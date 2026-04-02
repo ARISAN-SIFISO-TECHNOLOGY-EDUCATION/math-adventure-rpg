@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Star, Trophy, RefreshCw, ChevronRight, Coins, Sparkles, Loader2 } from 'lucide-react';
+import { Star, Trophy, RefreshCw, ChevronRight, Coins, Sparkles, Loader2, Volume2, VolumeX } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 // --- Types ---
@@ -16,6 +16,140 @@ type Problem = {
   options: (number | string)[];
   correctAnswer: number | string;
 };
+
+// --- Sound System ---
+function useSoundSystem() {
+  const [muted, setMuted] = useState(false);
+  const ctxRef = useRef<AudioContext | null>(null);
+  const masterGainRef = useRef<GainNode | null>(null);
+  const bgmTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const bgmPlayingRef = useRef(false);
+  const mutedRef = useRef(false);
+
+  const getCtx = useCallback(() => {
+    if (!ctxRef.current) {
+      ctxRef.current = new AudioContext();
+      masterGainRef.current = ctxRef.current.createGain();
+      masterGainRef.current.gain.value = 1;
+      masterGainRef.current.connect(ctxRef.current.destination);
+    }
+    if (ctxRef.current.state === 'suspended') ctxRef.current.resume();
+    return { ctx: ctxRef.current, master: masterGainRef.current! };
+  }, []);
+
+  const playNote = useCallback((
+    ctx: AudioContext,
+    master: GainNode,
+    freq: number,
+    startTime: number,
+    duration: number,
+    type: OscillatorType = 'sine',
+    gainVal = 0.3
+  ) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(master);
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, startTime);
+    gain.gain.setValueAtTime(gainVal, startTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+    osc.start(startTime);
+    osc.stop(startTime + duration + 0.05);
+  }, []);
+
+  // BGM: adventurous pentatonic melody (C major pentatonic)
+  const BGM_NOTES: [number, number][] = [
+    [523.25, 0.25], [659.25, 0.25], [783.99, 0.25], [880.00, 0.25],
+    [783.99, 0.50], [659.25, 0.25], [523.25, 0.25], [587.33, 0.50],
+    [659.25, 0.25], [523.25, 0.25], [440.00, 0.25], [523.25, 0.75],
+    [392.00, 0.25], [440.00, 0.25], [523.25, 0.25], [659.25, 0.25],
+    [523.25, 0.50], [440.00, 0.25], [392.00, 0.25], [523.25, 1.00],
+  ];
+
+  const scheduleBGMLoop = useCallback((ctx: AudioContext, master: GainNode, startTime: number) => {
+    if (!bgmPlayingRef.current) return;
+    let t = startTime;
+    const totalDur = BGM_NOTES.reduce((sum, [, dur]) => sum + dur, 0);
+    BGM_NOTES.forEach(([freq, dur]) => {
+      playNote(ctx, master, freq, t, dur - 0.04, 'triangle', 0.07);
+      t += dur;
+    });
+    bgmTimerRef.current = setTimeout(() => {
+      if (bgmPlayingRef.current) scheduleBGMLoop(ctx, master, ctx.currentTime + 0.05);
+    }, (totalDur - 0.3) * 1000);
+  }, [playNote]);
+
+  const startBGM = useCallback(() => {
+    if (bgmPlayingRef.current) return;
+    bgmPlayingRef.current = true;
+    const { ctx, master } = getCtx();
+    scheduleBGMLoop(ctx, master, ctx.currentTime + 0.1);
+  }, [getCtx, scheduleBGMLoop]);
+
+  const stopBGM = useCallback(() => {
+    bgmPlayingRef.current = false;
+    if (bgmTimerRef.current) clearTimeout(bgmTimerRef.current);
+  }, []);
+
+  const playClick = useCallback(() => {
+    const { ctx, master } = getCtx();
+    const t = ctx.currentTime;
+    playNote(ctx, master, 1046.5, t, 0.08, 'sine', 0.35);
+  }, [getCtx, playNote]);
+
+  const playCorrect = useCallback(() => {
+    const { ctx, master } = getCtx();
+    const t = ctx.currentTime;
+    [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) =>
+      playNote(ctx, master, freq, t + i * 0.12, 0.25, 'sine', 0.35)
+    );
+  }, [getCtx, playNote]);
+
+  const playWrong = useCallback(() => {
+    const { ctx, master } = getCtx();
+    const t = ctx.currentTime;
+    playNote(ctx, master, 349.23, t, 0.15, 'sawtooth', 0.18);
+    playNote(ctx, master, 261.63, t + 0.18, 0.35, 'sawtooth', 0.18);
+  }, [getCtx, playNote]);
+
+  const playVictory = useCallback(() => {
+    const { ctx, master } = getCtx();
+    const t = ctx.currentTime;
+    const fanfare: [number, number, number][] = [
+      [523.25, 0.00, 0.15], [659.25, 0.15, 0.15], [783.99, 0.30, 0.15],
+      [523.25, 0.50, 0.10], [659.25, 0.60, 0.10], [783.99, 0.70, 0.10],
+      [1046.50, 0.85, 0.65],
+    ];
+    fanfare.forEach(([freq, offset, dur]) =>
+      playNote(ctx, master, freq, t + offset, dur, 'sine', 0.4)
+    );
+  }, [getCtx, playNote]);
+
+  const toggleMute = useCallback(() => {
+    const newMuted = !mutedRef.current;
+    mutedRef.current = newMuted;
+    setMuted(newMuted);
+    if (masterGainRef.current) {
+      masterGainRef.current.gain.value = newMuted ? 0 : 1;
+    }
+    // play click sound on toggle (audible only when unmuting)
+    if (!newMuted) {
+      const { ctx, master } = getCtx();
+      playNote(ctx, master, 1046.5, ctx.currentTime + 0.05, 0.08, 'sine', 0.35);
+    }
+  }, [getCtx, playNote]);
+
+  useEffect(() => {
+    return () => {
+      bgmPlayingRef.current = false;
+      if (bgmTimerRef.current) clearTimeout(bgmTimerRef.current);
+      ctxRef.current?.close();
+    };
+  }, []);
+
+  return { muted, toggleMute, startBGM, stopBGM, playClick, playCorrect, playWrong, playVictory };
+}
 
 // --- Components ---
 
@@ -39,6 +173,8 @@ export default function App() {
   const [feedback, setFeedback] = useState<{ type: 'CORRECT' | 'WRONG'; value: string } | null>(null);
   const [shake, setShake] = useState(false);
 
+  const { muted, toggleMute, startBGM, stopBGM, playClick, playCorrect, playWrong, playVictory } = useSoundSystem();
+
   const fetchQuestion = async () => {
     setIsLoading(true);
     try {
@@ -47,14 +183,11 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ level }),
       });
-      if (!response.ok) {
-        throw new Error('Failed to fetch question');
-      }
+      if (!response.ok) throw new Error('Failed to fetch question');
       const data = await response.json();
       setProblem(data);
     } catch (error) {
       console.error(error);
-      // Fallback question if API fails
       setProblem({
         question: "If 3 alien monsters join 4 other alien monsters, how many are there?",
         options: [7, 5, 8, 12],
@@ -66,6 +199,8 @@ export default function App() {
   };
 
   const startGame = () => {
+    playClick();
+    startBGM();
     setGameState('PLAYING');
     setProgress(0);
     fetchQuestion();
@@ -84,16 +219,18 @@ export default function App() {
     if (!problem) return;
 
     if (choice === problem.correctAnswer) {
-      // Correct!
+      playCorrect();
       setFeedback({ type: 'CORRECT', value: 'Awesome!' });
       triggerConfetti();
       setCoins(prev => prev + 10);
-      
+
       const newProgress = progress + 1;
       setProgress(newProgress);
 
       if (newProgress >= 5) {
         setTimeout(() => {
+          stopBGM();
+          playVictory();
           setLevel(prev => prev + 1);
           setGameState('VICTORY');
           setFeedback(null);
@@ -105,13 +242,11 @@ export default function App() {
         }, 1500);
       }
     } else {
-      // Wrong!
+      playWrong();
       setFeedback({ type: 'WRONG', value: 'Try again!' });
       setShake(true);
       setTimeout(() => setShake(false), 500);
-      setTimeout(() => {
-        setFeedback(null);
-      }, 1000);
+      setTimeout(() => setFeedback(null), 1000);
     }
   };
 
@@ -128,7 +263,7 @@ export default function App() {
             <p className="text-3xl font-black leading-none">{level}</p>
           </div>
         </div>
-        
+
         <div className="flex-1 mx-6 hidden md:block">
           <div className="flex justify-between text-sm font-black uppercase mb-2">
             <span>Progress</span>
@@ -145,6 +280,19 @@ export default function App() {
           <div className="bg-[#FEF3C7] p-3 rounded-2xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             <Coins className="text-[#F59E0B] fill-[#F59E0B]" size={24} />
           </div>
+          {/* Mute Toggle */}
+          <button
+            onClick={toggleMute}
+            className={`p-3 rounded-2xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 transition-all ${
+              muted ? 'bg-[#F3F4F6]' : 'bg-[#E0F2FE]'
+            }`}
+            title={muted ? 'Unmute' : 'Mute'}
+          >
+            {muted
+              ? <VolumeX className="text-gray-400" size={24} />
+              : <Volume2 className="text-[#3B82F6]" size={24} />
+            }
+          </button>
         </div>
       </div>
 
@@ -223,7 +371,6 @@ export default function App() {
                     <div className="text-center mb-10">
                       <h2 className="text-3xl md:text-5xl font-black leading-tight">{problem?.question}</h2>
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {problem?.options.map((opt, i) => (
                         <button
