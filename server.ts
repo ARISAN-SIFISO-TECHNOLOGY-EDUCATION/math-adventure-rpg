@@ -15,24 +15,38 @@ async function startServer() {
   // API Routes
   app.post("/api/generate-math", async (req, res) => {
     try {
-      const { level } = req.body;
+      const { level = 1, phase = 1, topic = '' } = req.body;
       const apiKey = process.env.ANTHROPIC_API_KEY;
-      
+
       if (!apiKey) {
         return res.status(400).json({ error: "ANTHROPIC_API_KEY is not set in the environment variables." });
       }
 
-      const anthropic = new Anthropic({
-        apiKey: apiKey,
-      });
+      const anthropic = new Anthropic({ apiKey });
 
-      const prompt = `Generate a fun, kid-friendly math question suitable for level ${level || 1} (ages 6-8). 
-      Return ONLY a JSON object with the following structure:
-      {
-        "question": "The text of the question (e.g., 'If 3 alien monsters join 4 other alien monsters, how many are there?')",
-        "options": [7, 5, 8, 12], // Array of 4 numbers or short strings. One must be correct.
-        "correctAnswer": 7 // The correct answer from the options array
-      }`;
+      const ageContext: Record<number, string> = {
+        1: "pre-school children aged 3–5. Use extremely simple language. All numbers must be 10 or less. Use counting scenarios with animals, toys, or food. No abstract symbols.",
+        2: "lower primary children aged 6–8. Use friendly simple language. Numbers up to 100. Include fun scenarios with monsters, sweets, or toys.",
+        3: "higher primary children aged 9–10. Can use standard math notation. Numbers up to 1000. Use relatable word problems.",
+        4: "advanced primary children aged 11–12. Include fractions, decimals, and percentages. Expect solid arithmetic knowledge.",
+      };
+
+      const prompt = `Generate a fun, kid-friendly math question about: ${topic || "basic arithmetic"}.
+This is for ${ageContext[phase] || ageContext[1]}
+This is level ${level} of 5 within the current phase.
+
+Return ONLY a raw JSON object — no markdown, no explanation:
+{
+  "question": "Question text — keep it fun and thematic (use monsters, aliens, sweets, space, animals)",
+  "options": [option1, option2, option3, option4],
+  "correctAnswer": theCorrectAnswer
+}
+
+Rules:
+- options must have exactly 4 items; exactly one must equal correctAnswer
+- Wrong options should be plausible but clearly distinct from the correct answer
+- Phase 1 (pre-school): options must be whole numbers between 1 and 10
+- Keep questions short (under 20 words for phases 1–2, longer is fine for phases 3–4)`;
 
       const msg = await anthropic.messages.create({
         model: "claude-haiku-4-5-20251001",
