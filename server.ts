@@ -4,7 +4,7 @@ import path from "path";
 import Anthropic from "@anthropic-ai/sdk";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({ override: true });
 
 async function startServer() {
   const app = express();
@@ -35,7 +35,7 @@ async function startServer() {
       }`;
 
       const msg = await anthropic.messages.create({
-        model: "claude-3-5-sonnet-20241022",
+        model: "claude-haiku-4-5-20251001",
         max_tokens: 300,
         temperature: 0.7,
         system: "You are a fun, encouraging math teacher for young kids. Always output valid JSON.",
@@ -51,7 +51,7 @@ async function startServer() {
       if (content.type === 'text') {
         const jsonStr = content.text.trim();
         // Extract JSON if it's wrapped in markdown
-        const match = jsonStr.match(/\\{.*\\}/s) || [jsonStr];
+        const match = jsonStr.match(/\{.*\}/s) || [jsonStr];
         const parsed = JSON.parse(match[0]);
         res.json(parsed);
       } else {
@@ -73,7 +73,7 @@ async function startServer() {
   } else {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
-    app.get("*", (req, res) => {
+    app.get("*", (_req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
   }
