@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Trophy, ChevronRight, Coins, Sparkles, Volume2, VolumeX, Lock } from 'lucide-react';
 import { generateProblem, type Problem } from '../mathEngine';
 import confetti from 'canvas-confetti';
+import { Companion, type CompanionEmotion } from './Companion';
+import { useNarration } from './useNarration';
 
 // --- Types ---
 type GameState = 'START' | 'TUTORIAL' | 'LEVEL_INTRO' | 'PLAYING' | 'VICTORY';
@@ -520,8 +522,11 @@ export default function Game() {
   const [showPhaseSelect, setShowPhaseSelect] = useState(false);
   const [tutorialDone, setTutorialDone] = useState(() => localStorage.getItem('tutorialDone') === '1');
   const [flashVisible, setFlashVisible] = useState(true);
+  const [companionEmotion, setCompanionEmotion] = useState<CompanionEmotion>('idle');
+  const [companionMessage, setCompanionMessage] = useState<string | null>(null);
 
   const { muted, toggleMute, startBGM, stopBGM, playClick, playCorrect, playWrong, playVictory } = useSoundSystem();
+  const { speakQuestion, speakCorrect, speakWrong, speakLevelUp, speakVictory, speakWelcome } = useNarration(muted);
 
   const currentPhaseConfig = PHASES[phase - 1];
 
@@ -540,6 +545,26 @@ export default function Game() {
     }
   }, [problem, gameState]);
 
+  // Companion thinks + narration speaks whenever a new question appears
+  useEffect(() => {
+    if (gameState === 'PLAYING' && problem) {
+      setCompanionEmotion('thinking');
+      setCompanionMessage(null);
+      speakQuestion(problem.question, problem.meta?.isSubitizing);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [problem]);
+
+  // Auto-reset companion to idle after 3 s of non-idle emotion
+  useEffect(() => {
+    if (companionEmotion === 'idle') return;
+    const t = setTimeout(() => {
+      setCompanionEmotion('idle');
+      setCompanionMessage(null);
+    }, 3000);
+    return () => clearTimeout(t);
+  }, [companionEmotion]);
+
   const startGame = useCallback(() => {
     playClick();
     let startPhase = phase;
@@ -557,7 +582,10 @@ export default function Game() {
 
     setProgress(0);
     setFeedback(null);
+    setCompanionEmotion('excited');
+    setCompanionMessage(null);
     startBGM();
+    speakWelcome();
 
     // Show tutorial first time in Phase 1
     if (startPhase === 1 && !tutorialDone) {
@@ -596,6 +624,9 @@ export default function Game() {
 
     if (choice === problem.correctAnswer) {
       playCorrect();
+      speakCorrect();
+      setCompanionEmotion(progress + 1 >= 5 ? 'celebrating' : 'excited');
+      setCompanionMessage(null);
       triggerConfetti();
       setCoins(prev => prev + 10);
       setFeedback({ type: 'CORRECT', value: 'Awesome!' });
@@ -610,6 +641,8 @@ export default function Game() {
           setFeedback(null);
           stopBGM();
           playVictory();
+          speakVictory();
+          setCompanionEmotion('celebrating');
           setProgress(0);
 
           if (wasLastLevel) {
@@ -639,6 +672,9 @@ export default function Game() {
       }
     } else {
       playWrong();
+      speakWrong();
+      setCompanionEmotion('encouraging');
+      setCompanionMessage(null);
       setFeedback({ type: 'WRONG', value: 'Try again!' });
       setShake(true);
       setTimeout(() => setShake(false), 500);
@@ -773,7 +809,13 @@ export default function Game() {
           {/* PLAYING */}
           {gameState === 'PLAYING' && (
             <motion.div key="playing" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="w-full flex flex-col items-center">
-              <div className="w-full flex flex-col items-center mb-3">
+              {/* Monster + Companion row */}
+              <div className="w-full flex items-end justify-center gap-6 mb-3">
+                {/* Companion (player's ally) */}
+                <div className="mb-1">
+                  <Companion emotion={companionEmotion} customMessage={companionMessage} />
+                </div>
+                {/* Monster (enemy) */}
                 <motion.div
                   animate={shake ? { x: [-10, 10, -10, 10, 0] } : { y: [0, -8, 0] }}
                   transition={shake ? { duration: 0.4 } : { repeat: Infinity, duration: 3, ease: 'easeInOut' }}
@@ -781,6 +823,8 @@ export default function Game() {
                 >
                   {feedback?.type === 'CORRECT' ? '🥰' : feedback?.type === 'WRONG' ? '😵' : '👾'}
                 </motion.div>
+                {/* Spacer to keep monster centred */}
+                <div className="w-12" />
               </div>
 
               <div className="w-full bg-white rounded-[32px] p-6 md:p-8 border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
