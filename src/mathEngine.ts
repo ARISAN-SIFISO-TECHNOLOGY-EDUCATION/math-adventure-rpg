@@ -11,6 +11,7 @@ export type Problem = {
   question: string;
   options: (number | string)[];
   correctAnswer: number | string;
+  meta?: { isSubitizing?: boolean; bondTotal?: number; bondKnown?: number };
 };
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
@@ -144,6 +145,80 @@ function p1l5(): Problem {
     question: `${a} − ${b} = ?`,
     options: numericOptions(ans, 4, 0, 2),
     correctAnswer: ans,
+  };
+}
+
+function p1l6(): Problem {
+  // Subitizing — quick visual count 1–5 (UI handles the flash/hide timing)
+  const emojis = ['⭐', '🍎', '🐶', '🌸', '🐸', '🎉', '🍭'];
+  const emoji = emojis[rand(0, emojis.length - 1)];
+  const n = rand(1, 5);
+  const visual = Array(n).fill(emoji).join('  ');
+  return {
+    question: `${visual}`,
+    options: numericOptions(n, 4, 1, 2),
+    correctAnswer: n,
+    meta: { isSubitizing: true },
+  };
+}
+
+function p1l7(): Problem {
+  // Number bonds — missing addend: ? + b = total
+  const total = rand(3, 5);
+  const b = rand(1, total - 1);
+  const missing = total - b;
+  return {
+    question: `? + ${b} = ${total}`,
+    options: numericOptions(missing, 4, 0, 2),
+    correctAnswer: missing,
+    meta: { bondTotal: total, bondKnown: b },
+  };
+}
+
+function p1l8(): Problem {
+  // Counting objects from 11 to 20
+  const emojis = ['🌟', '🍊', '🦋', '🎈', '🐠', '🍭', '🌺'];
+  const emoji = emojis[rand(0, emojis.length - 1)];
+  const n = rand(11, 20);
+  const visual = Array(n).fill(emoji).join(' ');
+  return {
+    question: `Count the ${emoji}:\n${visual}`,
+    options: numericOptions(n, 4, 10, 3),
+    correctAnswer: n,
+  };
+}
+
+function p1l9(): Problem {
+  // Shapes — identify the shape from its emoji
+  const shapes = [
+    { emoji: '🔴', name: 'Circle' },
+    { emoji: '🟦', name: 'Square' },
+    { emoji: '🔺', name: 'Triangle' },
+    { emoji: '⭐', name: 'Star' },
+  ] as const;
+  const shape = shapes[rand(0, shapes.length - 1)];
+  const wrong = shapes.filter(s => s.name !== shape.name).map(s => s.name);
+  return {
+    question: `What shape is this?\n${shape.emoji}`,
+    options: shuffle([shape.name, ...wrong]),
+    correctAnswer: shape.name,
+  };
+}
+
+function p1l10(): Problem {
+  // Patterns — what comes next?
+  const patterns = [
+    { seq: ['🔴', '🔵', '🔴', '🔵'], answer: '🔴', wrong: ['🟡', '🟢', '🟣'] },
+    { seq: ['⭐', '🌙', '⭐', '🌙'], answer: '⭐', wrong: ['☀️', '🌸', '💧'] },
+    { seq: ['🐶', '🐱', '🐶', '🐱'], answer: '🐶', wrong: ['🐸', '🐼', '🐰'] },
+    { seq: ['🟩', '🟨', '🟩', '🟨'], answer: '🟩', wrong: ['🟥', '🟦', '🟫'] },
+    { seq: ['🌸', '🌺', '🌸', '🌺'], answer: '🌸', wrong: ['🌻', '🌼', '🌷'] },
+  ];
+  const p = patterns[rand(0, patterns.length - 1)];
+  return {
+    question: `What comes next?\n${p.seq.join('  ')}  ❓`,
+    options: shuffle([p.answer, ...p.wrong.slice(0, 3)]),
+    correctAnswer: p.answer,
   };
 }
 
@@ -480,6 +555,7 @@ function p4l5(): Problem {
 
 const GENERATORS: Record<string, () => Problem> = {
   '1-1': p1l1, '1-2': p1l2, '1-3': p1l3, '1-4': p1l4, '1-5': p1l5,
+  '1-6': p1l6, '1-7': p1l7, '1-8': p1l8, '1-9': p1l9, '1-10': p1l10,
   '2-1': p2l1, '2-2': p2l2, '2-3': p2l3, '2-4': p2l4, '2-5': p2l5,
   '3-1': p3l1, '3-2': p3l2, '3-3': p3l3, '3-4': p3l4, '3-5': p3l5,
   '4-1': p4l1, '4-2': p4l2, '4-3': p4l3, '4-4': p4l4, '4-5': p4l5,
