@@ -61,9 +61,9 @@ const GRADES = [
     border: '#BFDBFE',
     badge: 'Higher Primary',
     ages: 'Ages 9–10',
-    levels: 5,
-    description: 'All times tables, division, fractions, and rounding.',
-    topics: ['All times tables ×1–×12', 'Division basics', 'Simple fractions', 'Rounding'],
+    levels: 15,
+    description: '3 worlds, 15 levels — multiplication, decimals, fractions, ratio, algebra & data.',
+    topics: ['Commerce maths', 'Area & fractions', 'Data & algebra', '3 boss battles'],
     detailLink: '/higher-primary',
     playLink: '/play?phase=3',
     tip: 'Give them space — check in after each level.',
@@ -211,7 +211,7 @@ export default function LandingPage() {
       <section id="curriculum" className="py-20 bg-white px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="font-[Nunito] text-4xl font-bold text-center mb-3">Curriculum‑Aligned Learning</h2>
-          <p className="text-center text-gray-500 max-w-xl mx-auto mb-12">Following K–6 math standards across 35 levels and 4 phases</p>
+          <p className="text-center text-gray-500 max-w-xl mx-auto mb-12">Following K–6 math standards across 45 levels and 4 phases</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {GRADES.map(g => (
               <Link

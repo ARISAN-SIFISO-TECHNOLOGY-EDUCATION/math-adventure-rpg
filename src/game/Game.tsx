@@ -116,9 +116,56 @@ const P2_HINTS: Record<number, string> = {
 
 // Sub-world boundaries for Phase 2 (levelInPhase → world name + color)
 const P2_WORLDS = [
-  { levels: [1, 2, 3, 4, 5],   name: 'Academy of Numbers', emoji: '🏫', color: '#2563EB', bg: 'bg-[#EFF6FF]', badge: 'bg-[#93C5FD]' },
-  { levels: [6, 7, 8, 9, 10],  name: "Merchant's Guild",   emoji: '🏪', color: '#D97706', bg: 'bg-[#FFFBEB]', badge: 'bg-[#FCD34D]' },
-  { levels: [11, 12, 13, 14, 15], name: "Dragon's Tower",  emoji: '🐉', color: '#DC2626', bg: 'bg-[#FEF2F2]', badge: 'bg-[#FCA5A5]' },
+  { levels: [1, 2, 3, 4, 5],      name: 'Academy of Numbers', emoji: '🏫', color: '#2563EB', bgHex: '#EFF6FF', bg: 'bg-[#EFF6FF]', badge: 'bg-[#93C5FD]' },
+  { levels: [6, 7, 8, 9, 10],     name: "Merchant's Guild",   emoji: '🏪', color: '#D97706', bgHex: '#FFFBEB', bg: 'bg-[#FFFBEB]', badge: 'bg-[#FCD34D]' },
+  { levels: [11, 12, 13, 14, 15], name: "Dragon's Tower",     emoji: '🐉', color: '#DC2626', bgHex: '#FEF2F2', bg: 'bg-[#FEF2F2]', badge: 'bg-[#FCA5A5]' },
+];
+
+// ─── Phase 3 constants ────────────────────────────────────────────────────────
+
+const P3_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
+  // World 1 — Merchant Republic
+  1:  { emoji: '🏦', title: 'Welcome to the Merchant Republic!', body: 'Master big multiplication to dominate the marketplace.', tip: 'Try 23×14 = 23×10 + 23×4 — split it up!' },
+  2:  { emoji: '➗', title: 'Division with Remainders',          body: 'Not every number divides perfectly — find what is left over!', tip: 'Quotient × divisor + remainder = the original.' },
+  3:  { emoji: '🔢', title: 'Decimal Duels',                    body: 'Add and subtract decimal numbers — every decimal place counts!', tip: 'Line up the decimal point before calculating.' },
+  4:  { emoji: '%',  title: 'Percentage Power',                 body: 'Find 10% first — then scale up or down. The merchant method!', tip: '10% = divide by 10. 20% = double of 10%.' },
+  5:  { emoji: '👑', title: 'BOSS: The Guild Master!',          body: 'Multi-step money challenges. Change, discounts, split bills — all at once!', tip: 'One step at a time. Total first, then adjust.' },
+  // World 2 — Engineers' Citadel
+  6:  { emoji: '🏗️', title: "Enter the Engineers' Citadel!",  body: 'Area — how many square metres fill the space? Not the same as perimeter!', tip: 'Area = length × width. Perimeter = 2×(l+w).' },
+  7:  { emoji: '➗', title: 'Fraction Files',                   body: 'Simplify fractions — find the smallest equivalent form.', tip: 'Divide both top and bottom by the same number.' },
+  8:  { emoji: '🧮', title: 'Fraction Fusion',                  body: 'Add and subtract fractions with DIFFERENT denominators.', tip: 'Convert to a common denominator first!' },
+  9:  { emoji: '⚖️', title: 'Ratio & Proportion',              body: 'Scale ratios up or down — the citadel needs exact measurements!', tip: 'If ratio is 2:3 and you multiply one part, multiply the other.' },
+  10: { emoji: '👷', title: 'BOSS: Chief Architect!',          body: 'Combined challenge — area, fractions, and ratios together!', tip: 'Solve each part separately, then combine the results.' },
+  // World 3 — Storm Observatory
+  11: { emoji: '🌩️', title: 'Welcome to the Storm Observatory!', body: 'Negative numbers — below zero exists in science, finance, and nature.', tip: 'Use a number line. Going left means getting smaller.' },
+  12: { emoji: '📊', title: 'Data Storm',                       body: 'Find the mean, median, and mode of data sets.', tip: 'Mean = total ÷ count. Median = middle. Mode = most common.' },
+  13: { emoji: '🔣', title: 'Algebra Alert',                    body: 'Solve equations — find the hidden value of n!', tip: 'Do the OPPOSITE operation to isolate n on one side.' },
+  14: { emoji: '⚙️', title: 'BODMAS Battle',                   body: 'Brackets first, then × and ÷, then + and −. Order matters!', tip: 'B → O → D → M → A → S. Never skip steps.' },
+  15: { emoji: '🌩️', title: 'FINAL BOSS: Storm Warden!',      body: 'The ultimate synthesis — everything from all three worlds!', tip: 'Read carefully, plan your steps, then calculate.' },
+};
+
+const P3_HINTS: Record<number, string> = {
+  1:  '✖️ Split: 23×14 = 23×10 + 23×4.',
+  2:  '➗ Quotient × divisor + remainder = original.',
+  3:  '🔢 Line up the decimal point before calculating.',
+  4:  '% Find 10% first, then scale up or down.',
+  5:  '💰 Total first — then find change or apply discount.',
+  6:  '📐 Area = l × w. Don\'t confuse with perimeter!',
+  7:  '➗ Divide top AND bottom by the same number.',
+  8:  '🧮 Common denominator first!',
+  9:  '⚖️ Multiply BOTH parts of the ratio by the same factor.',
+  10: '🏗️ Solve each part separately.',
+  11: '🌡️ Number line: left = smaller, right = bigger.',
+  12: '📊 Sort the values first to find the median.',
+  13: '🔣 Use the opposite operation to find n.',
+  14: '⚙️ Brackets first, then × ÷, then + −.',
+  15: '🌩️ Break it into steps — check each one.',
+};
+
+const P3_WORLDS = [
+  { levels: [1, 2, 3, 4, 5],     name: 'Merchant Republic',  emoji: '🏦', color: '#0EA5E9', bgHex: '#F0F9FF', bg: 'bg-[#F0F9FF]', badge: 'bg-[#7DD3FC]' },
+  { levels: [6, 7, 8, 9, 10],    name: "Engineers' Citadel", emoji: '🏗️', color: '#16A34A', bgHex: '#F0FDF4', bg: 'bg-[#F0FDF4]', badge: 'bg-[#86EFAC]' },
+  { levels: [11, 12, 13, 14, 15], name: 'Storm Observatory', emoji: '🌩️', color: '#7C3AED', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#C4B5FD]' },
 ];
 
 type PhaseConfig = {
@@ -187,17 +234,30 @@ const PHASES: PhaseConfig[] = [
   {
     id: 3,
     name: 'Higher Primary',
-    ageRange: 'Ages 9–10',
+    ageRange: 'Ages 9–12',
     emoji: '🔢',
     bgColor: 'bg-[#DBEAFE]',
     borderColor: 'border-[#3B82F6]',
     badgeBg: 'bg-[#60A5FA]',
     levels: [
-      { n: 11, topic: 'all times tables from 1 to 12' },
-      { n: 12, topic: 'basic division with no remainders' },
-      { n: 13, topic: 'simple fractions such as half or quarter of a number' },
-      { n: 14, topic: 'word problems involving addition and subtraction' },
-      { n: 15, topic: 'rounding numbers to the nearest 10 or 100' },
+      // World 1 — Merchant Republic
+      { n: 1,  topic: 'long multiplication — 2-digit × 2-digit' },
+      { n: 2,  topic: 'division with remainders — quotient and remainder' },
+      { n: 3,  topic: 'decimal addition and subtraction (1 decimal place)' },
+      { n: 4,  topic: 'percentages using the 10% anchor method' },
+      { n: 5,  topic: 'multi-step money: change, discounts, and splitting bills' },
+      // World 2 — Engineers' Citadel
+      { n: 6,  topic: 'area of rectangles and squares in square metres' },
+      { n: 7,  topic: 'simplifying fractions to lowest terms' },
+      { n: 8,  topic: 'adding and subtracting fractions with unlike denominators' },
+      { n: 9,  topic: 'ratio and proportion — scaling and map distances' },
+      { n: 10, topic: 'combined area, fraction, and ratio problems' },
+      // World 3 — Storm Observatory
+      { n: 11, topic: 'negative integers — temperature changes and number lines' },
+      { n: 12, topic: 'mean, median, and mode of data sets' },
+      { n: 13, topic: 'algebraic equations — solve for the unknown n' },
+      { n: 14, topic: 'advanced order of operations with brackets (BODMAS)' },
+      { n: 15, topic: 'multi-step synthesis — algebra, data, and negative numbers' },
     ],
   },
   {
@@ -537,21 +597,29 @@ function TutorialScreen({ onDone }: { onDone: () => void }) {
   );
 }
 
-// --- Level Intro Card (Phase 1 + Phase 2 world entries) ---
+// --- Level Intro Card (Phase 1, 2, and 3 world entries) ---
 function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: number; levelInPhase: number; totalLevels: number; onStart: () => void }) {
   const isPhase2 = phase === 2;
-  const intro = isPhase2
-    ? (P2_LEVEL_INTROS[levelInPhase] ?? P2_LEVEL_INTROS[1])
-    : (LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1]);
+  const isPhase3 = phase === 3;
 
-  const world = isPhase2 ? P2_WORLDS.find(w => w.levels.includes(levelInPhase)) : null;
-  const isWorldEntry = isPhase2 && world?.levels[0] === levelInPhase;
+  const intro = isPhase3
+    ? (P3_LEVEL_INTROS[levelInPhase] ?? P3_LEVEL_INTROS[1])
+    : isPhase2
+      ? (P2_LEVEL_INTROS[levelInPhase] ?? P2_LEVEL_INTROS[1])
+      : (LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1]);
 
-  const badgeBg = isPhase2 ? (world?.badge ?? 'bg-[#93C5FD]') : 'bg-[#FEF9C3]';
-  const tipBg   = isPhase2 ? (world?.bg ?? 'bg-[#EFF6FF]') : 'bg-[#DCFCE7]';
-  const tipBorder = isPhase2 ? `border-[${world?.color ?? '#2563EB'}]` : 'border-[#22C55E]';
-  const tipColor  = isPhase2 ? '' : 'text-[#15803D]';
-  const btnColor  = isPhase2 ? (world?.color ?? '#2563EB') : '#3B82F6';
+  const world = isPhase3
+    ? P3_WORLDS.find(w => w.levels.includes(levelInPhase))
+    : isPhase2
+      ? P2_WORLDS.find(w => w.levels.includes(levelInPhase))
+      : null;
+  const isWorldEntry = (isPhase2 || isPhase3) && world?.levels[0] === levelInPhase;
+
+  const badgeBg  = world ? world.badge : 'bg-[#FEF9C3]';
+  const tipBg    = world ? world.bg    : 'bg-[#DCFCE7]';
+  const tipBorder = world ? '' : 'border-[#22C55E]';
+  const tipColor  = world ? '' : 'text-[#15803D]';
+  const btnColor  = world ? world.color : '#3B82F6';
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -578,7 +646,10 @@ function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: 
         </div>
         <h2 className="text-2xl font-black mb-2">{intro.title}</h2>
         <p className="text-gray-500 font-bold mb-3">{intro.body}</p>
-        <div className={`${tipBg} border-2 ${tipBorder} rounded-2xl px-4 py-3 mb-6 w-full`}>
+        <div
+          className={`${tipBg} border-2 rounded-2xl px-4 py-3 mb-6 w-full`}
+          style={world ? { borderColor: world.color } : undefined}
+        >
           <p className={`text-sm font-black ${tipColor}`}>💡 Tip: {intro.tip}</p>
         </div>
         <button
@@ -677,11 +748,12 @@ export default function Game() {
     startBGM();
     speakWelcome();
 
-    // Show tutorial first time in Phase 1
-    const isPhase2WorldEntry = startPhase === 2 && [1, 6, 11].includes(startLevel);
+    // Show tutorial first time in Phase 1; show world intros at sub-world entries
+    const isP2WorldEntry = startPhase === 2 && [1, 6, 11].includes(startLevel);
+    const isP3WorldEntry = startPhase === 3 && [1, 6, 11].includes(startLevel);
     if (startPhase === 1 && !tutorialDone) {
       setGameState('TUTORIAL');
-    } else if (startPhase === 1 || isPhase2WorldEntry) {
+    } else if (startPhase === 1 || isP2WorldEntry || isP3WorldEntry) {
       setGameState('LEVEL_INTRO');
       loadQuestion(startPhase, startLevel);
     } else {
@@ -739,6 +811,7 @@ export default function Game() {
           const nextLevelInPhase = levelInPhase + 1;
           const nextPhase = phase + 1;
           const isP2WorldEntry = !wasLastLevel && phase === 2 && [6, 11].includes(nextLevelInPhase);
+          const isP3WorldEntry = !wasLastLevel && phase === 3 && [6, 11].includes(nextLevelInPhase);
 
           if (wasLastLevel) {
             setIsPhaseTransition(true);
@@ -755,11 +828,8 @@ export default function Game() {
 
           setGameState('VICTORY');
           // Pre-load next question so level intro card is ready
-          if (!wasLastLevel && (phase === 1 || isP2WorldEntry)) {
-            loadQuestion(
-              wasLastLevel ? nextPhase : phase,
-              wasLastLevel ? 1 : nextLevelInPhase
-            );
+          if (!wasLastLevel && (phase === 1 || isP2WorldEntry || isP3WorldEntry)) {
+            loadQuestion(phase, nextLevelInPhase);
           }
         }, 1500);
       } else {
@@ -810,7 +880,7 @@ export default function Game() {
       {gameState === 'TUTORIAL' && (
         <TutorialScreen onDone={handleTutorialDone} />
       )}
-      {gameState === 'LEVEL_INTRO' && (phase === 1 || phase === 2) && (
+      {gameState === 'LEVEL_INTRO' && (phase === 1 || phase === 2 || phase === 3) && (
         <LevelIntroCard phase={phase} levelInPhase={levelInPhase} totalLevels={currentPhaseConfig.levels.length} onStart={handleLevelIntroStart} />
       )}
 
@@ -1008,6 +1078,14 @@ export default function Game() {
                       <p className="text-sm font-black text-[#1D4ED8]">{P2_HINTS[levelInPhase]}</p>
                     </div>
                   )}
+                  {phase === 3 && P3_HINTS[levelInPhase] && (() => {
+                    const w3 = P3_WORLDS.find(w => w.levels.includes(levelInPhase));
+                    return (
+                      <div className="border-2 rounded-2xl px-4 py-2 mb-4 text-center" style={{ background: w3?.bgHex ?? '#F0F9FF', borderColor: w3?.color ?? '#0EA5E9' }}>
+                        <p className="text-sm font-black" style={{ color: w3?.color ?? '#0EA5E9' }}>{P3_HINTS[levelInPhase]}</p>
+                      </div>
+                    );
+                  })()}
 
                   {/* Answer buttons — hidden during subitizing flash */}
                   {(!problem?.meta?.isSubitizing || !flashVisible) && (
@@ -1062,8 +1140,10 @@ export default function Game() {
                     <Trophy className="text-black" size={80} />
                   </div>
                   <h2 className="text-5xl font-black mb-4">LEVEL UP!</h2>
-                  {phase === 2 && P2_WORLDS.find(w => w.levels.includes(levelInPhase)) && (() => {
-                    const w = P2_WORLDS.find(ww => ww.levels.includes(levelInPhase))!;
+                  {(phase === 2 || phase === 3) && (() => {
+                    const worlds = phase === 2 ? P2_WORLDS : P3_WORLDS;
+                    const w = worlds.find(ww => ww.levels.includes(levelInPhase));
+                    if (!w) return null;
                     return (
                       <div className="inline-block mb-3 px-4 py-1.5 rounded-full font-black text-sm text-white" style={{ background: w.color }}>
                         {w.emoji} {w.name}
