@@ -308,6 +308,232 @@ function p2l5(): Problem {
   }
 }
 
+// PHASE 2 — Lower Primary continued: World 2 & 3
+
+function p2l6(): Problem {
+  // Place value — identify tens or units digit
+  const n = rand(11, 99);
+  const askTens = Math.random() < 0.5;
+  const ans = askTens ? Math.floor(n / 10) : n % 10;
+  return {
+    question: askTens
+      ? `What is the TENS digit of ${n}?`
+      : `What is the UNITS digit of ${n}?`,
+    options: numericOptions(ans, 4, 0, 3),
+    correctAnswer: ans,
+  };
+}
+
+function p2l7(): Problem {
+  // Money — how much altogether or how much change
+  const coins = [1, 2, 5, 10, 20, 50];
+  const useChange = Math.random() < 0.5;
+  if (useChange) {
+    // Change from purchase
+    const price = rand(1, 8) * 10 + rand(0, 1) * 5; // e.g. 35, 40, 65
+    const paid = price + (rand(1, 4) * 10);           // pays more in round 10s
+    const change = paid - price;
+    return {
+      question: `Something costs R${price}.\nYou pay R${paid}.\nWhat is your change?`,
+      options: numericOptions(change, 4, 0, 10),
+      correctAnswer: change,
+    };
+  } else {
+    // Count two coin amounts together
+    const a = coins[rand(0, coins.length - 1)];
+    const b = coins[rand(0, coins.length - 1)];
+    return {
+      question: `You have a ${a}c coin and a ${b}c coin.\nHow many cents altogether?`,
+      options: numericOptions(a + b, 4, 0, 15),
+      correctAnswer: a + b,
+    };
+  }
+}
+
+function p2l8(): Problem {
+  // Time — reading hours or simple minutes
+  const hour = rand(1, 12);
+  const minuteOpts = [0, 15, 30, 45];
+  const minute = minuteOpts[rand(0, minuteOpts.length - 1)];
+  const minuteStr = minute === 0 ? "o'clock" : `${minute} minutes past ${hour}`;
+  const ans = minute === 0 ? hour * 100 : hour * 100 + minute; // encode as hhmm integer
+  const distractors = [
+    (hour === 12 ? 1 : hour + 1) * 100 + minute,
+    (hour === 1 ? 12 : hour - 1) * 100 + minute,
+    hour * 100 + (minute === 45 ? 30 : minute + 15),
+  ].filter(v => v !== ans);
+
+  // Simpler variant: just ask what time it is
+  const addHours = rand(1, 4);
+  const newHour = ((hour - 1 + addHours) % 12) + 1;
+  return {
+    question: `It is ${hour}:${minute === 0 ? '00' : minute} now.\nWhat time will it be in ${addHours} hour${addHours > 1 ? 's' : ''}?`,
+    options: numericOptions(newHour, 4, 1, 3).map(v => {
+      const h = ((v - 1 + 12) % 12) + 1;
+      return `${h}:${minute === 0 ? '00' : minute}` as string | number;
+    }),
+    correctAnswer: `${newHour}:${minute === 0 ? '00' : minute}`,
+  };
+}
+
+function p2l9(): Problem {
+  // Word problems with addition/subtraction up to 100
+  const variant = rand(0, 3);
+  if (variant === 0) {
+    const a = rand(10, 60);
+    const b = rand(10, 40);
+    return {
+      question: `Lebo has ${a} stickers.\nShe gets ${b} more.\nHow many stickers now?`,
+      options: numericOptions(a + b, 4, 0, 10),
+      correctAnswer: a + b,
+    };
+  } else if (variant === 1) {
+    const total = rand(30, 90);
+    const eaten = rand(5, total - 5);
+    return {
+      question: `There are ${total} sweets in a jar.\n${eaten} are eaten.\nHow many sweets are left?`,
+      options: numericOptions(total - eaten, 4, 0, 10),
+      correctAnswer: total - eaten,
+    };
+  } else if (variant === 2) {
+    const red = rand(10, 50);
+    const blue = rand(10, 50);
+    return {
+      question: `${red} red apples and ${blue} green apples\nare in the basket.\nHow many apples altogether?`,
+      options: numericOptions(red + blue, 4, 0, 10),
+      correctAnswer: red + blue,
+    };
+  } else {
+    const start = rand(50, 90);
+    const spend = rand(5, start - 5);
+    return {
+      question: `Thabo had R${start}.\nHe spent R${spend} on a book.\nHow much does he have left?`,
+      options: numericOptions(start - spend, 4, 0, 10),
+      correctAnswer: start - spend,
+    };
+  }
+}
+
+function p2l10(): Problem {
+  // Doubles, halves, and near-doubles
+  const useDouble = Math.random() < 0.5;
+  if (useDouble) {
+    const n = rand(5, 25);
+    return {
+      question: `Double ${n} = ?`,
+      options: numericOptions(n * 2, 4, 0, 6),
+      correctAnswer: n * 2,
+    };
+  } else {
+    const n = rand(2, 25) * 2; // even number so half is whole
+    return {
+      question: `Half of ${n} = ?`,
+      options: numericOptions(n / 2, 4, 1, 4),
+      correctAnswer: n / 2,
+    };
+  }
+}
+
+function p2l11(): Problem {
+  // Times tables ×3, ×4, ×6
+  const tables = [3, 4, 6];
+  const t = tables[rand(0, tables.length - 1)];
+  const n = rand(1, 10);
+  const ans = t * n;
+  return {
+    question: `${t} × ${n} = ?`,
+    options: numericOptions(ans, 4, 0, t * 2),
+    correctAnswer: ans,
+  };
+}
+
+function p2l12(): Problem {
+  // Division sharing equally (÷2, ÷3, ÷4, ÷5)
+  const divisors = [2, 3, 4, 5];
+  const d = divisors[rand(0, divisors.length - 1)];
+  const quotient = rand(2, 10);
+  const dividend = d * quotient;
+  return {
+    question: `${dividend} shared equally among ${d}.\nHow many each?`,
+    options: numericOptions(quotient, 4, 1, 4),
+    correctAnswer: quotient,
+  };
+}
+
+function p2l13(): Problem {
+  // Simple fractions of a number — ½, ¼, ¾ (age-appropriate)
+  type Fraction = [number, number, string];
+  const fracs: Fraction[] = [
+    [1, 2, 'half of'],
+    [1, 4, 'a quarter of'],
+    [3, 4, 'three quarters of'],
+  ];
+  const [num, den, label] = fracs[rand(0, fracs.length - 1)];
+  const base = rand(2, 12) * den;
+  const ans = (base * num) / den;
+  return {
+    question: `What is ${label} ${base}?`,
+    options: numericOptions(ans, 4, 0, 5),
+    correctAnswer: ans,
+  };
+}
+
+function p2l14(): Problem {
+  // Perimeter of a rectangle / square
+  const useSquare = Math.random() < 0.4;
+  if (useSquare) {
+    const side = rand(2, 12);
+    return {
+      question: `A square has sides of ${side} cm.\nWhat is the perimeter?`,
+      options: numericOptions(side * 4, 4, 0, 8),
+      correctAnswer: side * 4,
+    };
+  } else {
+    const w = rand(2, 10);
+    const h = rand(2, 10);
+    return {
+      question: `A rectangle is ${w} cm wide and ${h} cm tall.\nWhat is the perimeter?`,
+      options: numericOptions((w + h) * 2, 4, 0, 10),
+      correctAnswer: (w + h) * 2,
+    };
+  }
+}
+
+function p2l15(): Problem {
+  // Multi-step word problems (two calculations)
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const priceEach = rand(2, 8) * 5;
+    const qty = rand(2, 4);
+    const total = priceEach * qty;
+    const paid = total + rand(1, 3) * 10;
+    const change = paid - total;
+    return {
+      question: `Pens cost R${priceEach} each.\nBuy ${qty} pens and pay R${paid}.\nWhat is the change?`,
+      options: numericOptions(change, 4, 0, 10),
+      correctAnswer: change,
+    };
+  } else if (variant === 1) {
+    const bags = rand(2, 5);
+    const perBag = rand(3, 8);
+    const eaten = rand(2, bags * perBag - 2);
+    return {
+      question: `${bags} bags each have ${perBag} oranges.\n${eaten} oranges are eaten.\nHow many are left?`,
+      options: numericOptions(bags * perBag - eaten, 4, 0, 8),
+      correctAnswer: bags * perBag - eaten,
+    };
+  } else {
+    const rows = rand(2, 5);
+    const cols = rand(2, 6);
+    const extra = rand(1, 5);
+    return {
+      question: `A classroom has ${rows} rows of ${cols} desks.\n${extra} extra desks are added.\nHow many desks altogether?`,
+      options: numericOptions(rows * cols + extra, 4, 0, 8),
+      correctAnswer: rows * cols + extra,
+    };
+  }
+}
+
 // PHASE 3 — Higher Primary (Ages 9–10)
 
 function p3l1(): Problem {
@@ -557,6 +783,8 @@ const GENERATORS: Record<string, () => Problem> = {
   '1-1': p1l1, '1-2': p1l2, '1-3': p1l3, '1-4': p1l4, '1-5': p1l5,
   '1-6': p1l6, '1-7': p1l7, '1-8': p1l8, '1-9': p1l9, '1-10': p1l10,
   '2-1': p2l1, '2-2': p2l2, '2-3': p2l3, '2-4': p2l4, '2-5': p2l5,
+  '2-6': p2l6, '2-7': p2l7, '2-8': p2l8, '2-9': p2l9, '2-10': p2l10,
+  '2-11': p2l11, '2-12': p2l12, '2-13': p2l13, '2-14': p2l14, '2-15': p2l15,
   '3-1': p3l1, '3-2': p3l2, '3-3': p3l3, '3-4': p3l4, '3-5': p3l5,
   '4-1': p4l1, '4-2': p4l2, '4-3': p4l3, '4-4': p4l4, '4-5': p4l5,
 };

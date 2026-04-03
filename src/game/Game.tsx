@@ -75,6 +75,52 @@ const PHASE1_HINTS: Record<number, string> = {
   10: '🎨 What is the repeating pattern?',
 };
 
+const P2_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
+  // World 1 — Academy of Numbers
+  1:  { emoji: '🏫', title: 'Welcome to the Academy!',   body: 'Add numbers up to 20 to defeat the gate guardians.',   tip: 'Count on from the bigger number!' },
+  2:  { emoji: '➖', title: 'Subtraction Siege',          body: 'Take away to weaken the enemies!',                      tip: 'Count backwards from the bigger number.' },
+  3:  { emoji: '💯', title: 'The Hundred Challenge',      body: 'Add and subtract numbers all the way to 100!',          tip: 'Break big numbers into tens to make it easier.' },
+  4:  { emoji: '✖️', title: 'Times Table Training',       body: 'Master the ×2, ×5, and ×10 tables to unlock power-ups!', tip: 'Skip-count: 5, 10, 15, 20…' },
+  5:  { emoji: '❓', title: 'The Missing Number',         body: 'Find the hidden number to solve the puzzle!',           tip: 'Think: what do I add to get the total?' },
+  // World 2 — Merchant's Guild
+  6:  { emoji: '🏪', title: 'Enter the Merchant\'s Guild!', body: 'Understand place value — tens and units are your coins and gems!', tip: 'The first digit tells you HOW MANY tens.' },
+  7:  { emoji: '💰', title: 'Money Mastery',              body: 'Count coins, make change — the guild rewards sharp traders!', tip: 'Work out the total, then find the difference.' },
+  8:  { emoji: '⏰', title: 'Time Keeper',                body: 'Tell the time and calculate hours ahead!',              tip: 'Count forward on a clock: 8 → 9 → 10…' },
+  9:  { emoji: '📖', title: 'Story Problems',             body: 'Real-world word problems — read carefully and choose the right operation!', tip: 'Find the KEY words: "more", "left", "altogether".' },
+  10: { emoji: '🪞', title: 'Doubles & Halves',           body: 'Double and halve numbers — these are your secret weapons!', tip: 'Half means split equally into TWO groups.' },
+  // World 3 — Dragon's Tower
+  11: { emoji: '🐉', title: 'Dragon\'s Tower Awaits!',   body: 'Multiply with ×3, ×4, and ×6 to storm the tower!',     tip: 'Use what you know: 4×6 = double 2×6!' },
+  12: { emoji: '⚔️', title: 'Division Dragon',           body: 'Share numbers equally to defeat the dragon\'s riddles!', tip: 'Division is just multiplication in reverse.' },
+  13: { emoji: '🍕', title: 'Fraction Fortress',         body: 'Find halves and quarters of numbers — split the treasure!', tip: 'Half = divide by 2. Quarter = divide by 4.' },
+  14: { emoji: '📐', title: 'Perimeter Puzzle',          body: 'Calculate the perimeter — add up ALL the sides of the shape!', tip: 'Perimeter = all sides added together.' },
+  15: { emoji: '🏆', title: 'FINAL BOSS: Word Problems', body: 'Two-step word problems — read, plan, then calculate!',  tip: 'Do one calculation at a time — no rushing!' },
+};
+
+const P2_HINTS: Record<number, string> = {
+  1:  '➕ Start from the bigger number and count up!',
+  2:  '➖ Start from the bigger number and count down!',
+  3:  '💯 Break into tens and units to make it easier!',
+  4:  '✖️ Skip-count to find the answer!',
+  5:  '❓ Think: what makes the total correct?',
+  6:  '🔢 Which digit is in the tens place?',
+  7:  '💰 Total cost first, then find the change!',
+  8:  '⏰ Count the hours forward on the clock!',
+  9:  '📖 Look for keywords: "altogether", "left", "more".',
+  10: '🪞 Double means ×2. Half means ÷2.',
+  11: '✖️ Use a known fact to help!',
+  12: '➗ How many groups fit into the total?',
+  13: '🍕 Half = ÷2. Quarter = ÷4.',
+  14: '📐 Add ALL four sides of the shape!',
+  15: '🏆 Solve one step at a time!',
+};
+
+// Sub-world boundaries for Phase 2 (levelInPhase → world name + color)
+const P2_WORLDS = [
+  { levels: [1, 2, 3, 4, 5],   name: 'Academy of Numbers', emoji: '🏫', color: '#2563EB', bg: 'bg-[#EFF6FF]', badge: 'bg-[#93C5FD]' },
+  { levels: [6, 7, 8, 9, 10],  name: "Merchant's Guild",   emoji: '🏪', color: '#D97706', bg: 'bg-[#FFFBEB]', badge: 'bg-[#FCD34D]' },
+  { levels: [11, 12, 13, 14, 15], name: "Dragon's Tower",  emoji: '🐉', color: '#DC2626', bg: 'bg-[#FEF2F2]', badge: 'bg-[#FCA5A5]' },
+];
+
 type PhaseConfig = {
   id: number;
   name: string;
@@ -118,11 +164,24 @@ const PHASES: PhaseConfig[] = [
     borderColor: 'border-[#22C55E]',
     badgeBg: 'bg-[#4ADE80]',
     levels: [
-      { n: 6, topic: 'addition with answers up to 20' },
-      { n: 7, topic: 'subtraction within 20' },
-      { n: 8, topic: 'addition and subtraction with numbers up to 100' },
-      { n: 9, topic: 'times tables for 2, 5, and 10' },
+      // World 1 — Academy of Numbers
+      { n: 6,  topic: 'addition with answers up to 20' },
+      { n: 7,  topic: 'subtraction within 20' },
+      { n: 8,  topic: 'addition and subtraction with numbers up to 100' },
+      { n: 9,  topic: 'times tables for 2, 5, and 10' },
       { n: 10, topic: 'missing number problems such as ? + 4 = 11 or 7 − ? = 3' },
+      // World 2 — Merchant's Guild
+      { n: 11, topic: 'place value — identifying tens and units digits' },
+      { n: 12, topic: 'money — counting coins and making change' },
+      { n: 13, topic: 'time — reading clocks and calculating hours ahead' },
+      { n: 14, topic: 'word problems involving addition and subtraction' },
+      { n: 15, topic: 'doubles and halves of numbers' },
+      // World 3 — Dragon's Tower
+      { n: 16, topic: 'times tables for 3, 4, and 6' },
+      { n: 17, topic: 'division by sharing equally' },
+      { n: 18, topic: 'simple fractions — half, quarter, and three quarters' },
+      { n: 19, topic: 'perimeter of rectangles and squares' },
+      { n: 20, topic: 'multi-step word problems requiring two calculations' },
     ],
   },
   {
@@ -478,9 +537,22 @@ function TutorialScreen({ onDone }: { onDone: () => void }) {
   );
 }
 
-// --- Level Intro Card (Phase 1 only) ---
-function LevelIntroCard({ levelInPhase, totalLevels, onStart }: { levelInPhase: number; totalLevels: number; onStart: () => void }) {
-  const intro = LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1];
+// --- Level Intro Card (Phase 1 + Phase 2 world entries) ---
+function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: number; levelInPhase: number; totalLevels: number; onStart: () => void }) {
+  const isPhase2 = phase === 2;
+  const intro = isPhase2
+    ? (P2_LEVEL_INTROS[levelInPhase] ?? P2_LEVEL_INTROS[1])
+    : (LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1]);
+
+  const world = isPhase2 ? P2_WORLDS.find(w => w.levels.includes(levelInPhase)) : null;
+  const isWorldEntry = isPhase2 && world?.levels[0] === levelInPhase;
+
+  const badgeBg = isPhase2 ? (world?.badge ?? 'bg-[#93C5FD]') : 'bg-[#FEF9C3]';
+  const tipBg   = isPhase2 ? (world?.bg ?? 'bg-[#EFF6FF]') : 'bg-[#DCFCE7]';
+  const tipBorder = isPhase2 ? `border-[${world?.color ?? '#2563EB'}]` : 'border-[#22C55E]';
+  const tipColor  = isPhase2 ? '' : 'text-[#15803D]';
+  const btnColor  = isPhase2 ? (world?.color ?? '#2563EB') : '#3B82F6';
+
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       {/* Back to home — always accessible from level intro */}
@@ -493,7 +565,12 @@ function LevelIntroCard({ levelInPhase, totalLevels, onStart }: { levelInPhase: 
         transition={{ type: 'spring', stiffness: 300, damping: 22 }}
         className="bg-white w-full max-w-sm rounded-[32px] border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] p-8 flex flex-col items-center text-center"
       >
-        <div className="bg-[#FEF9C3] w-20 h-20 rounded-full border-4 border-black flex items-center justify-center text-4xl mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+        {isWorldEntry && world && (
+          <div className="w-full mb-4 rounded-2xl py-2 px-4 font-black text-sm uppercase tracking-widest text-white text-center" style={{ background: world.color }}>
+            {world.emoji} {world.name}
+          </div>
+        )}
+        <div className={`${badgeBg} w-20 h-20 rounded-full border-4 border-black flex items-center justify-center text-4xl mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]`}>
           {intro.emoji}
         </div>
         <div className="bg-black text-white text-xs font-black px-4 py-1 rounded-full mb-3 uppercase tracking-widest">
@@ -501,12 +578,13 @@ function LevelIntroCard({ levelInPhase, totalLevels, onStart }: { levelInPhase: 
         </div>
         <h2 className="text-2xl font-black mb-2">{intro.title}</h2>
         <p className="text-gray-500 font-bold mb-3">{intro.body}</p>
-        <div className="bg-[#DCFCE7] border-2 border-[#22C55E] rounded-2xl px-4 py-3 mb-6 w-full">
-          <p className="text-sm font-black text-[#15803D]">💡 Tip: {intro.tip}</p>
+        <div className={`${tipBg} border-2 ${tipBorder} rounded-2xl px-4 py-3 mb-6 w-full`}>
+          <p className={`text-sm font-black ${tipColor}`}>💡 Tip: {intro.tip}</p>
         </div>
         <button
           onClick={onStart}
-          className="w-full bg-[#3B82F6] text-white py-4 rounded-2xl text-xl font-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 transition-all"
+          className="w-full text-white py-4 rounded-2xl text-xl font-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 transition-all"
+          style={{ background: btnColor }}
         >
           I'm Ready! ✊
         </button>
@@ -600,9 +678,10 @@ export default function Game() {
     speakWelcome();
 
     // Show tutorial first time in Phase 1
+    const isPhase2WorldEntry = startPhase === 2 && [1, 6, 11].includes(startLevel);
     if (startPhase === 1 && !tutorialDone) {
       setGameState('TUTORIAL');
-    } else if (startPhase === 1) {
+    } else if (startPhase === 1 || isPhase2WorldEntry) {
       setGameState('LEVEL_INTRO');
       loadQuestion(startPhase, startLevel);
     } else {
@@ -657,6 +736,10 @@ export default function Game() {
           setCompanionEmotion('celebrating');
           setProgress(0);
 
+          const nextLevelInPhase = levelInPhase + 1;
+          const nextPhase = phase + 1;
+          const isP2WorldEntry = !wasLastLevel && phase === 2 && [6, 11].includes(nextLevelInPhase);
+
           if (wasLastLevel) {
             setIsPhaseTransition(true);
             setIsGameComplete(wasLastPhase);
@@ -671,9 +754,12 @@ export default function Game() {
           }
 
           setGameState('VICTORY');
-          // Pre-load next question so level intro is ready
-          if (!wasLastLevel && phase === 1) {
-            loadQuestion(phase, levelInPhase + 1); // pre-load for LEVEL_INTRO
+          // Pre-load next question so level intro card is ready
+          if (!wasLastLevel && (phase === 1 || isP2WorldEntry)) {
+            loadQuestion(
+              wasLastLevel ? nextPhase : phase,
+              wasLastLevel ? 1 : nextLevelInPhase
+            );
           }
         }, 1500);
       } else {
@@ -724,8 +810,8 @@ export default function Game() {
       {gameState === 'TUTORIAL' && (
         <TutorialScreen onDone={handleTutorialDone} />
       )}
-      {gameState === 'LEVEL_INTRO' && phase === 1 && (
-        <LevelIntroCard levelInPhase={levelInPhase} totalLevels={currentPhaseConfig.levels.length} onStart={handleLevelIntroStart} />
+      {gameState === 'LEVEL_INTRO' && (phase === 1 || phase === 2) && (
+        <LevelIntroCard phase={phase} levelInPhase={levelInPhase} totalLevels={currentPhaseConfig.levels.length} onStart={handleLevelIntroStart} />
       )}
 
       {/* HUD */}
@@ -911,10 +997,15 @@ export default function Game() {
                     </div>
                   )}
 
-                  {/* Hint strip (Phase 1 only) */}
+                  {/* Hint strip */}
                   {phase === 1 && PHASE1_HINTS[levelInPhase] && (
                     <div className="bg-[#FEF9C3] border-2 border-[#EAB308] rounded-2xl px-4 py-2 mb-4 text-center">
                       <p className="text-sm font-black text-[#92400E]">{PHASE1_HINTS[levelInPhase]}</p>
+                    </div>
+                  )}
+                  {phase === 2 && P2_HINTS[levelInPhase] && (
+                    <div className="bg-[#EFF6FF] border-2 border-[#93C5FD] rounded-2xl px-4 py-2 mb-4 text-center">
+                      <p className="text-sm font-black text-[#1D4ED8]">{P2_HINTS[levelInPhase]}</p>
                     </div>
                   )}
 
@@ -971,6 +1062,14 @@ export default function Game() {
                     <Trophy className="text-black" size={80} />
                   </div>
                   <h2 className="text-5xl font-black mb-4">LEVEL UP!</h2>
+                  {phase === 2 && P2_WORLDS.find(w => w.levels.includes(levelInPhase)) && (() => {
+                    const w = P2_WORLDS.find(ww => ww.levels.includes(levelInPhase))!;
+                    return (
+                      <div className="inline-block mb-3 px-4 py-1.5 rounded-full font-black text-sm text-white" style={{ background: w.color }}>
+                        {w.emoji} {w.name}
+                      </div>
+                    );
+                  })()}
                   <p className="text-xl font-bold text-gray-500 mb-10">
                     {currentPhaseConfig.emoji} {currentPhaseConfig.name} · Level {levelInPhase} of {currentPhaseConfig.levels.length}
                   </p>
