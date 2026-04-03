@@ -46,9 +46,9 @@ const GRADES = [
     border: '#FDE68A',
     badge: 'Lower Primary',
     ages: 'Ages 6–8',
-    levels: 5,
-    description: 'Bigger numbers, times tables, and missing-number challenges.',
-    topics: ['Addition up to 100', 'Subtraction up to 100', 'Times tables ×2, ×5, ×10', 'Missing numbers'],
+    levels: 15,
+    description: '3 worlds, 15 levels — numbers, money, time, multiplication, fractions & more.',
+    topics: ['Numbers & operations', 'Money, time & place value', 'Multiply & divide', 'Fractions & perimeter'],
     detailLink: '/lower-primary',
     playLink: '/play?phase=2',
     tip: 'Let them try independently — stay nearby to celebrate!',
@@ -211,7 +211,7 @@ export default function LandingPage() {
       <section id="curriculum" className="py-20 bg-white px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="font-[Nunito] text-4xl font-bold text-center mb-3">Curriculum‑Aligned Learning</h2>
-          <p className="text-center text-gray-500 max-w-xl mx-auto mb-12">Following K–6 math standards across 25 levels and 4 phases</p>
+          <p className="text-center text-gray-500 max-w-xl mx-auto mb-12">Following K–6 math standards across 35 levels and 4 phases</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {GRADES.map(g => (
               <Link

@@ -3,12 +3,50 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 const accent = '#D97706';
-const levels = [
-  { n: 6, title: 'Addition within 20', example: '"9 + 6 = ?"' },
-  { n: 7, title: 'Subtraction within 20', example: '"15 – 7 = ?"' },
-  { n: 8, title: 'Addition within 100', example: '"34 + 25 = ?"' },
-  { n: 9, title: 'Times Tables ×2, ×5, ×10', example: '"5 × 6 = ?"' },
-  { n: 10, title: 'Missing Number', example: '"? + 4 = 11"' },
+
+const worlds = [
+  {
+    name: 'World 1 — Academy of Numbers',
+    emoji: '🏫',
+    color: '#2563EB',
+    bg: '#EFF6FF',
+    border: '#93C5FD',
+    levels: [
+      { n: 1,  title: 'Addition within 20',        example: '"9 + 6 = ?"' },
+      { n: 2,  title: 'Subtraction within 20',      example: '"15 – 7 = ?"' },
+      { n: 3,  title: 'Addition & Subtraction ≤100', example: '"34 + 25 = ?"' },
+      { n: 4,  title: 'Times Tables ×2, ×5, ×10',  example: '"5 × 6 = ?"' },
+      { n: 5,  title: 'Missing Number',             example: '"? + 4 = 11"' },
+    ],
+  },
+  {
+    name: "World 2 — Merchant's Guild",
+    emoji: '🏪',
+    color: '#D97706',
+    bg: '#FFFBEB',
+    border: '#FCD34D',
+    levels: [
+      { n: 6,  title: 'Place Value (Tens & Units)',  example: '"Tens digit of 47 = ?"' },
+      { n: 7,  title: 'Money & Change',              example: '"Cost R35, pay R50 — change?"' },
+      { n: 8,  title: 'Telling the Time',            example: '"It is 3:00. Add 2 hours."' },
+      { n: 9,  title: 'Word Problems (add/sub)',     example: '"Lebo has 34 sweets, gets 18 more…"' },
+      { n: 10, title: 'Doubles & Halves',            example: '"Half of 28 = ?"' },
+    ],
+  },
+  {
+    name: "World 3 — Dragon's Tower",
+    emoji: '🐉',
+    color: '#DC2626',
+    bg: '#FEF2F2',
+    border: '#FCA5A5',
+    levels: [
+      { n: 11, title: 'Times Tables ×3, ×4, ×6',    example: '"4 × 6 = ?"' },
+      { n: 12, title: 'Division (sharing equally)',  example: '"24 ÷ 4 = ?"' },
+      { n: 13, title: 'Simple Fractions',            example: '"¾ of 12 = ?"' },
+      { n: 14, title: 'Perimeter',                   example: '"Rectangle 5 cm × 3 cm — perimeter?"' },
+      { n: 15, title: 'Multi‑Step Word Problems',    example: '"3 bags of 6 oranges, eat 5 — how many left?"' },
+    ],
+  },
 ];
 
 export default function LowerPrimaryPage() {
@@ -33,11 +71,16 @@ export default function LowerPrimaryPage() {
           </span>
           <h1 className="font-[Nunito] text-6xl font-extrabold leading-tight mb-6"
             style={{ background: `linear-gradient(135deg,${accent},#F59E0B)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            Level Up Your Math Skills<br />Defeat Stronger Monsters
+            3 Worlds.<br />15 Levels. Epic Battles.
           </h1>
-          <p className="text-xl max-w-xl mx-auto mb-8" style={{ color: '#92400E' }}>
-            Addition, subtraction, and times tables become exciting battles. Earn XP, unlock gear, and save the kingdom.
+          <p className="text-xl max-w-xl mx-auto mb-4" style={{ color: '#92400E' }}>
+            Journey through the Academy of Numbers, the Merchant's Guild, and the Dragon's Tower. Master 15 levels of real math skills.
           </p>
+          <div className="flex gap-3 justify-center flex-wrap mb-8">
+            <span className="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">🏫 Academy of Numbers</span>
+            <span className="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">🏪 Merchant's Guild</span>
+            <span className="bg-red-100 text-red-800 text-xs font-bold px-3 py-1 rounded-full">🐉 Dragon's Tower</span>
+          </div>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link to="/play?phase=2" className="font-[Nunito] inline-flex items-center gap-2 text-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-all shadow-md no-underline"
               style={{ background: accent }}>
@@ -54,12 +97,14 @@ export default function LowerPrimaryPage() {
       {/* What they'll learn */}
       <section className="max-w-6xl mx-auto px-6 pb-16">
         <h2 className="font-[Nunito] text-3xl font-bold text-center mb-10" style={{ color: '#B45309' }}>Master Key Math Concepts</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
-            { icon: '➕', title: 'Addition up to 100', desc: 'With carrying and mental math strategies.' },
-            { icon: '➖', title: 'Subtraction up to 100', desc: 'No negative results — confidence building.' },
-            { icon: '✖️', title: 'Times Tables (×2, ×5, ×10)', desc: 'Foundational multiplication skills.' },
-            { icon: '❓', title: 'Missing Number Problems', desc: '"? + 4 = 11" — algebraic thinking starts here.' },
+            { icon: '🏫', title: 'Numbers & Operations', desc: 'Addition, subtraction, and times tables up to 100.' },
+            { icon: '🏪', title: 'Money, Time & Place Value', desc: 'Real-world skills: counting change, reading clocks, understanding tens and units.' },
+            { icon: '🐉', title: 'Multiply, Divide & Fractions', desc: 'Times tables ×3–×6, sharing equally, halves and quarters.' },
+            { icon: '📖', title: 'Word Problems', desc: 'Realistic scenarios build reading + math skills together.' },
+            { icon: '📐', title: 'Perimeter & Measurement', desc: 'Shapes in the real world — rectangles and squares.' },
+            { icon: '🧠', title: 'Multi-Step Thinking', desc: 'Two-step problems prepare children for upper primary.' },
           ].map(c => (
             <div key={c.title} className="bg-white text-center p-6 rounded-3xl shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all">
               <div className="text-5xl mb-4">{c.icon}</div>
@@ -70,15 +115,29 @@ export default function LowerPrimaryPage() {
         </div>
       </section>
 
-      {/* Levels */}
+      {/* Worlds + Levels */}
       <section id="levels" className="max-w-6xl mx-auto px-6 pb-16">
-        <h2 className="font-[Nunito] text-3xl font-bold text-center mb-10" style={{ color: '#B45309' }}>Lower Primary Levels</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {levels.map(l => (
-            <div key={l.n} className="bg-white p-6 rounded-2xl shadow-sm" style={{ borderLeft: '4px solid #F59E0B' }}>
-              <div className="font-[Nunito] text-2xl font-extrabold mb-2" style={{ color: accent }}>Level {l.n}</div>
-              <strong>{l.title}</strong>
-              <p className="text-gray-400 text-sm mt-2">{l.example}</p>
+        <h2 className="font-[Nunito] text-3xl font-bold text-center mb-10" style={{ color: '#B45309' }}>3 Worlds · 15 Levels</h2>
+        <div className="flex flex-col gap-10">
+          {worlds.map(world => (
+            <div key={world.name}>
+              {/* World header */}
+              <div className="flex items-center gap-3 mb-4 px-2">
+                <div className="text-3xl">{world.emoji}</div>
+                <div>
+                  <h3 className="font-[Nunito] text-xl font-extrabold" style={{ color: world.color }}>{world.name}</h3>
+                </div>
+              </div>
+              {/* Level cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {world.levels.map(l => (
+                  <div key={l.n} className="bg-white p-5 rounded-2xl shadow-sm" style={{ borderLeft: `4px solid ${world.color}` }}>
+                    <div className="font-[Nunito] text-xl font-extrabold mb-1" style={{ color: world.color }}>Level {l.n}</div>
+                    <strong className="text-sm">{l.title}</strong>
+                    <p className="text-gray-400 text-xs mt-1">{l.example}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
