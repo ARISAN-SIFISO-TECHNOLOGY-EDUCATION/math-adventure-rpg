@@ -18,8 +18,15 @@ export default function LowerPrimaryPage() {
         prevLink={{ href: '/preschool', label: 'Ages 3–5' }}
         nextLink={{ href: '/higher-primary', label: 'Ages 9–12' }} />
 
+      {/* Back to home */}
+      <div className="max-w-6xl mx-auto px-6 pt-6">
+        <Link to="/" className="inline-flex items-center gap-2 text-sm font-bold no-underline hover:opacity-70 transition-opacity" style={{ color: accent }}>
+          ← Back to Home
+        </Link>
+      </div>
+
       {/* Hero */}
-      <section className="py-16 text-center px-6">
+      <section className="py-12 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-amber-100 text-amber-800 text-xs font-semibold px-4 py-1 rounded-full mb-6">
             🎯 Grades 1–3 | Ages 6–8
@@ -32,9 +39,9 @@ export default function LowerPrimaryPage() {
             Addition, subtraction, and times tables become exciting battles. Earn XP, unlock gear, and save the kingdom.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
-            <Link to="/play" className="font-[Nunito] inline-flex items-center gap-2 text-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-all shadow-md no-underline"
+            <Link to="/play?phase=2" className="font-[Nunito] inline-flex items-center gap-2 text-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-all shadow-md no-underline"
               style={{ background: accent }}>
-              🎮 Play Web Demo
+              🎮 Play Lower Primary
             </Link>
             <Link to="/higher-primary" className="font-[Nunito] inline-flex items-center gap-2 bg-white border-2 px-8 py-4 rounded-full font-bold hover:scale-105 transition-all no-underline"
               style={{ borderColor: accent, color: accent }}>
@@ -77,6 +84,34 @@ export default function LowerPrimaryPage() {
         </div>
       </section>
 
+      {/* Parent tip */}
+      <section className="max-w-6xl mx-auto px-6 pb-16">
+        <div className="bg-white rounded-3xl p-8 border-2 shadow-sm flex gap-6 flex-wrap md:flex-nowrap items-start" style={{ borderColor: '#FDE68A' }}>
+          <div className="text-5xl shrink-0">👨‍👩‍👧</div>
+          <div>
+            <h2 className="font-[Nunito] text-2xl font-bold mb-2" style={{ color: '#B45309' }}>A Note for Parents &amp; Caregivers</h2>
+            <p className="text-gray-600 mb-4 leading-relaxed">
+              Children aged 6–8 are building independence but still benefit from encouragement nearby.
+              Let them try each question on their own first — then discuss what they found tricky.
+            </p>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li className="flex gap-2"><span className="font-bold" style={{ color: accent }}>✓</span> Let them read the question themselves first</li>
+              <li className="flex gap-2"><span className="font-bold" style={{ color: accent }}>✓</span> If stuck, ask "what do you already know?" not "the answer is…"</li>
+              <li className="flex gap-2"><span className="font-bold" style={{ color: accent }}>✓</span> Celebrate effort, not just correct answers</li>
+              <li className="flex gap-2"><span className="font-bold" style={{ color: accent }}>✓</span> 10–15 minutes per session works best for this age group</li>
+            </ul>
+            <div className="mt-4 flex gap-3 flex-wrap">
+              <Link to="/play?phase=2" className="font-[Nunito] inline-flex items-center gap-2 text-white text-sm px-6 py-3 rounded-full font-bold no-underline hover:opacity-90 transition-opacity" style={{ background: accent }}>
+                🎮 Start Playing
+              </Link>
+              <Link to="/#parents" className="font-[Nunito] inline-flex items-center gap-2 text-sm px-6 py-3 rounded-full font-bold no-underline border-2 hover:opacity-80 transition-opacity" style={{ borderColor: accent, color: accent }}>
+                Full Parent Guide
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Safety */}
       <section id="safety" className="max-w-6xl mx-auto px-6 pb-16">
         <h2 className="font-[Nunito] text-3xl font-bold text-center mb-10" style={{ color: '#B45309' }}>Parent‑Approved Safety</h2>
@@ -101,7 +136,7 @@ export default function LowerPrimaryPage() {
         <div className="max-w-2xl mx-auto">
           <h2 className="font-[Nunito] text-3xl font-bold text-white mb-4">Ready for the next challenge?</h2>
           <p className="mb-6 opacity-90">Try Lower Primary levels right now in your browser.</p>
-          <Link to="/play" className="font-[Nunito] inline-flex items-center gap-2 bg-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-all no-underline"
+          <Link to="/play?phase=2" className="font-[Nunito] inline-flex items-center gap-2 bg-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-all no-underline"
             style={{ color: accent }}>
             Play Now →
           </Link>

@@ -22,8 +22,15 @@ export default function HigherPrimaryPage() {
       <Navbar breadcrumb="Higher Primary" accentColor={accent} borderColor="#DDD6FE"
         prevLink={{ href: '/lower-primary', label: 'Ages 6–8' }} />
 
+      {/* Back to home */}
+      <div className="max-w-6xl mx-auto px-6 pt-6">
+        <Link to="/" className="inline-flex items-center gap-2 text-sm font-bold no-underline hover:opacity-70 transition-opacity" style={{ color: accent }}>
+          ← Back to Home
+        </Link>
+      </div>
+
       {/* Hero */}
-      <section className="py-16 text-center px-6">
+      <section className="py-12 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-violet-100 text-violet-800 text-xs font-semibold px-4 py-1 rounded-full mb-6">
             🎯 Grades 4–6 | Ages 9–12
@@ -36,13 +43,13 @@ export default function HigherPrimaryPage() {
             Fractions, decimals, percentages, order of operations, and multi-step word problems. Master them all to defeat the final bosses.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
-            <Link to="/play" className="font-[Nunito] inline-flex items-center gap-2 text-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-all shadow-md no-underline"
+            <Link to="/play?phase=3" className="font-[Nunito] inline-flex items-center gap-2 text-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-all shadow-md no-underline"
               style={{ background: accent }}>
-              🎮 Play Web Demo
+              🎮 Play Higher Primary
             </Link>
-            <Link to="/preschool" className="font-[Nunito] inline-flex items-center gap-2 bg-white border-2 px-8 py-4 rounded-full font-bold hover:scale-105 transition-all no-underline"
+            <Link to="/play?phase=4" className="font-[Nunito] inline-flex items-center gap-2 bg-white border-2 px-8 py-4 rounded-full font-bold hover:scale-105 transition-all no-underline"
               style={{ borderColor: accent, color: accent }}>
-              ← Start from Pre‑School
+              🏆 Play Advanced →
             </Link>
           </div>
         </div>
@@ -81,6 +88,35 @@ export default function HigherPrimaryPage() {
         </div>
       </section>
 
+      {/* Parent tip */}
+      <section className="max-w-6xl mx-auto px-6 pb-16">
+        <div className="bg-white rounded-3xl p-8 border-2 shadow-sm flex gap-6 flex-wrap md:flex-nowrap items-start" style={{ borderColor: '#DDD6FE' }}>
+          <div className="text-5xl shrink-0">👨‍👩‍👧</div>
+          <div>
+            <h2 className="font-[Nunito] text-2xl font-bold mb-2" style={{ color: '#5B21B6' }}>A Note for Parents &amp; Caregivers</h2>
+            <p className="text-gray-600 mb-4 leading-relaxed">
+              Children aged 9–12 can play independently, but benefit from parents who ask questions
+              and celebrate progress. This stage introduces abstract concepts — a quick chat after each
+              level helps cement the learning.
+            </p>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li className="flex gap-2"><span className="font-bold" style={{ color: accent }}>✓</span> Ask "which question was the trickiest?" after each session</li>
+              <li className="flex gap-2"><span className="font-bold" style={{ color: accent }}>✓</span> For fractions/percentages, connect to real life ("20% off a R50 item")</li>
+              <li className="flex gap-2"><span className="font-bold" style={{ color: accent }}>✓</span> 15–20 minutes per session, ideally daily, builds strong recall</li>
+              <li className="flex gap-2"><span className="font-bold" style={{ color: accent }}>✓</span> Use the grade change lock to keep them in the right challenge zone</li>
+            </ul>
+            <div className="mt-4 flex gap-3 flex-wrap">
+              <Link to="/play?phase=3" className="font-[Nunito] inline-flex items-center gap-2 text-white text-sm px-6 py-3 rounded-full font-bold no-underline hover:opacity-90 transition-opacity" style={{ background: accent }}>
+                🎮 Start Playing
+              </Link>
+              <Link to="/#parents" className="font-[Nunito] inline-flex items-center gap-2 text-sm px-6 py-3 rounded-full font-bold no-underline border-2 hover:opacity-80 transition-opacity" style={{ borderColor: accent, color: accent }}>
+                Full Parent Guide
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Safety */}
       <section id="safety" className="max-w-6xl mx-auto px-6 pb-16">
         <h2 className="font-[Nunito] text-3xl font-bold text-center mb-10" style={{ color: '#5B21B6' }}>Trusted by Parents</h2>
@@ -105,7 +141,7 @@ export default function HigherPrimaryPage() {
         <div className="max-w-2xl mx-auto">
           <h2 className="font-[Nunito] text-3xl font-bold text-white mb-4">The final challenge awaits.</h2>
           <p className="mb-6 opacity-90">Try Higher Primary levels right now in your browser.</p>
-          <Link to="/play" className="font-[Nunito] inline-flex items-center gap-2 bg-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-all no-underline"
+          <Link to="/play?phase=3" className="font-[Nunito] inline-flex items-center gap-2 bg-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-all no-underline"
             style={{ color: accent }}>
             Play Now →
           </Link>
