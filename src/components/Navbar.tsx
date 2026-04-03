@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 type NavbarProps = {
   breadcrumb?: string;
@@ -27,9 +28,9 @@ export default function Navbar({
           )}
         </div>
         <div className="flex gap-6 text-sm text-gray-500 font-semibold flex-wrap items-center">
-          <Link to="/#features"    className="hover:text-gray-800 no-underline text-gray-500">Features</Link>
-          <Link to="/#curriculum"  className="hover:text-gray-800 no-underline text-gray-500">Curriculum</Link>
-          <Link to="/#parents"     className="hover:text-gray-800 no-underline text-gray-500">Parents</Link>
+          <HashLink smooth to="/#features"   className="hover:text-gray-800 no-underline text-gray-500">Features</HashLink>
+          <HashLink smooth to="/#curriculum" className="hover:text-gray-800 no-underline text-gray-500">Curriculum</HashLink>
+          <HashLink smooth to="/#parents"    className="hover:text-gray-800 no-underline text-gray-500">Parents</HashLink>
           {prevLink && (
             <Link to={prevLink.href} className="hover:text-gray-800 no-underline text-gray-500">
               ← {prevLink.label}
