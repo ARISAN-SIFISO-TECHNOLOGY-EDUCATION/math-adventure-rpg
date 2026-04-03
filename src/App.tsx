@@ -5,17 +5,12 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Trophy, ChevronRight, Coins, Sparkles, Loader2, Volume2, VolumeX, Lock } from 'lucide-react';
+import { Trophy, ChevronRight, Coins, Sparkles, Volume2, VolumeX, Lock } from 'lucide-react';
+import { generateProblem, type Problem } from './mathEngine';
 import confetti from 'canvas-confetti';
 
 // --- Types ---
 type GameState = 'START' | 'PLAYING' | 'VICTORY';
-
-type Problem = {
-  question: string;
-  options: (number | string)[];
-  correctAnswer: number | string;
-};
 
 type PhaseConfig = {
   id: number;
@@ -366,7 +361,6 @@ export default function App() {
   const [progress, setProgress] = useState(0);
   const [coins, setCoins] = useState(0);
   const [problem, setProblem] = useState<Problem | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'CORRECT' | 'WRONG'; value: string } | null>(null);
   const [shake, setShake] = useState(false);
   const [isPhaseTransition, setIsPhaseTransition] = useState(false);
@@ -378,30 +372,8 @@ export default function App() {
 
   const currentPhaseConfig = PHASES[phase - 1];
 
-  const fetchQuestion = useCallback(async (p: number, l: number) => {
-    const phaseConfig = PHASES[p - 1];
-    const levelConfig = phaseConfig.levels[l - 1];
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/generate-math', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phase: p, level: l, topic: levelConfig.topic }),
-      });
-      if (!response.ok) throw new Error('Failed to fetch');
-      const data = await response.json();
-      setProblem(data);
-    } catch {
-      const fallbacks: Record<number, Problem> = {
-        1: { question: 'How many stars? ⭐⭐⭐', options: [3, 1, 5, 2], correctAnswer: 3 },
-        2: { question: '9 + 7 = ?', options: [16, 14, 15, 17], correctAnswer: 16 },
-        3: { question: '6 × 7 = ?', options: [42, 36, 48, 40], correctAnswer: 42 },
-        4: { question: '25% of 80 = ?', options: [20, 15, 25, 30], correctAnswer: 20 },
-      };
-      setProblem(fallbacks[p] || fallbacks[1]);
-    } finally {
-      setIsLoading(false);
-    }
+  const loadQuestion = useCallback((p: number, l: number) => {
+    setProblem(generateProblem(p, l));
   }, []);
 
   const startGame = useCallback(() => {
@@ -423,8 +395,8 @@ export default function App() {
     setFeedback(null);
     setGameState('PLAYING');
     startBGM();
-    fetchQuestion(startPhase, startLevel);
-  }, [phase, levelInPhase, isGameComplete, playClick, startBGM, fetchQuestion]);
+    loadQuestion(startPhase, startLevel);
+  }, [phase, levelInPhase, isGameComplete, playClick, startBGM, loadQuestion]);
 
   const triggerConfetti = () => {
     confetti({
@@ -474,7 +446,7 @@ export default function App() {
       } else {
         setTimeout(() => {
           setFeedback(null);
-          fetchQuestion(phase, levelInPhase);
+          loadQuestion(phase, levelInPhase);
         }, 1500);
       }
     } else {
@@ -484,7 +456,7 @@ export default function App() {
       setTimeout(() => setShake(false), 500);
       setTimeout(() => setFeedback(null), 1000);
     }
-  }, [problem, progress, phase, levelInPhase, playCorrect, playWrong, playVictory, stopBGM, fetchQuestion]);
+  }, [problem, progress, phase, levelInPhase, playCorrect, playWrong, playVictory, stopBGM, loadQuestion]);
 
   const handlePhaseSelect = (newPhase: number) => {
     setPhase(newPhase);
@@ -630,33 +602,26 @@ export default function App() {
                   </motion.div>
                 )}
 
-                {isLoading ? (
-                  <div className="flex flex-col items-center justify-center py-20">
-                    <Loader2 className="animate-spin text-[#3B82F6]" size={64} />
-                    <p className="mt-6 text-2xl font-black text-gray-500 animate-pulse">Thinking of a puzzle...</p>
+                <>
+                  <div className="text-center mb-10">
+                    <p className="text-sm font-black uppercase tracking-wider text-gray-400 mb-3">
+                      {currentPhaseConfig.emoji} {currentPhaseConfig.name} · Level {levelInPhase}/5
+                    </p>
+                    <h2 className="text-3xl md:text-5xl font-black leading-tight whitespace-pre-line">{problem?.question}</h2>
                   </div>
-                ) : (
-                  <>
-                    <div className="text-center mb-10">
-                      <p className="text-sm font-black uppercase tracking-wider text-gray-400 mb-3">
-                        {currentPhaseConfig.emoji} {currentPhaseConfig.name} · Level {levelInPhase}/5
-                      </p>
-                      <h2 className="text-3xl md:text-5xl font-black leading-tight">{problem?.question}</h2>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {problem?.options.map((opt, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handleAnswer(opt)}
-                          disabled={!!feedback}
-                          className="bg-[#E0F2FE] hover:bg-[#BAE6FD] border-4 border-black py-6 rounded-3xl text-3xl md:text-4xl font-black transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 disabled:opacity-50"
-                        >
-                          {opt}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {problem?.options.map((opt, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleAnswer(opt)}
+                        disabled={!!feedback}
+                        className="bg-[#E0F2FE] hover:bg-[#BAE6FD] border-4 border-black py-6 rounded-3xl text-3xl md:text-4xl font-black transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 disabled:opacity-50"
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                </>
               </div>
             </motion.div>
           )}
