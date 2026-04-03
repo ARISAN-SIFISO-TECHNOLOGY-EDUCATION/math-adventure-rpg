@@ -534,87 +534,472 @@ function p2l15(): Problem {
   }
 }
 
-// PHASE 3 — Higher Primary (Ages 9–10)
+// PHASE 3 — Higher Primary (Ages 9–12)
+// 3 sub-worlds × 5 levels = 15 levels
+//   World 1: Merchant Republic  (commerce)      — levels  1–5
+//   World 2: Engineers' Citadel (construction)  — levels  6–10
+//   World 3: Storm Observatory  (science/data)  — levels 11–15
+
+// ── World 1: Merchant Republic ────────────────────────────────────────────────
 
 function p3l1(): Problem {
-  // All times tables 1–12
-  const a = rand(2, 12);
-  const b = rand(2, 12);
+  // Long multiplication: 2-digit × 2-digit
+  const a = rand(11, 35);
+  const b = rand(11, 25);
   const ans = a * b;
   return {
     question: `${a} × ${b} = ?`,
-    options: numericOptions(ans, 4, 0, Math.max(12, Math.round(ans * 0.2))),
+    options: numericOptions(ans, 4, 0, Math.max(20, Math.round(ans * 0.12))),
     correctAnswer: ans,
   };
 }
 
 function p3l2(): Problem {
-  // Division with no remainder
-  const divisor = rand(2, 12);
-  const quotient = rand(2, 12);
-  const dividend = divisor * quotient;
+  // Division with remainders — ask for quotient OR remainder
+  const divisor = rand(3, 9);
+  const quotient = rand(3, 12);
+  const remainder = rand(1, divisor - 1);
+  const dividend = divisor * quotient + remainder;
+  if (Math.random() < 0.5) {
+    return {
+      question: `${dividend} ÷ ${divisor} = ${quotient} remainder ?\n(What is the remainder?)`,
+      options: numericOptions(remainder, 4, 0, 3),
+      correctAnswer: remainder,
+    };
+  }
   return {
-    question: `${dividend} ÷ ${divisor} = ?`,
-    options: numericOptions(quotient, 4, 1, 5),
+    question: `${dividend} ÷ ${divisor} = ? remainder ${remainder}\n(What is the quotient?)`,
+    options: numericOptions(quotient, 4, 1, 3),
     correctAnswer: quotient,
   };
 }
 
 function p3l3(): Problem {
-  // Simple fractions of a number (½, ¼, ¾, ⅓)
-  type Fraction = [number, number, string];
-  const fracs: Fraction[] = [
-    [1, 2, '1/2'], [1, 4, '1/4'], [3, 4, '3/4'], [1, 3, '1/3'],
-  ];
-  const [num, den, sym] = fracs[rand(0, fracs.length - 1)];
-  const base = rand(2, 12) * den; // guarantees clean integer answer
-  const ans = Math.round((base * num) / den);
+  // Decimal operations — add or subtract (1 decimal place)
+  const aInt = rand(11, 95);
+  const bInt = rand(11, 95);
+  const useAdd = Math.random() < 0.5;
+  if (useAdd) {
+    const ansInt = aInt + bInt;
+    return {
+      question: `${(aInt / 10).toFixed(1)} + ${(bInt / 10).toFixed(1)} = ?`,
+      options: numericOptions(ansInt, 4, 0, 5).map(v => parseFloat((v / 10).toFixed(1))),
+      correctAnswer: parseFloat((ansInt / 10).toFixed(1)),
+    };
+  }
+  const big = Math.max(aInt, bInt);
+  const small = Math.min(aInt, bInt);
+  const ansInt = big - small;
   return {
-    question: `${sym} of ${base} = ?`,
-    options: numericOptions(ans, 4, 0, 6),
-    correctAnswer: ans,
+    question: `${(big / 10).toFixed(1)} − ${(small / 10).toFixed(1)} = ?`,
+    options: numericOptions(ansInt, 4, 0, 5).map(v => parseFloat((v / 10).toFixed(1))),
+    correctAnswer: parseFloat((ansInt / 10).toFixed(1)),
   };
 }
 
 function p3l4(): Problem {
-  // Word problems — addition and subtraction
-  const variant = rand(0, 2);
-  if (variant === 0) {
-    const start = rand(20, 80);
-    const more = rand(5, 30);
-    return {
-      question: `Sam has ${start} stickers and gets ${more} more.\nHow many does he have now?`,
-      options: numericOptions(start + more, 4, 0, 10),
-      correctAnswer: start + more,
-    };
-  } else if (variant === 1) {
-    const total = rand(30, 90);
-    const flyAway = rand(5, total - 5);
-    return {
-      question: `${total} birds sit on a tree. ${flyAway} fly away.\nHow many remain?`,
-      options: numericOptions(total - flyAway, 4, 0, 10),
-      correctAnswer: total - flyAway,
-    };
-  } else {
-    const red = rand(10, 50);
-    const blue = rand(10, 50);
-    return {
-      question: `A box has ${red} red balls and ${blue} blue balls.\nHow many balls in total?`,
-      options: numericOptions(red + blue, 4, 0, 10),
-      correctAnswer: red + blue,
-    };
-  }
+  // Percentages using the 10% anchor method
+  const percents = [10, 20, 25, 50, 75];
+  const p = percents[rand(0, percents.length - 1)];
+  const den = 100 / p;
+  const base = rand(2, 20) * den; // guarantees clean integer answer
+  const ans = (base * p) / 100;
+  return {
+    question: `${p}% of ${base} = ?`,
+    options: numericOptions(ans, 4, 0, Math.max(8, Math.round(ans * 0.3))),
+    correctAnswer: ans,
+  };
 }
 
 function p3l5(): Problem {
-  // Rounding to nearest 10 or 100
-  const roundTo = Math.random() < 0.5 ? 10 : 100;
-  const n = roundTo === 10 ? rand(11, 99) : rand(101, 999);
-  const ans = Math.round(n / roundTo) * roundTo;
+  // Multi-step money (World 1 boss)
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const price = rand(2, 8) * 10 + rand(0, 1) * 5;
+    const qty = rand(2, 4);
+    const total = price * qty;
+    const paid = total + rand(1, 3) * 20;
+    return {
+      question: `${qty} items at R${price} each.\nYou pay R${paid}.\nWhat is your change?`,
+      options: numericOptions(paid - total, 4, 0, 10),
+      correctAnswer: paid - total,
+    };
+  }
+  if (variant === 1) {
+    const origPrice = rand(4, 20) * 10;
+    const discountPct = [10, 20, 25][rand(0, 2)];
+    const saving = (origPrice * discountPct) / 100;
+    const finalPrice = origPrice - saving;
+    return {
+      question: `Original price: R${origPrice}.\n${discountPct}% discount applied.\nFinal price?`,
+      options: numericOptions(finalPrice, 4, 0, Math.max(10, saving)),
+      correctAnswer: finalPrice,
+    };
+  }
+  const people = [2, 3, 4, 5][rand(0, 3)];
+  const perPerson = rand(5, 20) * 5;
+  const totalBill = perPerson * people;
   return {
-    question: `Round ${n} to the nearest ${roundTo}`,
-    options: multipleOptions(ans, roundTo),
-    correctAnswer: ans,
+    question: `A bill of R${totalBill} is split equally among ${people}.\nHow much does each person pay?`,
+    options: numericOptions(perPerson, 4, 0, Math.max(5, Math.round(perPerson * 0.2))),
+    correctAnswer: perPerson,
+  };
+}
+
+// ── World 2: Engineers' Citadel ───────────────────────────────────────────────
+
+function p3l6(): Problem {
+  // Area of rectangles/squares — perimeter included as a distractor
+  const length = rand(3, 15);
+  const width = rand(2, 10);
+  const area = length * width;
+  const perimeter = 2 * (length + width);
+  const opts = new Set<number>([area, perimeter]);
+  while (opts.size < 4) {
+    const d = area + rand(1, 3) * length * (Math.random() < 0.5 ? 1 : -1);
+    if (d > 0 && d !== area) opts.add(d);
+  }
+  return {
+    question: `A rectangle is ${length} m × ${width} m.\nWhat is the AREA in m²?`,
+    options: shuffle([...opts]).slice(0, 4),
+    correctAnswer: area,
+  };
+}
+
+function p3l7(): Problem {
+  // Simplify fractions
+  const pairs = [
+    { frac: '2/4', ans: '1/2', wrong: ['1/4', '2/3', '3/4'] },
+    { frac: '3/6', ans: '1/2', wrong: ['2/3', '1/3', '3/4'] },
+    { frac: '6/8', ans: '3/4', wrong: ['2/3', '1/2', '4/6'] },
+    { frac: '4/6', ans: '2/3', wrong: ['1/3', '3/4', '1/2'] },
+    { frac: '4/8', ans: '1/2', wrong: ['3/4', '2/4', '1/4'] },
+    { frac: '9/12', ans: '3/4', wrong: ['2/3', '1/2', '4/5'] },
+    { frac: '8/12', ans: '2/3', wrong: ['3/4', '1/2', '4/6'] },
+    { frac: '6/10', ans: '3/5', wrong: ['2/5', '1/2', '4/5'] },
+    { frac: '10/15', ans: '2/3', wrong: ['1/3', '3/5', '3/4'] },
+  ];
+  const p = pairs[rand(0, pairs.length - 1)];
+  return {
+    question: `Simplify ${p.frac}`,
+    options: shuffle([p.ans, ...p.wrong.slice(0, 3)]),
+    correctAnswer: p.ans,
+  };
+}
+
+function p3l8(): Problem {
+  // Fraction addition/subtraction with unlike denominators (curated safe pairs)
+  type FP = { n1: number; d1: number; n2: number; d2: number; op: '+' | '-'; ans: string };
+  const problems: FP[] = [
+    { n1: 1, d1: 2, n2: 1, d2: 4, op: '+', ans: '3/4' },
+    { n1: 2, d1: 3, n2: 1, d2: 6, op: '+', ans: '5/6' },
+    { n1: 3, d1: 4, n2: 1, d2: 2, op: '-', ans: '1/4' },
+    { n1: 5, d1: 6, n2: 1, d2: 3, op: '-', ans: '1/2' },
+    { n1: 1, d1: 3, n2: 1, d2: 6, op: '+', ans: '1/2' },
+    { n1: 1, d1: 2, n2: 1, d2: 3, op: '+', ans: '5/6' },
+    { n1: 3, d1: 4, n2: 1, d2: 8, op: '+', ans: '7/8' },
+    { n1: 2, d1: 3, n2: 1, d2: 4, op: '-', ans: '5/12' },
+  ];
+  const pr = problems[rand(0, problems.length - 1)];
+  // Build 3 plausible wrong answers
+  const wrongSet = new Set<string>([
+    fractionStr(pr.n1 + pr.n2, pr.d1 + pr.d2), // common mistake: add tops and bottoms
+    fractionStr(pr.n1 + pr.n2, pr.d1),
+    fractionStr(pr.n1, pr.d1 + pr.d2),
+  ].filter(w => w !== pr.ans));
+  while (wrongSet.size < 3) wrongSet.add(fractionStr(rand(1, 5), rand(2, 8)));
+  return {
+    question: `${pr.n1}/${pr.d1} ${pr.op} ${pr.n2}/${pr.d2} = ?`,
+    options: shuffle([pr.ans, ...[...wrongSet].slice(0, 3)]),
+    correctAnswer: pr.ans,
+  };
+}
+
+function p3l9(): Problem {
+  // Ratio & proportion
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const rA = rand(1, 4);
+    const rB = rand(2, 5);
+    const mult = rand(2, 6);
+    const givenA = rA * mult;
+    const givenB = rB * mult;
+    return {
+      question: `Ratio of red to blue tiles is ${rA}:${rB}.\nWith ${givenA} red tiles, how many blue?`,
+      options: numericOptions(givenB, 4, 1, Math.max(4, rB)),
+      correctAnswer: givenB,
+    };
+  }
+  if (variant === 1) {
+    const scale = [5, 10, 20][rand(0, 2)];
+    const mapDist = rand(3, 12);
+    const realDist = mapDist * scale;
+    return {
+      question: `Map scale: 1 cm = ${scale} km.\nMap distance: ${mapDist} cm.\nReal distance?`,
+      options: numericOptions(realDist, 4, 0, scale * 2),
+      correctAnswer: realDist,
+    };
+  }
+  const rA = rand(2, 4);
+  const rB = rand(3, 6);
+  const mult = rand(2, 4);
+  const givenA = rA * mult;
+  const givenB = rB * mult;
+  return {
+    question: `A recipe uses ${rA} cups flour and ${rB} cups milk.\nFor ${givenA} cups of flour, how much milk?`,
+    options: numericOptions(givenB, 4, 1, Math.max(4, rB)),
+    correctAnswer: givenB,
+  };
+}
+
+function p3l10(): Problem {
+  // World 2 boss — area + percentage, ratio split, or fraction of area
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const length = rand(4, 12);
+    const width = rand(3, 8);
+    const area = length * width;
+    const pricePerM2 = rand(3, 8) * 10;
+    const totalCost = area * pricePerM2;
+    return {
+      question: `Room: ${length} m × ${width} m.\nFlooring costs R${pricePerM2}/m².\nTotal cost?`,
+      options: numericOptions(totalCost, 4, 0, Math.max(pricePerM2 * 2, Math.round(totalCost * 0.15))),
+      correctAnswer: totalCost,
+    };
+  }
+  if (variant === 1) {
+    const people = [2, 3, 4][rand(0, 2)];
+    const perPerson = rand(5, 15) * people; // total divisible
+    const total = perPerson * people;
+    const rA = rand(1, people - 1);
+    const rB = people - rA;
+    const largeShare = (total / people) * Math.max(rA, rB);
+    return {
+      question: `R${total} shared in ratio ${rA}:${rB}.\nLarger share = R?`,
+      options: numericOptions(largeShare, 4, 0, Math.round(total * 0.15)),
+      correctAnswer: largeShare,
+    };
+  }
+  const length = rand(4, 10);
+  const width = rand(3, 8);
+  const area = length * width;
+  const fracs: [number, number][] = [[1, 2], [1, 4], [3, 4]];
+  const [num, den] = fracs[rand(0, fracs.length - 1)];
+  if (area % den !== 0) return p3l10();
+  const part = (area * num) / den;
+  return {
+    question: `A garden is ${length} m × ${width} m.\n${num}/${den} is planted.\nHow many m² is planted?`,
+    options: numericOptions(part, 4, 0, Math.max(5, Math.round(part * 0.2))),
+    correctAnswer: part,
+  };
+}
+
+// ── World 3: Storm Observatory ────────────────────────────────────────────────
+
+function p3l11(): Problem {
+  // Negative integers — temperature or number line
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const start = rand(-8, 4);
+    const change = rand(2, 8);
+    const goDown = Math.random() < 0.5;
+    const ans = goDown ? start - change : start + change;
+    return {
+      question: `Temperature: ${start}°C.\nIt ${goDown ? 'drops' : 'rises'} by ${change}°.\nNew temperature?`,
+      options: numericOptions(ans, 4, -20, 4),
+      correctAnswer: ans,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(-9, -1);
+    const b = rand(2, 12);
+    return {
+      question: `${a} + ${b} = ?`,
+      options: numericOptions(a + b, 4, -12, 4),
+      correctAnswer: a + b,
+    };
+  }
+  const nums = shuffle([rand(-8, -4), rand(-3, -1), rand(1, 4), rand(5, 10)]);
+  const smallest = Math.min(...nums);
+  return {
+    question: `Which is the SMALLEST?\n${nums.join('   ')}`,
+    options: shuffle([...nums]),
+    correctAnswer: smallest,
+  };
+}
+
+function p3l12(): Problem {
+  // Mean, median, or mode
+  const type = rand(0, 2);
+  if (type === 0) {
+    // Mean — pick values that sum cleanly
+    const count = rand(4, 5);
+    const mean = rand(4, 12);
+    const total = mean * count;
+    // Build count values summing to total
+    const vals: number[] = [];
+    let remaining = total;
+    for (let i = 0; i < count - 1; i++) {
+      const v = rand(Math.max(1, mean - 4), mean + 4);
+      vals.push(v);
+      remaining -= v;
+    }
+    vals.push(remaining);
+    if (remaining < 1 || remaining > 20) return p3l12();
+    return {
+      question: `Find the MEAN of:\n${shuffle(vals).join(', ')}`,
+      options: numericOptions(mean, 4, 1, 3),
+      correctAnswer: mean,
+    };
+  }
+  if (type === 1) {
+    // Mode — one value appears twice, rest appear once
+    const mode = rand(3, 10);
+    const others = [rand(11, 15), rand(16, 20), rand(21, 25)];
+    const vals = shuffle([mode, mode, ...others]);
+    return {
+      question: `Find the MODE of:\n${vals.join(', ')}`,
+      options: numericOptions(mode, 4, 1, 5),
+      correctAnswer: mode,
+    };
+  }
+  // Median — 5 values, sorted middle value
+  const vals = Array.from({ length: 5 }, () => rand(4, 20));
+  const sorted = [...vals].sort((a, b) => a - b);
+  const median = sorted[2];
+  return {
+    question: `Find the MEDIAN of:\n${vals.join(', ')}`,
+    options: numericOptions(median, 4, 1, 4),
+    correctAnswer: median,
+  };
+}
+
+function p3l13(): Problem {
+  // Algebraic equations — solve for n
+  const type = rand(0, 3);
+  if (type === 0) {
+    const n = rand(4, 18);
+    const b = rand(2, n - 1);
+    return {
+      question: `n + ${b} = ${n + b}\nWhat is n?`,
+      options: numericOptions(n, 4, 1, 4),
+      correctAnswer: n,
+    };
+  }
+  if (type === 1) {
+    const b = rand(3, 10);
+    const n = rand(3, 15);
+    return {
+      question: `n − ${b} = ${n - b}\nWhat is n?`,
+      options: numericOptions(n, 4, 1, 4),
+      correctAnswer: n,
+    };
+  }
+  if (type === 2) {
+    const b = rand(2, 8);
+    const n = rand(2, 10);
+    return {
+      question: `n × ${b} = ${n * b}\nWhat is n?`,
+      options: numericOptions(n, 4, 1, 3),
+      correctAnswer: n,
+    };
+  }
+  const b = rand(1, 8);
+  const n = rand(2, 9);
+  return {
+    question: `2n + ${b} = ${2 * n + b}\nWhat is n?`,
+    options: numericOptions(n, 4, 1, 3),
+    correctAnswer: n,
+  };
+}
+
+function p3l14(): Problem {
+  // Advanced BODMAS — brackets, mixed operations
+  const variant = rand(0, 5);
+  if (variant === 0) {
+    const a = rand(2, 6), b = rand(2, 6), c = rand(1, 8);
+    return {
+      question: `${a} + ${b} × ${c} = ?`,
+      options: numericOptions(a + b * c, 4, 0, 8),
+      correctAnswer: a + b * c,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(2, 8), b = rand(2, 4), c = rand(2, 6);
+    return {
+      question: `(${a} + ${b}) × ${c} = ?`,
+      options: numericOptions((a + b) * c, 4, 0, 10),
+      correctAnswer: (a + b) * c,
+    };
+  }
+  if (variant === 2) {
+    const a = rand(2, 6), b = rand(2, 5), c = rand(1, 8);
+    return {
+      question: `${a} × ${b} − ${c} = ?`,
+      options: numericOptions(a * b - c, 4, 0, 8),
+      correctAnswer: a * b - c,
+    };
+  }
+  if (variant === 3) {
+    const d = rand(2, 5);
+    const q = rand(2, 8);
+    const c = rand(2, 6);
+    return {
+      question: `${d * q} ÷ ${d} + ${c} = ?`,
+      options: numericOptions(q + c, 4, 0, 6),
+      correctAnswer: q + c,
+    };
+  }
+  if (variant === 4) {
+    const a = rand(2, 5), b = rand(2, 4), c = rand(3, 6), d = rand(1, c - 1);
+    return {
+      question: `(${a} + ${b}) × (${c} − ${d}) = ?`,
+      options: numericOptions((a + b) * (c - d), 4, 0, 8),
+      correctAnswer: (a + b) * (c - d),
+    };
+  }
+  const a = rand(1, 5), b = rand(2, 5), d2 = rand(2, 4), q2 = rand(2, 6);
+  return {
+    question: `${a} × ${b} + ${d2 * q2} ÷ ${d2} = ?`,
+    options: numericOptions(a * b + q2, 4, 0, 8),
+    correctAnswer: a * b + q2,
+  };
+}
+
+function p3l15(): Problem {
+  // Final boss — multi-step synthesis of all three worlds
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    // Negative numbers + multi-step
+    const start = rand(-10, -2);
+    const rise1 = rand(3, 8);
+    const rise2 = rand(2, 6);
+    return {
+      question: `A submarine is at ${start} m.\nIt rises ${rise1} m, then ${rise2} m more.\nFinal depth?`,
+      options: numericOptions(start + rise1 + rise2, 4, -15, 4),
+      correctAnswer: start + rise1 + rise2,
+    };
+  }
+  if (variant === 1) {
+    // Algebra — solve bn + c = total
+    const b = rand(3, 7);
+    const c = rand(2, 8);
+    const n = rand(2, 8);
+    return {
+      question: `${b}n + ${c} = ${b * n + c}\nWhat is n?`,
+      options: numericOptions(n, 4, 1, 3),
+      correctAnswer: n,
+    };
+  }
+  // Mean reverse — find missing value that gives a target mean
+  const known = Array.from({ length: 4 }, () => rand(10, 20));
+  const targetMean = rand(12, 18);
+  const fifth = targetMean * 5 - known.reduce((a, b) => a + b, 0);
+  if (fifth < 5 || fifth > 25) return p3l15();
+  return {
+    question: `4 scores: ${known.join(', ')}.\nWhat 5th score gives a mean of ${targetMean}?`,
+    options: numericOptions(fifth, 4, 5, 4),
+    correctAnswer: fifth,
   };
 }
 
@@ -786,6 +1171,8 @@ const GENERATORS: Record<string, () => Problem> = {
   '2-6': p2l6, '2-7': p2l7, '2-8': p2l8, '2-9': p2l9, '2-10': p2l10,
   '2-11': p2l11, '2-12': p2l12, '2-13': p2l13, '2-14': p2l14, '2-15': p2l15,
   '3-1': p3l1, '3-2': p3l2, '3-3': p3l3, '3-4': p3l4, '3-5': p3l5,
+  '3-6': p3l6, '3-7': p3l7, '3-8': p3l8, '3-9': p3l9, '3-10': p3l10,
+  '3-11': p3l11, '3-12': p3l12, '3-13': p3l13, '3-14': p3l14, '3-15': p3l15,
   '4-1': p4l1, '4-2': p4l2, '4-3': p4l3, '4-4': p4l4, '4-5': p4l5,
 };
 
