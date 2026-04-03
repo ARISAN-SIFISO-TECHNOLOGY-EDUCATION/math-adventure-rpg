@@ -23,13 +23,13 @@ export default function Navbar({
             🗡️ Math Adventure RPG
           </Link>
           {breadcrumb && (
-            <span className="text-gray-400 font-bold"> → {breadcrumb}</span>
+            <span className="text-gray-400 font-bold"> › {breadcrumb}</span>
           )}
         </div>
-        <div className="flex gap-6 text-sm text-gray-500 font-semibold flex-wrap">
-          <Link to="/#features" className="hover:text-gray-800 no-underline text-gray-500">Features</Link>
-          <Link to="/#curriculum" className="hover:text-gray-800 no-underline text-gray-500">Curriculum</Link>
-          <Link to="/#safety" className="hover:text-gray-800 no-underline text-gray-500">Safety</Link>
+        <div className="flex gap-6 text-sm text-gray-500 font-semibold flex-wrap items-center">
+          <Link to="/#features"    className="hover:text-gray-800 no-underline text-gray-500">Features</Link>
+          <Link to="/#curriculum"  className="hover:text-gray-800 no-underline text-gray-500">Curriculum</Link>
+          <Link to="/#parents"     className="hover:text-gray-800 no-underline text-gray-500">Parents</Link>
           {prevLink && (
             <Link to={prevLink.href} className="hover:text-gray-800 no-underline text-gray-500">
               ← {prevLink.label}
@@ -42,10 +42,10 @@ export default function Navbar({
           )}
           <Link
             to="/play"
-            style={{ color: accentColor }}
-            className="font-bold hover:opacity-80 no-underline"
+            style={{ background: accentColor }}
+            className="text-white font-bold px-4 py-2 rounded-full hover:opacity-90 no-underline transition-opacity"
           >
-            Play Demo ▶
+            Play Now ▶
           </Link>
         </div>
       </div>

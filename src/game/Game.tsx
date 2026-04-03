@@ -4,8 +4,9 @@
  */
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Trophy, ChevronRight, Coins, Sparkles, Volume2, VolumeX, Lock } from 'lucide-react';
+import { Trophy, ChevronRight, Coins, Sparkles, Volume2, VolumeX, Lock, Home } from 'lucide-react';
 import { generateProblem, type Problem } from '../mathEngine';
 import confetti from 'canvas-confetti';
 import { Companion, type CompanionEmotion } from './Companion';
@@ -508,8 +509,11 @@ function LevelIntroCard({ levelInPhase, totalLevels, onStart }: { levelInPhase: 
 
 // --- App ---
 export default function Game() {
+  const [searchParams] = useSearchParams();
+  const initialPhase = Math.min(4, Math.max(1, parseInt(searchParams.get('phase') ?? '1', 10) || 1));
+
   const [gameState, setGameState] = useState<GameState>('START');
-  const [phase, setPhase] = useState(1);
+  const [phase, setPhase] = useState(initialPhase);
   const [levelInPhase, setLevelInPhase] = useState(1);
   const [progress, setProgress] = useState(0);
   const [coins, setCoins] = useState(0);
@@ -756,6 +760,13 @@ export default function Game() {
           >
             {muted ? <VolumeX className="text-gray-400" size={24} /> : <Volume2 className="text-[#3B82F6]" size={24} />}
           </button>
+          <Link
+            to="/"
+            className="p-3 rounded-2xl border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-gray-50 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 transition-all"
+            title="Back to Home"
+          >
+            <Home size={24} className="text-gray-600" />
+          </Link>
         </div>
       </div>
 
