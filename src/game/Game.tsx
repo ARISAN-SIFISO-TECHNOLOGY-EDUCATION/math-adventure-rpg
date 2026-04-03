@@ -47,19 +47,29 @@ const TUTORIAL_SLIDES = [
 ];
 
 const LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
-  1: { emoji: '🔢', title: 'Counting 1 to 5', body: 'Count the objects and tap the right number.', tip: 'Point at each one as you count!' },
-  2: { emoji: '🌟', title: 'Counting up to 10', body: 'Now we count even more objects!', tip: 'Take it slow — count every single one.' },
-  3: { emoji: '⚖️', title: 'More or Less', body: 'Look at two numbers and pick the BIGGER one.', tip: 'Think: which number would be more sweets?' },
-  4: { emoji: '➕', title: 'Adding Together', body: 'Put two groups together and count them all.', tip: 'Count the first group, then keep counting!' },
-  5: { emoji: '➖', title: 'Taking Away', body: 'Start with a number and take some away.', tip: 'Count what is left after taking away.' },
+  1:  { emoji: '🔢', title: 'Counting 1 to 5',    body: 'Count the objects and tap the right number.', tip: 'Point at each one as you count!' },
+  2:  { emoji: '🌟', title: 'Counting up to 10',  body: 'Now we count even more objects!', tip: 'Take it slow — count every single one.' },
+  3:  { emoji: '⚖️', title: 'More or Less',        body: 'Look at two numbers and pick the BIGGER one.', tip: 'Think: which number would be more sweets?' },
+  4:  { emoji: '➕', title: 'Adding Together',     body: 'Put two groups together and count them all.', tip: 'Count the first group, then keep counting!' },
+  5:  { emoji: '➖', title: 'Taking Away',          body: 'Start with a number and take some away.', tip: 'Count what is left after taking away.' },
+  6:  { emoji: '⚡', title: 'Quick Count!',         body: 'Objects flash on screen — see how many without counting one by one!', tip: 'Trust your eyes — how many at once?' },
+  7:  { emoji: '🧩', title: 'Missing Part',         body: 'One part of the sum is missing. Blocks will help you find it!', tip: 'Count all blocks, then count the known ones.' },
+  8:  { emoji: '🔟', title: 'Counting to 20!',     body: 'Now we count all the way to 20 — you can do it!', tip: 'Try counting in groups of 5 to keep track.' },
+  9:  { emoji: '🔷', title: 'Shape Explorer',      body: 'Look at the shape and tap its name!', tip: 'Think about how many sides or corners it has.' },
+  10: { emoji: '🎨', title: 'Pattern Detective',   body: 'Spot what repeats and choose what comes next!', tip: 'Say the pattern out loud to hear the rhythm.' },
 };
 
 const PHASE1_HINTS: Record<number, string> = {
-  1: '👆 Count each object carefully!',
-  2: '👆 Count every one — up to 10!',
-  3: '👆 Tap the BIGGER number!',
-  4: '👆 Add them together!',
-  5: '👆 How many are left?',
+  1:  '👆 Count each object carefully!',
+  2:  '👆 Count every one — up to 10!',
+  3:  '👆 Tap the BIGGER number!',
+  4:  '👆 Add them together!',
+  5:  '👆 How many are left?',
+  6:  '⚡ Trust your eyes — don\'t count one by one!',
+  7:  '🧩 Count the blocks to find the missing part!',
+  8:  '👆 Count carefully all the way to 20!',
+  9:  '🔷 How many sides does it have?',
+  10: '🎨 What is the repeating pattern?',
 };
 
 type PhaseConfig = {
@@ -89,6 +99,11 @@ const PHASES: PhaseConfig[] = [
       { n: 3, topic: 'comparing two numbers — which is more or which is less' },
       { n: 4, topic: 'simple addition where the answer is 5 or less' },
       { n: 5, topic: 'simple subtraction where both numbers are 5 or less' },
+      { n: 6, topic: 'subitizing — recognise a quantity at a glance' },
+      { n: 7, topic: 'number bonds — find the missing part' },
+      { n: 8, topic: 'counting objects from 11 to 20' },
+      { n: 9, topic: 'identify shapes — circle, square, triangle, star' },
+      { n: 10, topic: 'spot the pattern — what comes next?' },
     ],
   },
   {
@@ -457,7 +472,7 @@ function TutorialScreen({ onDone }: { onDone: () => void }) {
 }
 
 // --- Level Intro Card (Phase 1 only) ---
-function LevelIntroCard({ levelInPhase, onStart }: { levelInPhase: number; onStart: () => void }) {
+function LevelIntroCard({ levelInPhase, totalLevels, onStart }: { levelInPhase: number; totalLevels: number; onStart: () => void }) {
   const intro = LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1];
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -471,7 +486,7 @@ function LevelIntroCard({ levelInPhase, onStart }: { levelInPhase: number; onSta
           {intro.emoji}
         </div>
         <div className="bg-black text-white text-xs font-black px-4 py-1 rounded-full mb-3 uppercase tracking-widest">
-          Level {levelInPhase} of 5
+          Level {levelInPhase} of {totalLevels}
         </div>
         <h2 className="text-2xl font-black mb-2">{intro.title}</h2>
         <p className="text-gray-500 font-bold mb-3">{intro.body}</p>
@@ -504,6 +519,7 @@ export default function Game() {
   const [showParentalGate, setShowParentalGate] = useState(false);
   const [showPhaseSelect, setShowPhaseSelect] = useState(false);
   const [tutorialDone, setTutorialDone] = useState(() => localStorage.getItem('tutorialDone') === '1');
+  const [flashVisible, setFlashVisible] = useState(true);
 
   const { muted, toggleMute, startBGM, stopBGM, playClick, playCorrect, playWrong, playVictory } = useSoundSystem();
 
@@ -512,6 +528,17 @@ export default function Game() {
   const loadQuestion = useCallback((p: number, l: number) => {
     setProblem(generateProblem(p, l));
   }, []);
+
+  // Subitizing flash: show objects for 1.5 s, then hide and reveal answer buttons
+  useEffect(() => {
+    if (gameState === 'PLAYING' && problem?.meta?.isSubitizing) {
+      setFlashVisible(true);
+      const timer = setTimeout(() => setFlashVisible(false), 1500);
+      return () => clearTimeout(timer);
+    } else {
+      setFlashVisible(true);
+    }
+  }, [problem, gameState]);
 
   const startGame = useCallback(() => {
     playClick();
@@ -576,7 +603,7 @@ export default function Game() {
       setProgress(newProgress);
 
       if (newProgress >= 5) {
-        const wasLastLevel = levelInPhase === 5;
+        const wasLastLevel = levelInPhase === currentPhaseConfig.levels.length;
         const wasLastPhase = phase === 4;
 
         setTimeout(() => {
@@ -601,7 +628,7 @@ export default function Game() {
           setGameState('VICTORY');
           // Pre-load next question so level intro is ready
           if (!wasLastLevel && phase === 1) {
-            loadQuestion(phase, levelInPhase + 1);
+            loadQuestion(phase, levelInPhase + 1); // pre-load for LEVEL_INTRO
           }
         }, 1500);
       } else {
@@ -650,7 +677,7 @@ export default function Game() {
         <TutorialScreen onDone={handleTutorialDone} />
       )}
       {gameState === 'LEVEL_INTRO' && phase === 1 && (
-        <LevelIntroCard levelInPhase={levelInPhase} onStart={handleLevelIntroStart} />
+        <LevelIntroCard levelInPhase={levelInPhase} totalLevels={currentPhaseConfig.levels.length} onStart={handleLevelIntroStart} />
       )}
 
       {/* HUD */}
@@ -663,7 +690,7 @@ export default function Game() {
           <div>
             <p className="text-xs font-black uppercase tracking-wider leading-tight text-gray-500">{currentPhaseConfig.name}</p>
             <p className="text-3xl font-black leading-none">
-              {levelInPhase}<span className="text-base font-black text-gray-400">/5</span>
+              {levelInPhase}<span className="text-base font-black text-gray-400">/{currentPhaseConfig.levels.length}</span>
             </p>
           </div>
         </div>
@@ -770,29 +797,75 @@ export default function Game() {
                 )}
 
                 <>
-                  <div className="text-center mb-5">
-                    <p className="text-sm font-black uppercase tracking-wider text-gray-400 mb-2">
-                      {currentPhaseConfig.emoji} {currentPhaseConfig.name} · Level {levelInPhase}/5
-                    </p>
-                    <h2 className="text-2xl md:text-4xl font-black leading-tight whitespace-pre-line">{problem?.question}</h2>
-                  </div>
+                  {/* Subitizing: show flash or "what did you see?" */}
+                  {problem?.meta?.isSubitizing ? (
+                    flashVisible ? (
+                      <div className="text-center mb-5">
+                        <p className="text-sm font-black uppercase tracking-wider text-gray-400 mb-3">
+                          ⚡ Quick Count! ⚡
+                        </p>
+                        <div className="bg-[#FEF9C3] border-4 border-[#EAB308] rounded-3xl p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                          <p className="text-4xl md:text-5xl leading-loose tracking-widest">{problem?.question}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center mb-5">
+                        <p className="text-5xl mb-3">🤔</p>
+                        <h2 className="text-2xl md:text-4xl font-black">How many did you see?</h2>
+                      </div>
+                    )
+                  ) : (
+                    <div className="text-center mb-5">
+                      <p className="text-sm font-black uppercase tracking-wider text-gray-400 mb-2">
+                        {currentPhaseConfig.emoji} {currentPhaseConfig.name} · Level {levelInPhase}/{currentPhaseConfig.levels.length}
+                      </p>
+                      <h2 className="text-2xl md:text-4xl font-black leading-tight whitespace-pre-line">{problem?.question}</h2>
+                    </div>
+                  )}
+
+                  {/* Number bond visual (level 7) */}
+                  {problem?.meta?.bondTotal !== undefined && (
+                    <div className="flex flex-col items-center mb-4">
+                      <div className="flex gap-1 flex-wrap justify-center mb-1">
+                        {Array.from({ length: problem.meta.bondTotal }).map((_, i) => (
+                          <div
+                            key={i}
+                            className={`w-9 h-9 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
+                              i < (problem.meta!.bondTotal! - problem.meta!.bondKnown!)
+                                ? 'bg-[#4ADE80]'
+                                : 'bg-[#FDE047]'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-xs font-black text-gray-400 uppercase tracking-wider">
+                        <span className="text-[#15803D]">■ hidden</span> + <span className="text-[#A16207]">■ {problem.meta.bondKnown}</span> = {problem.meta.bondTotal}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Hint strip (Phase 1 only) */}
                   {phase === 1 && PHASE1_HINTS[levelInPhase] && (
                     <div className="bg-[#FEF9C3] border-2 border-[#EAB308] rounded-2xl px-4 py-2 mb-4 text-center">
                       <p className="text-sm font-black text-[#92400E]">{PHASE1_HINTS[levelInPhase]}</p>
                     </div>
                   )}
-                  <div className="grid grid-cols-2 gap-4">
-                    {problem?.options.map((opt, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handleAnswer(opt)}
-                        disabled={!!feedback}
-                        className="bg-[#E0F2FE] hover:bg-[#BAE6FD] border-4 border-black py-4 rounded-2xl text-2xl md:text-3xl font-black transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 disabled:opacity-50"
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
+
+                  {/* Answer buttons — hidden during subitizing flash */}
+                  {(!problem?.meta?.isSubitizing || !flashVisible) && (
+                    <div className="grid grid-cols-2 gap-4">
+                      {problem?.options.map((opt, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleAnswer(opt)}
+                          disabled={!!feedback}
+                          className="bg-[#E0F2FE] hover:bg-[#BAE6FD] border-4 border-black py-4 rounded-2xl text-2xl md:text-3xl font-black transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 disabled:opacity-50"
+                        >
+                          {opt}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </>
               </div>
             </motion.div>
@@ -832,7 +905,7 @@ export default function Game() {
                   </div>
                   <h2 className="text-5xl font-black mb-4">LEVEL UP!</h2>
                   <p className="text-xl font-bold text-gray-500 mb-10">
-                    {currentPhaseConfig.emoji} {currentPhaseConfig.name} · Level {levelInPhase} of 5
+                    {currentPhaseConfig.emoji} {currentPhaseConfig.name} · Level {levelInPhase} of {currentPhaseConfig.levels.length}
                   </p>
                   <button onClick={startGame}
                     className="bg-[#4ADE80] hover:bg-[#22C55E] text-black px-12 py-6 rounded-full border-4 border-black text-3xl font-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-4 mx-auto">
