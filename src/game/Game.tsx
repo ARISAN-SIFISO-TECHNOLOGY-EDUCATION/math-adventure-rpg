@@ -429,6 +429,10 @@ function TutorialScreen({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      {/* Back to home — always accessible from tutorial */}
+      <Link to="/" className="absolute top-4 left-4 flex items-center gap-1.5 bg-white/90 hover:bg-white text-gray-700 text-sm font-black px-3 py-2 rounded-full border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] no-underline transition-all z-10">
+        ← Home
+      </Link>
       <AnimatePresence mode="wait">
         <motion.div
           key={slide}
@@ -479,6 +483,10 @@ function LevelIntroCard({ levelInPhase, totalLevels, onStart }: { levelInPhase: 
   const intro = LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1];
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      {/* Back to home — always accessible from level intro */}
+      <Link to="/" className="absolute top-4 left-4 flex items-center gap-1.5 bg-white/90 hover:bg-white text-gray-700 text-sm font-black px-3 py-2 rounded-full border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] no-underline transition-all z-10">
+        ← Home
+      </Link>
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -814,6 +822,10 @@ export default function Game() {
                 PLAY NOW
                 <ChevronRight size={32} className="group-hover:translate-x-2 transition-transform" />
               </button>
+
+              <Link to="/" className="mt-6 text-sm font-bold text-gray-400 hover:text-gray-600 no-underline flex items-center gap-1 mx-auto transition-colors">
+                ← Back to Home
+              </Link>
             </motion.div>
           )}
 
