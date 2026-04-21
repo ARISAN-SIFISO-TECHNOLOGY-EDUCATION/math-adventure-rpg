@@ -4,11 +4,16 @@ import Footer from '../components/Footer';
 
 const accent = '#059669';
 const levels = [
-  { n: 1, title: 'Count objects (1–5)', example: '"How many stars? ⭐⭐⭐"' },
-  { n: 2, title: 'Count objects (1–10)', example: '"How many monsters? 🐉🐉🐉🐉"' },
-  { n: 3, title: 'More or less', example: '"Which is more: 3 or 7?"' },
-  { n: 4, title: 'Addition within 5', example: '"2 + 1 = ?"' },
-  { n: 5, title: 'Subtraction within 5', example: '"4 – 2 = ?"' },
+  { n: 1,  title: 'Count objects (1–5)',      example: '"How many stars? ⭐⭐⭐"' },
+  { n: 2,  title: 'Count objects (1–10)',     example: '"How many monsters? 🐉🐉🐉🐉"' },
+  { n: 3,  title: 'More or less',             example: '"Which is more: 3 or 7?"' },
+  { n: 4,  title: 'Addition within 5',        example: '"2 + 1 = ?"' },
+  { n: 5,  title: 'Subtraction within 5',     example: '"4 – 2 = ?"' },
+  { n: 6,  title: 'Subitizing',               example: '"See the dots flash — how many?"' },
+  { n: 7,  title: 'Number Bonds to 5',        example: '"3 + ? = 5"' },
+  { n: 8,  title: 'Counting 11–20',           example: '"How many? (count 13 objects)"' },
+  { n: 9,  title: 'Shape Explorer',           example: '"Which shape has 3 sides?"' },
+  { n: 10, title: 'Pattern Detective',        example: '"🔴🔵🔴🔵 — what comes next?"' },
 ];
 
 export default function PreSchoolPage() {

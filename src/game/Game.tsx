@@ -168,6 +168,52 @@ const P3_WORLDS = [
   { levels: [11, 12, 13, 14, 15], name: 'Storm Observatory', emoji: '🌩️', color: '#7C3AED', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#C4B5FD]' },
 ];
 
+// ─── Phase 4 constants ────────────────────────────────────────────────────────
+
+const P4_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
+  1: { emoji: '🏔️', title: 'Welcome to The Pinnacle!',          body: 'Master complex fraction operations — the hardest math yet!',          tip: 'Find a common denominator before adding or subtracting.' },
+  2: { emoji: '🔢', title: 'Decimal Mastery',                    body: 'Two decimal places and multiplication — precision is everything!',    tip: 'Count the total decimal places in your answer.' },
+  3: { emoji: '📈', title: 'Percentage Challenges',               body: 'Percentage change and reverse percentages — the language of finance!', tip: 'Change ÷ original × 100 gives you % change.' },
+  4: { emoji: '🧮', title: 'BODMAS + Exponents',                 body: 'Squares and cubes inside complex expressions — secondary school ready!', tip: 'Exponents come BEFORE multiply and divide.' },
+  5: { emoji: '👑', title: 'FINAL BOSS: The Pinnacle Guardian!', body: 'Multi-step synthesis — every Pinnacle skill in one challenge.',        tip: 'Plan your steps on paper before calculating.' },
+};
+
+const P4_HINTS: Record<number, string> = {
+  1: '🔢 Find a common denominator first!',
+  2: '💰 Count decimal places in your final answer.',
+  3: '📈 % change = (change ÷ original) × 100.',
+  4: '🧮 Exponents first, then × ÷, then + −.',
+  5: '👑 Take it one step at a time!',
+};
+
+const P4_WORLDS = [
+  { levels: [1, 2, 3, 4, 5], name: 'The Pinnacle', emoji: '🏔️', color: '#9F1239', bgHex: '#FFF1F2', bg: 'bg-[#FFF1F2]', badge: 'bg-[#FECDD3]' },
+];
+
+// ─── Badge System ─────────────────────────────────────────────────────────────
+const BADGES: { id: string; emoji: string; label: string; desc: string }[] = [
+  { id: 'phase1_complete', emoji: '🌱', label: 'Sprout',           desc: 'Complete Pre-School'       },
+  { id: 'phase2_complete', emoji: '📚', label: 'Scholar',          desc: 'Complete Lower Primary'    },
+  { id: 'phase3_complete', emoji: '🗺️', label: 'Navigator',        desc: 'Complete Higher Primary'   },
+  { id: 'phase4_complete', emoji: '🏆', label: 'Legend',           desc: 'Master all 4 phases'       },
+  { id: 'boss_slayer',     emoji: '💀', label: 'Boss Slayer',      desc: 'Defeat your first boss'    },
+  { id: 'streak_3',        emoji: '🔥', label: 'Hot Streak',       desc: 'Play 3 days in a row'      },
+  { id: 'streak_7',        emoji: '🔥🔥','label': 'On Fire!',      desc: 'Play 7 days in a row'      },
+  { id: 'coins_100',       emoji: '🪙', label: 'Century',          desc: 'Earn 100 lifetime coins'   },
+  { id: 'coins_500',       emoji: '💰', label: 'Treasure Hoarder', desc: 'Earn 500 lifetime coins'   },
+  { id: 'consolation_5',   emoji: '💪', label: 'Resilient',        desc: 'Collect 5 consolation coins'},
+];
+
+function getHint(phase: number, levelInPhase: number): string {
+  if (phase === 1) return PHASE1_HINTS[levelInPhase] ?? '';
+  if (phase === 2) return P2_HINTS[levelInPhase] ?? '';
+  if (phase === 3) return P3_HINTS[levelInPhase] ?? '';
+  if (phase === 4) return P4_HINTS[levelInPhase] ?? '';
+  return '';
+}
+
+const isBossLevel = (p: number, lip: number): boolean => p >= 2 && [5, 10, 15].includes(lip);
+
 type PhaseConfig = {
   id: number;
   name: string;
@@ -601,19 +647,24 @@ function TutorialScreen({ onDone }: { onDone: () => void }) {
 function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: number; levelInPhase: number; totalLevels: number; onStart: () => void }) {
   const isPhase2 = phase === 2;
   const isPhase3 = phase === 3;
+  const isPhase4 = phase === 4;
 
-  const intro = isPhase3
-    ? (P3_LEVEL_INTROS[levelInPhase] ?? P3_LEVEL_INTROS[1])
-    : isPhase2
-      ? (P2_LEVEL_INTROS[levelInPhase] ?? P2_LEVEL_INTROS[1])
-      : (LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1]);
+  const intro = isPhase4
+    ? (P4_LEVEL_INTROS[levelInPhase] ?? P4_LEVEL_INTROS[1])
+    : isPhase3
+      ? (P3_LEVEL_INTROS[levelInPhase] ?? P3_LEVEL_INTROS[1])
+      : isPhase2
+        ? (P2_LEVEL_INTROS[levelInPhase] ?? P2_LEVEL_INTROS[1])
+        : (LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1]);
 
-  const world = isPhase3
-    ? P3_WORLDS.find(w => w.levels.includes(levelInPhase))
-    : isPhase2
-      ? P2_WORLDS.find(w => w.levels.includes(levelInPhase))
-      : null;
-  const isWorldEntry = (isPhase2 || isPhase3) && world?.levels[0] === levelInPhase;
+  const world = isPhase4
+    ? P4_WORLDS.find(w => w.levels.includes(levelInPhase))
+    : isPhase3
+      ? P3_WORLDS.find(w => w.levels.includes(levelInPhase))
+      : isPhase2
+        ? P2_WORLDS.find(w => w.levels.includes(levelInPhase))
+        : null;
+  const isWorldEntry = (isPhase2 || isPhase3 || isPhase4) && world?.levels[0] === levelInPhase;
 
   const badgeBg  = world ? world.badge : 'bg-[#FEF9C3]';
   const tipBg    = world ? world.bg    : 'bg-[#DCFCE7]';
@@ -664,14 +715,81 @@ function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: 
   );
 }
 
+// --- Companion Setup Modal (B5) ---
+const COMPANION_CHOICES = [
+  { emoji: '🐉', label: 'Dragon' },
+  { emoji: '🤖', label: 'Robot' },
+  { emoji: '🦊', label: 'Fox' },
+  { emoji: '🐼', label: 'Panda' },
+];
+
+function CompanionSetup({ onDone }: { onDone: (name: string, emoji: string) => void }) {
+  const [name, setName] = useState('Sparky');
+  const [emoji, setEmoji] = useState('🐉');
+
+  return (
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+      <motion.div
+        initial={{ scale: 0.85, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="bg-white rounded-[32px] p-8 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full max-w-sm"
+      >
+        <div className="text-center mb-6">
+          <div className="text-6xl mb-3">{emoji}</div>
+          <h2 className="text-2xl font-black">Name Your Companion!</h2>
+          <p className="text-sm font-bold text-gray-500 mt-1">They'll cheer you on through every level</p>
+        </div>
+        <input
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value.slice(0, 12))}
+          placeholder="Sparky"
+          maxLength={12}
+          className="w-full text-center text-2xl font-black p-4 rounded-2xl border-4 border-black outline-none mb-4"
+        />
+        <div className="grid grid-cols-4 gap-3 mb-6">
+          {COMPANION_CHOICES.map(c => (
+            <button
+              key={c.emoji}
+              onClick={() => setEmoji(c.emoji)}
+              className={`text-4xl p-3 rounded-2xl border-4 transition-all ${emoji === c.emoji ? 'border-black bg-yellow-100 scale-110' : 'border-gray-200 bg-gray-50'}`}
+              title={c.label}
+            >
+              {c.emoji}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={() => onDone(name.trim() || 'Sparky', emoji)}
+          className="w-full bg-[#3B82F6] text-white py-4 rounded-2xl text-xl font-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 transition-all"
+        >
+          Start Adventure! 🚀
+        </button>
+      </motion.div>
+    </div>
+  );
+}
+
 // --- App ---
 export default function Game() {
   const [searchParams] = useSearchParams();
-  const initialPhase = Math.min(4, Math.max(1, parseInt(searchParams.get('phase') ?? '1', 10) || 1));
+  const urlPhaseParam = searchParams.get('phase');
 
   const [gameState, setGameState] = useState<GameState>('START');
-  const [phase, setPhase] = useState(initialPhase);
-  const [levelInPhase, setLevelInPhase] = useState(1);
+  const [phase, setPhase] = useState(() => {
+    if (urlPhaseParam) return Math.min(4, Math.max(1, parseInt(urlPhaseParam, 10) || 1));
+    const saved = JSON.parse(localStorage.getItem('mathProgress') || 'null');
+    return saved?.phase ?? 1;
+  });
+  const [levelInPhase, setLevelInPhase] = useState(() => {
+    if (urlPhaseParam) return 1;
+    const saved = JSON.parse(localStorage.getItem('mathProgress') || 'null');
+    return saved?.levelInPhase ?? 1;
+  });
+  const [hasSavedProgress] = useState(() => {
+    if (urlPhaseParam) return false;
+    return !!JSON.parse(localStorage.getItem('mathProgress') || 'null');
+  });
   const [progress, setProgress] = useState(0);
   const [coins, setCoins] = useState(0);
   const [problem, setProblem] = useState<Problem | null>(null);
@@ -685,6 +803,27 @@ export default function Game() {
   const [flashVisible, setFlashVisible] = useState(true);
   const [companionEmotion, setCompanionEmotion] = useState<CompanionEmotion>('idle');
   const [companionMessage, setCompanionMessage] = useState<string | null>(null);
+  // B2 — explanatory feedback
+  const [wrongAttempts, setWrongAttempts] = useState(0);
+  // B3 — boss level tracking
+  const [bossDefeated, setBossDefeated] = useState(false);
+  // B4 — streak
+  const [streakCount, setStreakCount] = useState(0);
+  const [streakUpdatedToday, setStreakUpdatedToday] = useState(false);
+  // Badge system
+  const [earnedBadges, setEarnedBadges] = useState<string[]>(() =>
+    JSON.parse(localStorage.getItem('earnedBadges') || '[]')
+  );
+  // B5 — companion personalisation
+  const [companionName, setCompanionName] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem('companionSetup') || 'null');
+    return saved?.name ?? 'Sparky';
+  });
+  const [companionEmoji, setCompanionEmoji] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem('companionSetup') || 'null');
+    return saved?.emoji ?? '🐉';
+  });
+  const [showCompanionSetup, setShowCompanionSetup] = useState(() => !localStorage.getItem('companionSetup'));
 
   const { muted, toggleMute, startBGM, stopBGM, playClick, playCorrect, playWrong, playVictory } = useSoundSystem();
   const { speakQuestion, speakCorrect, speakWrong, speakLevelUp, speakVictory, speakWelcome } = useNarration(muted);
@@ -694,6 +833,36 @@ export default function Game() {
   const loadQuestion = useCallback((p: number, l: number) => {
     setProblem(generateProblem(p, l));
   }, []);
+
+  const awardBadge = useCallback((id: string) => {
+    setEarnedBadges(prev => {
+      if (prev.includes(id)) return prev;
+      const next = [...prev, id];
+      localStorage.setItem('earnedBadges', JSON.stringify(next));
+      return next;
+    });
+  }, []);
+
+  // B4 — initialise streak from localStorage on mount
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem('streakData') || 'null');
+    if (!saved) return;
+    const today = new Date().toISOString().slice(0, 10);
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    if (saved.lastPlayDate === today) {
+      setStreakCount(saved.streakCount);
+      setStreakUpdatedToday(true);
+    } else if (saved.lastPlayDate === yesterday) {
+      setStreakCount(saved.streakCount);
+    } else {
+      setStreakCount(0);
+    }
+  }, []);
+
+  // B2 — reset wrongAttempts whenever a new problem loads
+  useEffect(() => {
+    setWrongAttempts(0);
+  }, [problem]);
 
   // Subitizing flash: show objects for 1.5 s, then hide and reveal answer buttons
   useEffect(() => {
@@ -743,6 +912,7 @@ export default function Game() {
 
     setProgress(0);
     setFeedback(null);
+    setBossDefeated(false);
     setCompanionEmotion('excited');
     setCompanionMessage(null);
     startBGM();
@@ -751,9 +921,10 @@ export default function Game() {
     // Show tutorial first time in Phase 1; show world intros at sub-world entries
     const isP2WorldEntry = startPhase === 2 && [1, 6, 11].includes(startLevel);
     const isP3WorldEntry = startPhase === 3 && [1, 6, 11].includes(startLevel);
+    const isP4WorldEntry = startPhase === 4 && startLevel === 1;
     if (startPhase === 1 && !tutorialDone) {
       setGameState('TUTORIAL');
-    } else if (startPhase === 1 || isP2WorldEntry || isP3WorldEntry) {
+    } else if (startPhase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry) {
       setGameState('LEVEL_INTRO');
       loadQuestion(startPhase, startLevel);
     } else {
@@ -788,7 +959,8 @@ export default function Game() {
     if (choice === problem.correctAnswer) {
       playCorrect();
       speakCorrect();
-      setCompanionEmotion(progress + 1 >= 5 ? 'celebrating' : 'excited');
+      const requiredToWin = isBossLevel(phase, levelInPhase) ? 7 : 5;
+      setCompanionEmotion(progress + 1 >= requiredToWin ? 'celebrating' : 'excited');
       setCompanionMessage(null);
       triggerConfetti();
       setCoins(prev => prev + 10);
@@ -796,9 +968,31 @@ export default function Game() {
       const newProgress = progress + 1;
       setProgress(newProgress);
 
-      if (newProgress >= 5) {
+      // B4 — streak: award bonus coins on first correct answer of a new streak day
+      if (!streakUpdatedToday) {
+        const today = new Date().toISOString().slice(0, 10);
+        const saved = JSON.parse(localStorage.getItem('streakData') || 'null');
+        const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+        const newStreak = saved?.lastPlayDate === yesterday ? (saved.streakCount + 1) : 1;
+        const bonus = Math.min(newStreak * 5, 50);
+        setStreakCount(newStreak);
+        setCoins(prev => prev + bonus);
+        localStorage.setItem('streakData', JSON.stringify({ streakCount: newStreak, lastPlayDate: today }));
+        setStreakUpdatedToday(true);
+        if (newStreak >= 3)  awardBadge('streak_3');
+        if (newStreak >= 7)  awardBadge('streak_7');
+      }
+      // Lifetime coins tracking + badges
+      const prevLifetime = parseInt(localStorage.getItem('lifetimeCoins') || '0', 10);
+      const newLifetime = prevLifetime + 10;
+      localStorage.setItem('lifetimeCoins', String(newLifetime));
+      if (newLifetime >= 100)  awardBadge('coins_100');
+      if (newLifetime >= 500)  awardBadge('coins_500');
+
+      if (newProgress >= requiredToWin) {
         const wasLastLevel = levelInPhase === currentPhaseConfig.levels.length;
         const wasLastPhase = phase === 4;
+        const wasBonus = isBossLevel(phase, levelInPhase);
 
         setTimeout(() => {
           setFeedback(null);
@@ -807,9 +1001,28 @@ export default function Game() {
           speakVictory();
           setCompanionEmotion('celebrating');
           setProgress(0);
+          setBossDefeated(wasBonus);
+
+          // B1 — persist progress
+          if (wasLastLevel && wasLastPhase) {
+            localStorage.removeItem('mathProgress');
+          } else if (wasLastLevel) {
+            localStorage.setItem('mathProgress', JSON.stringify({ phase: phase + 1, levelInPhase: 1 }));
+          } else {
+            localStorage.setItem('mathProgress', JSON.stringify({ phase, levelInPhase: levelInPhase + 1 }));
+          }
+
+          // Award phase-complete badges
+          if (wasLastLevel) {
+            if (phase === 1) awardBadge('phase1_complete');
+            if (phase === 2) awardBadge('phase2_complete');
+            if (phase === 3) awardBadge('phase3_complete');
+            if (phase === 4) awardBadge('phase4_complete');
+          }
+          // Award boss-slayer badge
+          if (wasBonus) awardBadge('boss_slayer');
 
           const nextLevelInPhase = levelInPhase + 1;
-          const nextPhase = phase + 1;
           const isP2WorldEntry = !wasLastLevel && phase === 2 && [6, 11].includes(nextLevelInPhase);
           const isP3WorldEntry = !wasLastLevel && phase === 3 && [6, 11].includes(nextLevelInPhase);
 
@@ -827,6 +1040,10 @@ export default function Game() {
           }
 
           setGameState('VICTORY');
+          // B3 — boss confetti
+          if (wasBonus) {
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#F97316', '#EF4444', '#DC2626'] });
+          }
           // Pre-load next question so level intro card is ready
           if (!wasLastLevel && (phase === 1 || isP2WorldEntry || isP3WorldEntry)) {
             loadQuestion(phase, nextLevelInPhase);
@@ -843,12 +1060,29 @@ export default function Game() {
       speakWrong();
       setCompanionEmotion('encouraging');
       setCompanionMessage(null);
-      setFeedback({ type: 'WRONG', value: 'Try again!' });
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
-      setTimeout(() => setFeedback(null), 1000);
+      const newWrong = wrongAttempts + 1;
+      setWrongAttempts(newWrong);
+      if (newWrong >= 2) {
+        // B2 — reveal correct answer after 2 wrong attempts
+        setFeedback({ type: 'WRONG', value: '__REVEAL__' });
+      } else {
+        // Consolation coins: +2 on first wrong attempt
+        setCoins(prev => prev + 2);
+        const prevLC = parseInt(localStorage.getItem('lifetimeCoins') || '0', 10);
+        const newLC = prevLC + 2;
+        localStorage.setItem('lifetimeCoins', String(newLC));
+        if (newLC >= 100) awardBadge('coins_100');
+        if (newLC >= 500) awardBadge('coins_500');
+        const consolationTotal = parseInt(localStorage.getItem('consolationCoins') || '0', 10) + 2;
+        localStorage.setItem('consolationCoins', String(consolationTotal));
+        if (consolationTotal >= 5) awardBadge('consolation_5');
+        setFeedback({ type: 'WRONG', value: '+2 🪙 Keep going!' });
+        setShake(true);
+        setTimeout(() => setShake(false), 500);
+        setTimeout(() => setFeedback(null), 1200);
+      }
     }
-  }, [problem, progress, phase, levelInPhase, playCorrect, playWrong, playVictory, stopBGM, loadQuestion]);
+  }, [problem, progress, phase, levelInPhase, wrongAttempts, streakUpdatedToday, awardBadge, playCorrect, playWrong, playVictory, stopBGM, loadQuestion]);
 
   const handlePhaseSelect = (newPhase: number) => {
     setPhase(newPhase);
@@ -864,6 +1098,14 @@ export default function Game() {
     <div className="min-h-screen bg-[#FFE5F1] font-sans text-black flex flex-col items-center p-4 md:p-8">
 
       {/* Overlays */}
+      {showCompanionSetup && (
+        <CompanionSetup onDone={(name, emoji) => {
+          setCompanionName(name);
+          setCompanionEmoji(emoji);
+          localStorage.setItem('companionSetup', JSON.stringify({ name, emoji }));
+          setShowCompanionSetup(false);
+        }} />
+      )}
       {showParentalGate && (
         <ParentalGate
           onSuccess={() => { setShowParentalGate(false); setShowPhaseSelect(true); }}
@@ -880,7 +1122,7 @@ export default function Game() {
       {gameState === 'TUTORIAL' && (
         <TutorialScreen onDone={handleTutorialDone} />
       )}
-      {gameState === 'LEVEL_INTRO' && (phase === 1 || phase === 2 || phase === 3) && (
+      {gameState === 'LEVEL_INTRO' && (
         <LevelIntroCard phase={phase} levelInPhase={levelInPhase} totalLevels={currentPhaseConfig.levels.length} onStart={handleLevelIntroStart} />
       )}
 
@@ -902,14 +1144,24 @@ export default function Game() {
         {/* Progress Bar */}
         <div className="flex-1 mx-6 hidden md:block">
           <div className="flex justify-between text-sm font-black uppercase mb-2">
-            <span>Progress</span>
-            <span>{progress} / 5</span>
+            <span>{isBossLevel(phase, levelInPhase) ? '💀 BOSS HP' : 'Progress'}</span>
+            <span>{progress} / {isBossLevel(phase, levelInPhase) ? 7 : 5}</span>
           </div>
-          <ProgressBar current={progress} max={5} color="bg-[#4ADE80]" />
+          <ProgressBar
+            current={isBossLevel(phase, levelInPhase) ? Math.max(0, 7 - progress) : progress}
+            max={isBossLevel(phase, levelInPhase) ? 7 : 5}
+            color={isBossLevel(phase, levelInPhase) ? 'bg-[#EF4444]' : 'bg-[#4ADE80]'}
+          />
         </div>
 
-        {/* Coins + Mute */}
+        {/* Coins + Streak + Mute */}
         <div className="flex items-center gap-3">
+          {streakCount > 0 && (
+            <div className="flex items-center gap-1 bg-orange-100 border-2 border-orange-400 px-2 py-1 rounded-xl">
+              <span className="text-base leading-none">🔥</span>
+              <span className="font-black text-orange-700 text-sm">{streakCount}</span>
+            </div>
+          )}
           <div className="text-right">
             <p className="text-sm font-black uppercase tracking-wider">Coins</p>
             <p className="text-3xl font-black leading-none text-[#F59E0B]">{coins}</p>
@@ -971,13 +1223,52 @@ export default function Game() {
                 </button>
               </div>
 
+              {hasSavedProgress && (
+                <div className="inline-flex items-center gap-2 bg-green-100 border-2 border-green-500 text-green-800 text-sm font-black px-4 py-2 rounded-full mb-4">
+                  ▶ Continue: {PHASES[phase - 1].name} · Level {levelInPhase}
+                </div>
+              )}
               <button
                 onClick={startGame}
                 className="group relative bg-[#3B82F6] hover:bg-[#2563EB] text-white px-12 py-6 rounded-full border-4 border-black text-3xl font-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-4 mx-auto"
               >
-                PLAY NOW
+                {hasSavedProgress ? 'CONTINUE' : 'PLAY NOW'}
                 <ChevronRight size={32} className="group-hover:translate-x-2 transition-transform" />
               </button>
+
+              {/* Companion card */}
+              <div className="mt-6 w-full max-w-sm mx-auto flex items-center justify-between bg-white border-4 border-black rounded-2xl px-4 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl">{companionEmoji}</span>
+                  <div className="text-left">
+                    <p className="text-xs font-black uppercase tracking-wider text-gray-400 leading-none">Your companion</p>
+                    <p className="font-black text-lg leading-tight">{companionName}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => { playClick(); setShowCompanionSetup(true); }}
+                  className="bg-gray-100 border-2 border-black px-3 py-1.5 rounded-xl font-black text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-0.5 active:translate-x-0.5 transition-all"
+                >
+                  ✏️ Edit
+                </button>
+              </div>
+
+              {/* Badge Gallery */}
+              <div className="mt-4 w-full max-w-sm mx-auto">
+                <p className="text-xs font-black uppercase tracking-widest text-gray-400 mb-3 text-center">Badges ({earnedBadges.length}/{BADGES.length})</p>
+                <div className="grid grid-cols-5 gap-2">
+                  {BADGES.map(b => {
+                    const earned = earnedBadges.includes(b.id);
+                    return (
+                      <div key={b.id} title={earned ? `${b.label}: ${b.desc}` : `Locked: ${b.desc}`}
+                        className={`flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all ${earned ? 'border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' : 'border-gray-200 bg-gray-100 opacity-40'}`}>
+                        <span className={`text-2xl ${earned ? '' : 'grayscale'}`}>{b.emoji}</span>
+                        <span className="text-[9px] font-black text-center leading-tight mt-1 text-gray-600">{b.label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
 
               <Link to="/" className="mt-6 text-sm font-bold text-gray-400 hover:text-gray-600 no-underline flex items-center gap-1 mx-auto transition-colors">
                 ← Back to Home
@@ -992,7 +1283,7 @@ export default function Game() {
               <div className="w-full flex items-end justify-center gap-6 mb-3">
                 {/* Companion (player's ally) */}
                 <div className="mb-1">
-                  <Companion emotion={companionEmotion} customMessage={companionMessage} />
+                  <Companion emotion={companionEmotion} customMessage={companionMessage} name={companionName} emoji={companionEmoji} />
                 </div>
                 {/* Monster (enemy) */}
                 <motion.div
@@ -1007,15 +1298,38 @@ export default function Game() {
               </div>
 
               <div className="w-full bg-white rounded-[32px] p-6 md:p-8 border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
-                {feedback && (
+                {feedback && feedback.value !== '__REVEAL__' && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className={`absolute inset-0 z-10 flex items-center justify-center text-5xl font-black border-4 border-black ${
+                    className={`absolute inset-0 z-10 flex items-center justify-center text-5xl font-black border-4 border-black rounded-[28px] ${
                       feedback.type === 'CORRECT' ? 'bg-[#4ADE80]' : 'bg-[#F87171]'
                     }`}
                   >
                     {feedback.value}
+                  </motion.div>
+                )}
+                {feedback?.value === '__REVEAL__' && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white border-4 border-black rounded-[28px] p-6 text-center"
+                  >
+                    <div className="text-lg font-black text-gray-500 mb-1">Correct Answer:</div>
+                    <div className="text-5xl font-black text-[#22C55E] mb-3">{problem?.correctAnswer}</div>
+                    <div className="bg-[#FEF9C3] border-2 border-[#EAB308] rounded-2xl px-4 py-3 mb-5 w-full">
+                      <p className="text-sm font-black text-[#92400E]">{problem?.explanation ?? getHint(phase, levelInPhase)}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setFeedback(null);
+                        setWrongAttempts(0);
+                        loadQuestion(phase, levelInPhase);
+                      }}
+                      className="bg-[#3B82F6] text-white px-8 py-3 rounded-2xl text-lg font-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 transition-all"
+                    >
+                      Got it! Next →
+                    </button>
                   </motion.div>
                 )}
 
@@ -1086,6 +1400,14 @@ export default function Game() {
                       </div>
                     );
                   })()}
+                  {phase === 4 && P4_HINTS[levelInPhase] && (() => {
+                    const w4 = P4_WORLDS.find(w => w.levels.includes(levelInPhase));
+                    return (
+                      <div className="border-2 rounded-2xl px-4 py-2 mb-4 text-center" style={{ background: w4?.bgHex ?? '#FFF1F2', borderColor: w4?.color ?? '#9F1239' }}>
+                        <p className="text-sm font-black" style={{ color: w4?.color ?? '#9F1239' }}>{P4_HINTS[levelInPhase]}</p>
+                      </div>
+                    );
+                  })()}
 
                   {/* Answer buttons — hidden during subitizing flash */}
                   {(!problem?.meta?.isSubitizing || !flashVisible) && (
@@ -1139,9 +1461,9 @@ export default function Game() {
                   <div className="w-40 h-40 bg-[#FFD700] rounded-full flex items-center justify-center mx-auto mb-8 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                     <Trophy className="text-black" size={80} />
                   </div>
-                  <h2 className="text-5xl font-black mb-4">LEVEL UP!</h2>
-                  {(phase === 2 || phase === 3) && (() => {
-                    const worlds = phase === 2 ? P2_WORLDS : P3_WORLDS;
+                  <h2 className="text-5xl font-black mb-4">{bossDefeated ? 'BOSS DEFEATED! 💀' : 'LEVEL UP!'}</h2>
+                  {(phase === 2 || phase === 3 || phase === 4) && (() => {
+                    const worlds = phase === 4 ? P4_WORLDS : phase === 3 ? P3_WORLDS : P2_WORLDS;
                     const w = worlds.find(ww => ww.levels.includes(levelInPhase));
                     if (!w) return null;
                     return (

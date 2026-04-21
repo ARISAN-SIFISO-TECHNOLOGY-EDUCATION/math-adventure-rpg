@@ -24,15 +24,18 @@ const MESSAGES: Record<CompanionEmotion, string[]> = {
 interface CompanionProps {
   emotion: CompanionEmotion;
   customMessage?: string | null;
+  name?: string;
+  emoji?: string;
 }
 
-export function Companion({ emotion, customMessage }: CompanionProps) {
-  const [msg, setMsg] = useState<string>(() => MESSAGES.idle[0]);
+export function Companion({ emotion, customMessage, name = 'Sparky', emoji = '🐉' }: CompanionProps) {
+  const [msg, setMsg] = useState<string>(() => `${name}: ${MESSAGES.idle[0]}`);
 
   useEffect(() => {
     const pool = MESSAGES[emotion];
-    setMsg(customMessage ?? pool[Math.floor(Math.random() * pool.length)]);
-  }, [emotion, customMessage]);
+    const base = customMessage ?? pool[Math.floor(Math.random() * pool.length)];
+    setMsg(`${name}: ${base}`);
+  }, [emotion, customMessage, name]);
 
   return (
     <div className="relative flex flex-col items-center">
@@ -71,7 +74,7 @@ export function Companion({ emotion, customMessage }: CompanionProps) {
         }}
         className="text-4xl select-none cursor-default leading-none"
       >
-        {EMOTION_EMOJI[emotion]}
+        {emotion === 'idle' || emotion === 'thinking' ? emoji : EMOTION_EMOJI[emotion]}
       </motion.div>
     </div>
   );

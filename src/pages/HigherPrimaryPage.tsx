@@ -85,7 +85,7 @@ export default function HigherPrimaryPage() {
               style={{ background: accent }}>
               🎮 Play Higher Primary
             </Link>
-            <Link to="/play?phase=4" className="font-[Nunito] inline-flex items-center gap-2 bg-white border-2 px-8 py-4 rounded-full font-bold hover:scale-105 transition-all no-underline"
+            <Link to="/advanced-primary" className="font-[Nunito] inline-flex items-center gap-2 bg-white border-2 px-8 py-4 rounded-full font-bold hover:scale-105 transition-all no-underline"
               style={{ borderColor: accent, color: accent }}>
               🏆 Play Advanced →
             </Link>
