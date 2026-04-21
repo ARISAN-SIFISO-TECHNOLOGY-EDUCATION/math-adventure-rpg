@@ -60,7 +60,8 @@ export function useNarration(muted: boolean) {
         speak('Quick! Look at the screen carefully. How many do you see?');
         return;
       }
-      const cleaned = cleanForSpeech(question);
+      const withFractions = question.replace(/(\d+)\/(\d+)/g, '$1 over $2');
+      const cleaned = cleanForSpeech(withFractions);
       if (cleaned.length > 2) speak(cleaned);
     },
     [speak],

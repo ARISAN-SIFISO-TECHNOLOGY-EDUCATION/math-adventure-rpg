@@ -11,6 +11,7 @@ export type Problem = {
   question: string;
   options: (number | string)[];
   correctAnswer: number | string;
+  explanation?: string;
   meta?: { isSubitizing?: boolean; bondTotal?: number; bondKnown?: number };
 };
 
@@ -95,6 +96,7 @@ function p1l1(): Problem {
     question: `How many ${emoji}?\n${visual}`,
     options: numericOptions(n, 4, 1, 2),
     correctAnswer: n,
+    explanation: `Count each ${emoji} one by one: 1, 2${n > 2 ? `, … ${n}` : ''}. There are ${n}.`,
   };
 }
 
@@ -108,6 +110,7 @@ function p1l2(): Problem {
     question: `Count the ${emoji}:\n${visual}`,
     options: numericOptions(n, 4, 1, 3),
     correctAnswer: n,
+    explanation: `Point to each ${emoji} and count: 1, 2, 3${n > 3 ? `, … ${n}` : ''}. Total = ${n}.`,
   };
 }
 
@@ -121,6 +124,7 @@ function p1l3(): Problem {
     question: `Which number is BIGGER?\n${a}  or  ${b}`,
     options: shuffle([a, b]),
     correctAnswer: bigger,
+    explanation: `${Math.max(a,b)} is further along the number line than ${Math.min(a,b)}, so ${bigger} is bigger.`,
   };
 }
 
@@ -133,6 +137,7 @@ function p1l4(): Problem {
     question: `${a} + ${b} = ?`,
     options: numericOptions(sum, 4, 1, 2),
     correctAnswer: sum,
+    explanation: `Hold up ${a} fingers, then add ${b} more: ${Array.from({length:sum},(_,i)=>i+1).join(', ')}. Answer = ${sum}.`,
   };
 }
 
@@ -145,6 +150,7 @@ function p1l5(): Problem {
     question: `${a} − ${b} = ?`,
     options: numericOptions(ans, 4, 0, 2),
     correctAnswer: ans,
+    explanation: `Start at ${a}, count back ${b}: ${Array.from({length:b},(_,i)=>a-i-1).join(', ')}. Answer = ${ans}.`,
   };
 }
 
@@ -159,6 +165,7 @@ function p1l6(): Problem {
     options: numericOptions(n, 4, 1, 2),
     correctAnswer: n,
     meta: { isSubitizing: true },
+    explanation: `Quick-look counting! The group had ${n} ${emoji}. Train your brain to see the amount without counting one-by-one.`,
   };
 }
 
@@ -172,6 +179,7 @@ function p1l7(): Problem {
     options: numericOptions(missing, 4, 0, 2),
     correctAnswer: missing,
     meta: { bondTotal: total, bondKnown: b },
+    explanation: `? + ${b} = ${total}. To find ?, subtract: ${total} − ${b} = ${missing}.`,
   };
 }
 
@@ -185,6 +193,7 @@ function p1l8(): Problem {
     question: `Count the ${emoji}:\n${visual}`,
     options: numericOptions(n, 4, 10, 3),
     correctAnswer: n,
+    explanation: `Count in groups of 10 first (${Math.floor(n/10)*10}), then add the leftovers (${n%10===0?'none':n%10}). Total = ${n}.`,
   };
 }
 
@@ -202,6 +211,7 @@ function p1l9(): Problem {
     question: `What shape is this?\n${shape.emoji}`,
     options: shuffle([shape.name, ...wrong]),
     correctAnswer: shape.name,
+    explanation: `That is a ${shape.name}! Look at its sides and curves to recognise it next time.`,
   };
 }
 
@@ -219,6 +229,7 @@ function p1l10(): Problem {
     question: `What comes next?\n${p.seq.join('  ')}  ❓`,
     options: shuffle([p.answer, ...p.wrong.slice(0, 3)]),
     correctAnswer: p.answer,
+    explanation: `The pattern repeats every 2: ${p.seq[0]}, ${p.seq[1]}, ${p.seq[0]}, ${p.seq[1]}, … so next is ${p.answer}.`,
   };
 }
 
@@ -233,6 +244,7 @@ function p2l1(): Problem {
     question: `${a} + ${b} = ?`,
     options: numericOptions(ans, 4, 1, 4),
     correctAnswer: ans,
+    explanation: `Start at ${a}, count on ${b} more → ${ans}. (${a} + ${b} = ${ans})`,
   };
 }
 
@@ -245,6 +257,7 @@ function p2l2(): Problem {
     question: `${a} − ${b} = ?`,
     options: numericOptions(ans, 4, 0, 4),
     correctAnswer: ans,
+    explanation: `${a} minus ${b}: count back ${b} from ${a} → ${ans}.`,
   };
 }
 
@@ -259,6 +272,7 @@ function p2l3(): Problem {
       question: `${a} + ${b} = ?`,
       options: numericOptions(ans, 4, 0, 10),
       correctAnswer: ans,
+      explanation: `Add the tens first: ${Math.floor(a/10)*10} + ${Math.floor(b/10)*10} = ${Math.floor(a/10)*10+Math.floor(b/10)*10}, then add the units: + ${a%10} + ${b%10} = ${ans}.`,
     };
   } else {
     const a = rand(20, 100);
@@ -268,6 +282,7 @@ function p2l3(): Problem {
       question: `${a} − ${b} = ?`,
       options: numericOptions(ans, 4, 0, 10),
       correctAnswer: ans,
+      explanation: `${a} − ${b}: subtract tens (${a} − ${Math.floor(b/10)*10} = ${a-Math.floor(b/10)*10}), then units (− ${b%10} = ${ans}).`,
     };
   }
 }
@@ -282,6 +297,7 @@ function p2l4(): Problem {
     question: `${t} × ${n} = ?`,
     options: numericOptions(ans, 4, 0, t * 2),
     correctAnswer: ans,
+    explanation: `Count by ${t}s, ${n} times: ${Array.from({length:n},(_,i)=>t*(i+1)).join(', ')}. Answer = ${ans}.`,
   };
 }
 
@@ -295,6 +311,7 @@ function p2l5(): Problem {
       question: `? + ${known} = ${total}`,
       options: numericOptions(missing, 4, 1, 4),
       correctAnswer: missing,
+      explanation: `? + ${known} = ${total} → ? = ${total} − ${known} = ${missing}.`,
     };
   } else {
     const a = rand(6, 20);
@@ -304,6 +321,7 @@ function p2l5(): Problem {
       question: `${a} − ? = ${result}`,
       options: numericOptions(missing, 4, 1, 4),
       correctAnswer: missing,
+      explanation: `${a} − ? = ${result} → ? = ${a} − ${result} = ${missing}.`,
     };
   }
 }
@@ -321,6 +339,7 @@ function p2l6(): Problem {
       : `What is the UNITS digit of ${n}?`,
     options: numericOptions(ans, 4, 0, 3),
     correctAnswer: ans,
+    explanation: `${n} = ${Math.floor(n/10)} tens and ${n%10} units. The ${askTens?'tens':'units'} digit is ${ans}.`,
   };
 }
 
@@ -337,6 +356,7 @@ function p2l7(): Problem {
       question: `Something costs R${price}.\nYou pay R${paid}.\nWhat is your change?`,
       options: numericOptions(change, 4, 0, 10),
       correctAnswer: change,
+      explanation: `Change = paid − cost = R${paid} − R${price} = R${change}.`,
     };
   } else {
     // Count two coin amounts together
@@ -346,6 +366,7 @@ function p2l7(): Problem {
       question: `You have a ${a}c coin and a ${b}c coin.\nHow many cents altogether?`,
       options: numericOptions(a + b, 4, 0, 15),
       correctAnswer: a + b,
+      explanation: `${a}c + ${b}c = ${a+b}c altogether.`,
     };
   }
 }
@@ -373,6 +394,7 @@ function p2l8(): Problem {
       return `${h}:${minute === 0 ? '00' : minute}` as string | number;
     }),
     correctAnswer: `${newHour}:${minute === 0 ? '00' : minute}`,
+    explanation: `${hour}:${minute===0?'00':minute} + ${addHours} hour${addHours>1?'s':''} = ${newHour}:${minute===0?'00':minute}.`,
   };
 }
 
@@ -386,6 +408,7 @@ function p2l9(): Problem {
       question: `Lebo has ${a} stickers.\nShe gets ${b} more.\nHow many stickers now?`,
       options: numericOptions(a + b, 4, 0, 10),
       correctAnswer: a + b,
+      explanation: `${a} + ${b} = ${a+b} stickers in total.`,
     };
   } else if (variant === 1) {
     const total = rand(30, 90);
@@ -394,6 +417,7 @@ function p2l9(): Problem {
       question: `There are ${total} sweets in a jar.\n${eaten} are eaten.\nHow many sweets are left?`,
       options: numericOptions(total - eaten, 4, 0, 10),
       correctAnswer: total - eaten,
+      explanation: `${total} − ${eaten} = ${total-eaten} sweets remain.`,
     };
   } else if (variant === 2) {
     const red = rand(10, 50);
@@ -402,6 +426,7 @@ function p2l9(): Problem {
       question: `${red} red apples and ${blue} green apples\nare in the basket.\nHow many apples altogether?`,
       options: numericOptions(red + blue, 4, 0, 10),
       correctAnswer: red + blue,
+      explanation: `${red} + ${blue} = ${red+blue} apples altogether.`,
     };
   } else {
     const start = rand(50, 90);
@@ -410,6 +435,7 @@ function p2l9(): Problem {
       question: `Thabo had R${start}.\nHe spent R${spend} on a book.\nHow much does he have left?`,
       options: numericOptions(start - spend, 4, 0, 10),
       correctAnswer: start - spend,
+      explanation: `R${start} − R${spend} = R${start-spend} left.`,
     };
   }
 }
@@ -423,6 +449,7 @@ function p2l10(): Problem {
       question: `Double ${n} = ?`,
       options: numericOptions(n * 2, 4, 0, 6),
       correctAnswer: n * 2,
+      explanation: `Double means × 2: ${n} + ${n} = ${n*2}.`,
     };
   } else {
     const n = rand(2, 25) * 2; // even number so half is whole
@@ -430,6 +457,7 @@ function p2l10(): Problem {
       question: `Half of ${n} = ?`,
       options: numericOptions(n / 2, 4, 1, 4),
       correctAnswer: n / 2,
+      explanation: `Half means ÷ 2: ${n} ÷ 2 = ${n/2}.`,
     };
   }
 }
@@ -444,6 +472,7 @@ function p2l11(): Problem {
     question: `${t} × ${n} = ?`,
     options: numericOptions(ans, 4, 0, t * 2),
     correctAnswer: ans,
+    explanation: `${t} × ${n}: count by ${t}s → ${Array.from({length:n},(_,i)=>t*(i+1)).join(', ')}. Answer = ${ans}.`,
   };
 }
 
@@ -457,6 +486,7 @@ function p2l12(): Problem {
     question: `${dividend} shared equally among ${d}.\nHow many each?`,
     options: numericOptions(quotient, 4, 1, 4),
     correctAnswer: quotient,
+    explanation: `${dividend} ÷ ${d} = ${quotient}. (Check: ${d} × ${quotient} = ${dividend} ✓)`,
   };
 }
 
@@ -475,6 +505,7 @@ function p2l13(): Problem {
     question: `What is ${label} ${base}?`,
     options: numericOptions(ans, 4, 0, 5),
     correctAnswer: ans,
+    explanation: `${num}/${den} of ${base} = ${base} ÷ ${den} × ${num} = ${base/den} × ${num} = ${ans}.`,
   };
 }
 
@@ -487,6 +518,7 @@ function p2l14(): Problem {
       question: `A square has sides of ${side} cm.\nWhat is the perimeter?`,
       options: numericOptions(side * 4, 4, 0, 8),
       correctAnswer: side * 4,
+      explanation: `Square perimeter = 4 × side = 4 × ${side} = ${side*4} cm.`,
     };
   } else {
     const w = rand(2, 10);
@@ -495,6 +527,7 @@ function p2l14(): Problem {
       question: `A rectangle is ${w} cm wide and ${h} cm tall.\nWhat is the perimeter?`,
       options: numericOptions((w + h) * 2, 4, 0, 10),
       correctAnswer: (w + h) * 2,
+      explanation: `Perimeter = 2 × (width + height) = 2 × (${w} + ${h}) = 2 × ${w+h} = ${(w+h)*2} cm.`,
     };
   }
 }
@@ -512,6 +545,7 @@ function p2l15(): Problem {
       question: `Pens cost R${priceEach} each.\nBuy ${qty} pens and pay R${paid}.\nWhat is the change?`,
       options: numericOptions(change, 4, 0, 10),
       correctAnswer: change,
+      explanation: `Step 1: ${qty} × R${priceEach} = R${total}. Step 2: R${paid} − R${total} = R${change} change.`,
     };
   } else if (variant === 1) {
     const bags = rand(2, 5);
@@ -521,6 +555,7 @@ function p2l15(): Problem {
       question: `${bags} bags each have ${perBag} oranges.\n${eaten} oranges are eaten.\nHow many are left?`,
       options: numericOptions(bags * perBag - eaten, 4, 0, 8),
       correctAnswer: bags * perBag - eaten,
+      explanation: `Step 1: ${bags} × ${perBag} = ${bags*perBag} total. Step 2: ${bags*perBag} − ${eaten} = ${bags*perBag-eaten} left.`,
     };
   } else {
     const rows = rand(2, 5);
@@ -530,6 +565,7 @@ function p2l15(): Problem {
       question: `A classroom has ${rows} rows of ${cols} desks.\n${extra} extra desks are added.\nHow many desks altogether?`,
       options: numericOptions(rows * cols + extra, 4, 0, 8),
       correctAnswer: rows * cols + extra,
+      explanation: `Step 1: ${rows} × ${cols} = ${rows*cols} desks. Step 2: ${rows*cols} + ${extra} = ${rows*cols+extra} total.`,
     };
   }
 }
@@ -551,6 +587,7 @@ function p3l1(): Problem {
     question: `${a} × ${b} = ?`,
     options: numericOptions(ans, 4, 0, Math.max(20, Math.round(ans * 0.12))),
     correctAnswer: ans,
+    explanation: `${a} × ${b}: split → ${a} × ${Math.floor(b/10)*10} = ${a*Math.floor(b/10)*10}, then + ${a} × ${b%10} = ${a*(b%10)}. Total = ${ans}.`,
   };
 }
 
@@ -565,12 +602,14 @@ function p3l2(): Problem {
       question: `${dividend} ÷ ${divisor} = ${quotient} remainder ?\n(What is the remainder?)`,
       options: numericOptions(remainder, 4, 0, 3),
       correctAnswer: remainder,
+      explanation: `${quotient} × ${divisor} = ${quotient*divisor}. Then ${dividend} − ${quotient*divisor} = ${remainder} remainder.`,
     };
   }
   return {
     question: `${dividend} ÷ ${divisor} = ? remainder ${remainder}\n(What is the quotient?)`,
     options: numericOptions(quotient, 4, 1, 3),
     correctAnswer: quotient,
+    explanation: `${dividend} − ${remainder} = ${dividend-remainder}. Then ${dividend-remainder} ÷ ${divisor} = ${quotient}.`,
   };
 }
 
@@ -585,6 +624,7 @@ function p3l3(): Problem {
       question: `${(aInt / 10).toFixed(1)} + ${(bInt / 10).toFixed(1)} = ?`,
       options: numericOptions(ansInt, 4, 0, 5).map(v => parseFloat((v / 10).toFixed(1))),
       correctAnswer: parseFloat((ansInt / 10).toFixed(1)),
+      explanation: `Line up the decimal points: ${(aInt/10).toFixed(1)} + ${(bInt/10).toFixed(1)} = ${(ansInt/10).toFixed(1)}.`,
     };
   }
   const big = Math.max(aInt, bInt);
@@ -594,6 +634,7 @@ function p3l3(): Problem {
     question: `${(big / 10).toFixed(1)} − ${(small / 10).toFixed(1)} = ?`,
     options: numericOptions(ansInt, 4, 0, 5).map(v => parseFloat((v / 10).toFixed(1))),
     correctAnswer: parseFloat((ansInt / 10).toFixed(1)),
+    explanation: `Line up the decimal points: ${(big/10).toFixed(1)} − ${(small/10).toFixed(1)} = ${(ansInt/10).toFixed(1)}.`,
   };
 }
 
@@ -608,6 +649,7 @@ function p3l4(): Problem {
     question: `${p}% of ${base} = ?`,
     options: numericOptions(ans, 4, 0, Math.max(8, Math.round(ans * 0.3))),
     correctAnswer: ans,
+    explanation: `10% of ${base} = ${base/10}. So ${p}% = ${p/10} × ${base/10} = ${ans}.`,
   };
 }
 
@@ -623,6 +665,7 @@ function p3l5(): Problem {
       question: `${qty} items at R${price} each.\nYou pay R${paid}.\nWhat is your change?`,
       options: numericOptions(paid - total, 4, 0, 10),
       correctAnswer: paid - total,
+      explanation: `Step 1: ${qty} × R${price} = R${total}. Step 2: R${paid} − R${total} = R${paid-total} change.`,
     };
   }
   if (variant === 1) {
@@ -634,6 +677,7 @@ function p3l5(): Problem {
       question: `Original price: R${origPrice}.\n${discountPct}% discount applied.\nFinal price?`,
       options: numericOptions(finalPrice, 4, 0, Math.max(10, saving)),
       correctAnswer: finalPrice,
+      explanation: `${discountPct}% of R${origPrice} = R${saving}. Final = R${origPrice} − R${saving} = R${finalPrice}.`,
     };
   }
   const people = [2, 3, 4, 5][rand(0, 3)];
@@ -643,6 +687,7 @@ function p3l5(): Problem {
     question: `A bill of R${totalBill} is split equally among ${people}.\nHow much does each person pay?`,
     options: numericOptions(perPerson, 4, 0, Math.max(5, Math.round(perPerson * 0.2))),
     correctAnswer: perPerson,
+    explanation: `R${totalBill} ÷ ${people} = R${perPerson} per person.`,
   };
 }
 
@@ -663,6 +708,7 @@ function p3l6(): Problem {
     question: `A rectangle is ${length} m × ${width} m.\nWhat is the AREA in m²?`,
     options: shuffle([...opts]).slice(0, 4),
     correctAnswer: area,
+    explanation: `Area = length × width = ${length} × ${width} = ${area} m². (Perimeter would be ${perimeter} m — don't confuse them!)`,
   };
 }
 
@@ -684,6 +730,7 @@ function p3l7(): Problem {
     question: `Simplify ${p.frac}`,
     options: shuffle([p.ans, ...p.wrong.slice(0, 3)]),
     correctAnswer: p.ans,
+    explanation: `Divide top and bottom by their GCD. ${p.frac} → ${p.ans}.`,
   };
 }
 
@@ -712,6 +759,7 @@ function p3l8(): Problem {
     question: `${pr.n1}/${pr.d1} ${pr.op} ${pr.n2}/${pr.d2} = ?`,
     options: shuffle([pr.ans, ...[...wrongSet].slice(0, 3)]),
     correctAnswer: pr.ans,
+    explanation: `Find a common denominator, then ${pr.op === '+' ? 'add' : 'subtract'} the numerators: ${pr.n1}/${pr.d1} ${pr.op} ${pr.n2}/${pr.d2} = ${pr.ans}.`,
   };
 }
 
@@ -728,6 +776,7 @@ function p3l9(): Problem {
       question: `Ratio of red to blue tiles is ${rA}:${rB}.\nWith ${givenA} red tiles, how many blue?`,
       options: numericOptions(givenB, 4, 1, Math.max(4, rB)),
       correctAnswer: givenB,
+      explanation: `Scale factor = ${givenA} ÷ ${rA} = ${mult}. Blue = ${rB} × ${mult} = ${givenB}.`,
     };
   }
   if (variant === 1) {
@@ -738,6 +787,7 @@ function p3l9(): Problem {
       question: `Map scale: 1 cm = ${scale} km.\nMap distance: ${mapDist} cm.\nReal distance?`,
       options: numericOptions(realDist, 4, 0, scale * 2),
       correctAnswer: realDist,
+      explanation: `${mapDist} cm × ${scale} km/cm = ${realDist} km.`,
     };
   }
   const rA = rand(2, 4);
@@ -749,6 +799,7 @@ function p3l9(): Problem {
     question: `A recipe uses ${rA} cups flour and ${rB} cups milk.\nFor ${givenA} cups of flour, how much milk?`,
     options: numericOptions(givenB, 4, 1, Math.max(4, rB)),
     correctAnswer: givenB,
+    explanation: `Scale factor = ${givenA} ÷ ${rA} = ${mult}. Milk = ${rB} × ${mult} = ${givenB} cups.`,
   };
 }
 
@@ -765,6 +816,7 @@ function p3l10(): Problem {
       question: `Room: ${length} m × ${width} m.\nFlooring costs R${pricePerM2}/m².\nTotal cost?`,
       options: numericOptions(totalCost, 4, 0, Math.max(pricePerM2 * 2, Math.round(totalCost * 0.15))),
       correctAnswer: totalCost,
+      explanation: `Area = ${length} × ${width} = ${area} m². Cost = ${area} × R${pricePerM2} = R${totalCost}.`,
     };
   }
   if (variant === 1) {
@@ -778,19 +830,25 @@ function p3l10(): Problem {
       question: `R${total} shared in ratio ${rA}:${rB}.\nLarger share = R?`,
       options: numericOptions(largeShare, 4, 0, Math.round(total * 0.15)),
       correctAnswer: largeShare,
+      explanation: `1 part = R${total} ÷ ${rA+rB} = R${total/(rA+rB)}. Larger share (${Math.max(rA,rB)} parts) = R${largeShare}.`,
     };
   }
-  const length = rand(4, 10);
-  const width = rand(3, 8);
-  const area = length * width;
-  const fracs: [number, number][] = [[1, 2], [1, 4], [3, 4]];
-  const [num, den] = fracs[rand(0, fracs.length - 1)];
-  if (area % den !== 0) return p3l10();
+  let length = 4, width = 4, num = 1, den = 2, area = 16;
+  let attempts = 0;
+  while (attempts++ < 20) {
+    length = rand(4, 10);
+    width = rand(3, 8);
+    area = length * width;
+    const fracs: [number, number][] = [[1, 2], [1, 4], [3, 4]];
+    [num, den] = fracs[rand(0, fracs.length - 1)];
+    if (area % den === 0) break;
+  }
   const part = (area * num) / den;
   return {
     question: `A garden is ${length} m × ${width} m.\n${num}/${den} is planted.\nHow many m² is planted?`,
     options: numericOptions(part, 4, 0, Math.max(5, Math.round(part * 0.2))),
     correctAnswer: part,
+    explanation: `Area = ${length} × ${width} = ${area} m². ${num}/${den} of ${area} = ${area} ÷ ${den} × ${num} = ${part} m².`,
   };
 }
 
@@ -808,6 +866,7 @@ function p3l11(): Problem {
       question: `Temperature: ${start}°C.\nIt ${goDown ? 'drops' : 'rises'} by ${change}°.\nNew temperature?`,
       options: numericOptions(ans, 4, -20, 4),
       correctAnswer: ans,
+      explanation: `${start} ${goDown ? '−' : '+'} ${change} = ${ans}°C. Moving ${goDown?'left (colder)':'right (warmer)'} on the number line.`,
     };
   }
   if (variant === 1) {
@@ -817,6 +876,7 @@ function p3l11(): Problem {
       question: `${a} + ${b} = ?`,
       options: numericOptions(a + b, 4, -12, 4),
       correctAnswer: a + b,
+      explanation: `${a} + ${b}: start at ${a}, move ${b} steps right → ${a+b}.`,
     };
   }
   const nums = shuffle([rand(-8, -4), rand(-3, -1), rand(1, 4), rand(5, 10)]);
@@ -825,6 +885,7 @@ function p3l11(): Problem {
     question: `Which is the SMALLEST?\n${nums.join('   ')}`,
     options: shuffle([...nums]),
     correctAnswer: smallest,
+    explanation: `On the number line, more negative = smaller. The smallest is ${smallest}.`,
   };
 }
 
@@ -845,11 +906,21 @@ function p3l12(): Problem {
       remaining -= v;
     }
     vals.push(remaining);
-    if (remaining < 1 || remaining > 20) return p3l12();
+    if (remaining < 1 || remaining > 20) {
+      // Fallback: use a clean set of values
+      return {
+        question: `Find the MEAN of:\n4, 6, 8, 10, 12`,
+        options: numericOptions(8, 4, 1, 3),
+        correctAnswer: 8,
+        explanation: `Mean = sum ÷ count = (4+6+8+10+12) ÷ 5 = 40 ÷ 5 = 8.`,
+      };
+    }
+    const displayVals = shuffle(vals);
     return {
-      question: `Find the MEAN of:\n${shuffle(vals).join(', ')}`,
+      question: `Find the MEAN of:\n${displayVals.join(', ')}`,
       options: numericOptions(mean, 4, 1, 3),
       correctAnswer: mean,
+      explanation: `Mean = sum ÷ count = ${vals.reduce((s,v)=>s+v,0)} ÷ ${count} = ${mean}.`,
     };
   }
   if (type === 1) {
@@ -861,6 +932,7 @@ function p3l12(): Problem {
       question: `Find the MODE of:\n${vals.join(', ')}`,
       options: numericOptions(mode, 4, 1, 5),
       correctAnswer: mode,
+      explanation: `Mode = most frequent value. ${mode} appears twice, so the mode is ${mode}.`,
     };
   }
   // Median — 5 values, sorted middle value
@@ -871,6 +943,7 @@ function p3l12(): Problem {
     question: `Find the MEDIAN of:\n${vals.join(', ')}`,
     options: numericOptions(median, 4, 1, 4),
     correctAnswer: median,
+    explanation: `Sort the values: ${sorted.join(', ')}. The middle (3rd) value is ${median}.`,
   };
 }
 
@@ -884,6 +957,7 @@ function p3l13(): Problem {
       question: `n + ${b} = ${n + b}\nWhat is n?`,
       options: numericOptions(n, 4, 1, 4),
       correctAnswer: n,
+      explanation: `n + ${b} = ${n+b} → n = ${n+b} − ${b} = ${n}.`,
     };
   }
   if (type === 1) {
@@ -893,6 +967,7 @@ function p3l13(): Problem {
       question: `n − ${b} = ${n - b}\nWhat is n?`,
       options: numericOptions(n, 4, 1, 4),
       correctAnswer: n,
+      explanation: `n − ${b} = ${n-b} → n = ${n-b} + ${b} = ${n}.`,
     };
   }
   if (type === 2) {
@@ -902,6 +977,7 @@ function p3l13(): Problem {
       question: `n × ${b} = ${n * b}\nWhat is n?`,
       options: numericOptions(n, 4, 1, 3),
       correctAnswer: n,
+      explanation: `n × ${b} = ${n*b} → n = ${n*b} ÷ ${b} = ${n}.`,
     };
   }
   const b = rand(1, 8);
@@ -910,6 +986,7 @@ function p3l13(): Problem {
     question: `2n + ${b} = ${2 * n + b}\nWhat is n?`,
     options: numericOptions(n, 4, 1, 3),
     correctAnswer: n,
+    explanation: `2n + ${b} = ${2*n+b} → 2n = ${2*n+b} − ${b} = ${2*n} → n = ${2*n} ÷ 2 = ${n}.`,
   };
 }
 
@@ -922,6 +999,7 @@ function p3l14(): Problem {
       question: `${a} + ${b} × ${c} = ?`,
       options: numericOptions(a + b * c, 4, 0, 8),
       correctAnswer: a + b * c,
+      explanation: `BODMAS: multiply first → ${b} × ${c} = ${b*c}, then add ${a} → ${a+b*c}.`,
     };
   }
   if (variant === 1) {
@@ -930,6 +1008,7 @@ function p3l14(): Problem {
       question: `(${a} + ${b}) × ${c} = ?`,
       options: numericOptions((a + b) * c, 4, 0, 10),
       correctAnswer: (a + b) * c,
+      explanation: `Brackets first: (${a} + ${b}) = ${a+b}, then × ${c} = ${(a+b)*c}.`,
     };
   }
   if (variant === 2) {
@@ -938,6 +1017,7 @@ function p3l14(): Problem {
       question: `${a} × ${b} − ${c} = ?`,
       options: numericOptions(a * b - c, 4, 0, 8),
       correctAnswer: a * b - c,
+      explanation: `Multiply first: ${a} × ${b} = ${a*b}, then subtract ${c} → ${a*b-c}.`,
     };
   }
   if (variant === 3) {
@@ -948,6 +1028,7 @@ function p3l14(): Problem {
       question: `${d * q} ÷ ${d} + ${c} = ?`,
       options: numericOptions(q + c, 4, 0, 6),
       correctAnswer: q + c,
+      explanation: `Division first: ${d*q} ÷ ${d} = ${q}, then + ${c} = ${q+c}.`,
     };
   }
   if (variant === 4) {
@@ -956,6 +1037,7 @@ function p3l14(): Problem {
       question: `(${a} + ${b}) × (${c} − ${d}) = ?`,
       options: numericOptions((a + b) * (c - d), 4, 0, 8),
       correctAnswer: (a + b) * (c - d),
+      explanation: `Both brackets first: (${a}+${b}) = ${a+b}, (${c}−${d}) = ${c-d}. Then ${a+b} × ${c-d} = ${(a+b)*(c-d)}.`,
     };
   }
   const a = rand(1, 5), b = rand(2, 5), d2 = rand(2, 4), q2 = rand(2, 6);
@@ -963,6 +1045,7 @@ function p3l14(): Problem {
     question: `${a} × ${b} + ${d2 * q2} ÷ ${d2} = ?`,
     options: numericOptions(a * b + q2, 4, 0, 8),
     correctAnswer: a * b + q2,
+    explanation: `Do × and ÷ first: ${a}×${b}=${a*b} and ${d2*q2}÷${d2}=${q2}. Then add: ${a*b}+${q2}=${a*b+q2}.`,
   };
 }
 
@@ -978,6 +1061,7 @@ function p3l15(): Problem {
       question: `A submarine is at ${start} m.\nIt rises ${rise1} m, then ${rise2} m more.\nFinal depth?`,
       options: numericOptions(start + rise1 + rise2, 4, -15, 4),
       correctAnswer: start + rise1 + rise2,
+      explanation: `${start} + ${rise1} = ${start+rise1}, then + ${rise2} = ${start+rise1+rise2} m.`,
     };
   }
   if (variant === 1) {
@@ -989,17 +1073,26 @@ function p3l15(): Problem {
       question: `${b}n + ${c} = ${b * n + c}\nWhat is n?`,
       options: numericOptions(n, 4, 1, 3),
       correctAnswer: n,
+      explanation: `${b}n + ${c} = ${b*n+c} → ${b}n = ${b*n+c} − ${c} = ${b*n} → n = ${b*n} ÷ ${b} = ${n}.`,
     };
   }
   // Mean reverse — find missing value that gives a target mean
-  const known = Array.from({ length: 4 }, () => rand(10, 20));
-  const targetMean = rand(12, 18);
-  const fifth = targetMean * 5 - known.reduce((a, b) => a + b, 0);
-  if (fifth < 5 || fifth > 25) return p3l15();
+  let known: number[] = [10, 14, 16, 18];
+  let targetMean = 14;
+  let fifth = 12;
+  let attempts = 0;
+  while (attempts++ < 20) {
+    known = Array.from({ length: 4 }, () => rand(10, 20));
+    targetMean = rand(12, 18);
+    fifth = targetMean * 5 - known.reduce((a, b) => a + b, 0);
+    if (fifth >= 5 && fifth <= 25) break;
+  }
+  if (fifth < 5 || fifth > 25) { known = [10, 14, 16, 18]; targetMean = 14; fifth = 12; }
   return {
     question: `4 scores: ${known.join(', ')}.\nWhat 5th score gives a mean of ${targetMean}?`,
     options: numericOptions(fifth, 4, 5, 4),
     correctAnswer: fifth,
+    explanation: `Target total = ${targetMean} × 5 = ${targetMean*5}. Sum of 4 scores = ${known.reduce((a,b)=>a+b,0)}. 5th score = ${targetMean*5} − ${known.reduce((a,b)=>a+b,0)} = ${fifth}.`,
   };
 }
 
@@ -1036,88 +1129,146 @@ function p4l1(): Problem {
     question: `${opA}/${den} ${opSym} ${opB}/${den} = ?`,
     options: shuffle([...distSet]),
     correctAnswer: ansStr,
+    explanation: `Same denominator: ${opSym === '+' ? `${opA} + ${opB}` : `${opA} − ${opB}`} = ${resultNum}, keep /${den} → ${ansStr}.`,
   };
 }
 
 function p4l2(): Problem {
-  // Adding and subtracting decimals (1 decimal place)
-  const useAdd = Math.random() < 0.5;
-  // Work in integers to avoid floating-point drift
-  const aInt = rand(10, 95);
-  const bInt = rand(10, 95);
-  const a = aInt / 10;
-  const b = bInt / 10;
-
+  // Decimals to 2 d.p. — add, subtract, or multiply
+  const variant = rand(0, 2);
+  if (variant === 2) {
+    // Multiplication: x.xx × single digit
+    const aInt = rand(100, 999);
+    const b = rand(2, 9);
+    const a = aInt / 100;
+    const ansInt = aInt * b;
+    const ans = ansInt / 100;
+    // Format to 2 d.p.
+    const fmt = (v: number) => v.toFixed(2);
+    const spread = Math.max(50, Math.round(ansInt * 0.1));
+    const opts = numericOptions(ansInt, 4, 0, spread).map(v => parseFloat((v / 100).toFixed(2)));
+    return {
+      question: `${fmt(a)} × ${b} = ?`,
+      options: opts,
+      correctAnswer: parseFloat(fmt(ans)),
+      explanation: `${fmt(a)} × ${b}: multiply as whole numbers (${aInt} × ${b} = ${ansInt}), then ÷ 100 = ${fmt(ans)}.`,
+    };
+  }
+  // Add or subtract to 2 d.p.
+  const useAdd = variant === 0;
+  const aInt = rand(100, 950);
+  const bInt = rand(100, 950);
+  const fmt = (v: number) => (v / 100).toFixed(2);
   if (useAdd) {
     const ansInt = aInt + bInt;
-    const ans = ansInt / 10;
     return {
-      question: `${a} + ${b} = ?`,
-      options: numericOptions(ansInt, 4, 0, 5).map(v => v / 10),
-      correctAnswer: ans,
+      question: `${fmt(aInt)} + ${fmt(bInt)} = ?`,
+      options: numericOptions(ansInt, 4, 0, 25).map(v => parseFloat((v / 100).toFixed(2))),
+      correctAnswer: parseFloat((ansInt / 100).toFixed(2)),
+      explanation: `Line up decimal points: ${fmt(aInt)} + ${fmt(bInt)} = ${(ansInt/100).toFixed(2)}.`,
     };
   } else {
     const bigger = Math.max(aInt, bInt);
     const smaller = Math.min(aInt, bInt);
     const ansInt = bigger - smaller;
-    const ans = ansInt / 10;
     return {
-      question: `${bigger / 10} − ${smaller / 10} = ?`,
-      options: numericOptions(ansInt, 4, 0, 5).map(v => v / 10),
-      correctAnswer: ans,
+      question: `${fmt(bigger)} − ${fmt(smaller)} = ?`,
+      options: numericOptions(ansInt, 4, 0, 25).map(v => parseFloat((v / 100).toFixed(2))),
+      correctAnswer: parseFloat((ansInt / 100).toFixed(2)),
+      explanation: `Line up decimal points: ${fmt(bigger)} − ${fmt(smaller)} = ${(ansInt/100).toFixed(2)}.`,
     };
   }
 }
 
 function p4l3(): Problem {
-  // Finding a percentage of a number
-  const percents = [10, 20, 25, 50, 75];
-  const p = percents[rand(0, percents.length - 1)];
-  // Choose base so result is always a whole number
-  const multiplier = rand(2, 20);
-  const base = multiplier * (100 / p);
-  const ans = (base * p) / 100;
+  // Percentage change or reverse percentage
+  const variant = rand(0, 1);
+  if (variant === 0) {
+    // Percentage change: old → new, find % change
+    const oldVal = rand(4, 20) * 5;              // 20–100, multiples of 5
+    const changePct = [10, 20, 25, 50][rand(0, 3)];
+    const increase = Math.random() < 0.5;
+    const newVal = increase ? oldVal + (oldVal * changePct) / 100 : oldVal - (oldVal * changePct) / 100;
+    return {
+      question: `A price changes from R${oldVal} to R${newVal}.\nWhat % ${increase ? 'increase' : 'decrease'} is this?`,
+      options: numericOptions(changePct, 4, 5, 10),
+      correctAnswer: changePct,
+      explanation: `Change = R${newVal} − R${oldVal} = R${Math.abs(newVal-oldVal)}. % change = ${Math.abs(newVal-oldVal)} ÷ ${oldVal} × 100 = ${changePct}%.`,
+    };
+  }
+  // Reverse percentage: after-discount price → original
+  const discountPct = [10, 20, 25][rand(0, 2)];
+  const remaining = 100 - discountPct;
+  // original × remaining/100 = salePrice
+  const multiplier = rand(2, 10);
+  const original = multiplier * (100 / (100 - discountPct)) * (100 - discountPct) / 100 * (100 / remaining) * remaining;
+  // Simpler: pick original cleanly divisible
+  const origClean = rand(3, 15) * (100 / gcd(remaining, 100)) * (remaining / 100);
+  const salePrice = Math.round(origClean * remaining / 100);
+  const origRound = Math.round(origClean);
   return {
-    question: `${p}% of ${base} = ?`,
-    options: numericOptions(ans, 4, 0, 10),
-    correctAnswer: ans,
+    question: `After a ${discountPct}% discount the price is R${salePrice}.\nWhat was the original price?`,
+    options: numericOptions(origRound, 4, 5, Math.max(5, Math.round(origRound * 0.1))),
+    correctAnswer: origRound,
+    explanation: `Sale price = ${100-discountPct}% of original. Original = R${salePrice} ÷ ${(100-discountPct)/100} = R${origRound}.`,
   };
 }
 
 function p4l4(): Problem {
-  // Order of operations (BODMAS / PEMDAS)
-  const variant = rand(0, 3);
+  // BODMAS with exponents and deeper nested brackets
+  const variant = rand(0, 4);
   if (variant === 0) {
-    const a = rand(2, 6), b = rand(2, 6), c = rand(1, 10);
+    // Simple square: a² + b × c
+    const a = rand(2, 6), b = rand(2, 5), c = rand(1, 8);
+    const ans = a * a + b * c;
     return {
-      question: `${a} × ${b} + ${c} = ?`,
-      options: numericOptions(a * b + c, 4, 0, 8),
-      correctAnswer: a * b + c,
+      question: `${a}² + ${b} × ${c} = ?`,
+      options: numericOptions(ans, 4, 0, 8),
+      correctAnswer: ans,
+      explanation: `Powers first: ${a}² = ${a*a}. Then × before +: ${b}×${c}=${b*c}. Finally: ${a*a}+${b*c}=${ans}.`,
     };
   } else if (variant === 1) {
-    const a = rand(2, 6), b = rand(2, 6), c = rand(1, 10);
+    // Cube: a³ − b
+    const a = rand(2, 4), b = rand(1, 10);
+    const ans = a * a * a - b;
     return {
-      question: `${c} + ${a} × ${b} = ?`,
-      options: numericOptions(c + a * b, 4, 0, 8),
-      correctAnswer: c + a * b,
+      question: `${a}³ − ${b} = ?`,
+      options: numericOptions(ans, 4, 0, 6),
+      correctAnswer: ans,
+      explanation: `${a}³ = ${a}×${a}×${a} = ${a*a*a}. Then − ${b} = ${ans}.`,
     };
   } else if (variant === 2) {
-    const a = rand(2, 6), b = rand(1, 6), c = rand(2, 5);
+    // Nested brackets: (a + b) × (c − d)
+    const a = rand(2, 6), b = rand(1, 4), c = rand(5, 10), d = rand(1, 4);
+    const ans = (a + b) * (c - d);
     return {
-      question: `(${a} + ${b}) × ${c} = ?`,
-      options: numericOptions((a + b) * c, 4, 0, 10),
-      correctAnswer: (a + b) * c,
+      question: `(${a} + ${b}) × (${c} − ${d}) = ?`,
+      options: numericOptions(ans, 4, 0, 10),
+      correctAnswer: ans,
+      explanation: `Brackets first: (${a}+${b})=${a+b}, (${c}−${d})=${c-d}. Then ${a+b}×${c-d}=${ans}.`,
+    };
+  } else if (variant === 3) {
+    // Exponent inside brackets: (a² + b) ÷ c — ensure divisible
+    const c = rand(2, 5);
+    const a = rand(2, 5);
+    const extra = rand(0, 3) * c;
+    const b = extra;
+    const ans = (a * a + b) / c;
+    return {
+      question: `(${a}² + ${b}) ÷ ${c} = ?`,
+      options: numericOptions(ans, 4, 0, 5),
+      correctAnswer: ans,
+      explanation: `Bracket first: ${a}²=${a*a}, ${a*a}+${b}=${a*a+b}. Then ÷${c} = ${ans}.`,
     };
   } else {
-    // Division then addition — ensure clean divide
-    const divisor = rand(2, 5);
-    const quotient = rand(2, 8);
-    const dividend = divisor * quotient;
-    const c = rand(1, 10);
+    // Full BODMAS: a + b × c² − d
+    const a = rand(2, 8), b = rand(2, 4), c = rand(2, 4), d = rand(1, 6);
+    const ans = a + b * c * c - d;
     return {
-      question: `${dividend} ÷ ${divisor} + ${c} = ?`,
-      options: numericOptions(quotient + c, 4, 0, 8),
-      correctAnswer: quotient + c,
+      question: `${a} + ${b} × ${c}² − ${d} = ?`,
+      options: numericOptions(ans, 4, 0, 8),
+      correctAnswer: ans,
+      explanation: `Order: ${c}²=${c*c}, then ${b}×${c*c}=${b*c*c}, then ${a}+${b*c*c}−${d}=${ans}.`,
     };
   }
 }
@@ -1136,6 +1287,7 @@ function p4l5(): Problem {
       question: `Each book costs $${priceEach}. Buy ${qty} books, pay $${paid}.\nWhat is the change?`,
       options: numericOptions(change, 4, 0, 10),
       correctAnswer: change,
+      explanation: `Step 1: ${qty} × $${priceEach} = $${total}. Step 2: $${paid} − $${total} = $${change} change.`,
     };
   } else if (variant === 1) {
     // Share remainder equally
@@ -1147,6 +1299,7 @@ function p4l5(): Problem {
       question: `${total} apples — ${eaten} are eaten, the rest shared equally among ${shared}.\nHow many each?`,
       options: numericOptions(each, 4, 1, 5),
       correctAnswer: each,
+      explanation: `Step 1: ${total} − ${eaten} = ${total-eaten} left. Step 2: ${total-eaten} ÷ ${shared} = ${each} each.`,
     };
   } else {
     // Distance = speed × time (two legs)
@@ -1158,6 +1311,7 @@ function p4l5(): Problem {
       question: `A car travels at ${speed} km/h for ${t1} hour${t1 > 1 ? 's' : ''}, then ${t2} more hour${t2 > 1 ? 's' : ''}.\nTotal distance?`,
       options: numericOptions(dist, 4, 0, speed),
       correctAnswer: dist,
+      explanation: `Total time = ${t1} + ${t2} = ${t1+t2} hours. Distance = ${speed} × ${t1+t2} = ${dist} km.`,
     };
   }
 }

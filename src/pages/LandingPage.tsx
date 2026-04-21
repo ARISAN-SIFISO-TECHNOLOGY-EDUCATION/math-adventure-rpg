@@ -1,91 +1,7 @@
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
-const FeatureCard = ({ icon, title, desc }: { icon: string; title: string; desc: string }) => (
-  <div className="text-center p-8 bg-gray-50 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all duration-200">
-    <div className="text-5xl mb-4">{icon}</div>
-    <h3 className="font-[Nunito] text-2xl font-semibold mb-3">{title}</h3>
-    <p className="text-gray-500">{desc}</p>
-  </div>
-);
-
-const SafetyItem = ({ badge, title, desc }: { badge: string; title: string; desc: string }) => (
-  <div className="text-center p-6">
-    <div className="text-4xl mb-3">{badge}</div>
-    <h3 className="font-[Nunito] text-xl font-semibold mb-2">{title}</h3>
-    <p className="text-gray-500 text-sm">{desc}</p>
-  </div>
-);
-
-// ─── Grade card data ───────────────────────────────────────────────────────────
-
-const GRADES = [
-  {
-    phase: 1,
-    emoji: '🌱',
-    color: '#059669',
-    bg: '#F0FDF4',
-    border: '#6EE7B7',
-    badge: 'Pre-School',
-    ages: 'Ages 3–5',
-    levels: 10,
-    description: 'Counting, comparing, shapes, patterns & simple sums — perfect first steps.',
-    topics: ['Counting 1–10', 'More or less', 'Addition within 5', 'Shapes & patterns'],
-    detailLink: '/preschool',
-    playLink: '/play?phase=1',
-    tip: 'Sit with your child and read each question aloud.',
-  },
-  {
-    phase: 2,
-    emoji: '📚',
-    color: '#D97706',
-    bg: '#FFFBEB',
-    border: '#FDE68A',
-    badge: 'Lower Primary',
-    ages: 'Ages 6–8',
-    levels: 15,
-    description: '3 worlds, 15 levels — numbers, money, time, multiplication, fractions & more.',
-    topics: ['Numbers & operations', 'Money, time & place value', 'Multiply & divide', 'Fractions & perimeter'],
-    detailLink: '/lower-primary',
-    playLink: '/play?phase=2',
-    tip: 'Let them try independently — stay nearby to celebrate!',
-  },
-  {
-    phase: 3,
-    emoji: '⚔️',
-    color: '#2563EB',
-    bg: '#EFF6FF',
-    border: '#BFDBFE',
-    badge: 'Higher Primary',
-    ages: 'Ages 9–10',
-    levels: 15,
-    description: '3 worlds, 15 levels — multiplication, decimals, fractions, ratio, algebra & data.',
-    topics: ['Commerce maths', 'Area & fractions', 'Data & algebra', '3 boss battles'],
-    detailLink: '/higher-primary',
-    playLink: '/play?phase=3',
-    tip: 'Give them space — check in after each level.',
-  },
-  {
-    phase: 4,
-    emoji: '🏆',
-    color: '#7C3AED',
-    bg: '#F5F3FF',
-    border: '#DDD6FE',
-    badge: 'Advanced Primary',
-    ages: 'Ages 11–12',
-    levels: 5,
-    description: 'Decimals, percentages, order of operations, and multi-step word problems.',
-    topics: ['Fractions & decimals', 'Percentages', 'Order of operations (BODMAS)', 'Word problems'],
-    detailLink: '/higher-primary',
-    playLink: '/play?phase=4',
-    tip: 'They can play fully independently at this stage.',
-  },
-];
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
+import { GRADES } from '../data/grades';
 
 export default function LandingPage() {
   return (
@@ -124,8 +40,8 @@ export default function LandingPage() {
           </div>
           <div className="flex justify-center gap-12 flex-wrap">
             {[
-              { num: '25', label: 'Difficulty Levels' },
-              { num: '4', label: 'Learning Phases' },
+              { num: '45', label: 'Difficulty Levels' },
+              { num: '4',  label: 'Learning Phases' },
               { num: '100%', label: 'Offline & Ad‑Free' },
             ].map(s => (
               <div key={s.label} className="text-center">
@@ -137,21 +53,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Features ── */}
-      <section id="features" className="py-20 bg-white px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="font-[Nunito] text-4xl font-bold text-center mb-12">Why Parents &amp; Kids Love It</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <FeatureCard icon="🧮" title="Adaptive Math"    desc="Problems scale automatically with your child's progress — from counting to percentages." />
-            <FeatureCard icon="🐉" title="Companion Guide"  desc="Sparky the Dragon gives encouragement, hints, and reads questions aloud so non-readers can play." />
-            <FeatureCard icon="🔒" title="100% Private"     desc="Zero data collection. No accounts. No ads. No tracking. COPPA/GDPR‑K compliant." />
-            <FeatureCard icon="📴" title="Works Offline"    desc="No internet? No problem. Play anywhere — on a plane, in a car, or at the park." />
-          </div>
-        </div>
-      </section>
-
       {/* ── Grade Cards ── */}
-      <section id="grades" className="py-20 bg-gray-50 px-6">
+      <section id="grades" className="py-20 bg-white px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="font-[Nunito] text-4xl font-bold text-center mb-3">Choose Your Grade</h2>
           <p className="text-center text-gray-500 max-w-xl mx-auto mb-12">
@@ -203,142 +106,6 @@ export default function LandingPage() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Curriculum (compact) ── */}
-      <section id="curriculum" className="py-20 bg-white px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="font-[Nunito] text-4xl font-bold text-center mb-3">Curriculum‑Aligned Learning</h2>
-          <p className="text-center text-gray-500 max-w-xl mx-auto mb-12">Following K–6 math standards across 45 levels and 4 phases</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {GRADES.map(g => (
-              <Link
-                key={g.phase}
-                to={g.detailLink}
-                className="bg-gray-50 rounded-2xl p-6 no-underline text-gray-800 hover:-translate-y-1 hover:shadow-lg transition-all block"
-                style={{ borderLeft: `4px solid ${g.color}` }}
-              >
-                <div className="font-[Nunito] font-extrabold text-xl mb-1">{g.emoji} {g.badge}</div>
-                <div className="text-sm text-gray-400 mb-4">{g.ages}</div>
-                <ul className="space-y-1">
-                  {g.topics.map(t => (
-                    <li key={t} className="text-sm flex items-center gap-2">
-                      <span className="font-bold" style={{ color: g.color }}>✓</span> {t}
-                    </li>
-                  ))}
-                </ul>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Safety ── */}
-      <section id="safety" className="py-20 bg-gray-50 px-6">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="font-[Nunito] text-4xl font-bold text-center mb-12">Designed with Safety First</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <SafetyItem badge="🚫" title="No Ads"            desc="Zero third‑party ad networks. No interruptions, ever." />
-            <SafetyItem badge="🔐" title="No Data Collection" desc="We don't collect names, emails, location, or usage data." />
-            <SafetyItem badge="👨‍👩‍👧" title="Parental Gate"    desc="Grade changes require a parent to solve a math puzzle first." />
-            <SafetyItem badge="📜" title="COPPA & GDPR‑K"    desc="Fully compliant with child-privacy regulations worldwide." />
-          </div>
-        </div>
-      </section>
-
-      {/* ── Parents & Caregivers ── */}
-      <section id="parents" className="py-20 bg-white px-6">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="font-[Nunito] text-4xl font-bold text-center mb-3">For Parents &amp; Caregivers</h2>
-          <p className="text-center text-gray-500 max-w-xl mx-auto mb-12">
-            Young children learn best with a caring adult nearby. Here's everything you need to
-            help your child get the most out of Math Adventure RPG.
-          </p>
-
-          {/* Age guidance */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-            {GRADES.map(g => (
-              <div
-                key={g.phase}
-                className="rounded-2xl p-6 border-2"
-                style={{ background: g.bg, borderColor: g.border }}
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-3xl">{g.emoji}</span>
-                  <div>
-                    <p className="font-[Nunito] font-black text-base" style={{ color: g.color }}>{g.badge}</p>
-                    <p className="text-sm text-gray-500">{g.ages}</p>
-                  </div>
-                </div>
-                <p className="text-sm text-gray-700 leading-relaxed">{g.tip}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Controls & tips grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: '🔒',
-                title: 'Switching Grade Levels',
-                body: 'Tap the lock icon ("Change") on the game start screen. You\'ll need to solve a short math puzzle — designed so young children can\'t accidentally change levels.',
-              },
-              {
-                icon: '🔇',
-                title: 'Audio Controls',
-                body: 'The speaker icon mutes all music and sound effects. Audio narration (Sparky reading questions aloud) is also silenced — useful if the device is shared.',
-              },
-              {
-                icon: '🏠',
-                title: 'Getting Back Home',
-                body: 'A Home button is always visible on the game screen. You can also use your browser\'s back button at any time — progress is automatically saved between sessions.',
-              },
-              {
-                icon: '✅',
-                title: 'Signs of Progress',
-                body: 'Watch for: counting without fingers, recalling addition facts instantly, quick times table answers, and solving word problems independently.',
-              },
-              {
-                icon: '🎯',
-                title: 'Choosing the Right Level',
-                body: 'Start at your child\'s current school year. If they find a level too easy, move up; if frustration sets in, drop down — the game adapts within each level too.',
-              },
-              {
-                icon: '💬',
-                title: 'Talking About the Game',
-                body: 'Ask "How did Sparky help you today?" or "Which question was the trickiest?" Conversation deepens learning and keeps children motivated.',
-              },
-            ].map(tip => (
-              <div key={tip.title} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
-                <div className="text-3xl mb-3">{tip.icon}</div>
-                <h3 className="font-[Nunito] text-lg font-bold mb-2 text-gray-800">{tip.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{tip.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Final CTA ── */}
-      <section className="py-20 text-center px-6" style={{ background: 'linear-gradient(135deg,#4F46E5,#7C3AED)', color: 'white' }}>
-        <div className="max-w-2xl mx-auto">
-          <h2 className="font-[Nunito] text-4xl font-bold text-white mb-4">Ready to start the adventure?</h2>
-          <p className="text-lg mb-8 opacity-90">No download. No sign‑up. Just pick a grade and play.</p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Link
-              to="/play"
-              className="font-[Nunito] inline-flex items-center gap-2 bg-white text-[#4F46E5] px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all no-underline"
-            >
-              🎮 Play Now
-            </Link>
-            <a
-              href="#grades"
-              className="font-[Nunito] inline-flex items-center gap-2 bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:scale-105 hover:bg-white/10 transition-all no-underline"
-            >
-              Choose a Grade
-            </a>
           </div>
         </div>
       </section>

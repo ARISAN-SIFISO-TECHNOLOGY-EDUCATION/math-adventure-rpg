@@ -1,55 +1,69 @@
-# Math Monsters
+# Math Adventure RPG
 
-A gamified, AdaptedMind-style math learning app powered by React, Tailwind CSS, and Anthropic's Claude AI.
+A gamified math learning app for children ages 3–12. Players solve math problems to battle monsters, earn coins, unlock badges, and progress through 45 levels across 4 difficulty phases.
 
-## Prerequisites
+Built with Vite + React 19 + TypeScript. Wrapped for Android using Capacitor. No backend, no API keys, no internet required.
 
-Before you begin, ensure you have the following installed on your local machine:
-- **Node.js** (v18 or higher recommended)
-- **npm** (comes with Node.js)
+## Tech Stack
 
-You will also need an **Anthropic API Key** to generate the dynamic math questions.
+- **Frontend:** React 19, TypeScript, Tailwind CSS, Motion
+- **Math Engine:** Procedural generator (`src/mathEngine.ts`) — all problems generated on-device
+- **Audio:** Web Audio API (SFX/BGM) + Web Speech API (narration)
+- **Persistence:** `localStorage` — progress, coins, badges, streaks
+- **Android:** Capacitor 8 wrapping the Vite `dist/` build
 
-## Local Setup Instructions
+## Local Development
 
-Follow these steps to get the project up and running locally:
+### Prerequisites
+- Node.js v18+
+- npm
 
-### 1. Clone the repository
-Clone this project to your local machine and navigate into the directory.
+### Setup
 
-### 2. Install dependencies
-Run the following command to install all required packages:
-\`\`\`bash
+```bash
 npm install
-\`\`\`
-
-### 3. Set up environment variables
-The app requires environment variables to function correctly. 
-1. Copy the example environment file to create your own local `.env` file:
-   \`\`\`bash
-   cp .env.example .env
-   \`\`\`
-2. Open the newly created `.env` file in your code editor.
-3. Add your Anthropic API key:
-   \`\`\`env
-   ANTHROPIC_API_KEY="your-actual-api-key-here"
-   \`\`\`
-
-### 4. Start the development server
-Start the full-stack development server (which runs both the Express backend and the Vite frontend):
-\`\`\`bash
 npm run dev
-\`\`\`
+```
 
-### 5. Open the app
-Once the server starts, open your browser and navigate to:
-\`\`\`
-http://localhost:3000
-\`\`\`
+Open `http://localhost:5173` in your browser.
 
 ## Available Scripts
 
-- \`npm run dev\`: Starts the development server using \`tsx\`.
-- \`npm run build\`: Builds the app for production.
-- \`npm start\`: Starts the production server (run \`npm run build\` first).
-- \`npm run lint\`: Runs TypeScript type checking.
+- `npm run dev` — Start the Vite development server
+- `npm run build` — Build for production (outputs to `dist/`)
+- `npm run preview` — Preview the production build locally
+- `npm run lint` — Run TypeScript type checking
+
+## Android Build (Google Play)
+
+After making changes, sync to Android:
+
+```bash
+npm run build
+npx cap sync
+```
+
+Then open Android Studio to build the signed AAB:
+
+```bash
+npx cap open android
+```
+
+Build → Generate Signed Bundle/APK → Android App Bundle
+
+## Game Structure
+
+| Phase | Badge | Ages | Levels | Topics |
+|-------|-------|------|--------|--------|
+| 1 | Pre-School | 3–5 | 10 | Counting, shapes, patterns, addition within 5 |
+| 2 | Lower Primary | 6–8 | 15 | Numbers, money, time, multiplication, fractions |
+| 3 | Higher Primary | 9–12 | 15 | Decimals, algebra, data, ratio |
+| 4 | Advanced Primary | 11–12 | 5 | BODMAS, percentages, multi-step word problems |
+
+## Privacy
+
+- No accounts, no sign-up
+- No data collection of any kind
+- No ads, no in-app purchases
+- Fully offline — no network calls during gameplay
+- COPPA and GDPR-K compliant
