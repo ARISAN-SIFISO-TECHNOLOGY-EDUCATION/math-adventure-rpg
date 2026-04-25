@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Math Adventure RPG</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8fafc; color: #1e293b; }
+
+    header {
+      background: linear-gradient(135deg, #4F46E5, #7C3AED);
+      color: white;
+      text-align: center;
+      padding: 64px 24px;
+    }
+    header .icon { font-size: 72px; margin-bottom: 16px; }
+    header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
+    header p { font-size: 1.2rem; opacity: 0.9; max-width: 500px; margin: 0 auto 32px; }
+
+    .badge {
+      display: inline-block;
+      background: white;
+      color: #4F46E5;
+      font-weight: 700;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+    .badge:hover { transform: scale(1.05); }
+
+    .features {
+      max-width: 900px;
+      margin: 64px auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+    .feature {
+      background: white;
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      border: 1px solid #e2e8f0;
+    }
+    .feature .emoji { font-size: 2.5rem; margin-bottom: 12px; }
+    .feature h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .feature p { color: #64748b; font-size: 0.95rem; line-height: 1.6; }
+
+    .grades {
+      background: white;
+      padding: 64px 24px;
+      text-align: center;
+    }
+    .grades h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 40px; }
+    .grade-grid {
+      max-width: 800px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .grade-card {
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+    }
+    .grade-card .emoji { font-size: 2rem; margin-bottom: 8px; }
+    .grade-card h4 { font-weight: 700; margin-bottom: 4px; }
+    .grade-card p { font-size: 0.85rem; color: #64748b; }
+
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      border-top: 1px solid #e2e8f0;
+    }
+    footer a { color: #4F46E5; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="icon">🧮</div>
+    <h1>Math Adventure RPG</h1>
+    <p>Battle monsters. Solve math. Level up. Free for children ages 3–12.</p>
+    <a class="badge" href="privacy-policy.html">Privacy Policy</a>
+  </header>
+
+  <section class="features">
+    <div class="feature">
+      <div class="emoji">🎮</div>
+      <h3>RPG Progression</h3>
+      <p>Earn coins, defeat monster bosses, and unlock badges across 45 levels.</p>
+    </div>
+    <div class="feature">
+      <div class="emoji">📴</div>
+      <h3>Fully Offline</h3>
+      <p>No internet required. Works on a plane, in a car, or anywhere.</p>
+    </div>
+    <div class="feature">
+      <div class="emoji">🔒</div>
+      <h3>100% Private</h3>
+      <p>Zero data collection. No accounts. No ads. COPPA and GDPR-K compliant.</p>
+    </div>
+    <div class="feature">
+      <div class="emoji">🗣️</div>
+      <h3>Voice Narration</h3>
+      <p>Every question is read aloud — ideal for pre-readers and children with dyslexia.</p>
+    </div>
+    <div class="feature">
+      <div class="emoji">🔥</div>
+      <h3>Daily Streaks</h3>
+      <p>Streak badges reward consistent daily play and build lasting study habits.</p>
+    </div>
+    <div class="feature">
+      <div class="emoji">💡</div>
+      <h3>Explanatory Feedback</h3>
+      <p>After wrong answers, the correct solution is shown with a step-by-step explanation.</p>
+    </div>
+  </section>
+
+  <section class="grades">
+    <h2>4 Grade Levels</h2>
+    <div class="grade-grid">
+      <div class="grade-card" style="background:#F0FDF4;">
+        <div class="emoji">🌱</div>
+        <h4>Pre-School</h4>
+        <p>Ages 3–5<br/>Counting, shapes, patterns</p>
+      </div>
+      <div class="grade-card" style="background:#FFFBEB;">
+        <div class="emoji">📚</div>
+        <h4>Lower Primary</h4>
+        <p>Ages 6–8<br/>Numbers, money, time, fractions</p>
+      </div>
+      <div class="grade-card" style="background:#EFF6FF;">
+        <div class="emoji">⚔️</div>
+        <h4>Higher Primary</h4>
+        <p>Ages 9–12<br/>Algebra, decimals, data</p>
+      </div>
+      <div class="grade-card" style="background:#FFF1F2;">
+        <div class="emoji">🏆</div>
+        <h4>Advanced Primary</h4>
+        <p>Ages 11–12<br/>BODMAS, percentages</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      &copy; 2026 Math Adventure RPG &nbsp;|&nbsp;
+      <a href="privacy-policy.html">Privacy Policy</a> &nbsp;|&nbsp;
+      <a href="mailto:sifiso.cyprianshezi28@gmail.com">Contact</a>
+    </p>
+  </footer>
+
+</body>
+</html>
