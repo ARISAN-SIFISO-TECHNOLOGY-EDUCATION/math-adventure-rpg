@@ -1095,7 +1095,7 @@ export default function Game() {
   const victoryPhaseConfig = PHASES[phase - 1];
 
   return (
-    <div className="min-h-screen bg-[#FFE5F1] font-sans text-black flex flex-col items-center p-4 md:p-8">
+    <div className="min-h-screen bg-[#FFE5F1] font-sans text-black flex flex-col items-center p-4 md:p-8 overflow-x-hidden">
 
       {/* Overlays */}
       {showCompanionSetup && (
@@ -1127,16 +1127,16 @@ export default function Game() {
       )}
 
       {/* HUD */}
-      <div className="w-full max-w-2xl flex justify-between items-center mb-8 bg-white p-4 rounded-3xl border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+      <div className="w-full max-w-2xl flex justify-between items-center mb-4 md:mb-8 bg-white p-2 md:p-4 rounded-3xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
         {/* Phase + Level */}
-        <div className="flex items-center gap-3">
-          <div className={`${currentPhaseConfig.badgeBg} p-3 rounded-2xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-xl leading-none`}>
+        <div className="flex items-center gap-1 md:gap-3">
+          <div className={`${currentPhaseConfig.badgeBg} p-2 md:p-3 rounded-2xl border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-base md:text-xl leading-none`}>
             {currentPhaseConfig.emoji}
           </div>
           <div>
-            <p className="text-xs font-black uppercase tracking-wider leading-tight text-gray-500">{currentPhaseConfig.name}</p>
-            <p className="text-3xl font-black leading-none">
-              {levelInPhase}<span className="text-base font-black text-gray-400">/{currentPhaseConfig.levels.length}</span>
+            <p className="text-[10px] md:text-xs font-black uppercase tracking-wider leading-tight text-gray-500">{currentPhaseConfig.name}</p>
+            <p className="text-xl md:text-3xl font-black leading-none">
+              {levelInPhase}<span className="text-sm md:text-base font-black text-gray-400">/{currentPhaseConfig.levels.length}</span>
             </p>
           </div>
         </div>
@@ -1155,33 +1155,33 @@ export default function Game() {
         </div>
 
         {/* Coins + Streak + Mute */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 md:gap-3">
           {streakCount > 0 && (
-            <div className="flex items-center gap-1 bg-orange-100 border-2 border-orange-400 px-2 py-1 rounded-xl">
-              <span className="text-base leading-none">🔥</span>
-              <span className="font-black text-orange-700 text-sm">{streakCount}</span>
+            <div className="flex items-center gap-1 bg-orange-100 border-2 border-orange-400 px-1 md:px-2 py-1 rounded-xl">
+              <span className="text-sm leading-none">🔥</span>
+              <span className="font-black text-orange-700 text-xs md:text-sm">{streakCount}</span>
             </div>
           )}
           <div className="text-right">
-            <p className="text-sm font-black uppercase tracking-wider">Coins</p>
-            <p className="text-3xl font-black leading-none text-[#F59E0B]">{coins}</p>
+            <p className="text-[10px] md:text-sm font-black uppercase tracking-wider hidden md:block">Coins</p>
+            <p className="text-xl md:text-3xl font-black leading-none text-[#F59E0B]">{coins}</p>
           </div>
-          <div className="bg-[#FEF3C7] p-3 rounded-2xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <Coins className="text-[#F59E0B] fill-[#F59E0B]" size={24} />
+          <div className="bg-[#FEF3C7] p-2 md:p-3 rounded-2xl border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <Coins className="text-[#F59E0B] fill-[#F59E0B] w-4 h-4 md:w-6 md:h-6" />
           </div>
           <button
             onClick={toggleMute}
-            className={`p-3 rounded-2xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 transition-all ${muted ? 'bg-gray-100' : 'bg-[#E0F2FE]'}`}
+            className={`p-2 md:p-3 rounded-2xl border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1 transition-all ${muted ? 'bg-gray-100' : 'bg-[#E0F2FE]'}`}
             title={muted ? 'Unmute' : 'Mute'}
           >
-            {muted ? <VolumeX className="text-gray-400" size={24} /> : <Volume2 className="text-[#3B82F6]" size={24} />}
+            {muted ? <VolumeX className="text-gray-400 w-4 h-4 md:w-6 md:h-6" /> : <Volume2 className="text-[#3B82F6] w-4 h-4 md:w-6 md:h-6" />}
           </button>
           <Link
             to="/"
-            className="p-3 rounded-2xl border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-gray-50 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 transition-all"
+            className="p-2 md:p-3 rounded-2xl border-4 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-gray-50 active:shadow-none active:translate-y-1 active:translate-x-1 transition-all"
             title="Back to Home"
           >
-            <Home size={24} className="text-gray-600" />
+            <Home className="text-gray-600 w-4 h-4 md:w-6 md:h-6" />
           </Link>
         </div>
       </div>
