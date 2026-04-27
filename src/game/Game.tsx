@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Trophy, ChevronRight, Coins, Sparkles, Volume2, VolumeX, Lock, Home } from 'lucide-react';
 import { generateProblem, type Problem } from '../mathEngine';
@@ -60,6 +60,11 @@ const LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string;
   8:  { emoji: '🔟', title: 'Counting to 20!',     body: 'Now we count all the way to 20 — you can do it!', tip: 'Try counting in groups of 5 to keep track.' },
   9:  { emoji: '🔷', title: 'Shape Explorer',      body: 'Look at the shape and tap its name!', tip: 'Think about how many sides or corners it has.' },
   10: { emoji: '🎨', title: 'Pattern Detective',   body: 'Spot what repeats and choose what comes next!', tip: 'Say the pattern out loud to hear the rhythm.' },
+  11: { emoji: '🗂️', title: 'Sort it Out!',         body: 'Find the one that does NOT belong!',            tip: 'Look carefully — what makes one different?' },
+  12: { emoji: '📏', title: 'Big or Small?',          body: 'Compare two things — which one wins?',          tip: 'Think about size, length, or how tall!' },
+  13: { emoji: '📦', title: '3D Shape Explorer',      body: 'These shapes are all around us in real life!',  tip: 'A ball is a sphere. A box is a cube!' },
+  14: { emoji: '⏪', title: 'Count Backwards!',       body: 'Start from the top and count back down!',       tip: 'Start at 10 and go: 10, 9, 8…' },
+  15: { emoji: '🥇', title: 'First, Second, Third…',  body: 'Who is 1st? Who is 2nd? Who is 3rd?',          tip: '1st means first in the line — at the front!' },
 };
 
 const PHASE1_HINTS: Record<number, string> = {
@@ -73,6 +78,11 @@ const PHASE1_HINTS: Record<number, string> = {
   8:  '👆 Count carefully all the way to 20!',
   9:  '🔷 How many sides does it have?',
   10: '🎨 What is the repeating pattern?',
+  11: '🗂️ Which one looks different from the rest?',
+  12: '📏 Look carefully — which is bigger or longer?',
+  13: '📦 Is it a ball, a box, a tin, or a cone?',
+  14: '⏪ Count backwards: 10, 9, 8… what fits the gap?',
+  15: '🥇 Count from the front: 1st, 2nd, 3rd…',
 };
 
 const P2_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
@@ -214,7 +224,7 @@ function getHint(phase: number, levelInPhase: number): string {
 
 const isBossLevel = (p: number, lip: number): boolean => p >= 2 && [5, 10, 15].includes(lip);
 
-type PhaseConfig = {
+export type PhaseConfig = {
   id: number;
   name: string;
   ageRange: string;
@@ -226,7 +236,7 @@ type PhaseConfig = {
 };
 
 // --- Phase Curriculum Config ---
-const PHASES: PhaseConfig[] = [
+export const PHASES: PhaseConfig[] = [
   {
     id: 1,
     name: 'Pre-School',
@@ -246,6 +256,11 @@ const PHASES: PhaseConfig[] = [
       { n: 8, topic: 'counting objects from 11 to 20' },
       { n: 9, topic: 'identify shapes — circle, square, triangle, star' },
       { n: 10, topic: 'spot the pattern — what comes next?' },
+      { n: 11, topic: 'sorting and classifying — find the one that does not belong' },
+      { n: 12, topic: 'size comparison — bigger, longer, taller' },
+      { n: 13, topic: 'identify 3D shapes — sphere, cube, cylinder, cone' },
+      { n: 14, topic: 'counting backwards from 10' },
+      { n: 15, topic: 'ordinal numbers — first, second, third, fourth' },
     ],
   },
   {
@@ -770,10 +785,76 @@ function CompanionSetup({ onDone }: { onDone: (name: string, emoji: string) => v
   );
 }
 
+function PauseMenu({ onResume, onRestart }: { onResume: () => void; onRestart: () => void }) {
+  return (
+    <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+      <motion.div
+        initial={{ scale: 0.85, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="bg-white rounded-[32px] p-8 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full max-w-xs flex flex-col gap-3"
+      >
+        <div className="text-center mb-2">
+          <div className="text-5xl mb-2">⏸️</div>
+          <h2 className="text-2xl font-black">PAUSED</h2>
+        </div>
+        <button onClick={onResume}
+          className="w-full bg-[#4ADE80] border-4 border-black py-4 rounded-2xl font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1 transition-all">
+          ▶️ Resume
+        </button>
+        <button onClick={onRestart}
+          className="w-full bg-[#FEF9C3] border-4 border-black py-4 rounded-2xl font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1 transition-all">
+          🔄 Restart Level
+        </button>
+        <Link to="/grown-up-corner"
+          className="w-full bg-[#EFF6FF] border-4 border-black py-4 rounded-2xl font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center no-underline block hover:bg-blue-50 transition-all">
+          👨‍👩‍👧 Grown-up Corner
+        </Link>
+        <Link to="/"
+          className="w-full bg-gray-100 border-4 border-black py-4 rounded-2xl font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center no-underline block hover:bg-gray-200 transition-all">
+          🏠 Home
+        </Link>
+      </motion.div>
+    </div>
+  );
+}
+
+function BreakOverlay({ onParentOverride }: { onParentOverride: () => void }) {
+  return (
+    <div className="fixed inset-0 bg-[#1E1B4B]/90 z-50 flex items-center justify-center p-4">
+      <motion.div
+        initial={{ scale: 0.85, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="bg-white rounded-[40px] p-10 border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] w-full max-w-sm text-center"
+      >
+        <motion.div
+          animate={{ y: [0, -12, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+          className="text-7xl mb-4"
+        >⏰</motion.div>
+        <h2 className="text-3xl font-black mb-2">Time for a Break!</h2>
+        <p className="text-gray-500 font-bold mb-8 leading-relaxed">
+          Great playing today! Come back later for more math adventures.
+        </p>
+        <Link to="/"
+          className="block w-full bg-[#4ADE80] border-4 border-black py-4 rounded-2xl font-black text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] no-underline text-black mb-3">
+          🏠 All done for now!
+        </Link>
+        <button onClick={onParentOverride}
+          className="text-sm font-black text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1 mx-auto">
+          <Lock size={12} /> Parent override
+        </button>
+      </motion.div>
+    </div>
+  );
+}
+
 // --- App ---
 export default function Game() {
   const [searchParams] = useSearchParams();
   const urlPhaseParam = searchParams.get('phase');
+  const urlLevelParam = searchParams.get('level');
+  const urlReplayParam = searchParams.get('replay');
+  const navigate = useNavigate();
 
   const [gameState, setGameState] = useState<GameState>('START');
   const [phase, setPhase] = useState(() => {
@@ -782,10 +863,12 @@ export default function Game() {
     return saved?.phase ?? 1;
   });
   const [levelInPhase, setLevelInPhase] = useState(() => {
+    if (urlPhaseParam && urlLevelParam) return Math.max(1, parseInt(urlLevelParam, 10) || 1);
     if (urlPhaseParam) return 1;
     const saved = JSON.parse(localStorage.getItem('mathProgress') || 'null');
     return saved?.levelInPhase ?? 1;
   });
+  const [isReplayMode] = useState(!!urlReplayParam);
   const [hasSavedProgress] = useState(() => {
     if (urlPhaseParam) return false;
     return !!JSON.parse(localStorage.getItem('mathProgress') || 'null');
@@ -824,6 +907,10 @@ export default function Game() {
     return saved?.emoji ?? '🐉';
   });
   const [showCompanionSetup, setShowCompanionSetup] = useState(() => !localStorage.getItem('companionSetup'));
+  const [showPauseMenu, setShowPauseMenu] = useState(false);
+  const [showBreakOverlay, setShowBreakOverlay] = useState(false);
+  const [showBreakGate, setShowBreakGate] = useState(false);
+  const [completedLevel, setCompletedLevel] = useState(1);
 
   const { muted, toggleMute, startBGM, stopBGM, playClick, playCorrect, playWrong, playVictory } = useSoundSystem();
   const { speakQuestion, speakCorrect, speakWrong, speakLevelUp, speakVictory, speakWelcome } = useNarration(muted);
@@ -894,6 +981,26 @@ export default function Game() {
     }, 3000);
     return () => clearTimeout(t);
   }, [companionEmotion]);
+
+  useEffect(() => {
+    const timer = JSON.parse(localStorage.getItem('sessionTimer') || 'null');
+    if (timer && Date.now() > timer.endTime) {
+      setShowBreakOverlay(true);
+      localStorage.removeItem('sessionTimer');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (gameState !== 'PLAYING') return;
+    const interval = setInterval(() => {
+      const timer = JSON.parse(localStorage.getItem('sessionTimer') || 'null');
+      if (timer && Date.now() > timer.endTime) {
+        setShowBreakOverlay(true);
+        localStorage.removeItem('sessionTimer');
+      }
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [gameState]);
 
   const startGame = useCallback(() => {
     playClick();
@@ -1003,13 +1110,15 @@ export default function Game() {
           setProgress(0);
           setBossDefeated(wasBonus);
 
-          // B1 — persist progress
-          if (wasLastLevel && wasLastPhase) {
-            localStorage.removeItem('mathProgress');
-          } else if (wasLastLevel) {
-            localStorage.setItem('mathProgress', JSON.stringify({ phase: phase + 1, levelInPhase: 1 }));
-          } else {
-            localStorage.setItem('mathProgress', JSON.stringify({ phase, levelInPhase: levelInPhase + 1 }));
+          // B1 — persist progress (skip in replay mode to preserve real saved progress)
+          if (!isReplayMode) {
+            if (wasLastLevel && wasLastPhase) {
+              localStorage.removeItem('mathProgress');
+            } else if (wasLastLevel) {
+              localStorage.setItem('mathProgress', JSON.stringify({ phase: phase + 1, levelInPhase: 1 }));
+            } else {
+              localStorage.setItem('mathProgress', JSON.stringify({ phase, levelInPhase: levelInPhase + 1 }));
+            }
           }
 
           // Award phase-complete badges
@@ -1039,6 +1148,7 @@ export default function Game() {
             setLevelInPhase(prev => prev + 1);
           }
 
+          setCompletedLevel(levelInPhase);
           setGameState('VICTORY');
           // B3 — boss confetti
           if (wasBonus) {
@@ -1082,7 +1192,7 @@ export default function Game() {
         setTimeout(() => setFeedback(null), 1200);
       }
     }
-  }, [problem, progress, phase, levelInPhase, wrongAttempts, streakUpdatedToday, awardBadge, playCorrect, playWrong, playVictory, stopBGM, loadQuestion]);
+  }, [problem, progress, phase, levelInPhase, wrongAttempts, streakUpdatedToday, isReplayMode, awardBadge, playCorrect, playWrong, playVictory, stopBGM, loadQuestion]);
 
   const handlePhaseSelect = (newPhase: number) => {
     setPhase(newPhase);
@@ -1090,6 +1200,25 @@ export default function Game() {
     setProgress(0);
     setShowPhaseSelect(false);
   };
+
+  const handlePlayAgain = useCallback(() => {
+    playClick();
+    setLevelInPhase(completedLevel);
+    setProgress(0);
+    setFeedback(null);
+    setBossDefeated(false);
+    startBGM();
+    setGameState(phase === 1 ? 'LEVEL_INTRO' : 'PLAYING');
+    loadQuestion(phase, completedLevel);
+  }, [completedLevel, phase, playClick, startBGM, loadQuestion]);
+
+  const handleRestartLevel = useCallback(() => {
+    setShowPauseMenu(false);
+    setProgress(0);
+    setFeedback(null);
+    setWrongAttempts(0);
+    loadQuestion(phase, levelInPhase);
+  }, [phase, levelInPhase, loadQuestion]);
 
   // After state updates in handleAnswer, phase/levelInPhase already reflect the NEW values
   const victoryPhaseConfig = PHASES[phase - 1];
@@ -1117,6 +1246,21 @@ export default function Game() {
           currentPhase={phase}
           onSelect={handlePhaseSelect}
           onClose={() => setShowPhaseSelect(false)}
+        />
+      )}
+      {showPauseMenu && (
+        <PauseMenu
+          onResume={() => setShowPauseMenu(false)}
+          onRestart={handleRestartLevel}
+        />
+      )}
+      {showBreakOverlay && !showBreakGate && (
+        <BreakOverlay onParentOverride={() => setShowBreakGate(true)} />
+      )}
+      {showBreakGate && (
+        <ParentalGate
+          onSuccess={() => { setShowBreakGate(false); setShowBreakOverlay(false); }}
+          onClose={() => setShowBreakGate(false)}
         />
       )}
       {gameState === 'TUTORIAL' && (
@@ -1183,6 +1327,15 @@ export default function Game() {
           >
             <Home className="text-gray-600 w-4 h-4 md:w-6 md:h-6" />
           </Link>
+          {gameState === 'PLAYING' && (
+            <button
+              onClick={() => { playClick(); setShowPauseMenu(true); }}
+              className="p-2 md:p-3 rounded-2xl border-4 border-black bg-[#FEF3C7] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1 transition-all"
+              title="Pause"
+            >
+              <span className="text-base md:text-xl leading-none">⏸️</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -1270,9 +1423,14 @@ export default function Game() {
                 </div>
               </div>
 
-              <Link to="/" className="mt-6 text-sm font-bold text-gray-400 hover:text-gray-600 no-underline flex items-center gap-1 mx-auto transition-colors">
-                ← Back to Home
-              </Link>
+              <div className="mt-6 flex items-center gap-6 justify-center flex-wrap">
+                <Link to="/" className="text-sm font-bold text-gray-400 hover:text-gray-600 no-underline flex items-center gap-1 transition-colors">
+                  ← Back to Home
+                </Link>
+                <Link to="/grown-up-corner" className="text-sm font-bold text-blue-500 hover:text-blue-700 no-underline flex items-center gap-1 transition-colors">
+                  👨‍👩‍👧 Grown-up Corner
+                </Link>
+              </div>
             </motion.div>
           )}
 
@@ -1472,13 +1630,26 @@ export default function Game() {
                       </div>
                     );
                   })()}
-                  <p className="text-xl font-bold text-gray-500 mb-10">
+                  <p className="text-xl font-bold text-gray-500 mb-8">
                     {currentPhaseConfig.emoji} {currentPhaseConfig.name} · Level {levelInPhase} of {currentPhaseConfig.levels.length}
                   </p>
-                  <button onClick={startGame}
-                    className="bg-[#4ADE80] hover:bg-[#22C55E] text-black px-12 py-6 rounded-full border-4 border-black text-3xl font-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-4 mx-auto">
-                    NEXT LEVEL <Sparkles size={32} />
-                  </button>
+                  <div className="flex flex-col gap-4 items-center">
+                    <button onClick={handlePlayAgain}
+                      className="bg-white border-4 border-black text-black px-10 py-4 rounded-full text-xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto hover:bg-gray-50">
+                      🔄 Play Again
+                    </button>
+                    {isReplayMode ? (
+                      <button onClick={() => { stopBGM(); navigate('/'); }}
+                        className="bg-[#4ADE80] hover:bg-[#22C55E] text-black px-12 py-6 rounded-full border-4 border-black text-2xl font-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-4 mx-auto">
+                        🏠 Back to Home
+                      </button>
+                    ) : (
+                      <button onClick={startGame}
+                        className="bg-[#4ADE80] hover:bg-[#22C55E] text-black px-12 py-6 rounded-full border-4 border-black text-3xl font-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-4 mx-auto">
+                        NEXT LEVEL <Sparkles size={32} />
+                      </button>
+                    )}
+                  </div>
                 </>
               )}
             </motion.div>

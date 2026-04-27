@@ -14,6 +14,11 @@ const levels = [
   { n: 8,  title: 'Counting 11–20',           example: '"How many? (count 13 objects)"' },
   { n: 9,  title: 'Shape Explorer',           example: '"Which shape has 3 sides?"' },
   { n: 10, title: 'Pattern Detective',        example: '"🔴🔵🔴🔵 — what comes next?"' },
+  { n: 11, title: 'Sort it Out!',             example: '"🐶🐱🐸🍎 — which does NOT belong?"' },
+  { n: 12, title: 'Big or Small?',            example: '"🐘 or 🐭 — which is BIGGER?"' },
+  { n: 13, title: '3D Shape Explorer',        example: '"What 3D shape is this? 🎲"' },
+  { n: 14, title: 'Count Backwards!',         example: '"10, 9, ?, 7, 6 — what is missing?"' },
+  { n: 15, title: 'First, Second, Third…',    example: '"🐶🐱🐸🐰 — what position is the frog?"' },
 ];
 
 export default function PreSchoolPage() {
@@ -60,10 +65,10 @@ export default function PreSchoolPage() {
         <h2 className="font-[Nunito] text-3xl font-bold text-center mb-10" style={{ color: '#065F46' }}>What They'll Learn</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
-            { icon: '🔢', title: 'Counting 1–10', desc: 'Count stars, monsters, and treasure with visual feedback.' },
-            { icon: '⚖️', title: 'More or Less', desc: 'Compare numbers and choose the bigger or smaller group.' },
-            { icon: '➕', title: 'Simple Addition', desc: 'Sums up to 5 using pictures and friendly characters.' },
-            { icon: '➖', title: 'Simple Subtraction', desc: 'Taking away within 5 — no negative numbers, no frustration.' },
+            { icon: '🔢', title: 'Counting 1–20', desc: 'Count stars, monsters, and treasure with visual feedback.' },
+            { icon: '⚖️', title: 'More or Less', desc: 'Compare numbers and sizes — bigger, longer, taller.' },
+            { icon: '🔷', title: 'Shapes & 3D Objects', desc: '2D shapes and real-life 3D objects like spheres, cubes, and cones.' },
+            { icon: '🗂️', title: 'Sort & Count', desc: 'Sorting, patterns, counting backwards, and ordinal numbers.' },
           ].map(c => (
             <div key={c.title} className="bg-white text-center p-6 rounded-3xl shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all">
               <div className="text-5xl mb-4">{c.icon}</div>
