@@ -233,6 +233,104 @@ function p1l10(): Problem {
   };
 }
 
+function p1l11(): Problem {
+  // Category sort — three items in one group, one odd one out
+  const groups = [
+    { items: ['🐶', '🐱', '🐸', '🍎'], odd: '🍎', tip: '🍎 is a fruit, not an animal' },
+    { items: ['🍎', '🍊', '🍌', '🚗'], odd: '🚗', tip: '🚗 is a vehicle, not a fruit' },
+    { items: ['🚗', '🚌', '✈️', '🌸'], odd: '🌸', tip: '🌸 is a flower, not a vehicle' },
+    { items: ['🌸', '🌺', '🌻', '🐶'], odd: '🐶', tip: '🐶 is an animal, not a flower' },
+    { items: ['⚽', '🏀', '🎾', '🍕'], odd: '🍕', tip: '🍕 is food, not a ball' },
+    { items: ['🍕', '🍔', '🍦', '🐱'], odd: '🐱', tip: '🐱 is an animal, not food' },
+    { items: ['🐘', '🦁', '🐯', '🚂'], odd: '🚂', tip: '🚂 is a vehicle, not an animal' },
+    { items: ['🚂', '🚀', '🚁', '🍌'], odd: '🍌', tip: '🍌 is a fruit, not a vehicle' },
+  ];
+  const g = groups[rand(0, groups.length - 1)];
+  const shuffled = shuffle([...g.items]);
+  return {
+    question: `Which one does NOT belong?\n${shuffled.join('  ')}`,
+    options: shuffled,
+    correctAnswer: g.odd,
+    explanation: `${g.tip}! Look for the one that is different from the others.`,
+  };
+}
+
+function p1l12(): Problem {
+  // Visual size comparison — bigger, longer, taller (no heavier/lighter — kids can't lift on screen)
+  const pairs = [
+    { a: '🐘', b: '🐭', q: 'Which is BIGGER?', answer: '🐘', exp: 'An elephant is much bigger than a mouse!' },
+    { a: '🦁', b: '🐜', q: 'Which is BIGGER?', answer: '🦁', exp: 'A lion is much bigger than an ant!' },
+    { a: '🚂', b: '🚗', q: 'Which is BIGGER?', answer: '🚂', exp: 'A train is bigger than a car!' },
+    { a: '🌳', b: '🌱', q: 'Which is TALLER?', answer: '🌳', exp: 'A tree is much taller than a seedling!' },
+    { a: '📏', b: '✏️', q: 'Which is LONGER?', answer: '📏', exp: 'A ruler is longer than a pencil!' },
+    { a: '🐋', b: '🐟', q: 'Which is BIGGER?', answer: '🐋', exp: 'A whale is much bigger than a fish!' },
+    { a: '🏔️', b: '⛺', q: 'Which is TALLER?', answer: '🏔️', exp: 'A mountain is much taller than a tent!' },
+    { a: '🚌', b: '🛵', q: 'Which is BIGGER?', answer: '🚌', exp: 'A bus is much bigger than a scooter!' },
+  ];
+  const p = pairs[rand(0, pairs.length - 1)];
+  return {
+    question: `${p.q}\n${p.a}  or  ${p.b}`,
+    options: shuffle([p.a, p.b]),
+    correctAnswer: p.answer,
+    explanation: p.exp,
+  };
+}
+
+function p1l13(): Problem {
+  // 3D shape identification — sphere, cube, cylinder, cone
+  const shapes = [
+    { emoji: '⚽', name: 'Sphere',   hint: 'A sphere is round like a ball — no flat sides!' },
+    { emoji: '🎲', name: 'Cube',     hint: 'A cube has 6 flat square sides — like a dice!' },
+    { emoji: '🥫', name: 'Cylinder', hint: 'A cylinder has 2 flat circles and a curved side — like a tin!' },
+    { emoji: '🍦', name: 'Cone',     hint: 'A cone has a flat circle base and a pointy top — like an ice cream!' },
+  ] as const;
+  const shape = shapes[rand(0, shapes.length - 1)];
+  const wrong = shapes.filter(s => s.name !== shape.name).map(s => s.name);
+  return {
+    question: `What 3D shape is this?\n${shape.emoji}`,
+    options: shuffle([shape.name, ...wrong]),
+    correctAnswer: shape.name,
+    explanation: shape.hint,
+  };
+}
+
+function p1l14(): Problem {
+  // Counting backwards — find the missing number in a descending sequence of 5
+  const start = rand(5, 10);
+  const seq = [start, start - 1, start - 2, start - 3, start - 4];
+  const missingIdx = rand(1, 3); // never first or last
+  const missing = seq[missingIdx];
+  const displayed = seq.map((n, i) => (i === missingIdx ? '?' : String(n)));
+  return {
+    question: `Count backwards — what is missing?\n${displayed.join(', ')}`,
+    options: numericOptions(missing, 4, 0, 2),
+    correctAnswer: missing,
+    explanation: `Counting back: ${seq.join(', ')}. The missing number is ${missing}.`,
+  };
+}
+
+function p1l15(): Problem {
+  // Ordinal positions — 1st through 4th in a line of animals
+  // Question names the animal in words so the narrator can read it aloud for non-readers
+  const lines = [
+    { animals: ['🐶', '🐱', '🐸', '🐰'], names: ['dog', 'cat', 'frog', 'rabbit'] },
+    { animals: ['🐻', '🐨', '🦊', '🐼'], names: ['bear', 'koala', 'fox', 'panda'] },
+    { animals: ['🦁', '🐯', '🐮', '🐷'], names: ['lion', 'tiger', 'cow', 'pig'] },
+    { animals: ['🐵', '🐔', '🐧', '🦆'], names: ['monkey', 'chicken', 'penguin', 'duck'] },
+  ];
+  const ordinals = ['1st', '2nd', '3rd', '4th'];
+  const line = lines[rand(0, lines.length - 1)];
+  const pos = rand(0, 3);
+  const correctOrdinal = ordinals[pos];
+  const wrong = ordinals.filter(o => o !== correctOrdinal);
+  return {
+    question: `${line.animals.join('  ')}\nWhat position is the ${line.names[pos]}? ${line.animals[pos]}`,
+    options: shuffle([correctOrdinal, ...wrong]),
+    correctAnswer: correctOrdinal,
+    explanation: `Count from the left: ${line.animals.map((a, i) => `${ordinals[i]} is ${a}`).join(', ')}. The ${line.names[pos]} is ${correctOrdinal}!`,
+  };
+}
+
 // PHASE 2 — Lower Primary (Ages 6–8)
 
 function p2l1(): Problem {
@@ -1321,6 +1419,7 @@ function p4l5(): Problem {
 const GENERATORS: Record<string, () => Problem> = {
   '1-1': p1l1, '1-2': p1l2, '1-3': p1l3, '1-4': p1l4, '1-5': p1l5,
   '1-6': p1l6, '1-7': p1l7, '1-8': p1l8, '1-9': p1l9, '1-10': p1l10,
+  '1-11': p1l11, '1-12': p1l12, '1-13': p1l13, '1-14': p1l14, '1-15': p1l15,
   '2-1': p2l1, '2-2': p2l2, '2-3': p2l3, '2-4': p2l4, '2-5': p2l5,
   '2-6': p2l6, '2-7': p2l7, '2-8': p2l8, '2-9': p2l9, '2-10': p2l10,
   '2-11': p2l11, '2-12': p2l12, '2-13': p2l13, '2-14': p2l14, '2-15': p2l15,
