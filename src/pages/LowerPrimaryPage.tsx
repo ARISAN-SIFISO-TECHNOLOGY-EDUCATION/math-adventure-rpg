@@ -47,6 +47,20 @@ const worlds = [
       { n: 15, title: 'Multi‑Step Word Problems',    example: '"3 bags of 6 oranges, eat 5 — how many left?"' },
     ],
   },
+  {
+    name: 'World 4 — Star Observatory',
+    emoji: '🌟',
+    color: '#7C3AED',
+    bg: '#F5F3FF',
+    border: '#C4B5FD',
+    levels: [
+      { n: 16, title: 'Number Patterns',              example: '"2, 4, ?, 8, 10 — what is missing?"' },
+      { n: 17, title: 'Measurement (cm / m / kg)',    example: '"Ruler 30 cm, pencil 15 cm — how much longer?"' },
+      { n: 18, title: 'Data Handling (Pictograph)',   example: '"Each ☺ = 2. Sport has 4 ☺. How many children?"' },
+      { n: 19, title: '3D Object Properties',         example: '"How many faces does a cube have?"' },
+      { n: 20, title: 'Expanded Notation (BOSS)',     example: '"What is the value of 4 in 347?"' },
+    ],
+  },
 ];
 
 export default function LowerPrimaryPage() {
@@ -71,15 +85,16 @@ export default function LowerPrimaryPage() {
           </span>
           <h1 className="font-[Nunito] text-6xl font-extrabold leading-tight mb-6"
             style={{ background: `linear-gradient(135deg,${accent},#F59E0B)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            3 Worlds.<br />15 Levels. Epic Battles.
+            4 Worlds.<br />20 Levels. Epic Battles.
           </h1>
           <p className="text-xl max-w-xl mx-auto mb-4" style={{ color: '#92400E' }}>
-            Journey through the Academy of Numbers, the Merchant's Guild, and the Dragon's Tower. Master 15 levels of real math skills.
+            Journey through the Academy of Numbers, the Merchant's Guild, the Dragon's Tower, and the Star Observatory. Master 20 levels of real math skills.
           </p>
           <div className="flex gap-3 justify-center flex-wrap mb-8">
             <span className="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">🏫 Academy of Numbers</span>
             <span className="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">🏪 Merchant's Guild</span>
             <span className="bg-red-100 text-red-800 text-xs font-bold px-3 py-1 rounded-full">🐉 Dragon's Tower</span>
+            <span className="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full">🌟 Star Observatory</span>
           </div>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link to="/play?phase=2" className="font-[Nunito] inline-flex items-center gap-2 text-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-all shadow-md no-underline"
@@ -105,6 +120,7 @@ export default function LowerPrimaryPage() {
             { icon: '📖', title: 'Word Problems', desc: 'Realistic scenarios build reading + math skills together.' },
             { icon: '📐', title: 'Perimeter & Measurement', desc: 'Shapes in the real world — rectangles and squares.' },
             { icon: '🧠', title: 'Multi-Step Thinking', desc: 'Two-step problems prepare children for upper primary.' },
+            { icon: '🌟', title: 'Patterns, Data & Measurement', desc: 'Number sequences, reading charts, measuring length and mass, and understanding place value.' },
           ].map(c => (
             <div key={c.title} className="bg-white text-center p-6 rounded-3xl shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all">
               <div className="text-5xl mb-4">{c.icon}</div>
@@ -117,7 +133,7 @@ export default function LowerPrimaryPage() {
 
       {/* Worlds + Levels */}
       <section id="levels" className="max-w-6xl mx-auto px-6 pb-16">
-        <h2 className="font-[Nunito] text-3xl font-bold text-center mb-10" style={{ color: '#B45309' }}>3 Worlds · 15 Levels</h2>
+        <h2 className="font-[Nunito] text-3xl font-bold text-center mb-10" style={{ color: '#B45309' }}>4 Worlds · 20 Levels</h2>
         <div className="flex flex-col gap-10">
           {worlds.map(world => (
             <div key={world.name}>

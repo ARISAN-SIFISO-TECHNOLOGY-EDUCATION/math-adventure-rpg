@@ -668,6 +668,205 @@ function p2l15(): Problem {
   }
 }
 
+// ── World 4: Star Observatory ─────────────────────────────────────────────────
+
+function p2l16(): Problem {
+  const stepChoices = [2, 3, 4, 5, 10];
+  const step = stepChoices[rand(0, stepChoices.length - 1)];
+  const start = rand(0, 5) * step;
+  const seq = [0, 1, 2, 3, 4].map(i => start + i * step);
+  const missingIdx = rand(1, 3);
+  const missing = seq[missingIdx];
+  const display = seq.map((v, i) => (i === missingIdx ? '?' : String(v))).join(', ');
+  return {
+    question: `Complete the pattern:\n${display}`,
+    options: numericOptions(missing, 4, 0, step * 2),
+    correctAnswer: missing,
+    explanation: `Count in ${step}s: ${seq.join(', ')}. The missing number is ${missing}.`,
+  };
+}
+
+function p2l17(): Problem {
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const shorter = rand(5, 20) * 2;
+    const longer  = shorter + rand(2, 10) * 2;
+    const diff    = longer - shorter;
+    return {
+      question: `A pencil is ${shorter} cm long.\nA ruler is ${longer} cm long.\nHow much longer is the ruler?`,
+      options: numericOptions(diff, 4, 0, 6),
+      correctAnswer: diff,
+      explanation: `${longer} − ${shorter} = ${diff} cm longer.`,
+    };
+  } else if (variant === 1) {
+    const a = rand(2, 8);
+    const b = rand(2, 8);
+    const total = a + b;
+    return {
+      question: `One rope is ${a} m long.\nAnother rope is ${b} m long.\nWhat is the total length?`,
+      options: numericOptions(total, 4, 0, 5),
+      correctAnswer: total,
+      explanation: `${a} + ${b} = ${total} m total.`,
+    };
+  } else {
+    const lighter = rand(1, 7);
+    const heavier = lighter + rand(1, 5);
+    const diff    = heavier - lighter;
+    return {
+      question: `A bag weighs ${lighter} kg.\nAnother bag weighs ${heavier} kg.\nHow much heavier is the second bag?`,
+      options: numericOptions(diff, 4, 0, 3),
+      correctAnswer: diff,
+      explanation: `${heavier} − ${lighter} = ${diff} kg heavier.`,
+    };
+  }
+}
+
+function p2l18(): Problem {
+  const categories = [
+    { name: 'Reading', emoji: '📚' },
+    { name: 'Drawing', emoji: '🎨' },
+    { name: 'Sport',   emoji: '⚽' },
+  ];
+  const each = rand(1, 3);
+  const symbols = categories.map(() => rand(1, 5));
+  const values  = symbols.map(s => s * each);
+
+  const makeChart = () =>
+    categories.map((c, i) => `${c.emoji} ${c.name}: ${'☺'.repeat(symbols[i])}`).join('\n');
+
+  const variant = rand(0, 2);
+
+  if (variant === 0) {
+    const idx = rand(0, 2);
+    const ans = values[idx];
+    return {
+      question: `Each ☺ = ${each} child${each > 1 ? 'ren' : ''}.\n\n${makeChart()}\n\nHow many children chose ${categories[idx].name}?`,
+      options: numericOptions(ans, 4, 0, each * 2),
+      correctAnswer: ans,
+      explanation: `${categories[idx].name}: ${symbols[idx]} × ${each} = ${ans} children.`,
+    };
+  } else if (variant === 1) {
+    let syms = symbols.slice();
+    let vals = values.slice();
+    let attempts = 0;
+    while (attempts < 20) {
+      const max = Math.max(...vals);
+      if (vals.filter(v => v === max).length === 1) break;
+      syms = categories.map(() => rand(1, 5));
+      vals = syms.map(s => s * each);
+      attempts++;
+    }
+    const max = Math.max(...vals);
+    const winnerIdx = vals.indexOf(max);
+    const winner = categories[winnerIdx].name;
+    const chart = categories.map((c, i) => `${c.emoji} ${c.name}: ${'☺'.repeat(syms[i])}`).join('\n');
+    return {
+      question: `Each ☺ = ${each} child${each > 1 ? 'ren' : ''}.\n\n${chart}\n\nWhich activity is MOST popular?`,
+      options: shuffle(categories.map(c => c.name)),
+      correctAnswer: winner,
+      explanation: `${winner} has the most ☺ symbols (${syms[winnerIdx]}), meaning ${max} children.`,
+    };
+  } else {
+    let idxA = rand(0, 2);
+    let idxB = rand(0, 2);
+    let attempts = 0;
+    while ((idxB === idxA || values[idxA] === values[idxB]) && attempts < 20) {
+      idxA = rand(0, 2); idxB = rand(0, 2); attempts++;
+    }
+    const bigger  = values[idxA] >= values[idxB] ? idxA : idxB;
+    const smaller = values[idxA] >= values[idxB] ? idxB : idxA;
+    const diff = values[bigger] - values[smaller];
+    return {
+      question: `Each ☺ = ${each} child${each > 1 ? 'ren' : ''}.\n\n${makeChart()}\n\nHow many more children chose ${categories[bigger].name} than ${categories[smaller].name}?`,
+      options: numericOptions(diff, 4, 0, each * 2),
+      correctAnswer: diff,
+      explanation: `${values[bigger]} − ${values[smaller]} = ${diff} more children chose ${categories[bigger].name}.`,
+    };
+  }
+}
+
+function p2l19(): Problem {
+  const shapes = [
+    { name: 'cube',              emoji: '🎲', faces: 6, edges: 12, vertices: 8 },
+    { name: 'sphere',            emoji: '⚽', faces: 0, edges: 0,  vertices: 0 },
+    { name: 'cylinder',          emoji: '🥫', faces: 2, edges: 2,  vertices: 0 },
+    { name: 'cone',              emoji: '🍦', faces: 1, edges: 1,  vertices: 1 },
+    { name: 'rectangular prism', emoji: '📦', faces: 6, edges: 12, vertices: 8 },
+  ];
+  const shape = shapes[rand(0, shapes.length - 1)];
+  const props = [
+    { label: 'flat faces',         value: shape.faces    },
+    { label: 'edges',              value: shape.edges    },
+    { label: 'vertices (corners)', value: shape.vertices },
+  ];
+  const prop = props[rand(0, props.length - 1)];
+  return {
+    question: `How many ${prop.label} does a ${shape.name} ${shape.emoji} have?`,
+    options: numericOptions(prop.value, 4, 0, 3),
+    correctAnswer: prop.value,
+    explanation: `A ${shape.name} has ${shape.faces} flat face(s), ${shape.edges} edge(s), and ${shape.vertices} corner(s).`,
+  };
+}
+
+function p2l20(): Problem {
+  const hundreds = rand(1, 9);
+  const tens     = rand(0, 9);
+  const units    = rand(0, 9);
+  const num      = hundreds * 100 + tens * 10 + units;
+
+  const variant = rand(0, 2);
+
+  if (variant === 0) {
+    const places = [
+      { name: 'hundreds', value: hundreds * 100 },
+      { name: 'tens',     value: tens * 10 },
+      { name: 'units',    value: units },
+    ].filter(p => p.value > 0);
+    const place = places[rand(0, places.length - 1)];
+    const spread = place.value >= 100 ? 100 : place.value >= 10 ? 10 : 3;
+    return {
+      question: `What is the value of the digit in the ${place.name} place of ${num}?`,
+      options: numericOptions(place.value, 4, 0, spread),
+      correctAnswer: place.value,
+      explanation: `${num} = ${hundreds * 100} + ${tens * 10} + ${units}. The ${place.name} digit is worth ${place.value}.`,
+    };
+  } else if (variant === 1) {
+    const parts = [hundreds * 100, tens * 10, units].filter(p => p > 0);
+    if (parts.length < 2) {
+      const ans = hundreds * 100;
+      return {
+        question: `What is the value of the hundreds digit in ${num}?`,
+        options: numericOptions(ans, 4, 0, 100),
+        correctAnswer: ans,
+        explanation: `The hundreds digit ${hundreds} is worth ${ans}.`,
+      };
+    }
+    const missingIdx = rand(0, parts.length - 1);
+    const missing = parts[missingIdx];
+    const shown = parts.map((p, i) => (i === missingIdx ? '?' : String(p))).join(' + ');
+    const spread = missing >= 100 ? 100 : missing >= 10 ? 10 : 3;
+    return {
+      question: `${num} = ${shown}\nWhat is the missing part?`,
+      options: numericOptions(missing, 4, 0, spread),
+      correctAnswer: missing,
+      explanation: `${num} = ${parts.join(' + ')}. The missing part is ${missing}.`,
+    };
+  } else {
+    const placeOptions = [
+      { name: 'hundreds', digit: hundreds },
+      { name: 'tens',     digit: tens },
+      { name: 'units',    digit: units },
+    ];
+    const place = placeOptions[rand(0, 2)];
+    return {
+      question: `What digit is in the ${place.name} place of ${num}?`,
+      options: numericOptions(place.digit, 4, 0, 4),
+      correctAnswer: place.digit,
+      explanation: `${num} = ${hundreds * 100} + ${tens * 10} + ${units}. The ${place.name} digit is ${place.digit}.`,
+    };
+  }
+}
+
 // PHASE 3 — Higher Primary (Ages 9–12)
 // 3 sub-worlds × 5 levels = 15 levels
 //   World 1: Merchant Republic  (commerce)      — levels  1–5
@@ -1423,6 +1622,7 @@ const GENERATORS: Record<string, () => Problem> = {
   '2-1': p2l1, '2-2': p2l2, '2-3': p2l3, '2-4': p2l4, '2-5': p2l5,
   '2-6': p2l6, '2-7': p2l7, '2-8': p2l8, '2-9': p2l9, '2-10': p2l10,
   '2-11': p2l11, '2-12': p2l12, '2-13': p2l13, '2-14': p2l14, '2-15': p2l15,
+  '2-16': p2l16, '2-17': p2l17, '2-18': p2l18, '2-19': p2l19, '2-20': p2l20,
   '3-1': p3l1, '3-2': p3l2, '3-3': p3l3, '3-4': p3l4, '3-5': p3l5,
   '3-6': p3l6, '3-7': p3l7, '3-8': p3l8, '3-9': p3l9, '3-10': p3l10,
   '3-11': p3l11, '3-12': p3l12, '3-13': p3l13, '3-14': p3l14, '3-15': p3l15,
