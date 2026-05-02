@@ -47,7 +47,7 @@ export function Companion({ emotion, customMessage, name = 'Sparky', emoji = 'ðŸ
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, scale: 0.85 }}
           transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-          className="absolute bottom-full mb-1 bg-white border-2 border-black rounded-2xl px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] whitespace-nowrap text-[11px] font-black text-gray-800 pointer-events-none"
+          className="absolute bottom-full mb-1 bg-white border-2 border-black rounded-2xl px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-[11px] font-black text-gray-800 pointer-events-none max-w-[170px] text-center leading-snug"
         >
           {msg}
           {/* Bubble pointer */}

@@ -18,7 +18,7 @@ const FEATURES = [
   {
     icon: '🔒',
     title: '100% Private',
-    desc: 'Zero data collection. No accounts. No ads. No tracking. Fully compliant with COPPA and GDPR-K child privacy regulations.',
+    desc: 'Zero data collection. No accounts. No ads. No tracking. Fully compliant with COPPA, GDPR-K, and POPIA child privacy regulations.',
   },
   {
     icon: '📴',
@@ -51,7 +51,7 @@ const SAFETY = [
   { badge: '🚫', title: 'No Ads — Ever',        desc: 'Zero third-party ad networks. No interstitials, no banners, no interruptions.' },
   { badge: '🔐', title: 'No Data Collection',    desc: 'We collect nothing. No names, emails, location, or usage data — not even anonymised.' },
   { badge: '👨‍👩‍👧', title: 'Parental Gate',       desc: 'Grade changes require a parent to solve a math problem — young children cannot accidentally switch.' },
-  { badge: '📜', title: 'COPPA & GDPR-K',        desc: 'Designed from the ground up to comply with child-privacy regulations in the US, EU, and UK.' },
+  { badge: '📜', title: 'COPPA, GDPR-K & POPIA',  desc: 'Compliant with child-privacy law in South Africa (POPIA), the US (COPPA), and the EU/UK (GDPR-K). The curriculum follows South African CAPS.' },
   { badge: '📴', title: 'Fully Offline',          desc: 'No CDN calls, no analytics beacons, no third-party scripts. The game is self-contained.' },
   { badge: '🏠', title: 'No External Links',      desc: 'Children cannot accidentally navigate away from the game — every link stays within the app.' },
   { badge: '🔇', title: 'Volume Controls',        desc: 'Full mute for music, sound effects, and voice narration — ideal for shared or quiet environments.' },
