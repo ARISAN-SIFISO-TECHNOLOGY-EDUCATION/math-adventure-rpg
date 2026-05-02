@@ -26,7 +26,7 @@ const TUTORIAL_SLIDES = [
   {
     emoji: '🎮',
     title: 'How to Play',
-    body: 'A question will appear. Look at the answers and TAP the right one!',
+    body: 'A question will appear. Look at the answers and CHOOSE the right one!',
     bg: 'bg-[#DCFCE7]',
   },
   {
@@ -50,7 +50,7 @@ const TUTORIAL_SLIDES = [
 ];
 
 const LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
-  1:  { emoji: '🔢', title: 'Counting 1 to 5',    body: 'Count the objects and tap the right number.', tip: 'Point at each one as you count!' },
+  1:  { emoji: '🔢', title: 'Counting 1 to 5',    body: 'Count the objects and choose the right number.', tip: 'Point at each one as you count!' },
   2:  { emoji: '🌟', title: 'Counting up to 10',  body: 'Now we count even more objects!', tip: 'Take it slow — count every single one.' },
   3:  { emoji: '⚖️', title: 'More or Less',        body: 'Look at two numbers and pick the BIGGER one.', tip: 'Think: which number would be more sweets?' },
   4:  { emoji: '➕', title: 'Adding Together',     body: 'Put two groups together and count them all.', tip: 'Count the first group, then keep counting!' },
@@ -58,7 +58,7 @@ const LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string;
   6:  { emoji: '⚡', title: 'Quick Count!',         body: 'Objects flash on screen — see how many without counting one by one!', tip: 'Trust your eyes — how many at once?' },
   7:  { emoji: '🧩', title: 'Missing Part',         body: 'One part of the sum is missing. Blocks will help you find it!', tip: 'Count all blocks, then count the known ones.' },
   8:  { emoji: '🔟', title: 'Counting to 20!',     body: 'Now we count all the way to 20 — you can do it!', tip: 'Try counting in groups of 5 to keep track.' },
-  9:  { emoji: '🔷', title: 'Shape Explorer',      body: 'Look at the shape and tap its name!', tip: 'Think about how many sides or corners it has.' },
+  9:  { emoji: '🔷', title: 'Shape Explorer',      body: 'Look at the shape and choose its name!', tip: 'Think about how many sides or corners it has.' },
   10: { emoji: '🎨', title: 'Pattern Detective',   body: 'Spot what repeats and choose what comes next!', tip: 'Say the pattern out loud to hear the rhythm.' },
   11: { emoji: '🗂️', title: 'Sort it Out!',         body: 'Find the one that does NOT belong!',            tip: 'Look carefully — what makes one different?' },
   12: { emoji: '📏', title: 'Big or Small?',          body: 'Compare two things — which one wins?',          tip: 'Think about size, length, or how tall!' },
@@ -70,7 +70,7 @@ const LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string;
 const PHASE1_HINTS: Record<number, string> = {
   1:  '👆 Count each object carefully!',
   2:  '👆 Count every one — up to 10!',
-  3:  '👆 Tap the BIGGER number!',
+  3:  '👆 Choose the BIGGER number!',
   4:  '👆 Add them together!',
   5:  '👆 How many are left?',
   6:  '⚡ Trust your eyes — don\'t count one by one!',
@@ -104,6 +104,12 @@ const P2_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: stri
   13: { emoji: '🍕', title: 'Fraction Fortress',         body: 'Find halves and quarters of numbers — split the treasure!', tip: 'Half = divide by 2. Quarter = divide by 4.' },
   14: { emoji: '📐', title: 'Perimeter Puzzle',          body: 'Calculate the perimeter — add up ALL the sides of the shape!', tip: 'Perimeter = all sides added together.' },
   15: { emoji: '🏆', title: 'FINAL BOSS: Word Problems', body: 'Two-step word problems — read, plan, then calculate!',  tip: 'Do one calculation at a time — no rushing!' },
+  // World 4 — Star Observatory
+  16: { emoji: '🌟', title: 'Star Observatory Awaits!',  body: 'Spot the pattern and fill the missing number!',          tip: 'Count the gap between numbers — that is your step!' },
+  17: { emoji: '📏', title: 'Measuring Up',              body: 'Length and mass — use the right unit to solve it!',      tip: 'cm for short things; m for long things; kg for mass.' },
+  18: { emoji: '📊', title: 'Data Detective',            body: 'Read the chart and answer questions about the data!',    tip: 'Count the ☺ symbols, then multiply by the key.' },
+  19: { emoji: '📦', title: '3D Shape Master',           body: 'Explore faces, edges, and corners of 3D shapes!',       tip: 'Run your finger along each edge — count carefully!' },
+  20: { emoji: '🌟', title: 'FINAL BOSS: Star Keeper!', body: 'Expanded notation — show the value of every digit!',    tip: '356 = 300 + 50 + 6. Each place has its own value.' },
 };
 
 const P2_HINTS: Record<number, string> = {
@@ -122,6 +128,11 @@ const P2_HINTS: Record<number, string> = {
   13: '🍕 Half = ÷2. Quarter = ÷4.',
   14: '📐 Add ALL four sides of the shape!',
   15: '🏆 Solve one step at a time!',
+  16: '🌟 What is the gap between each number?',
+  17: '📏 Subtract to find the difference; add to find the total.',
+  18: '📊 Count ☺ symbols × the key number.',
+  19: '📦 Flat sides = faces. Lines where sides meet = edges. Corners = vertices.',
+  20: '🌟 Hundreds, tens, units — each digit has its own place value.',
 };
 
 // Sub-world boundaries for Phase 2 (levelInPhase → world name + color)
@@ -129,6 +140,7 @@ const P2_WORLDS = [
   { levels: [1, 2, 3, 4, 5],      name: 'Academy of Numbers', emoji: '🏫', color: '#2563EB', bgHex: '#EFF6FF', bg: 'bg-[#EFF6FF]', badge: 'bg-[#93C5FD]' },
   { levels: [6, 7, 8, 9, 10],     name: "Merchant's Guild",   emoji: '🏪', color: '#D97706', bgHex: '#FFFBEB', bg: 'bg-[#FFFBEB]', badge: 'bg-[#FCD34D]' },
   { levels: [11, 12, 13, 14, 15], name: "Dragon's Tower",     emoji: '🐉', color: '#DC2626', bgHex: '#FEF2F2', bg: 'bg-[#FEF2F2]', badge: 'bg-[#FCA5A5]' },
+  { levels: [16, 17, 18, 19, 20], name: 'Star Observatory',   emoji: '🌟', color: '#7C3AED', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#C4B5FD]' },
 ];
 
 // ─── Phase 3 constants ────────────────────────────────────────────────────────
@@ -222,7 +234,7 @@ function getHint(phase: number, levelInPhase: number): string {
   return '';
 }
 
-const isBossLevel = (p: number, lip: number): boolean => p >= 2 && [5, 10, 15].includes(lip);
+const isBossLevel = (p: number, lip: number): boolean => p >= 2 && [5, 10, 15, 20].includes(lip);
 
 export type PhaseConfig = {
   id: number;
@@ -290,6 +302,12 @@ export const PHASES: PhaseConfig[] = [
       { n: 18, topic: 'simple fractions — half, quarter, and three quarters' },
       { n: 19, topic: 'perimeter of rectangles and squares' },
       { n: 20, topic: 'multi-step word problems requiring two calculations' },
+      // World 4 — Star Observatory
+      { n: 21, topic: 'number patterns — complete sequences counting in 2s, 3s, 4s, 5s, or 10s' },
+      { n: 22, topic: 'standard measurement — length in cm and m, mass in kg' },
+      { n: 23, topic: 'data handling — read a pictograph and answer total, most popular, and difference questions' },
+      { n: 24, topic: 'properties of 3D objects — faces, edges, and vertices of cubes, spheres, cylinders, and cones' },
+      { n: 25, topic: 'expanded notation — value of a digit in a 3-digit number' },
     ],
   },
   {
@@ -762,7 +780,7 @@ function CompanionSetup({ onDone }: { onDone: (name: string, emoji: string) => v
           maxLength={12}
           className="w-full text-center text-2xl font-black p-4 rounded-2xl border-4 border-black outline-none mb-4"
         />
-        <div className="grid grid-cols-4 gap-3 mb-6">
+        <div className="flex justify-center gap-3 mb-6">
           {COMPANION_CHOICES.map(c => (
             <button
               key={c.emoji}
@@ -907,6 +925,7 @@ export default function Game() {
     return saved?.emoji ?? '🐉';
   });
   const [showCompanionSetup, setShowCompanionSetup] = useState(() => !localStorage.getItem('companionSetup'));
+  const [showBadges, setShowBadges] = useState(false);
   const [showPauseMenu, setShowPauseMenu] = useState(false);
   const [showBreakOverlay, setShowBreakOverlay] = useState(false);
   const [showBreakGate, setShowBreakGate] = useState(false);
@@ -1026,7 +1045,7 @@ export default function Game() {
     speakWelcome();
 
     // Show tutorial first time in Phase 1; show world intros at sub-world entries
-    const isP2WorldEntry = startPhase === 2 && [1, 6, 11].includes(startLevel);
+    const isP2WorldEntry = startPhase === 2 && [1, 6, 11, 16].includes(startLevel);
     const isP3WorldEntry = startPhase === 3 && [1, 6, 11].includes(startLevel);
     const isP4WorldEntry = startPhase === 4 && startLevel === 1;
     if (startPhase === 1 && !tutorialDone) {
@@ -1132,7 +1151,7 @@ export default function Game() {
           if (wasBonus) awardBadge('boss_slayer');
 
           const nextLevelInPhase = levelInPhase + 1;
-          const isP2WorldEntry = !wasLastLevel && phase === 2 && [6, 11].includes(nextLevelInPhase);
+          const isP2WorldEntry = !wasLastLevel && phase === 2 && [6, 11, 16].includes(nextLevelInPhase);
           const isP3WorldEntry = !wasLastLevel && phase === 3 && [6, 11].includes(nextLevelInPhase);
 
           if (wasLastLevel) {
@@ -1406,21 +1425,29 @@ export default function Game() {
                 </button>
               </div>
 
-              {/* Badge Gallery */}
+              {/* Badge Gallery — collapsible */}
               <div className="mt-4 w-full max-w-sm mx-auto">
-                <p className="text-xs font-black uppercase tracking-widest text-gray-400 mb-3 text-center">Badges ({earnedBadges.length}/{BADGES.length})</p>
-                <div className="grid grid-cols-5 gap-2">
-                  {BADGES.map(b => {
-                    const earned = earnedBadges.includes(b.id);
-                    return (
-                      <div key={b.id} title={earned ? `${b.label}: ${b.desc}` : `Locked: ${b.desc}`}
-                        className={`flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all ${earned ? 'border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' : 'border-gray-200 bg-gray-100 opacity-40'}`}>
-                        <span className={`text-2xl ${earned ? '' : 'grayscale'}`}>{b.emoji}</span>
-                        <span className="text-[9px] font-black text-center leading-tight mt-1 text-gray-600">{b.label}</span>
-                      </div>
-                    );
-                  })}
-                </div>
+                <button
+                  onClick={() => setShowBadges(b => !b)}
+                  className="w-full flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest text-gray-400 py-2 hover:text-gray-600 transition-colors"
+                >
+                  🏅 Badges ({earnedBadges.length}/{BADGES.length})
+                  <span className="text-[10px]">{showBadges ? '▲' : '▼'}</span>
+                </button>
+                {showBadges && (
+                  <div className="grid grid-cols-5 gap-2 mt-2">
+                    {BADGES.map(b => {
+                      const earned = earnedBadges.includes(b.id);
+                      return (
+                        <div key={b.id} title={earned ? `${b.label}: ${b.desc}` : `Locked: ${b.desc}`}
+                          className={`flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all ${earned ? 'border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' : 'border-gray-200 bg-gray-100 opacity-40'}`}>
+                          <span className={`text-2xl ${earned ? '' : 'grayscale'}`}>{b.emoji}</span>
+                          <span className="text-[9px] font-black text-center leading-tight mt-1 text-gray-600">{b.label}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               <div className="mt-6 flex items-center gap-6 justify-center flex-wrap">
@@ -1572,10 +1599,10 @@ export default function Game() {
                     <div className="grid grid-cols-2 gap-4">
                       {problem?.options.map((opt, i) => (
                         <button
-                          key={i}
+                          key={`opt-${i}-${String(opt)}`}
                           onClick={() => handleAnswer(opt)}
                           disabled={!!feedback}
-                          className="bg-[#E0F2FE] hover:bg-[#BAE6FD] border-4 border-black py-4 rounded-2xl text-2xl md:text-3xl font-black transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 disabled:opacity-50"
+                          className="bg-[#E0F2FE] hover:bg-[#BAE6FD] border-4 border-black py-4 rounded-2xl text-2xl md:text-3xl font-black transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 disabled:opacity-50 focus:outline-none"
                         >
                           {opt}
                         </button>
@@ -1589,37 +1616,37 @@ export default function Game() {
 
           {/* VICTORY */}
           {gameState === 'VICTORY' && (
-            <motion.div key="victory" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center w-full bg-white p-12 rounded-[40px] border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
+            <motion.div key="victory" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center w-full bg-white p-6 md:p-10 rounded-[40px] border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               {isGameComplete ? (
                 <>
-                  <div className="text-7xl mb-4">🏆</div>
-                  <h2 className="text-5xl font-black mb-4">CHAMPION!</h2>
-                  <p className="text-2xl font-bold mb-3">You've mastered all 4 phases!</p>
-                  <p className="text-base font-bold text-gray-400 mb-10">From Pre-School to Advanced Primary. Incredible!</p>
+                  <div className="text-6xl mb-3">🏆</div>
+                  <h2 className="text-4xl font-black mb-3">CHAMPION!</h2>
+                  <p className="text-xl font-bold mb-2">You've mastered all 4 phases!</p>
+                  <p className="text-sm font-bold text-gray-400 mb-6">From Pre-School to Advanced Primary. Incredible!</p>
                   <button onClick={startGame}
-                    className="bg-[#FFD700] hover:bg-[#F59E0B] text-black px-12 py-6 rounded-full border-4 border-black text-2xl font-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-4 mx-auto">
-                    PLAY AGAIN <Sparkles size={28} />
+                    className="bg-[#FFD700] hover:bg-[#F59E0B] text-black px-10 py-4 rounded-full border-4 border-black text-xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto">
+                    PLAY AGAIN <Sparkles size={24} />
                   </button>
                 </>
               ) : isPhaseTransition ? (
                 <>
-                  <div className="text-7xl mb-4">{victoryPhaseConfig.emoji}</div>
-                  <div className={`inline-block ${victoryPhaseConfig.bgColor} ${victoryPhaseConfig.borderColor} border-4 px-6 py-2 rounded-full mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]`}>
-                    <p className="font-black text-lg">Phase {victoryPhaseConfig.id} Unlocked!</p>
+                  <div className="text-6xl mb-3">{victoryPhaseConfig.emoji}</div>
+                  <div className={`inline-block ${victoryPhaseConfig.bgColor} ${victoryPhaseConfig.borderColor} border-4 px-5 py-2 rounded-full mb-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]`}>
+                    <p className="font-black text-base">Phase {victoryPhaseConfig.id} Unlocked!</p>
                   </div>
-                  <h2 className="text-4xl font-black mb-2">{victoryPhaseConfig.name}</h2>
-                  <p className="text-xl font-bold text-gray-400 mb-10">{victoryPhaseConfig.ageRange}</p>
+                  <h2 className="text-3xl font-black mb-2">{victoryPhaseConfig.name}</h2>
+                  <p className="text-lg font-bold text-gray-400 mb-6">{victoryPhaseConfig.ageRange}</p>
                   <button onClick={startGame}
-                    className={`${victoryPhaseConfig.badgeBg} text-black px-12 py-6 rounded-full border-4 border-black text-2xl font-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-4 mx-auto`}>
-                    START PHASE {victoryPhaseConfig.id} <ChevronRight size={28} />
+                    className={`${victoryPhaseConfig.badgeBg} text-black px-10 py-4 rounded-full border-4 border-black text-xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto`}>
+                    START PHASE {victoryPhaseConfig.id} <ChevronRight size={24} />
                   </button>
                 </>
               ) : (
                 <>
-                  <div className="w-40 h-40 bg-[#FFD700] rounded-full flex items-center justify-center mx-auto mb-8 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                    <Trophy className="text-black" size={80} />
+                  <div className="w-24 h-24 md:w-32 md:h-32 bg-[#FFD700] rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                    <Trophy className="text-black" size={52} />
                   </div>
-                  <h2 className="text-5xl font-black mb-4">{bossDefeated ? 'BOSS DEFEATED! 💀' : 'LEVEL UP!'}</h2>
+                  <h2 className="text-4xl font-black mb-3">{bossDefeated ? 'BOSS DEFEATED! 💀' : 'LEVEL UP!'}</h2>
                   {(phase === 2 || phase === 3 || phase === 4) && (() => {
                     const worlds = phase === 4 ? P4_WORLDS : phase === 3 ? P3_WORLDS : P2_WORLDS;
                     const w = worlds.find(ww => ww.levels.includes(levelInPhase));
@@ -1630,23 +1657,23 @@ export default function Game() {
                       </div>
                     );
                   })()}
-                  <p className="text-xl font-bold text-gray-500 mb-8">
+                  <p className="text-lg font-bold text-gray-500 mb-5">
                     {currentPhaseConfig.emoji} {currentPhaseConfig.name} · Level {levelInPhase} of {currentPhaseConfig.levels.length}
                   </p>
-                  <div className="flex flex-col gap-4 items-center">
+                  <div className="flex flex-col gap-3 items-center">
                     <button onClick={handlePlayAgain}
-                      className="bg-white border-4 border-black text-black px-10 py-4 rounded-full text-xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto hover:bg-gray-50">
+                      className="bg-white border-4 border-black text-black px-8 py-3 rounded-full text-lg font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 transition-all flex items-center gap-3 mx-auto hover:bg-gray-50">
                       🔄 Play Again
                     </button>
                     {isReplayMode ? (
                       <button onClick={() => { stopBGM(); navigate('/'); }}
-                        className="bg-[#4ADE80] hover:bg-[#22C55E] text-black px-12 py-6 rounded-full border-4 border-black text-2xl font-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-4 mx-auto">
+                        className="bg-[#4ADE80] hover:bg-[#22C55E] text-black px-10 py-4 rounded-full border-4 border-black text-xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto">
                         🏠 Back to Home
                       </button>
                     ) : (
                       <button onClick={startGame}
-                        className="bg-[#4ADE80] hover:bg-[#22C55E] text-black px-12 py-6 rounded-full border-4 border-black text-3xl font-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-4 mx-auto">
-                        NEXT LEVEL <Sparkles size={32} />
+                        className="bg-[#4ADE80] hover:bg-[#22C55E] text-black px-10 py-4 rounded-full border-4 border-black text-2xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto">
+                        NEXT LEVEL <Sparkles size={28} />
                       </button>
                     )}
                   </div>

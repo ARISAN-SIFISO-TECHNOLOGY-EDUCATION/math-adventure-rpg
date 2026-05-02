@@ -40,7 +40,7 @@ export default function LandingPage() {
           </div>
           <div className="flex justify-center gap-12 flex-wrap">
             {[
-              { num: '50', label: 'Difficulty Levels' },
+              { num: '55', label: 'Difficulty Levels' },
               { num: '4',  label: 'Learning Phases' },
               { num: '100%', label: 'Offline & Ad‑Free' },
             ].map(s => (
