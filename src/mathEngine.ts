@@ -21,6 +21,39 @@ function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Like rand() but skips one excluded value — useful to avoid accidentally
+// picking the correct answer as a distractor.
+function randInt(min: number, max: number, exclude: number | null = null): number {
+  let n: number;
+  do { n = Math.floor(Math.random() * (max - min + 1)) + min; }
+  while (exclude !== null && n === exclude && max - min > 0);
+  return n;
+}
+
+// Generates `count` unique shuffled options including `correct`.
+// Uses a relative delta so distractors stay plausible regardless of answer magnitude.
+// Guarantees fill via sequential fallback — no duplicates possible.
+function generateDistractors(correct: number, delta = 5, count = 4): string[] {
+  const isFloat = !Number.isInteger(correct) || !Number.isInteger(delta);
+  const step = !Number.isInteger(delta) ? delta : (isFloat ? 0.5 : 1);
+  const range = Math.max(4, Math.ceil(delta / step));
+  const dist = new Set<string>();
+  dist.add(isFloat ? correct.toFixed(2) : String(correct));
+  let attempts = 0;
+  while (dist.size < count && attempts < 100) {
+    attempts++;
+    const offset = randInt(-range, range, 0);
+    const wrong = correct + offset * step;
+    dist.add(isFloat ? wrong.toFixed(2) : String(wrong));
+  }
+  let fallback = 1;
+  while (dist.size < count) {
+    dist.add(isFloat ? (correct + fallback * step).toFixed(2) : String(correct + fallback * step));
+    fallback++;
+  }
+  return shuffle(Array.from(dist));
+}
+
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
