@@ -1243,7 +1243,7 @@ export default function Game() {
   const victoryPhaseConfig = PHASES[phase - 1];
 
   return (
-    <div className="min-h-screen bg-[#FFE5F1] font-sans text-black flex flex-col items-center p-4 md:p-8 overflow-x-hidden">
+    <div className="min-h-screen bg-[#FFE5F1] font-sans text-black flex flex-col items-center p-2 md:p-8 overflow-x-hidden">
 
       {/* Overlays */}
       {showCompanionSetup && (
@@ -1487,7 +1487,7 @@ export default function Game() {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className={`absolute inset-0 z-10 flex items-center justify-center text-5xl font-black border-4 border-black rounded-[28px] ${
+                    className={`absolute inset-0 z-10 flex items-center justify-center text-3xl md:text-5xl font-black border-4 border-black rounded-[28px] text-center px-4 ${
                       feedback.type === 'CORRECT' ? 'bg-[#4ADE80]' : 'bg-[#F87171]'
                     }`}
                   >
@@ -1684,6 +1684,7 @@ export default function Game() {
 
         </AnimatePresence>
       </main>
+
     </div>
   );
 }
