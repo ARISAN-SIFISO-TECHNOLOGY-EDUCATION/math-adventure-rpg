@@ -284,13 +284,61 @@ const P5_WORLDS = [
   { levels: [11, 12, 13, 14, 15], name: "The Oracle's Nexus", emoji: '🔮', color: '#6D28D9', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#DDD6FE]' },
 ];
 
+// ─── Phase 6 constants ────────────────────────────────────────────────────────
+
+const P6_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
+  // World 1 — The Algebra Lab
+  1:  { emoji: '🧪', title: 'Enter the Algebra Lab!',             body: 'Exponent laws — multiply powers of the same base by adding their exponents.',            tip: 'a^m × a^n = a^(m+n). Same base? Add the exponents.' },
+  2:  { emoji: '0️⃣', title: 'Zero and Negative Exponents',        body: 'Any number to the power 0 equals 1. Negative exponents mean "take the reciprocal".',      tip: 'a^0 = 1. a^(−n) = 1/aⁿ.' },
+  3:  { emoji: '🔬', title: 'Trinomial Factorising',              body: 'Reverse expansion — find two numbers that ADD to the middle and MULTIPLY to the last.',    tip: 'x² + 5x + 6: find factors of 6 that add to 5 → 2 and 3.' },
+  4:  { emoji: '💰', title: 'Financial Maths',                    body: 'VAT is 15% added to a price. Hire purchase = deposit + balance. Exchange rates convert currencies.', tip: 'Including VAT = price × 1.15.' },
+  5:  { emoji: '⚗️', title: 'BOSS: The Lab Master!',              body: 'Exponent laws, trinomial factorising, and financial maths — all in one challenge!',        tip: 'Identify the topic first, then apply the right rule.' },
+  // World 2 — The Proof Chamber
+  6:  { emoji: '🗺️', title: 'Enter the Proof Chamber!',           body: 'Translations move a shape by a vector (a, b). Add the vector to each coordinate.',       tip: '(x, y) + (a, b) = (x+a, y+b).' },
+  7:  { emoji: '🪞', title: 'Reflections',                        body: 'Over x-axis: y changes sign. Over y-axis: x changes sign. Over y=x: swap x and y.',       tip: 'x-axis reflection: (x, y) → (x, −y).' },
+  8:  { emoji: '🌀', title: 'Rotations',                          body: '90° clockwise: (x, y) → (y, −x). 180°: (x, y) → (−x, −y). 90° anti-clockwise: (x, y) → (−y, x).', tip: '90° clockwise = (y, −x). Memorise this one!' },
+  9:  { emoji: '📏', title: 'Congruency Conditions',              body: 'Triangles are congruent by: SAS, SSS, AAS, or RHS. Match what information is given.',     tip: 'RHS only applies to right-angled triangles.' },
+  10: { emoji: '⚔️', title: 'BOSS: The Proof Master!',            body: 'Combine translations, reflections, rotations, and congruency — the chamber is yours!',    tip: 'Do each transformation in order. Step by step.' },
+  // World 3 — The Data Observatory
+  11: { emoji: '🔭', title: 'Enter the Data Observatory!',        body: 'Five-number summary: Minimum, Q1, Median, Q3, Maximum. Q1 and Q3 are quartiles.',        tip: 'Sort the data first. Q1 = median of lower half.' },
+  12: { emoji: '📐', title: 'Compound Shapes',                    body: 'Split complex shapes into rectangles and triangles. Find each area, then add or subtract.', tip: 'Area of triangle = ½ × base × height.' },
+  13: { emoji: '🌳', title: 'Tree Diagrams',                      body: 'Multiply along branches for "AND" probability. P(A and B) = P(A) × P(B).',               tip: 'Independent events: multiply the probabilities.' },
+  14: { emoji: '💱', title: 'Exchange Rates & Ratio',             body: 'Exchange rate converts currencies. Sharing in a ratio: find 1 part first, then multiply.', tip: '1 part = total ÷ sum of ratio.' },
+  15: { emoji: '🎓', title: 'FINAL BOSS: The Observatory Chief!', body: 'The ultimate Age 14 challenge — algebra, transformations, data, and finance combined!',   tip: 'Read carefully. Identify the topic. Execute.' },
+};
+
+const P6_HINTS: Record<number, string> = {
+  1:  '🧪 a^m × a^n = a^(m+n). Same base, add exponents.',
+  2:  '0️⃣ a^0 = 1. a^(−n) = 1/aⁿ.',
+  3:  '🔬 Find factors of the last number that add to the middle.',
+  4:  '💰 Including VAT = price × 1.15.',
+  5:  '⚗️ Identify the topic first, then apply the rule.',
+  6:  '🗺️ Translation: add the vector to each coordinate.',
+  7:  '🪞 x-axis: y changes sign. y-axis: x changes sign.',
+  8:  '🌀 90° clockwise: (x, y) → (y, −x).',
+  9:  '📏 SAS, SSS, AAS, RHS — match what is given.',
+  10: '⚔️ Apply each transformation step by step.',
+  11: '🔭 Sort first. Q1 = median of lower half.',
+  12: '📐 Split into rectangles and triangles. Area of △ = ½bh.',
+  13: '🌳 Multiply along branches: P(A and B) = P(A) × P(B).',
+  14: '💱 1 part = total ÷ sum of ratio.',
+  15: '🎓 One step at a time — you\'ve got this!',
+};
+
+const P6_WORLDS = [
+  { levels: [1, 2, 3, 4, 5],     name: 'The Algebra Lab',       emoji: '🧪', color: '#0369A1', bgHex: '#F0F9FF', bg: 'bg-[#F0F9FF]', badge: 'bg-[#BAE6FD]' },
+  { levels: [6, 7, 8, 9, 10],    name: 'The Proof Chamber',     emoji: '⚔️', color: '#059669', bgHex: '#F0FDF4', bg: 'bg-[#F0FDF4]', badge: 'bg-[#6EE7B7]' },
+  { levels: [11, 12, 13, 14, 15], name: 'The Data Observatory', emoji: '🔭', color: '#7C3AED', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#C4B5FD]' },
+];
+
 // ─── Badge System ─────────────────────────────────────────────────────────────
 const BADGES: { id: string; emoji: string; label: string; desc: string }[] = [
   { id: 'phase1_complete', emoji: '🌱', label: 'Sprout',           desc: 'Complete Pre-School'       },
   { id: 'phase2_complete', emoji: '📚', label: 'Scholar',          desc: 'Complete Lower Primary'    },
   { id: 'phase3_complete', emoji: '🗺️', label: 'Navigator',        desc: 'Complete Higher Primary'   },
   { id: 'phase4_complete', emoji: '🏆', label: 'Legend',           desc: 'Master all 4 phases'       },
-  { id: 'phase5_complete', emoji: '🧠', label: 'Mastermind',       desc: 'Master all 5 phases'       },
+  { id: 'phase5_complete', emoji: '🧠', label: 'Mastermind',       desc: 'Complete Age 13'           },
+  { id: 'phase6_complete', emoji: '🎓', label: 'Graduate',         desc: 'Master all 6 phases'       },
   { id: 'boss_slayer',     emoji: '💀', label: 'Boss Slayer',      desc: 'Defeat your first boss'    },
   { id: 'streak_3',        emoji: '🔥', label: 'Hot Streak',       desc: 'Play 3 days in a row'      },
   { id: 'streak_7',        emoji: '🔥🔥','label': 'On Fire!',      desc: 'Play 7 days in a row'      },
@@ -303,6 +351,7 @@ function getHint(phase: number, levelInPhase: number): string {
   if (phase === 1) return PHASE1_HINTS[levelInPhase] ?? '';
   if (phase === 2) return P2_HINTS[levelInPhase] ?? '';
   if (phase === 3) return P3_HINTS[levelInPhase] ?? '';
+  if (phase === 6) return P6_HINTS[levelInPhase] ?? '';
   if (phase === 5) return P5_HINTS[levelInPhase] ?? '';
   if (phase === 4) return P4_HINTS[levelInPhase] ?? '';
   return '';
@@ -442,7 +491,7 @@ export const PHASES: PhaseConfig[] = [
   {
     id: 5,
     name: 'Secondary',
-    ageRange: 'Ages 13–14',
+    ageRange: 'Age 13',
     emoji: '🧠',
     bgColor: 'bg-[#EEF2FF]',
     borderColor: 'border-[#818CF8]',
@@ -466,6 +515,35 @@ export const PHASES: PhaseConfig[] = [
       { n: 43, topic: 'advanced probability — complementary events and independent events' },
       { n: 44, topic: 'quartiles and interquartile range from a dataset' },
       { n: 45, topic: 'final boss — algebra, geometry, data, and probability combined' },
+    ],
+  },
+  {
+    id: 6,
+    name: 'Upper Secondary',
+    ageRange: 'Age 14',
+    emoji: '🎓',
+    bgColor: 'bg-[#F0F9FF]',
+    borderColor: 'border-[#7DD3FC]',
+    badgeBg: 'bg-[#BAE6FD]',
+    levels: [
+      // World 1 — The Algebra Lab
+      { n: 46, topic: 'exponent laws — product, quotient, and power rules' },
+      { n: 47, topic: 'zero and negative exponents — a^0 = 1, a^(−n) = 1/aⁿ' },
+      { n: 48, topic: 'trinomial factorising — x² + bx + c = (x + p)(x + q)' },
+      { n: 49, topic: 'financial maths — VAT (15%), hire purchase, deposits' },
+      { n: 50, topic: 'combined algebra boss — exponents, trinomials, financial' },
+      // World 2 — The Proof Chamber
+      { n: 51, topic: 'transformations: translation — move by a vector (a, b)' },
+      { n: 52, topic: 'transformations: reflection — over x-axis, y-axis, y = x' },
+      { n: 53, topic: 'transformations: rotation — 90° and 180° about the origin' },
+      { n: 54, topic: 'congruency conditions — SAS, SSS, AAS, RHS' },
+      { n: 55, topic: 'combined geometry boss — transformations and congruency' },
+      // World 3 — The Data Observatory
+      { n: 56, topic: 'five-number summary — Q1, median, Q3, and IQR' },
+      { n: 57, topic: 'compound shapes — area of combined rectangles and triangles' },
+      { n: 58, topic: 'tree diagrams — compound probability by multiplying branches' },
+      { n: 59, topic: 'exchange rates and dividing in a ratio' },
+      { n: 60, topic: 'final boss — algebra, transformations, data, and finance combined' },
     ],
   },
 ];
@@ -795,10 +873,13 @@ function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: 
   const isPhase3 = phase === 3;
   const isPhase4 = phase === 4;
   const isPhase5 = phase === 5;
+  const isPhase6 = phase === 6;
 
-  const intro = isPhase5
-    ? (P5_LEVEL_INTROS[levelInPhase] ?? P5_LEVEL_INTROS[1])
-    : isPhase4
+  const intro = isPhase6
+    ? (P6_LEVEL_INTROS[levelInPhase] ?? P6_LEVEL_INTROS[1])
+    : isPhase5
+      ? (P5_LEVEL_INTROS[levelInPhase] ?? P5_LEVEL_INTROS[1])
+      : isPhase4
       ? (P4_LEVEL_INTROS[levelInPhase] ?? P4_LEVEL_INTROS[1])
       : isPhase3
         ? (P3_LEVEL_INTROS[levelInPhase] ?? P3_LEVEL_INTROS[1])
@@ -806,16 +887,18 @@ function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: 
           ? (P2_LEVEL_INTROS[levelInPhase] ?? P2_LEVEL_INTROS[1])
           : (LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1]);
 
-  const world = isPhase5
-    ? P5_WORLDS.find(w => w.levels.includes(levelInPhase))
-    : isPhase4
-      ? P4_WORLDS.find(w => w.levels.includes(levelInPhase))
-      : isPhase3
-        ? P3_WORLDS.find(w => w.levels.includes(levelInPhase))
-        : isPhase2
-          ? P2_WORLDS.find(w => w.levels.includes(levelInPhase))
-        : null;
-  const isWorldEntry = (isPhase2 || isPhase3 || isPhase4) && world?.levels[0] === levelInPhase;
+  const world = isPhase6
+    ? P6_WORLDS.find(w => w.levels.includes(levelInPhase))
+    : isPhase5
+      ? P5_WORLDS.find(w => w.levels.includes(levelInPhase))
+      : isPhase4
+        ? P4_WORLDS.find(w => w.levels.includes(levelInPhase))
+        : isPhase3
+          ? P3_WORLDS.find(w => w.levels.includes(levelInPhase))
+          : isPhase2
+            ? P2_WORLDS.find(w => w.levels.includes(levelInPhase))
+            : null;
+  const isWorldEntry = (isPhase2 || isPhase3 || isPhase4 || isPhase5 || isPhase6) && world?.levels[0] === levelInPhase;
 
   const badgeBg  = world ? world.badge : 'bg-[#FEF9C3]';
   const tipBg    = world ? world.bg    : 'bg-[#DCFCE7]';
@@ -1167,9 +1250,10 @@ export default function Game() {
     const isP3WorldEntry = startPhase === 3 && [1, 6, 11].includes(startLevel);
     const isP4WorldEntry = startPhase === 4 && [1, 6, 11].includes(startLevel);
     const isP5WorldEntry = startPhase === 5 && [1, 6, 11].includes(startLevel);
+    const isP6WorldEntry = startPhase === 6 && [1, 6, 11].includes(startLevel);
     if (startPhase === 1 && !tutorialDone) {
       setGameState('TUTORIAL');
-    } else if (startPhase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry || isP5WorldEntry) {
+    } else if (startPhase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry || isP5WorldEntry || isP6WorldEntry) {
       setGameState('LEVEL_INTRO');
       loadQuestion(startPhase, startLevel);
     } else {
@@ -1236,7 +1320,7 @@ export default function Game() {
 
       if (newProgress >= requiredToWin) {
         const wasLastLevel = levelInPhase === currentPhaseConfig.levels.length;
-        const wasLastPhase = phase === 5;
+        const wasLastPhase = phase === 6;
         const wasBonus = isBossLevel(phase, levelInPhase);
 
         setTimeout(() => {
@@ -1266,6 +1350,7 @@ export default function Game() {
             if (phase === 3) awardBadge('phase3_complete');
             if (phase === 4) awardBadge('phase4_complete');
             if (phase === 5) awardBadge('phase5_complete');
+            if (phase === 6) awardBadge('phase6_complete');
           }
           // Award boss-slayer badge
           if (wasBonus) awardBadge('boss_slayer');
@@ -1275,6 +1360,7 @@ export default function Game() {
           const isP3WorldEntry = !wasLastLevel && phase === 3 && [6, 11].includes(nextLevelInPhase);
           const isP4WorldEntry = !wasLastLevel && phase === 4 && [6, 11].includes(nextLevelInPhase);
           const isP5WorldEntry = !wasLastLevel && phase === 5 && [6, 11].includes(nextLevelInPhase);
+          const isP6WorldEntry = !wasLastLevel && phase === 6 && [6, 11].includes(nextLevelInPhase);
 
           if (wasLastLevel) {
             setIsPhaseTransition(true);
@@ -1296,7 +1382,7 @@ export default function Game() {
             confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#F97316', '#EF4444', '#DC2626'] });
           }
           // Pre-load next question so level intro card is ready
-          if (!wasLastLevel && (phase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry || isP5WorldEntry)) {
+          if (!wasLastLevel && (phase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry || isP5WorldEntry || isP6WorldEntry)) {
             loadQuestion(phase, nextLevelInPhase);
           }
         }, 1500);
@@ -1722,6 +1808,14 @@ export default function Game() {
                       </div>
                     );
                   })()}
+                  {phase === 6 && P6_HINTS[levelInPhase] && (() => {
+                    const w6 = P6_WORLDS.find(w => w.levels.includes(levelInPhase));
+                    return (
+                      <div className="border-2 rounded-2xl px-4 py-2 mb-4 text-center" style={{ background: w6?.bgHex ?? '#F0F9FF', borderColor: w6?.color ?? '#0369A1' }}>
+                        <p className="text-sm font-black" style={{ color: w6?.color ?? '#0369A1' }}>{P6_HINTS[levelInPhase]}</p>
+                      </div>
+                    );
+                  })()}
 
                   {/* Answer buttons — hidden during subitizing flash */}
                   {(!problem?.meta?.isSubitizing || !flashVisible) && (
@@ -1777,7 +1871,7 @@ export default function Game() {
                   </div>
                   <h2 className="text-4xl font-black mb-3">{bossDefeated ? 'BOSS DEFEATED! 💀' : 'LEVEL UP!'}</h2>
                   {(phase === 2 || phase === 3 || phase === 4) && (() => {
-                    const worlds = phase === 5 ? P5_WORLDS : phase === 4 ? P4_WORLDS : phase === 3 ? P3_WORLDS : P2_WORLDS;
+                    const worlds = phase === 6 ? P6_WORLDS : phase === 5 ? P5_WORLDS : phase === 4 ? P4_WORLDS : phase === 3 ? P3_WORLDS : P2_WORLDS;
                     const w = worlds.find(ww => ww.levels.includes(levelInPhase));
                     if (!w) return null;
                     return (

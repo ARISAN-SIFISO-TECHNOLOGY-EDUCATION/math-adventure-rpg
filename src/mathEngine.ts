@@ -2427,6 +2427,449 @@ function p5l15(): Problem {
   };
 }
 
+// PHASE 6 — Age 14
+// World 1: The Algebra Lab     (advanced algebra)     — levels  1–5
+// World 2: The Proof Chamber   (transformations)      — levels  6–10
+// World 3: The Data Observatory (data & finance)      — levels 11–15
+
+// ── World 1: The Algebra Lab ──────────────────────────────────────────────────
+
+function p6l1(): Problem {
+  // Exponent laws: product, quotient, power
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const base = rand(2, 5), m = rand(2, 5), n = rand(2, 5);
+    return {
+      question: `Simplify: ${base}^${m} × ${base}^${n} = ${base}^?`,
+      options: numericOptions(m + n, 4, 2, 3),
+      correctAnswer: m + n,
+      explanation: `Product law: a^m × a^n = a^(m+n). ${base}^${m} × ${base}^${n} = ${base}^${m + n}.`,
+    };
+  }
+  if (variant === 1) {
+    const base = rand(2, 5), n = rand(1, 3), ans = rand(n + 1, n + 4);
+    return {
+      question: `Simplify: ${base}^${ans + n} ÷ ${base}^${n} = ${base}^?`,
+      options: numericOptions(ans, 4, 1, 3),
+      correctAnswer: ans,
+      explanation: `Quotient law: a^m ÷ a^n = a^(m−n). ${base}^${ans + n} ÷ ${base}^${n} = ${base}^${ans}.`,
+    };
+  }
+  const base = rand(2, 4), m = rand(2, 4), n = rand(2, 3);
+  return {
+    question: `Simplify: (${base}^${m})^${n} = ${base}^?`,
+    options: numericOptions(m * n, 4, 2, 3),
+    correctAnswer: m * n,
+    explanation: `Power law: (a^m)^n = a^(m×n). (${base}^${m})^${n} = ${base}^${m * n}.`,
+  };
+}
+
+function p6l2(): Problem {
+  // Negative and zero exponents
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const base = rand(2, 12);
+    return {
+      question: `What is ${base}^0?`,
+      options: shuffle([1, 0, base, base * base]),
+      correctAnswer: 1,
+      explanation: `Any non-zero number to the power 0 equals 1. ${base}^0 = 1.`,
+    };
+  }
+  if (variant === 1) {
+    const base = rand(2, 6);
+    const ans = fractionStr(1, base);
+    const wrongs = [fractionStr(1, base + 1), String(base), fractionStr(1, base - 1)].filter(w => w !== ans);
+    return {
+      question: `What is ${base}^(−1)?`,
+      options: shuffle([ans, ...wrongs.slice(0, 3)]),
+      correctAnswer: ans,
+      explanation: `a^(−1) = 1/a. ${base}^(−1) = 1/${base} = ${ans}.`,
+    };
+  }
+  const base = rand(2, 5);
+  const ans = fractionStr(1, base * base);
+  const wrongs = [fractionStr(1, base), String(base * base), fractionStr(1, base * base + 1)].filter(w => w !== ans);
+  return {
+    question: `What is ${base}^(−2)?`,
+    options: shuffle([ans, ...wrongs.slice(0, 3)]),
+    correctAnswer: ans,
+    explanation: `a^(−2) = 1/a². ${base}^(−2) = 1/${base * base} = ${ans}.`,
+  };
+}
+
+function p6l3(): Problem {
+  // Trinomial factorising: x² + (a+b)x + ab = (x+a)(x+b)
+  const pairs: [number, number][] = [
+    [1,2],[1,3],[1,4],[1,5],[1,6],
+    [2,3],[2,4],[2,5],[2,6],
+    [3,4],[3,5],[3,6],[4,5],[4,6],
+  ];
+  const [a, b] = pairs[rand(0, pairs.length - 1)];
+  const s = a + b, p = a * b;
+  const ans = `(x + ${a})(x + ${b})`;
+  return {
+    question: `Factorise: x² + ${s}x + ${p}`,
+    options: shuffle([ans, `(x + ${s})(x + ${p})`, `(x + ${a})(x + ${b + 1})`, `(x + ${a + 1})(x + ${b})`]),
+    correctAnswer: ans,
+    explanation: `Find two numbers that add to ${s} and multiply to ${p}: ${a} and ${b}. x² + ${s}x + ${p} = (x + ${a})(x + ${b}).`,
+  };
+}
+
+function p6l4(): Problem {
+  // Financial maths: VAT, hire purchase, discount
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const excl = rand(4, 20) * 10;
+    const vat = excl * 0.15;
+    const incl = excl + vat;
+    return {
+      question: `Price excluding VAT: R${excl}.\nVAT is 15%.\nPrice including VAT?`,
+      options: numericOptions(incl, 4, excl, Math.max(10, Math.round(incl * 0.1))),
+      correctAnswer: incl,
+      explanation: `VAT = 15% × R${excl} = R${vat}. Total = R${excl} + R${vat} = R${incl}.`,
+    };
+  }
+  if (variant === 1) {
+    const excl = rand(4, 20) * 10;
+    const incl = excl * 1.15;
+    return {
+      question: `Price including 15% VAT: R${incl}.\nPrice EXCLUDING VAT?`,
+      options: numericOptions(excl, 4, 0, Math.max(10, Math.round(excl * 0.1))),
+      correctAnswer: excl,
+      explanation: `Excl VAT = R${incl} ÷ 1.15 = R${excl}.`,
+    };
+  }
+  const price = rand(5, 20) * 100;
+  const pct = [10, 20, 25][rand(0, 2)];
+  const deposit = (price * pct) / 100;
+  return {
+    question: `Item costs R${price}.\nPay ${pct}% deposit.\nWhat is the balance owing?`,
+    options: numericOptions(price - deposit, 4, 0, Math.max(50, Math.round((price - deposit) * 0.1))),
+    correctAnswer: price - deposit,
+    explanation: `Deposit = ${pct}% × R${price} = R${deposit}. Balance = R${price} − R${deposit} = R${price - deposit}.`,
+  };
+}
+
+function p6l5(): Problem {
+  // BOSS: Combined algebra — exponents + trinomials + financial
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const base = rand(2, 4), m = rand(2, 4), n = rand(2, 4);
+    return {
+      question: `${base}^${m} × ${base}^${n} = ${base}^?\nWhat is the missing exponent?`,
+      options: numericOptions(m + n, 4, 2, 3),
+      correctAnswer: m + n,
+      explanation: `Product law: ${base}^${m} × ${base}^${n} = ${base}^${m + n}.`,
+    };
+  }
+  if (variant === 1) {
+    const pairs: [number, number][] = [[1,4],[2,3],[1,5],[2,5],[3,4]];
+    const [a, b] = pairs[rand(0, pairs.length - 1)];
+    const s = a + b, p = a * b;
+    const ans = `(x + ${a})(x + ${b})`;
+    return {
+      question: `Factorise completely:\nx² + ${s}x + ${p}`,
+      options: shuffle([ans, `(x + ${s})(x + ${p})`, `(x + ${a})(x + ${b + 1})`, `(x + ${a + 1})(x + ${b})`]),
+      correctAnswer: ans,
+      explanation: `${a} + ${b} = ${s} ✓ and ${a} × ${b} = ${p} ✓ → (x + ${a})(x + ${b}).`,
+    };
+  }
+  const excl = rand(6, 16) * 10;
+  const incl = excl * 1.15;
+  return {
+    question: `A jersey costs R${excl} excl VAT.\n15% VAT is added.\nWhat is the final price?`,
+    options: numericOptions(incl, 4, excl, Math.max(10, Math.round(incl * 0.1))),
+    correctAnswer: incl,
+    explanation: `R${excl} × 1.15 = R${incl}.`,
+  };
+}
+
+// ── World 2: The Proof Chamber ────────────────────────────────────────────────
+
+function p6l6(): Problem {
+  // Transformations: translation
+  const x = rand(-4, 5), y = rand(-4, 5);
+  const dx = rand(-4, 4), dy = rand(-4, 4);
+  const nx = x + dx, ny = y + dy;
+  const ans = `(${nx}, ${ny})`;
+  const dxStr = dx >= 0 ? `+${dx}` : String(dx);
+  const dyStr = dy >= 0 ? `+${dy}` : String(dy);
+  return {
+    question: `Point (${x}, ${y}) is translated by vector (${dxStr}, ${dyStr}).\nNew position?`,
+    options: shuffle([ans, `(${x - dx}, ${ny})`, `(${nx}, ${y - dy})`, `(${x - dx}, ${y - dy})`]),
+    correctAnswer: ans,
+    explanation: `Add vector: (${x} ${dxStr}, ${y} ${dyStr}) = (${nx}, ${ny}).`,
+  };
+}
+
+function p6l7(): Problem {
+  // Transformations: reflection over axes and y = x
+  const x = rand(-5, 5), y = rand(-5, 5);
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const ans = `(${x}, ${-y})`;
+    return {
+      question: `Reflect (${x}, ${y}) over the x-axis.\nNew coordinates?`,
+      options: shuffle([ans, `(${-x}, ${y})`, `(${-x}, ${-y})`, `(${y}, ${x})`]),
+      correctAnswer: ans,
+      explanation: `Reflection over x-axis: y changes sign. (${x}, ${y}) → (${x}, ${-y}).`,
+    };
+  }
+  if (variant === 1) {
+    const ans = `(${-x}, ${y})`;
+    return {
+      question: `Reflect (${x}, ${y}) over the y-axis.\nNew coordinates?`,
+      options: shuffle([ans, `(${x}, ${-y})`, `(${-x}, ${-y})`, `(${y}, ${x})`]),
+      correctAnswer: ans,
+      explanation: `Reflection over y-axis: x changes sign. (${x}, ${y}) → (${-x}, ${y}).`,
+    };
+  }
+  const ans = `(${y}, ${x})`;
+  return {
+    question: `Reflect (${x}, ${y}) over the line y = x.\nNew coordinates?`,
+    options: shuffle([ans, `(${x}, ${y})`, `(${-y}, ${-x})`, `(${-x}, ${-y})`]),
+    correctAnswer: ans,
+    explanation: `Reflection over y = x: swap coordinates. (${x}, ${y}) → (${y}, ${x}).`,
+  };
+}
+
+function p6l8(): Problem {
+  // Transformations: rotation about origin
+  const x = rand(1, 6), y = rand(1, 6);
+  const variant = rand(0, 1);
+  if (variant === 0) {
+    // 90° clockwise: (x, y) → (y, −x)
+    const ans = `(${y}, ${-x})`;
+    return {
+      question: `Rotate (${x}, ${y}) 90° clockwise about the origin.\nNew coordinates?`,
+      options: shuffle([ans, `(${-y}, ${x})`, `(${-x}, ${-y})`, `(${y}, ${x})`]),
+      correctAnswer: ans,
+      explanation: `90° clockwise: (x, y) → (y, −x). (${x}, ${y}) → (${y}, ${-x}).`,
+    };
+  }
+  // 180°: (x, y) → (−x, −y)
+  const ans = `(${-x}, ${-y})`;
+  return {
+    question: `Rotate (${x}, ${y}) 180° about the origin.\nNew coordinates?`,
+    options: shuffle([ans, `(${y}, ${-x})`, `(${-y}, ${x})`, `(${x}, ${y})`]),
+    correctAnswer: ans,
+    explanation: `180° rotation: (x, y) → (−x, −y). (${x}, ${y}) → (${-x}, ${-y}).`,
+  };
+}
+
+function p6l9(): Problem {
+  // Congruency conditions: SAS, SSS, AAS, RHS
+  const conditions = [
+    { name: 'SAS', scenario: 'Two triangles: sides 4 cm and 6 cm with an INCLUDED angle of 50°.' },
+    { name: 'SSS', scenario: 'Two triangles: all three sides measure 3 cm, 5 cm, and 7 cm.' },
+    { name: 'AAS', scenario: 'Two triangles: angles of 40° and 70°, and the side opposite 70° is 5 cm.' },
+    { name: 'RHS', scenario: 'Two right-angled triangles: hypotenuse 10 cm, one leg 6 cm.' },
+  ];
+  const c = conditions[rand(0, conditions.length - 1)];
+  return {
+    question: `${c.scenario}\nWhich congruency condition applies?`,
+    options: shuffle(['SAS', 'SSS', 'AAS', 'RHS']),
+    correctAnswer: c.name,
+    explanation: `${c.name} (${c.name === 'SAS' ? 'Side-Angle-Side' : c.name === 'SSS' ? 'Side-Side-Side' : c.name === 'AAS' ? 'Angle-Angle-Side' : 'Right angle-Hypotenuse-Side'}) matches the given information.`,
+  };
+}
+
+function p6l10(): Problem {
+  // BOSS: Combined transformations
+  const x = rand(1, 5), y = rand(1, 5);
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    // Translate then reflect over x-axis
+    const dx = rand(1, 4), dy = rand(1, 4);
+    const tx = x + dx, ty = y + dy;
+    const ans = `(${tx}, ${-ty})`;
+    const dxStr = `+${dx}`, dyStr = `+${dy}`;
+    return {
+      question: `(${x}, ${y}): translate by (${dxStr}, ${dyStr}), then reflect over x-axis.\nFinal position?`,
+      options: shuffle([ans, `(${tx}, ${ty})`, `(${-tx}, ${ty})`, `(${-tx}, ${-ty})`]),
+      correctAnswer: ans,
+      explanation: `Step 1: (${x}+${dx}, ${y}+${dy}) = (${tx}, ${ty}). Step 2: reflect x-axis → (${tx}, ${-ty}).`,
+    };
+  }
+  if (variant === 1) {
+    // 90° clockwise then identify
+    const ans = `(${y}, ${-x})`;
+    return {
+      question: `Rotate (${x}, ${y}) 90° clockwise, then reflect over y-axis.\nFinal position?`,
+      options: shuffle([ans, `(${-y}, ${x})`, `(${-x}, ${-y})`, `(${y}, ${x})`]),
+      correctAnswer: `(${-y}, ${-x})`,
+      explanation: `90° clockwise: (${y}, ${-x}). Reflect y-axis: (${-y}, ${-x}).`,
+    };
+  }
+  // Reflection over y = x
+  const ans = `(${y}, ${x})`;
+  return {
+    question: `Reflect (${x}, ${y}) over y = x, then rotate 180°.\nFinal position?`,
+    options: shuffle([`(${-y}, ${-x})`, `(${y}, ${x})`, `(${-x}, ${-y})`, `(${x}, ${y})`]),
+    correctAnswer: `(${-y}, ${-x})`,
+    explanation: `Step 1: y=x reflection → (${y}, ${x}). Step 2: 180° rotation → (${-y}, ${-x}).`,
+  };
+}
+
+// ── World 3: The Data Observatory ─────────────────────────────────────────────
+
+function p6l11(): Problem {
+  // Five-number summary: Q1, Q3, IQR
+  const base = rand(3, 8), d = rand(2, 5);
+  const vals = Array.from({ length: 8 }, (_, i) => base + i * d);
+  const q1 = vals[1], q3 = vals[5], iqr = q3 - q1;
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    return {
+      question: `Data (sorted): ${vals.join(', ')}\nWhat is Q1 (lower quartile)?`,
+      options: numericOptions(q1, 4, vals[0], d * 2),
+      correctAnswer: q1,
+      explanation: `Lower half: ${vals.slice(0, 4).join(', ')}. Q1 = median of lower half = ${q1}.`,
+    };
+  }
+  if (variant === 1) {
+    return {
+      question: `Data (sorted): ${vals.join(', ')}\nWhat is Q3 (upper quartile)?`,
+      options: numericOptions(q3, 4, vals[3], d * 2),
+      correctAnswer: q3,
+      explanation: `Upper half: ${vals.slice(4).join(', ')}. Q3 = median of upper half = ${q3}.`,
+    };
+  }
+  return {
+    question: `Data (sorted): ${vals.join(', ')}\nFind the IQR (Q3 − Q1).`,
+    options: numericOptions(iqr, 4, 0, d * 2),
+    correctAnswer: iqr,
+    explanation: `Q1 = ${q1}, Q3 = ${q3}. IQR = ${q3} − ${q1} = ${iqr}.`,
+  };
+}
+
+function p6l12(): Problem {
+  // Compound shapes: area and perimeter
+  const variant = rand(0, 1);
+  if (variant === 0) {
+    // Rectangle + triangle on top
+    const rw = rand(4, 10), rh = rand(3, 8), th = rand(2, 5);
+    const area = rw * rh + (rw * th) / 2;
+    return {
+      question: `A shape: rectangle ${rw}m × ${rh}m with a triangle on top (base ${rw}m, height ${th}m).\nTotal area?`,
+      options: numericOptions(area, 4, 0, Math.max(10, Math.round(area * 0.15))),
+      correctAnswer: area,
+      explanation: `Rectangle: ${rw}×${rh} = ${rw * rh} m². Triangle: ½×${rw}×${th} = ${(rw * th) / 2} m². Total = ${area} m².`,
+    };
+  }
+  // L-shaped area
+  const lw = rand(6, 12), lh = rand(6, 10);
+  const sw = rand(2, lw - 2), sh = rand(2, lh - 2);
+  const area = lw * lh - sw * sh;
+  return {
+    question: `L-shaped room: ${lw}m × ${lh}m minus a ${sw}m × ${sh}m corner cut out.\nArea?`,
+    options: numericOptions(area, 4, 0, Math.max(10, Math.round(area * 0.15))),
+    correctAnswer: area,
+    explanation: `Large: ${lw * lh} m². Cut-out: ${sw * sh} m². L-shape = ${lw * lh} − ${sw * sh} = ${area} m².`,
+  };
+}
+
+function p6l13(): Problem {
+  // Tree diagrams — compound probability
+  const variant = rand(0, 1);
+  if (variant === 0) {
+    // P(A and B) = P(A) × P(B) — with replacement
+    const red = rand(2, 4), total = rand(red + 2, red + 4);
+    const blue = total - red;
+    const ans = fractionStr(red * red, total * total);
+    const w1 = fractionStr(red * blue, total * total);
+    const w2 = fractionStr(red, total);
+    const w3 = fractionStr(red * 2, total * 2);
+    return {
+      question: `Bag: ${red} red, ${blue} blue balls (replace after pick).\nP(red, then red) = ?`,
+      options: shuffle([ans, w1, w2, w3].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+      correctAnswer: ans,
+      explanation: `P(red) = ${red}/${total}. P(red twice) = ${fractionStr(red, total)} × ${fractionStr(red, total)} = ${ans}.`,
+    };
+  }
+  // Coin + die
+  const totalFaces = [4, 6][rand(0, 1)];
+  const evenFaces = totalFaces / 2;
+  const ans = fractionStr(evenFaces, 2 * totalFaces);
+  return {
+    question: `Flip a fair coin AND roll a ${totalFaces}-sided die.\nP(heads AND even number)?`,
+    options: shuffle([ans, fractionStr(1, 2), fractionStr(evenFaces, totalFaces), fractionStr(1, totalFaces)].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+    correctAnswer: ans,
+    explanation: `P(heads) = 1/2. P(even) = ${evenFaces}/${totalFaces}. P(both) = 1/2 × ${evenFaces}/${totalFaces} = ${ans}.`,
+  };
+}
+
+function p6l14(): Problem {
+  // Exchange rates and ratio
+  const variant = rand(0, 1);
+  if (variant === 0) {
+    const rate = rand(15, 20);
+    const usd = rand(2, 10) * 10;
+    const zar = usd * rate;
+    return {
+      question: `Exchange rate: R${rate} = $1.\nConvert R${zar} to dollars.`,
+      options: numericOptions(usd, 4, 1, Math.max(5, Math.round(usd * 0.2))),
+      correctAnswer: usd,
+      explanation: `R${zar} ÷ R${rate}/$ = $${usd}.`,
+    };
+  }
+  // Divide in ratio
+  let total: number, r1: number, r2: number, share1: number;
+  do {
+    r1 = rand(1, 4); r2 = rand(1, 4);
+    total = (r1 + r2) * rand(2, 8) * 10;
+    share1 = (total / (r1 + r2)) * r1;
+  } while (!Number.isInteger(share1));
+  const larger = Math.max(share1, total - share1);
+  return {
+    question: `R${total} shared in ratio ${r1}:${r2}.\nWhat is the LARGER share?`,
+    options: numericOptions(larger, 4, 0, Math.max(20, Math.round(larger * 0.15))),
+    correctAnswer: larger,
+    explanation: `1 part = R${total / (r1 + r2)}. Larger (${Math.max(r1, r2)} parts) = R${larger}.`,
+  };
+}
+
+function p6l15(): Problem {
+  // FINAL BOSS — synthesis of all three worlds
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    // Trinomial factorising
+    const pairs: [number, number][] = [[1,4],[2,3],[1,5],[2,5],[3,4]];
+    const [a, b] = pairs[rand(0, pairs.length - 1)];
+    const s = a + b, p = a * b;
+    const ans = `(x + ${a})(x + ${b})`;
+    return {
+      question: `Factorise completely:\nx² + ${s}x + ${p}`,
+      options: shuffle([ans, `(x + ${s})(x + ${p})`, `(x + ${a + 1})(x + ${b - 1})`, `(x + ${a})(x + ${b + 1})`]),
+      correctAnswer: ans,
+      explanation: `${a} + ${b} = ${s} and ${a} × ${b} = ${p} → (x + ${a})(x + ${b}).`,
+    };
+  }
+  if (variant === 1) {
+    // Translation
+    const x = rand(1, 5), y = rand(1, 5);
+    const dx = rand(1, 4), dy = rand(1, 4);
+    const ans = `(${x + dx}, ${y + dy})`;
+    return {
+      question: `Point (${x}, ${y}) translated by (+${dx}, +${dy}).\nNew coordinates?`,
+      options: shuffle([ans, `(${x - dx}, ${y + dy})`, `(${x + dx}, ${y - dy})`, `(${x - dx}, ${y - dy})`]),
+      correctAnswer: ans,
+      explanation: `(${x}+${dx}, ${y}+${dy}) = (${x + dx}, ${y + dy}).`,
+    };
+  }
+  // Exchange rate
+  const rate = [16, 18, 20][rand(0, 2)];
+  const usd = rand(3, 8) * 10;
+  const zar = usd * rate;
+  return {
+    question: `Exchange rate: R${rate} = $1.\nConvert R${zar} to dollars.`,
+    options: numericOptions(usd, 4, 1, Math.max(5, Math.round(usd * 0.2))),
+    correctAnswer: usd,
+    explanation: `R${zar} ÷ ${rate} = $${usd}.`,
+  };
+}
+
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 const GENERATORS: Record<string, () => Problem> = {
@@ -2446,6 +2889,9 @@ const GENERATORS: Record<string, () => Problem> = {
   '5-1': p5l1, '5-2': p5l2, '5-3': p5l3, '5-4': p5l4, '5-5': p5l5,
   '5-6': p5l6, '5-7': p5l7, '5-8': p5l8, '5-9': p5l9, '5-10': p5l10,
   '5-11': p5l11, '5-12': p5l12, '5-13': p5l13, '5-14': p5l14, '5-15': p5l15,
+  '6-1': p6l1, '6-2': p6l2, '6-3': p6l3, '6-4': p6l4, '6-5': p6l5,
+  '6-6': p6l6, '6-7': p6l7, '6-8': p6l8, '6-9': p6l9, '6-10': p6l10,
+  '6-11': p6l11, '6-12': p6l12, '6-13': p6l13, '6-14': p6l14, '6-15': p6l15,
 };
 
 export function generateProblem(phase: number, level: number): Problem {
