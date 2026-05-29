@@ -13,7 +13,7 @@ const FEATURES = [
   {
     icon: '🐉',
     title: 'Companion Guide',
-    desc: 'Sparky the Dragon gives encouragement, hints, and reads every question aloud. Ages 6+ can play independently; ages 3–5 play best alongside a parent.',
+    desc: 'Sparky the Dragon gives encouragement, hints, and reads every question aloud. Ages 6–14 can play independently; ages 3–5 play best alongside a parent.',
   },
   {
     icon: '🔒',

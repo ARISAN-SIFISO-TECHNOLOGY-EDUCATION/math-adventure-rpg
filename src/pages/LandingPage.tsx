@@ -21,7 +21,7 @@ export default function LandingPage() {
             Learn Math.<br />Slay Monsters.<br />Save the Kingdom.
           </h1>
           <p className="text-xl text-gray-500 max-w-xl mx-auto mb-8">
-            A turn‑based educational RPG for kids ages 3–12. Solve math problems to defeat
+            A turn‑based educational RPG for ages 3–14. Solve math problems to defeat
             enemies, earn coins, and progress through a magical world — guided by Sparky the Dragon.
           </p>
           <div className="flex gap-4 justify-center flex-wrap mb-12">
