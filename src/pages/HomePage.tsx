@@ -7,7 +7,7 @@ type AgeCard = {
   color: string;
   bg: string;
   border: string;
-  phase: 1 | 2 | 3 | 4;
+  phase: 1 | 2 | 3 | 4 | 5;
   advanced?: boolean;
 };
 
@@ -28,6 +28,10 @@ const AGE_CARDS: AgeCard[] = [
   { age: 12, label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#EFF6FF', border: '#BFDBFE', phase: 3 },
   { age: 11, label: 'Advanced',       emoji: '🏆', color: '#9F1239', bg: '#FFF1F2', border: '#FECDD3', phase: 4, advanced: true },
   { age: 12, label: 'Advanced',       emoji: '🏆', color: '#9F1239', bg: '#FFF1F2', border: '#FECDD3', phase: 4, advanced: true },
+  // Row 5 — Secondary
+  { age: 13, label: 'Secondary', emoji: '🧠', color: '#4338CA', bg: '#EEF2FF', border: '#A5B4FC', phase: 5 },
+  { age: 14, label: 'Secondary', emoji: '🧠', color: '#4338CA', bg: '#EEF2FF', border: '#A5B4FC', phase: 5 },
+  { age: 14, label: 'Secondary', emoji: '🔮', color: '#6D28D9', bg: '#F5F3FF', border: '#DDD6FE', phase: 5, advanced: true },
 ];
 
 function AgeCardItem({ card }: { card: AgeCard }) {
@@ -63,6 +67,7 @@ export default function HomePage() {
     AGE_CARDS.slice(3, 6),
     AGE_CARDS.slice(6, 9),
     AGE_CARDS.slice(9, 12),
+    AGE_CARDS.slice(12, 15),
   ];
 
   return (
