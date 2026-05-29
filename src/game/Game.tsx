@@ -1107,6 +1107,9 @@ export default function Game() {
   const [companionMessage, setCompanionMessage] = useState<string | null>(null);
   // B2 — explanatory feedback
   const [wrongAttempts, setWrongAttempts] = useState(0);
+  // Phase 5+ strict mode: track wrong questions across the whole level
+  const [levelWrongCount, setLevelWrongCount] = useState(0);
+  const [levelFailed, setLevelFailed] = useState(false);
   // B3 — boss level tracking
   const [bossDefeated, setBossDefeated] = useState(false);
   // B4 — streak
@@ -1238,6 +1241,8 @@ export default function Game() {
     }
 
     setProgress(0);
+    setLevelWrongCount(0);
+    setLevelFailed(false);
     setFeedback(null);
     setBossDefeated(false);
     setCompanionEmotion('excited');
@@ -1330,6 +1335,8 @@ export default function Game() {
           speakVictory();
           setCompanionEmotion('celebrating');
           setProgress(0);
+          setLevelWrongCount(0);
+          setLevelFailed(false);
           setBossDefeated(wasBonus);
 
           // B1 — persist progress (skip in replay mode to preserve real saved progress)
@@ -1399,6 +1406,17 @@ export default function Game() {
       setCompanionMessage(null);
       const newWrong = wrongAttempts + 1;
       setWrongAttempts(newWrong);
+
+      // Phase 5+ strict mode: first wrong on this question counts toward level limit
+      if (phase >= 5 && newWrong === 1) {
+        const newLevelWrong = levelWrongCount + 1;
+        setLevelWrongCount(newLevelWrong);
+        if (newLevelWrong >= 3) {
+          setLevelFailed(true);
+          return; // show failure overlay immediately
+        }
+      }
+
       if (newWrong >= 2) {
         // B2 — reveal correct answer after 2 wrong attempts
         setFeedback({ type: 'WRONG', value: '__REVEAL__' });
@@ -1425,6 +1443,8 @@ export default function Game() {
     setPhase(newPhase);
     setLevelInPhase(1);
     setProgress(0);
+    setLevelWrongCount(0);
+    setLevelFailed(false);
     setShowPhaseSelect(false);
   };
 
@@ -1432,6 +1452,8 @@ export default function Game() {
     playClick();
     setLevelInPhase(completedLevel);
     setProgress(0);
+    setLevelWrongCount(0);
+    setLevelFailed(false);
     setFeedback(null);
     setBossDefeated(false);
     startBGM();
@@ -1442,6 +1464,8 @@ export default function Game() {
   const handleRestartLevel = useCallback(() => {
     setShowPauseMenu(false);
     setProgress(0);
+    setLevelWrongCount(0);
+    setLevelFailed(false);
     setFeedback(null);
     setWrongAttempts(0);
     loadQuestion(phase, levelInPhase);
@@ -1480,6 +1504,36 @@ export default function Game() {
           onResume={() => setShowPauseMenu(false)}
           onRestart={handleRestartLevel}
         />
+      )}
+
+      {/* Phase 5+ Level Failed overlay */}
+      {levelFailed && (
+        <div className="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ scale: 0.85, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white rounded-[32px] p-8 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full max-w-sm text-center"
+          >
+            <div className="text-6xl mb-4">💀</div>
+            <h2 className="text-2xl font-black mb-2">Level Failed!</h2>
+            <p className="text-sm font-bold text-gray-500 mb-6">
+              Too many wrong answers.<br />Study the questions and try again!
+            </p>
+            <button
+              onClick={() => {
+                setLevelFailed(false);
+                setProgress(0);
+                setLevelWrongCount(0);
+                setWrongAttempts(0);
+                setFeedback(null);
+                loadQuestion(phase, levelInPhase);
+              }}
+              className="w-full bg-[#EF4444] text-white py-4 rounded-2xl text-xl font-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 transition-all"
+            >
+              🔄 Try Again
+            </button>
+          </motion.div>
+        </div>
       )}
       {showBreakOverlay && !showBreakGate && (
         <BreakOverlay onParentOverride={() => setShowBreakGate(true)} />
