@@ -761,7 +761,7 @@ function CompanionSetup({ onDone }: { onDone: (name: string, emoji: string) => v
   const [emoji, setEmoji] = useState('🐉');
 
   return (
-    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4">
       <motion.div
         initial={{ scale: 0.85, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -780,12 +780,12 @@ function CompanionSetup({ onDone }: { onDone: (name: string, emoji: string) => v
           maxLength={12}
           className="w-full text-center text-2xl font-black p-4 rounded-2xl border-4 border-black outline-none mb-4"
         />
-        <div className="flex justify-center gap-3 mb-6">
+        <div className="grid grid-cols-4 gap-2 mb-6">
           {COMPANION_CHOICES.map(c => (
             <button
               key={c.emoji}
               onClick={() => setEmoji(c.emoji)}
-              className={`text-4xl p-3 rounded-2xl border-4 transition-all ${emoji === c.emoji ? 'border-black bg-yellow-100 scale-110' : 'border-gray-200 bg-gray-50'}`}
+              className={`text-4xl p-2 rounded-2xl border-4 transition-all w-full aspect-square flex items-center justify-center ${emoji === c.emoji ? 'border-black bg-yellow-100 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' : 'border-gray-200 bg-gray-50'}`}
               title={c.label}
             >
               {c.emoji}
@@ -1325,12 +1325,9 @@ export default function Game() {
               <span className="font-black text-orange-700 text-xs md:text-sm">{streakCount}</span>
             </div>
           )}
-          <div className="text-right">
-            <p className="text-[10px] md:text-sm font-black uppercase tracking-wider hidden md:block">Coins</p>
-            <p className="text-xl md:text-3xl font-black leading-none text-[#F59E0B]">{coins}</p>
-          </div>
-          <div className="bg-[#FEF3C7] p-2 md:p-3 rounded-2xl border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-            <Coins className="text-[#F59E0B] fill-[#F59E0B] w-4 h-4 md:w-6 md:h-6" />
+          <div className="flex items-center gap-1 bg-[#FEF3C7] border-4 border-black rounded-2xl px-2 py-1 md:px-3 md:py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <Coins className="text-[#F59E0B] fill-[#F59E0B] w-4 h-4 md:w-6 md:h-6 shrink-0" />
+            <span className="text-base md:text-2xl font-black leading-none text-[#F59E0B] tabular-nums">{coins}</span>
           </div>
           <button
             onClick={toggleMute}
@@ -1339,13 +1336,15 @@ export default function Game() {
           >
             {muted ? <VolumeX className="text-gray-400 w-4 h-4 md:w-6 md:h-6" /> : <Volume2 className="text-[#3B82F6] w-4 h-4 md:w-6 md:h-6" />}
           </button>
-          <Link
-            to="/"
-            className="p-2 md:p-3 rounded-2xl border-4 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-gray-50 active:shadow-none active:translate-y-1 active:translate-x-1 transition-all"
-            title="Back to Home"
-          >
-            <Home className="text-gray-600 w-4 h-4 md:w-6 md:h-6" />
-          </Link>
+          {gameState !== 'PLAYING' && (
+            <Link
+              to="/"
+              className="p-2 md:p-3 rounded-2xl border-4 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-gray-50 active:shadow-none active:translate-y-1 active:translate-x-1 transition-all"
+              title="Back to Home"
+            >
+              <Home className="text-gray-600 w-4 h-4 md:w-6 md:h-6" />
+            </Link>
+          )}
           {gameState === 'PLAYING' && (
             <button
               onClick={() => { playClick(); setShowPauseMenu(true); }}

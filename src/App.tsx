@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import HomePage from './pages/HomePage';
 import LandingPage from './pages/LandingPage';
 import FeaturesPage from './pages/FeaturesPage';
 import CurriculumPage from './pages/CurriculumPage';
@@ -16,7 +17,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<LandingPage />} />
         <Route path="/features" element={<FeaturesPage />} />
         <Route path="/curriculum" element={<CurriculumPage />} />
         <Route path="/parents" element={<ParentsPage />} />
