@@ -1646,6 +1646,309 @@ function p4l5(): Problem {
   }
 }
 
+// ── World 2: The Geometry Forge ───────────────────────────────────────────────
+
+function p4l6(): Problem {
+  // Volume of rectangular prisms
+  const l = rand(2, 10), w = rand(2, 8), h = rand(2, 6);
+  const vol = l * w * h;
+  return {
+    question: `A box is ${l} cm long, ${w} cm wide and ${h} cm tall.\nVolume in cm³?`,
+    options: numericOptions(vol, 4, 0, Math.max(20, Math.round(vol * 0.2))),
+    correctAnswer: vol,
+    explanation: `Volume = l × w × h = ${l} × ${w} × ${h} = ${vol} cm³.`,
+  };
+}
+
+function p4l7(): Problem {
+  // Surface area of rectangular prisms
+  const l = rand(2, 8), w = rand(2, 6), h = rand(2, 5);
+  const sa = 2 * (l * w + l * h + w * h);
+  return {
+    question: `A box: ${l} cm × ${w} cm × ${h} cm.\nSurface area in cm²?`,
+    options: numericOptions(sa, 4, 0, Math.max(15, Math.round(sa * 0.15))),
+    correctAnswer: sa,
+    explanation: `SA = 2(lw + lh + wh) = 2(${l*w} + ${l*h} + ${w*h}) = ${sa} cm².`,
+  };
+}
+
+function p4l8(): Problem {
+  // Angles: supplementary, complementary, vertically opposite
+  const type = rand(0, 2);
+  if (type === 0) {
+    const a = rand(35, 145);
+    return {
+      question: `Two angles are supplementary.\nOne angle is ${a}°.\nWhat is the other?`,
+      options: numericOptions(180 - a, 4, 10, 15),
+      correctAnswer: 180 - a,
+      explanation: `Supplementary angles add to 180°. 180 − ${a} = ${180 - a}°.`,
+    };
+  }
+  if (type === 1) {
+    const a = rand(15, 75);
+    return {
+      question: `Two angles are complementary.\nOne angle is ${a}°.\nWhat is the other?`,
+      options: numericOptions(90 - a, 4, 5, 10),
+      correctAnswer: 90 - a,
+      explanation: `Complementary angles add to 90°. 90 − ${a} = ${90 - a}°.`,
+    };
+  }
+  const a = rand(25, 155);
+  return {
+    question: `Two lines intersect.\nOne angle is ${a}°.\nWhat is the vertically opposite angle?`,
+    options: numericOptions(a, 4, 10, 15),
+    correctAnswer: a,
+    explanation: `Vertically opposite angles are equal. Both = ${a}°.`,
+  };
+}
+
+function p4l9(): Problem {
+  // Triangle angle properties
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    let a = rand(35, 75), b = rand(35, 75);
+    let c = 180 - a - b;
+    if (c < 15) { a = 55; b = 65; c = 60; }
+    return {
+      question: `A triangle has angles ${a}° and ${b}°.\nWhat is the third angle?`,
+      options: numericOptions(c, 4, 10, 15),
+      correctAnswer: c,
+      explanation: `Angles in a triangle sum to 180°. 180 − ${a} − ${b} = ${c}°.`,
+    };
+  }
+  if (variant === 1) {
+    const apex = rand(2, 10) * 10; // 20–100, multiples of 10 → integer base
+    const base = (180 - apex) / 2;
+    return {
+      question: `An isosceles triangle has apex angle ${apex}°.\nWhat is each base angle?`,
+      options: numericOptions(base, 4, 10, 10),
+      correctAnswer: base,
+      explanation: `Base angles are equal: (180 − ${apex}) ÷ 2 = ${base}°.`,
+    };
+  }
+  const a = rand(30, 70), b = rand(30, 70);
+  return {
+    question: `A triangle has two angles: ${a}° and ${b}°.\nWhat is the exterior angle at the third vertex?`,
+    options: numericOptions(a + b, 4, 30, 15),
+    correctAnswer: a + b,
+    explanation: `Exterior angle = sum of the two non-adjacent angles = ${a} + ${b} = ${a + b}°.`,
+  };
+}
+
+function p4l10(): Problem {
+  // BOSS: Combined geometry
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const l = rand(3, 8), w = rand(2, 6), h = rand(2, 5);
+    const vol = l * w * h;
+    const price = rand(2, 8) * 5;
+    return {
+      question: `A room: ${l}m × ${w}m × ${h}m.\nSoil costs R${price}/m³.\nCost to fill it?`,
+      options: numericOptions(vol * price, 4, 0, Math.max(price * 2, Math.round(vol * price * 0.15))),
+      correctAnswer: vol * price,
+      explanation: `Volume = ${l}×${w}×${h} = ${vol} m³. Cost = ${vol} × R${price} = R${vol * price}.`,
+    };
+  }
+  if (variant === 1) {
+    let a = rand(40, 70), b = rand(30, 60);
+    let c = 180 - a - b;
+    if (c < 15) { a = 60; b = 55; c = 65; }
+    return {
+      question: `A triangle has angles ${a}° and ${b}°.\nWhat is the supplement of the third angle?`,
+      options: numericOptions(180 - c, 4, 20, 15),
+      correctAnswer: 180 - c,
+      explanation: `Third angle = 180−${a}−${b} = ${c}°. Supplement = 180−${c} = ${180 - c}°.`,
+    };
+  }
+  const l = rand(3, 7), w = rand(2, 5), h = rand(2, 4);
+  const sa = 2 * (l * w + l * h + w * h);
+  return {
+    question: `Wrap a gift: ${l}cm × ${w}cm × ${h}cm.\nSurface area of paper needed (cm²)?`,
+    options: numericOptions(sa, 4, 0, Math.max(15, Math.round(sa * 0.15))),
+    correctAnswer: sa,
+    explanation: `SA = 2(${l*w} + ${l*h} + ${w*h}) = ${sa} cm².`,
+  };
+}
+
+// ── World 3: The Summit Academy ───────────────────────────────────────────────
+
+function p4l11(): Problem {
+  // Simple probability
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const red = rand(2, 5), blue = rand(2, 5), total = red + blue;
+    const ans = fractionStr(red, total);
+    const wrongs = [fractionStr(blue, total), fractionStr(red, total + 1), fractionStr(red + 1, total)].filter(w => w !== ans);
+    while (wrongs.length < 3) wrongs.push(fractionStr(rand(1, total - 1), total + 1));
+    return {
+      question: `A bag has ${red} red and ${blue} blue balls.\nP(picking red) = ?`,
+      options: shuffle([ans, ...wrongs.slice(0, 3)]),
+      correctAnswer: ans,
+      explanation: `P = favourable ÷ total = ${red} ÷ ${total} = ${ans}.`,
+    };
+  }
+  if (variant === 1) {
+    const favorable = rand(1, 3);
+    const label = favorable === 1 ? 'a 1' : favorable === 2 ? 'a 1 or 2' : 'a 1, 2 or 3';
+    const ans = fractionStr(favorable, 6);
+    const wrongs = [fractionStr(6 - favorable, 6), fractionStr(favorable, 7), fractionStr(favorable + 1, 6)].filter(w => w !== ans);
+    return {
+      question: `A die is rolled.\nP(getting ${label}) = ?`,
+      options: shuffle([ans, ...wrongs.slice(0, 3)]),
+      correctAnswer: ans,
+      explanation: `P = ${favorable} out of 6 = ${ans}.`,
+    };
+  }
+  const red = rand(2, 5), total = rand(red + 2, red + 5);
+  const ans = fractionStr(total - red, total);
+  const wrongs = [fractionStr(red, total), fractionStr(total - red, total + 1), fractionStr(total - red - 1, total)].filter(w => w !== ans);
+  while (wrongs.length < 3) wrongs.push(fractionStr(rand(1, total - 1), total));
+  return {
+    question: `A bag has ${red} red balls out of ${total} total.\nP(NOT picking red) = ?`,
+    options: shuffle([ans, ...wrongs.slice(0, 3)]),
+    correctAnswer: ans,
+    explanation: `P(not red) = ${total - red} ÷ ${total} = ${ans}.`,
+  };
+}
+
+function p4l12(): Problem {
+  // Algebraic expressions: expand and simplify
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = rand(2, 6), b = rand(2, 8), c = rand(2, 8);
+    const ans = `${a * b} + ${a * c}`;
+    return {
+      question: `Expand: ${a}(${b} + ${c})`,
+      options: shuffle([ans, `${a + b} + ${a + c}`, `${a * b} + ${c}`, `${a * (b + c)}`]),
+      correctAnswer: ans,
+      explanation: `${a}×${b} + ${a}×${c} = ${a*b} + ${a*c}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(2, 6), b = rand(5, 12), c = rand(2, b - 2);
+    const ans = `${a * b} − ${a * c}`;
+    return {
+      question: `Expand: ${a}(${b} − ${c})`,
+      options: shuffle([ans, `${a + b} − ${a + c}`, `${a * b} − ${c}`, `${a * (b - c)}`]),
+      correctAnswer: ans,
+      explanation: `${a}×${b} − ${a}×${c} = ${a*b} − ${a*c}.`,
+    };
+  }
+  const a = rand(2, 7), b = rand(2, 7);
+  const ans = `${a + b}x`;
+  return {
+    question: `Simplify: ${a}x + ${b}x`,
+    options: shuffle([ans, `${a * b}x`, `${Math.abs(a - b)}x`, `${a + b + 1}x`]),
+    correctAnswer: ans,
+    explanation: `Collect like terms: (${a} + ${b})x = ${a + b}x.`,
+  };
+}
+
+function p4l13(): Problem {
+  // Linear equations with variables on both sides
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const x = rand(2, 8), a = rand(3, 7), c = rand(1, a - 1), b = rand(2, 10);
+    const d = (a - c) * x + b;
+    return {
+      question: `${a}x + ${b} = ${c}x + ${d}\nWhat is x?`,
+      options: numericOptions(x, 4, 1, 3),
+      correctAnswer: x,
+      explanation: `${a}x − ${c}x = ${d} − ${b}. ${a - c}x = ${d - b}. x = ${x}.`,
+    };
+  }
+  if (variant === 1) {
+    const x = rand(3, 10), a = rand(3, 7), c = rand(1, a - 1), b = rand(2, 8);
+    const d = (a - c) * x - b;
+    if (d < 1) return p4l13();
+    return {
+      question: `${a}x − ${b} = ${c}x + ${d}\nWhat is x?`,
+      options: numericOptions(x, 4, 1, 3),
+      correctAnswer: x,
+      explanation: `${a}x − ${c}x = ${d} + ${b}. ${a - c}x = ${d + b}. x = ${x}.`,
+    };
+  }
+  const a = rand(2, 5), x = rand(2, 9) * a, b = rand(2, 8);
+  const c = x / a + b;
+  return {
+    question: `x ÷ ${a} + ${b} = ${c}\nWhat is x?`,
+    options: numericOptions(x, 4, 1, a * 2),
+    correctAnswer: x,
+    explanation: `x ÷ ${a} = ${c} − ${b} = ${c - b}. x = ${c - b} × ${a} = ${x}.`,
+  };
+}
+
+function p4l14(): Problem {
+  // Arithmetic sequences
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = rand(2, 10), d = rand(2, 8);
+    const seq = [a, a + d, a + 2 * d, a + 3 * d];
+    const next = a + 4 * d;
+    return {
+      question: `What comes next?\n${seq.join(', ')}, ?`,
+      options: numericOptions(next, 4, a, d * 2),
+      correctAnswer: next,
+      explanation: `Common difference = ${d}. Next = ${seq[3]} + ${d} = ${next}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(1, 8), d = rand(2, 7), n = rand(5, 10);
+    const ans = a + (n - 1) * d;
+    return {
+      question: `Sequence starts at ${a}, increases by ${d} each time.\nWhat is term number ${n}?`,
+      options: numericOptions(ans, 4, 0, d * 2),
+      correctAnswer: ans,
+      explanation: `Term n = ${a} + (n−1) × ${d}. Term ${n} = ${a} + ${(n - 1) * d} = ${ans}.`,
+    };
+  }
+  const a = rand(3, 8), d = rand(3, 9);
+  const seq5 = [a, a + d, a + 2 * d, a + 3 * d, a + 4 * d];
+  const missingIdx = rand(1, 3);
+  const missing = seq5[missingIdx];
+  const display = seq5.map((v, i) => (i === missingIdx ? '?' : String(v)));
+  return {
+    question: `Find the missing term:\n${display.join(', ')}`,
+    options: numericOptions(missing, 4, 0, d * 2),
+    correctAnswer: missing,
+    explanation: `Common difference = ${d}. Missing = ${seq5[missingIdx - 1]} + ${d} = ${missing}.`,
+  };
+}
+
+function p4l15(): Problem {
+  // FINAL BOSS — synthesis of all three worlds
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const l = rand(3, 7), w = rand(2, 5), h = rand(2, 4);
+    const vol = l * w * h;
+    const price = rand(2, 8) * 5;
+    return {
+      question: `A pool: ${l}m × ${w}m × ${h}m.\nWater costs R${price}/m³.\nTotal fill cost?`,
+      options: numericOptions(vol * price, 4, 0, Math.max(price * 2, Math.round(vol * price * 0.15))),
+      correctAnswer: vol * price,
+      explanation: `Volume = ${vol} m³. Cost = ${vol} × R${price} = R${vol * price}.`,
+    };
+  }
+  if (variant === 1) {
+    const red = rand(3, 6), total = rand(red + 2, red + 6);
+    const pct = Math.round((red / total) * 100);
+    return {
+      question: `Bag: ${red} red balls out of ${total} total.\nApprox % chance of picking red?`,
+      options: numericOptions(pct, 4, 5, 15),
+      correctAnswer: pct,
+      explanation: `P(red) = ${red} ÷ ${total} ≈ ${pct}%.`,
+    };
+  }
+  const a = rand(2, 5), d = rand(3, 7), n = rand(6, 10);
+  const target = a + (n - 1) * d;
+  return {
+    question: `Sequence: ${a}, ${a + d}, ${a + 2 * d}, …\nWhich term number equals ${target}?`,
+    options: numericOptions(n, 4, 1, 3),
+    correctAnswer: n,
+    explanation: `nth term = ${a} + (n−1)×${d} = ${target}. n−1 = ${n - 1}. n = ${n}.`,
+  };
+}
+
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 const GENERATORS: Record<string, () => Problem> = {
@@ -1660,6 +1963,8 @@ const GENERATORS: Record<string, () => Problem> = {
   '3-6': p3l6, '3-7': p3l7, '3-8': p3l8, '3-9': p3l9, '3-10': p3l10,
   '3-11': p3l11, '3-12': p3l12, '3-13': p3l13, '3-14': p3l14, '3-15': p3l15,
   '4-1': p4l1, '4-2': p4l2, '4-3': p4l3, '4-4': p4l4, '4-5': p4l5,
+  '4-6': p4l6, '4-7': p4l7, '4-8': p4l8, '4-9': p4l9, '4-10': p4l10,
+  '4-11': p4l11, '4-12': p4l12, '4-13': p4l13, '4-14': p4l14, '4-15': p4l15,
 };
 
 export function generateProblem(phase: number, level: number): Problem {

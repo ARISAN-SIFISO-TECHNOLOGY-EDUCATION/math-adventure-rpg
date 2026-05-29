@@ -193,23 +193,48 @@ const P3_WORLDS = [
 // ─── Phase 4 constants ────────────────────────────────────────────────────────
 
 const P4_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
-  1: { emoji: '🏔️', title: 'Welcome to The Pinnacle!',          body: 'Master complex fraction operations — the hardest math yet!',          tip: 'Find a common denominator before adding or subtracting.' },
-  2: { emoji: '🔢', title: 'Decimal Mastery',                    body: 'Two decimal places and multiplication — precision is everything!',    tip: 'Count the total decimal places in your answer.' },
-  3: { emoji: '📈', title: 'Percentage Challenges',               body: 'Percentage change and reverse percentages — the language of finance!', tip: 'Change ÷ original × 100 gives you % change.' },
-  4: { emoji: '🧮', title: 'BODMAS + Exponents',                 body: 'Squares and cubes inside complex expressions — secondary school ready!', tip: 'Exponents come BEFORE multiply and divide.' },
-  5: { emoji: '👑', title: 'FINAL BOSS: The Pinnacle Guardian!', body: 'Multi-step synthesis — every Pinnacle skill in one challenge.',        tip: 'Plan your steps on paper before calculating.' },
+  // World 1 — The Pinnacle
+  1: { emoji: '🏔️', title: 'Welcome to The Pinnacle!',           body: 'Master complex fraction operations — the hardest math yet!',           tip: 'Find a common denominator before adding or subtracting.' },
+  2: { emoji: '🔢', title: 'Decimal Mastery',                     body: 'Two decimal places and multiplication — precision is everything!',     tip: 'Count the total decimal places in your answer.' },
+  3: { emoji: '📈', title: 'Percentage Challenges',                body: 'Percentage change and reverse percentages — the language of finance!',  tip: 'Change ÷ original × 100 gives you % change.' },
+  4: { emoji: '🧮', title: 'BODMAS + Exponents',                  body: 'Squares and cubes inside complex expressions — secondary school ready!', tip: 'Exponents come BEFORE multiply and divide.' },
+  5: { emoji: '👑', title: 'BOSS: The Pinnacle Guardian!',         body: 'Multi-step synthesis — every Pinnacle skill at once!',                 tip: 'Plan your steps before calculating.' },
+  // World 2 — The Geometry Forge
+  6:  { emoji: '📦', title: 'Enter the Geometry Forge!',          body: 'Volume — how much space does a 3D shape fill? Length × width × height!', tip: 'Volume = l × w × h. Don\'t confuse with area!' },
+  7:  { emoji: '🎁', title: 'Surface Area',                       body: 'How much material wraps a box? Add up ALL the faces!',                  tip: 'SA = 2(lw + lh + wh). Six faces, three pairs.' },
+  8:  { emoji: '📐', title: 'Angle Relationships',                body: 'Supplementary, complementary, vertically opposite — angles have rules!', tip: 'Supplementary = 180°. Complementary = 90°.' },
+  9:  { emoji: '🔺', title: 'Triangle Properties',                body: 'All triangles\' angles add to 180°. Isosceles and equilateral have extra rules!', tip: 'Three angles always sum to 180°.' },
+  10: { emoji: '⚙️', title: 'BOSS: The Chief Geometer!',         body: 'Volume, surface area, and angles — all in one forge challenge!',        tip: 'One calculation at a time.' },
+  // World 3 — The Summit Academy
+  11: { emoji: '🎲', title: 'Welcome to the Summit Academy!',     body: 'Probability — how likely is an event? Express as a fraction!',          tip: 'P = favourable outcomes ÷ total outcomes.' },
+  12: { emoji: '🔡', title: 'Expand & Simplify',                  body: 'Algebra: expand brackets and collect like terms!',                      tip: 'a(b + c) = ab + ac. Multiply every term inside.' },
+  13: { emoji: '⚖️', title: 'Equations Both Sides',              body: 'Variables on both sides — move them all to one side first!',            tip: 'Do the same operation to BOTH sides.' },
+  14: { emoji: '📊', title: 'Arithmetic Sequences',               body: 'Find patterns in sequences — spot the common difference!',              tip: 'nth term = first term + (n−1) × difference.' },
+  15: { emoji: '🏆', title: 'FINAL BOSS: The Summit Guardian!',   body: 'The ultimate challenge — geometry, algebra, probability, and sequences!', tip: 'Read carefully. Solve one step at a time.' },
 };
 
 const P4_HINTS: Record<number, string> = {
-  1: '🔢 Find a common denominator first!',
-  2: '💰 Count decimal places in your final answer.',
-  3: '📈 % change = (change ÷ original) × 100.',
-  4: '🧮 Exponents first, then × ÷, then + −.',
-  5: '👑 Take it one step at a time!',
+  1:  '🔢 Find a common denominator first!',
+  2:  '💰 Count decimal places in your final answer.',
+  3:  '📈 % change = (change ÷ original) × 100.',
+  4:  '🧮 Exponents first, then × ÷, then + −.',
+  5:  '👑 Take it one step at a time!',
+  6:  '📦 Volume = l × w × h.',
+  7:  '🎁 SA = 2(lw + lh + wh). Six faces, three pairs.',
+  8:  '📐 Supplementary = 180°. Complementary = 90°.',
+  9:  '🔺 Angles in a triangle always sum to 180°.',
+  10: '⚙️ Solve each part separately, then combine.',
+  11: '🎲 P = favourable ÷ total outcomes.',
+  12: '🔡 Multiply every term inside the bracket.',
+  13: '⚖️ Move all x terms to one side first.',
+  14: '📊 nth term = first + (n−1) × difference.',
+  15: '🏆 One step at a time — you\'ve got this!',
 };
 
 const P4_WORLDS = [
-  { levels: [1, 2, 3, 4, 5], name: 'The Pinnacle', emoji: '🏔️', color: '#9F1239', bgHex: '#FFF1F2', bg: 'bg-[#FFF1F2]', badge: 'bg-[#FECDD3]' },
+  { levels: [1, 2, 3, 4, 5],     name: 'The Pinnacle',        emoji: '🏔️', color: '#9F1239', bgHex: '#FFF1F2', bg: 'bg-[#FFF1F2]', badge: 'bg-[#FECDD3]' },
+  { levels: [6, 7, 8, 9, 10],    name: 'The Geometry Forge',  emoji: '⚙️', color: '#0369A1', bgHex: '#F0F9FF', bg: 'bg-[#F0F9FF]', badge: 'bg-[#BAE6FD]' },
+  { levels: [11, 12, 13, 14, 15], name: 'The Summit Academy', emoji: '🏆', color: '#7C3AED', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#C4B5FD]' },
 ];
 
 // ─── Badge System ─────────────────────────────────────────────────────────────
@@ -349,10 +374,20 @@ export const PHASES: PhaseConfig[] = [
     badgeBg: 'bg-[#C084FC]',
     levels: [
       { n: 16, topic: 'adding and subtracting simple fractions' },
-      { n: 17, topic: 'adding and subtracting decimal numbers' },
-      { n: 18, topic: 'finding a percentage of a number such as 20% of 60' },
-      { n: 19, topic: 'order of operations using BODMAS or PEMDAS' },
+      { n: 17, topic: 'adding and subtracting decimal numbers to 2 decimal places' },
+      { n: 18, topic: 'percentage change and reverse percentages' },
+      { n: 19, topic: 'order of operations: BODMAS with squares and cubes' },
       { n: 20, topic: 'multi-step word problems requiring two or more calculations' },
+      { n: 21, topic: 'volume of rectangular prisms — length × width × height' },
+      { n: 22, topic: 'surface area of rectangular prisms — sum of all faces' },
+      { n: 23, topic: 'angle relationships: supplementary, complementary, vertically opposite' },
+      { n: 24, topic: 'triangle properties — angle sum, isosceles, exterior angles' },
+      { n: 25, topic: 'combined geometry: volume, surface area, and angles' },
+      { n: 26, topic: 'simple probability expressed as a fraction' },
+      { n: 27, topic: 'expanding algebraic expressions and collecting like terms' },
+      { n: 28, topic: 'linear equations with variables on both sides' },
+      { n: 29, topic: 'arithmetic sequences — finding terms and missing values' },
+      { n: 30, topic: 'final boss: geometry, probability, algebra, and sequences combined' },
     ],
   },
 ];
@@ -1047,7 +1082,7 @@ export default function Game() {
     // Show tutorial first time in Phase 1; show world intros at sub-world entries
     const isP2WorldEntry = startPhase === 2 && [1, 6, 11, 16].includes(startLevel);
     const isP3WorldEntry = startPhase === 3 && [1, 6, 11].includes(startLevel);
-    const isP4WorldEntry = startPhase === 4 && startLevel === 1;
+    const isP4WorldEntry = startPhase === 4 && [1, 6, 11].includes(startLevel);
     if (startPhase === 1 && !tutorialDone) {
       setGameState('TUTORIAL');
     } else if (startPhase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry) {
@@ -1153,6 +1188,7 @@ export default function Game() {
           const nextLevelInPhase = levelInPhase + 1;
           const isP2WorldEntry = !wasLastLevel && phase === 2 && [6, 11, 16].includes(nextLevelInPhase);
           const isP3WorldEntry = !wasLastLevel && phase === 3 && [6, 11].includes(nextLevelInPhase);
+          const isP4WorldEntry = !wasLastLevel && phase === 4 && [6, 11].includes(nextLevelInPhase);
 
           if (wasLastLevel) {
             setIsPhaseTransition(true);
@@ -1174,7 +1210,7 @@ export default function Game() {
             confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#F97316', '#EF4444', '#DC2626'] });
           }
           // Pre-load next question so level intro card is ready
-          if (!wasLastLevel && (phase === 1 || isP2WorldEntry || isP3WorldEntry)) {
+          if (!wasLastLevel && (phase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry)) {
             loadQuestion(phase, nextLevelInPhase);
           }
         }, 1500);
