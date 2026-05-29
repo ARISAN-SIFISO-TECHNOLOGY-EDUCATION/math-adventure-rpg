@@ -237,12 +237,60 @@ const P4_WORLDS = [
   { levels: [11, 12, 13, 14, 15], name: 'The Summit Academy', emoji: '🏆', color: '#7C3AED', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#C4B5FD]' },
 ];
 
+// ─── Phase 5 constants ────────────────────────────────────────────────────────
+
+const P5_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
+  // World 1 — The Iron Citadel
+  1:  { emoji: '⚔️', title: 'Enter the Iron Citadel!',            body: 'Algebra begins — substitute values into expressions and evaluate.', tip: 'Replace x with the given number and calculate.' },
+  2:  { emoji: '🔣', title: 'Double Bracket Expansion',           body: 'Expand (x + a)(x + b) — use FOIL: First, Outer, Inner, Last.', tip: 'FOIL: x² + bx + ax + ab = x² + (a+b)x + ab.' },
+  3:  { emoji: '🔩', title: 'Factorising',                        body: 'Reverse expansion — find the common factor or spot the difference of squares.', tip: 'Find the HCF of all terms first.' },
+  4:  { emoji: '⚖️', title: 'Complex Equations',                 body: 'Solve equations with brackets and fractions — same rules, more steps.', tip: 'Clear brackets first, then isolate x.' },
+  5:  { emoji: '🗡️', title: 'BOSS: The Iron Warden!',            body: 'Full algebra challenge — substitution, expansion, and equations.', tip: 'Take it one step at a time.' },
+  // World 2 — The Storm Fortress
+  6:  { emoji: '⚡', title: 'Enter the Storm Fortress!',          body: 'Pythagoras theorem — c² = a² + b². Find the missing side of any right triangle.', tip: 'Hypotenuse is always the longest side, opposite the right angle.' },
+  7:  { emoji: '📐', title: 'Pythagoras: Shorter Side',           body: 'Find a shorter side: a² = c² − b². Subtract, then square root.', tip: 'Rearrange: a² = c² − b².' },
+  8:  { emoji: '🔀', title: 'Parallel Line Angles',              body: 'Corresponding = equal. Alternate = equal. Co-interior = 180°.', tip: 'Z-angles (alternate) are equal. C-angles (co-interior) add to 180°.' },
+  9:  { emoji: '📈', title: 'Straight Line Functions',            body: 'Gradient = rise ÷ run = (y₂−y₁) ÷ (x₂−x₁). y = mx + c.', tip: 'Gradient tells you how steep the line is.' },
+  10: { emoji: '🌩️', title: 'BOSS: The Storm Marshal!',          body: 'Pythagoras, angles, and straight lines — the fortress is yours to conquer!', tip: 'Identify which formula to use first.' },
+  // World 3 — The Oracle's Nexus
+  11: { emoji: '🔮', title: "Enter the Oracle's Nexus!",          body: 'Scientific notation — write very large numbers as a × 10ⁿ.', tip: 'The number before × 10ⁿ must be between 1 and 10.' },
+  12: { emoji: '➖', title: 'Integer Operations',                 body: 'Negatives: (−)(−) = +. (−)(+) = −. Subtracting a negative = adding.', tip: 'Two negatives make a positive when multiplying or dividing.' },
+  13: { emoji: '🎲', title: 'Advanced Probability',               body: 'P(not A) = 1 − P(A). P(A and B) = P(A) × P(B) for independent events.', tip: 'Always check: do all probabilities add to 1?' },
+  14: { emoji: '📊', title: 'Quartiles and Spread',               body: 'Quartiles split data into four equal parts. IQR = Q3 − Q1.', tip: 'Sort the data first, then find Q1 (25%) and Q3 (75%).' },
+  15: { emoji: '🧠', title: 'FINAL BOSS: The Oracle!',            body: 'The ultimate synthesis — algebra, geometry, data, and probability combined!', tip: 'Identify the topic, choose the right formula, execute.' },
+};
+
+const P5_HINTS: Record<number, string> = {
+  1:  '⚔️ Replace x with the number and calculate.',
+  2:  '🔣 FOIL: x² + (a+b)x + ab.',
+  3:  '🔩 Find the HCF of all terms first.',
+  4:  '⚖️ Clear brackets, then isolate x.',
+  5:  '🗡️ One step at a time.',
+  6:  '⚡ c² = a² + b². Square root at the end.',
+  7:  '📐 a² = c² − b². Subtract then root.',
+  8:  '🔀 Z = equal. C = 180°. F = equal.',
+  9:  '📈 m = (y₂−y₁) ÷ (x₂−x₁).',
+  10: '🌩️ Identify the right formula first.',
+  11: '🔮 1 ≤ a < 10 in a × 10ⁿ.',
+  12: '➖ Two negatives multiplied = positive.',
+  13: '🎲 P(not A) = 1 − P(A).',
+  14: '📊 Sort first, then find the middle.',
+  15: '🧠 Identify the topic, then apply the formula.',
+};
+
+const P5_WORLDS = [
+  { levels: [1, 2, 3, 4, 5],     name: 'The Iron Citadel',    emoji: '⚔️', color: '#4338CA', bgHex: '#EEF2FF', bg: 'bg-[#EEF2FF]', badge: 'bg-[#A5B4FC]' },
+  { levels: [6, 7, 8, 9, 10],    name: 'The Storm Fortress',  emoji: '⚡', color: '#0F766E', bgHex: '#F0FDFA', bg: 'bg-[#F0FDFA]', badge: 'bg-[#99F6E4]' },
+  { levels: [11, 12, 13, 14, 15], name: "The Oracle's Nexus", emoji: '🔮', color: '#6D28D9', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#DDD6FE]' },
+];
+
 // ─── Badge System ─────────────────────────────────────────────────────────────
 const BADGES: { id: string; emoji: string; label: string; desc: string }[] = [
   { id: 'phase1_complete', emoji: '🌱', label: 'Sprout',           desc: 'Complete Pre-School'       },
   { id: 'phase2_complete', emoji: '📚', label: 'Scholar',          desc: 'Complete Lower Primary'    },
   { id: 'phase3_complete', emoji: '🗺️', label: 'Navigator',        desc: 'Complete Higher Primary'   },
   { id: 'phase4_complete', emoji: '🏆', label: 'Legend',           desc: 'Master all 4 phases'       },
+  { id: 'phase5_complete', emoji: '🧠', label: 'Mastermind',       desc: 'Master all 5 phases'       },
   { id: 'boss_slayer',     emoji: '💀', label: 'Boss Slayer',      desc: 'Defeat your first boss'    },
   { id: 'streak_3',        emoji: '🔥', label: 'Hot Streak',       desc: 'Play 3 days in a row'      },
   { id: 'streak_7',        emoji: '🔥🔥','label': 'On Fire!',      desc: 'Play 7 days in a row'      },
@@ -255,6 +303,7 @@ function getHint(phase: number, levelInPhase: number): string {
   if (phase === 1) return PHASE1_HINTS[levelInPhase] ?? '';
   if (phase === 2) return P2_HINTS[levelInPhase] ?? '';
   if (phase === 3) return P3_HINTS[levelInPhase] ?? '';
+  if (phase === 5) return P5_HINTS[levelInPhase] ?? '';
   if (phase === 4) return P4_HINTS[levelInPhase] ?? '';
   return '';
 }
@@ -388,6 +437,35 @@ export const PHASES: PhaseConfig[] = [
       { n: 28, topic: 'linear equations with variables on both sides' },
       { n: 29, topic: 'arithmetic sequences — finding terms and missing values' },
       { n: 30, topic: 'final boss: geometry, probability, algebra, and sequences combined' },
+    ],
+  },
+  {
+    id: 5,
+    name: 'Secondary',
+    ageRange: 'Ages 13–14',
+    emoji: '🧠',
+    bgColor: 'bg-[#EEF2FF]',
+    borderColor: 'border-[#818CF8]',
+    badgeBg: 'bg-[#A5B4FC]',
+    levels: [
+      // World 1 — The Iron Citadel
+      { n: 31, topic: 'algebraic substitution — evaluate expressions for a given value of x' },
+      { n: 32, topic: 'expanding double brackets — (x + a)(x + b) using FOIL' },
+      { n: 33, topic: 'factorising — common factor and difference of two squares' },
+      { n: 34, topic: 'solving equations with brackets and fractions' },
+      { n: 35, topic: 'combined algebra boss — substitution, expansion, equations' },
+      // World 2 — The Storm Fortress
+      { n: 36, topic: 'Pythagoras theorem — find the hypotenuse' },
+      { n: 37, topic: 'Pythagoras theorem — find a shorter side' },
+      { n: 38, topic: 'parallel line angle relationships — corresponding, alternate, co-interior' },
+      { n: 39, topic: 'straight line functions — gradient and y = mx + c' },
+      { n: 40, topic: 'combined geometry boss — Pythagoras, angles, and straight lines' },
+      // World 3 — The Oracle's Nexus
+      { n: 41, topic: 'scientific notation — express large numbers as a × 10ⁿ' },
+      { n: 42, topic: 'integer operations — multiplying and subtracting negative numbers' },
+      { n: 43, topic: 'advanced probability — complementary events and independent events' },
+      { n: 44, topic: 'quartiles and interquartile range from a dataset' },
+      { n: 45, topic: 'final boss — algebra, geometry, data, and probability combined' },
     ],
   },
 ];
@@ -716,21 +794,26 @@ function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: 
   const isPhase2 = phase === 2;
   const isPhase3 = phase === 3;
   const isPhase4 = phase === 4;
+  const isPhase5 = phase === 5;
 
-  const intro = isPhase4
-    ? (P4_LEVEL_INTROS[levelInPhase] ?? P4_LEVEL_INTROS[1])
-    : isPhase3
-      ? (P3_LEVEL_INTROS[levelInPhase] ?? P3_LEVEL_INTROS[1])
-      : isPhase2
-        ? (P2_LEVEL_INTROS[levelInPhase] ?? P2_LEVEL_INTROS[1])
-        : (LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1]);
+  const intro = isPhase5
+    ? (P5_LEVEL_INTROS[levelInPhase] ?? P5_LEVEL_INTROS[1])
+    : isPhase4
+      ? (P4_LEVEL_INTROS[levelInPhase] ?? P4_LEVEL_INTROS[1])
+      : isPhase3
+        ? (P3_LEVEL_INTROS[levelInPhase] ?? P3_LEVEL_INTROS[1])
+        : isPhase2
+          ? (P2_LEVEL_INTROS[levelInPhase] ?? P2_LEVEL_INTROS[1])
+          : (LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1]);
 
-  const world = isPhase4
-    ? P4_WORLDS.find(w => w.levels.includes(levelInPhase))
-    : isPhase3
-      ? P3_WORLDS.find(w => w.levels.includes(levelInPhase))
-      : isPhase2
-        ? P2_WORLDS.find(w => w.levels.includes(levelInPhase))
+  const world = isPhase5
+    ? P5_WORLDS.find(w => w.levels.includes(levelInPhase))
+    : isPhase4
+      ? P4_WORLDS.find(w => w.levels.includes(levelInPhase))
+      : isPhase3
+        ? P3_WORLDS.find(w => w.levels.includes(levelInPhase))
+        : isPhase2
+          ? P2_WORLDS.find(w => w.levels.includes(levelInPhase))
         : null;
   const isWorldEntry = (isPhase2 || isPhase3 || isPhase4) && world?.levels[0] === levelInPhase;
 
@@ -1083,9 +1166,10 @@ export default function Game() {
     const isP2WorldEntry = startPhase === 2 && [1, 6, 11, 16].includes(startLevel);
     const isP3WorldEntry = startPhase === 3 && [1, 6, 11].includes(startLevel);
     const isP4WorldEntry = startPhase === 4 && [1, 6, 11].includes(startLevel);
+    const isP5WorldEntry = startPhase === 5 && [1, 6, 11].includes(startLevel);
     if (startPhase === 1 && !tutorialDone) {
       setGameState('TUTORIAL');
-    } else if (startPhase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry) {
+    } else if (startPhase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry || isP5WorldEntry) {
       setGameState('LEVEL_INTRO');
       loadQuestion(startPhase, startLevel);
     } else {
@@ -1152,7 +1236,7 @@ export default function Game() {
 
       if (newProgress >= requiredToWin) {
         const wasLastLevel = levelInPhase === currentPhaseConfig.levels.length;
-        const wasLastPhase = phase === 4;
+        const wasLastPhase = phase === 5;
         const wasBonus = isBossLevel(phase, levelInPhase);
 
         setTimeout(() => {
@@ -1181,6 +1265,7 @@ export default function Game() {
             if (phase === 2) awardBadge('phase2_complete');
             if (phase === 3) awardBadge('phase3_complete');
             if (phase === 4) awardBadge('phase4_complete');
+            if (phase === 5) awardBadge('phase5_complete');
           }
           // Award boss-slayer badge
           if (wasBonus) awardBadge('boss_slayer');
@@ -1189,6 +1274,7 @@ export default function Game() {
           const isP2WorldEntry = !wasLastLevel && phase === 2 && [6, 11, 16].includes(nextLevelInPhase);
           const isP3WorldEntry = !wasLastLevel && phase === 3 && [6, 11].includes(nextLevelInPhase);
           const isP4WorldEntry = !wasLastLevel && phase === 4 && [6, 11].includes(nextLevelInPhase);
+          const isP5WorldEntry = !wasLastLevel && phase === 5 && [6, 11].includes(nextLevelInPhase);
 
           if (wasLastLevel) {
             setIsPhaseTransition(true);
@@ -1210,7 +1296,7 @@ export default function Game() {
             confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#F97316', '#EF4444', '#DC2626'] });
           }
           // Pre-load next question so level intro card is ready
-          if (!wasLastLevel && (phase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry)) {
+          if (!wasLastLevel && (phase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry || isP5WorldEntry)) {
             loadQuestion(phase, nextLevelInPhase);
           }
         }, 1500);
@@ -1628,6 +1714,14 @@ export default function Game() {
                       </div>
                     );
                   })()}
+                  {phase === 5 && P5_HINTS[levelInPhase] && (() => {
+                    const w5 = P5_WORLDS.find(w => w.levels.includes(levelInPhase));
+                    return (
+                      <div className="border-2 rounded-2xl px-4 py-2 mb-4 text-center" style={{ background: w5?.bgHex ?? '#EEF2FF', borderColor: w5?.color ?? '#4338CA' }}>
+                        <p className="text-sm font-black" style={{ color: w5?.color ?? '#4338CA' }}>{P5_HINTS[levelInPhase]}</p>
+                      </div>
+                    );
+                  })()}
 
                   {/* Answer buttons — hidden during subitizing flash */}
                   {(!problem?.meta?.isSubitizing || !flashVisible) && (
@@ -1683,7 +1777,7 @@ export default function Game() {
                   </div>
                   <h2 className="text-4xl font-black mb-3">{bossDefeated ? 'BOSS DEFEATED! 💀' : 'LEVEL UP!'}</h2>
                   {(phase === 2 || phase === 3 || phase === 4) && (() => {
-                    const worlds = phase === 4 ? P4_WORLDS : phase === 3 ? P3_WORLDS : P2_WORLDS;
+                    const worlds = phase === 5 ? P5_WORLDS : phase === 4 ? P4_WORLDS : phase === 3 ? P3_WORLDS : P2_WORLDS;
                     const w = worlds.find(ww => ww.levels.includes(levelInPhase));
                     if (!w) return null;
                     return (

@@ -1949,6 +1949,484 @@ function p4l15(): Problem {
   };
 }
 
+// PHASE 5 — Secondary (Ages 13–14) — CAPS Grade 8–9
+// World 1: The Iron Citadel   (algebra)           — levels  1–5
+// World 2: The Storm Fortress (geometry)           — levels  6–10
+// World 3: The Oracle's Nexus (data & science)    — levels 11–15
+
+// ── World 1: The Iron Citadel ─────────────────────────────────────────────────
+
+function p5l1(): Problem {
+  // Algebraic substitution — evaluate expression for given x
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = rand(2, 8), b = rand(1, 12), x = rand(2, 7);
+    const ans = a * x + b;
+    return {
+      question: `If x = ${x}, find ${a}x + ${b}.`,
+      options: numericOptions(ans, 4, 0, Math.max(8, Math.round(ans * 0.15))),
+      correctAnswer: ans,
+      explanation: `Substitute x = ${x}: ${a}(${x}) + ${b} = ${a * x} + ${b} = ${ans}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(2, 5), b = rand(1, 8), x = rand(2, 5);
+    const ans = a * x * x + b;
+    return {
+      question: `If x = ${x}, find ${a}x² + ${b}.`,
+      options: numericOptions(ans, 4, 0, Math.max(10, Math.round(ans * 0.15))),
+      correctAnswer: ans,
+      explanation: `${a}(${x})² + ${b} = ${a * x * x} + ${b} = ${ans}.`,
+    };
+  }
+  const a = rand(2, 6), b = rand(2, 5), x = rand(2, 5);
+  const ans = a * x * x - b * x;
+  if (ans <= 0) return p5l1();
+  return {
+    question: `If x = ${x}, find ${a}x² − ${b}x.`,
+    options: numericOptions(ans, 4, 0, Math.max(10, Math.round(ans * 0.15))),
+    correctAnswer: ans,
+    explanation: `${a}(${x})² − ${b}(${x}) = ${a * x * x} − ${b * x} = ${ans}.`,
+  };
+}
+
+function p5l2(): Problem {
+  // Expand double brackets (x + a)(x + b) = x² + (a+b)x + ab
+  const a = rand(1, 7), b = rand(1, 7);
+  const s = a + b, p = a * b;
+  const ans = `x² + ${s}x + ${p}`;
+  return {
+    question: `Expand: (x + ${a})(x + ${b})`,
+    options: shuffle([ans, `x² + ${p}x + ${s}`, `x² + ${s}x + ${p + 1}`, `x² + ${s + 1}x + ${p}`]),
+    correctAnswer: ans,
+    explanation: `FOIL: x² + ${b}x + ${a}x + ${p} = x² + ${s}x + ${p}.`,
+  };
+}
+
+function p5l3(): Problem {
+  // Factorising: common factor or difference of two squares
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    // ax + ac = a(x + c)
+    const a = rand(2, 6), c = rand(2, 8);
+    const ac = a * c;
+    const ans = `${a}(x + ${c})`;
+    return {
+      question: `Factorise: ${a}x + ${ac}`,
+      options: shuffle([ans, `${a}(x + ${c + 1})`, `${a - 1}(x + ${c})`, `${a}(x + ${ac})`]),
+      correctAnswer: ans,
+      explanation: `HCF is ${a}. ${a}x + ${ac} = ${a}(x + ${c}).`,
+    };
+  }
+  if (variant === 1) {
+    // abx + ac = a(bx + c)
+    const a = rand(2, 5), b = rand(2, 5), c = rand(2, 6);
+    const ab = a * b, ac = a * c;
+    const ans = `${a}(${b}x + ${c})`;
+    return {
+      question: `Factorise: ${ab}x + ${ac}`,
+      options: shuffle([ans, `${a}(${b + 1}x + ${c})`, `${a - 1}(${b}x + ${c})`, `${a}(${b}x + ${c + 1})`]),
+      correctAnswer: ans,
+      explanation: `HCF is ${a}. ${ab}x + ${ac} = ${a}(${b}x + ${c}).`,
+    };
+  }
+  // Difference of two squares: x² − n² = (x+n)(x−n)
+  const squares = [
+    { expr: 'x² − 4',  ans: '(x + 2)(x − 2)', wrongs: ['(x + 2)²', '(x − 2)²', '(x + 4)(x − 1)'] },
+    { expr: 'x² − 9',  ans: '(x + 3)(x − 3)', wrongs: ['(x + 3)²', '(x − 3)²', '(x + 9)(x − 1)'] },
+    { expr: 'x² − 16', ans: '(x + 4)(x − 4)', wrongs: ['(x + 4)²', '(x − 4)²', '(x + 8)(x − 2)'] },
+    { expr: 'x² − 25', ans: '(x + 5)(x − 5)', wrongs: ['(x + 5)²', '(x − 5)²', '(x + 25)(x − 1)'] },
+  ];
+  const sq = squares[rand(0, squares.length - 1)];
+  return {
+    question: `Factorise: ${sq.expr}`,
+    options: shuffle([sq.ans, ...sq.wrongs]),
+    correctAnswer: sq.ans,
+    explanation: `Difference of squares: a² − b² = (a+b)(a−b). ${sq.expr} = ${sq.ans}.`,
+  };
+}
+
+function p5l4(): Problem {
+  // Equations with brackets or fractions
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    // (ax + b) / c = d  →  ax = cd − b  →  x = (cd−b)/a
+    const a = rand(2, 4), c = rand(2, 5), d = rand(3, 9), b = rand(1, 8);
+    const num = c * d - b;
+    if (num <= 0 || num % a !== 0) return p5l4();
+    const x = num / a;
+    return {
+      question: `(${a}x + ${b}) ÷ ${c} = ${d}\nWhat is x?`,
+      options: numericOptions(x, 4, 1, 4),
+      correctAnswer: x,
+      explanation: `${a}x + ${b} = ${c * d}. ${a}x = ${num}. x = ${x}.`,
+    };
+  }
+  if (variant === 1) {
+    // a(x + b) = c  →  x = c/a − b
+    const a = rand(2, 5), b = rand(2, 8), x = rand(2, 10);
+    const c = a * (x + b);
+    return {
+      question: `${a}(x + ${b}) = ${c}\nWhat is x?`,
+      options: numericOptions(x, 4, 1, 4),
+      correctAnswer: x,
+      explanation: `x + ${b} = ${c} ÷ ${a} = ${c / a}. x = ${c / a} − ${b} = ${x}.`,
+    };
+  }
+  // ax + b = cx + d with larger numbers
+  const x = rand(3, 12), a = rand(4, 9), c = rand(1, a - 2), b = rand(2, 10);
+  const d = (a - c) * x + b;
+  return {
+    question: `${a}x + ${b} = ${c}x + ${d}\nWhat is x?`,
+    options: numericOptions(x, 4, 1, 4),
+    correctAnswer: x,
+    explanation: `${a - c}x = ${d - b}. x = ${d - b} ÷ ${a - c} = ${x}.`,
+  };
+}
+
+function p5l5(): Problem {
+  // BOSS: Combined algebra — substitution into expanded/factorised form
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = rand(2, 5), b = rand(1, 8), c = rand(2, 6), x = rand(2, 5);
+    const ans = a * x * x + b * x + c;
+    return {
+      question: `If x = ${x}, find ${a}x² + ${b}x + ${c}.`,
+      options: numericOptions(ans, 4, 0, Math.max(12, Math.round(ans * 0.15))),
+      correctAnswer: ans,
+      explanation: `${a}(${x})² + ${b}(${x}) + ${c} = ${a * x * x} + ${b * x} + ${c} = ${ans}.`,
+    };
+  }
+  if (variant === 1) {
+    // Solve then substitute
+    const a = rand(3, 7), b = rand(2, 10), x = rand(2, 8);
+    const c = a * x + b;
+    const ansExpr = 2 * x + 1;
+    return {
+      question: `${a}x + ${b} = ${c}. Find 2x + 1.`,
+      options: numericOptions(ansExpr, 4, 1, 4),
+      correctAnswer: ansExpr,
+      explanation: `x = (${c} − ${b}) ÷ ${a} = ${x}. Then 2(${x}) + 1 = ${ansExpr}.`,
+    };
+  }
+  const a = rand(2, 6), b = rand(2, 8), c = a + b, p = a * b;
+  const x = rand(2, 5);
+  const ans = x * x + c * x + p;
+  return {
+    question: `(x + ${a})(x + ${b}) for x = ${x}.\nWhat is the value?`,
+    options: numericOptions(ans, 4, 0, Math.max(10, Math.round(ans * 0.15))),
+    correctAnswer: ans,
+    explanation: `Expand: x² + ${c}x + ${p}. At x = ${x}: ${x * x} + ${c * x} + ${p} = ${ans}.`,
+  };
+}
+
+// ── World 2: The Storm Fortress ───────────────────────────────────────────────
+
+function p5l6(): Problem {
+  // Pythagoras — find the hypotenuse
+  const triples = [[3,4,5],[5,12,13],[6,8,10],[8,15,17],[9,12,15],[7,24,25]];
+  const [a, b, c] = triples[rand(0, triples.length - 1)];
+  return {
+    question: `A right triangle has legs ${a} cm and ${b} cm.\nFind the hypotenuse.`,
+    options: numericOptions(c, 4, c - 4, 4),
+    correctAnswer: c,
+    explanation: `Pythagoras: c² = ${a}² + ${b}² = ${a*a} + ${b*b} = ${c*c}. c = √${c*c} = ${c} cm.`,
+  };
+}
+
+function p5l7(): Problem {
+  // Pythagoras — find the shorter side
+  const triples = [[3,4,5],[5,12,13],[6,8,10],[8,15,17],[9,12,15],[7,24,25]];
+  const [a, b, c] = triples[rand(0, triples.length - 1)];
+  const findA = Math.random() < 0.5;
+  const known = findA ? b : a;
+  const ans   = findA ? a : b;
+  return {
+    question: `A right triangle has hypotenuse ${c} cm and one leg ${known} cm.\nFind the other leg.`,
+    options: numericOptions(ans, 4, ans - 4, 4),
+    correctAnswer: ans,
+    explanation: `a² = c² − b² = ${c*c} − ${known*known} = ${ans*ans}. a = √${ans*ans} = ${ans} cm.`,
+  };
+}
+
+function p5l8(): Problem {
+  // Parallel line angle relationships
+  const variant = rand(0, 2);
+  const angle = rand(35, 145);
+  if (variant === 0) {
+    return {
+      question: `Two parallel lines are cut by a transversal.\nOne angle is ${angle}°.\nWhat is the corresponding angle?`,
+      options: numericOptions(angle, 4, 10, 15),
+      correctAnswer: angle,
+      explanation: `Corresponding angles are equal when lines are parallel. Both = ${angle}°.`,
+    };
+  }
+  if (variant === 1) {
+    return {
+      question: `Two parallel lines are cut by a transversal.\nOne angle is ${angle}°.\nWhat is the alternate interior angle?`,
+      options: numericOptions(angle, 4, 10, 15),
+      correctAnswer: angle,
+      explanation: `Alternate interior angles are equal. Both = ${angle}°.`,
+    };
+  }
+  const coInt = 180 - angle;
+  return {
+    question: `Two parallel lines are cut by a transversal.\nOne angle is ${angle}°.\nWhat is the co-interior angle?`,
+    options: numericOptions(coInt, 4, 10, 15),
+    correctAnswer: coInt,
+    explanation: `Co-interior angles add to 180°. ${angle}° + ? = 180°. ? = ${coInt}°.`,
+  };
+}
+
+function p5l9(): Problem {
+  // Gradient of a straight line through two points
+  const variant = rand(0, 1);
+  if (variant === 0) {
+    // Two points, find gradient m = (y2-y1)/(x2-x1)
+    const x1 = 0, x2 = rand(2, 6);
+    const m  = rand(1, 5);
+    const y1 = rand(0, 5), y2 = y1 + m * x2;
+    return {
+      question: `A line passes through (${x1}, ${y1}) and (${x2}, ${y2}).\nWhat is the gradient?`,
+      options: numericOptions(m, 4, 1, 3),
+      correctAnswer: m,
+      explanation: `m = (y₂ − y₁) ÷ (x₂ − x₁) = (${y2} − ${y1}) ÷ (${x2} − ${x1}) = ${y2-y1} ÷ ${x2} = ${m}.`,
+    };
+  }
+  // y = mx + c — find y for given x
+  const m = rand(2, 5), c = rand(1, 8), x = rand(1, 6);
+  const y = m * x + c;
+  return {
+    question: `Line: y = ${m}x + ${c}.\nWhat is y when x = ${x}?`,
+    options: numericOptions(y, 4, 0, Math.max(6, Math.round(y * 0.15))),
+    correctAnswer: y,
+    explanation: `y = ${m}(${x}) + ${c} = ${m * x} + ${c} = ${y}.`,
+  };
+}
+
+function p5l10(): Problem {
+  // BOSS: Combined geometry — Pythagoras + angles
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const triples = [[3,4,5],[5,12,13],[6,8,10],[8,15,17]];
+    const [a, b, c] = triples[rand(0, triples.length - 1)];
+    const pricePerCm = rand(2, 5) * 10;
+    return {
+      question: `A right triangle: legs ${a} m and ${b} m.\nFencing costs R${pricePerCm}/m.\nCost to fence the hypotenuse?`,
+      options: numericOptions(c * pricePerCm, 4, 0, pricePerCm * 2),
+      correctAnswer: c * pricePerCm,
+      explanation: `Hypotenuse = ${c} m. Cost = ${c} × R${pricePerCm} = R${c * pricePerCm}.`,
+    };
+  }
+  if (variant === 1) {
+    const angle = rand(35, 80);
+    const alt   = angle;
+    const coInt = 180 - angle;
+    const useAlt = Math.random() < 0.5;
+    return {
+      question: `Parallel lines, transversal crosses at ${angle}°.\nFind the co-interior angle.`,
+      options: numericOptions(coInt, 4, 10, 15),
+      correctAnswer: coInt,
+      explanation: `Co-interior angles sum to 180°. 180 − ${angle} = ${coInt}°.`,
+    };
+  }
+  const m = rand(2, 5), c = rand(1, 8);
+  const x1 = rand(1, 4), x2 = x1 + rand(2, 4);
+  const y1 = m * x1 + c, y2 = m * x2 + c;
+  return {
+    question: `Line y = ${m}x + ${c}.\nWhat is the gradient between\n(${x1}, ${y1}) and (${x2}, ${y2})?`,
+    options: numericOptions(m, 4, 1, 3),
+    correctAnswer: m,
+    explanation: `m = (${y2}−${y1}) ÷ (${x2}−${x1}) = ${y2-y1} ÷ ${x2-x1} = ${m}.`,
+  };
+}
+
+// ── World 3: The Oracle's Nexus ───────────────────────────────────────────────
+
+function p5l11(): Problem {
+  // Scientific notation — large numbers only (Grade 8)
+  const mantissas = [1.2, 1.5, 2.0, 2.4, 3.0, 3.5, 4.0, 5.0, 6.0, 7.5, 8.0, 9.0];
+  const m = mantissas[rand(0, mantissas.length - 1)];
+  const exp = rand(3, 8);
+  const formatted = m % 1 === 0 ? String(m) : m.toFixed(1);
+  const ans = `${formatted} × 10^${exp}`;
+  const w1  = `${formatted} × 10^${exp + 1}`;
+  const w2  = `${formatted} × 10^${exp - 1}`;
+  const m2  = mantissas.filter(v => v !== m)[rand(0, mantissas.length - 2)];
+  const m2f = m2 % 1 === 0 ? String(m2) : m2.toFixed(1);
+  const w3  = `${m2f} × 10^${exp}`;
+  // Build the display number
+  const fullNum = (m * Math.pow(10, exp)).toLocaleString('en-ZA');
+  return {
+    question: `Write ${fullNum} in scientific notation.`,
+    options: shuffle([ans, w1, w2, w3]),
+    correctAnswer: ans,
+    explanation: `Move decimal to get ${formatted}. Count ${exp} places → ${formatted} × 10^${exp}.`,
+  };
+}
+
+function p5l12(): Problem {
+  // Integer operations with negatives
+  const variant = rand(0, 3);
+  if (variant === 0) {
+    const a = rand(2, 9), b = rand(2, 9);
+    return {
+      question: `(−${a}) × (−${b}) = ?`,
+      options: numericOptions(a * b, 4, 0, Math.max(8, Math.round(a * b * 0.2))),
+      correctAnswer: a * b,
+      explanation: `Negative × negative = positive. (−${a}) × (−${b}) = +${a * b}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(2, 9), b = rand(2, 9);
+    return {
+      question: `(−${a}) × ${b} = ?`,
+      options: shuffle([-(a * b), a * b, a - b, a + b]),
+      correctAnswer: -(a * b),
+      explanation: `Negative × positive = negative. (−${a}) × ${b} = −${a * b}.`,
+    };
+  }
+  if (variant === 2) {
+    const a = rand(3, 12), b = rand(2, 6);
+    return {
+      question: `${a} − (−${b}) = ?`,
+      options: numericOptions(a + b, 4, 0, 5),
+      correctAnswer: a + b,
+      explanation: `Subtracting a negative = adding. ${a} − (−${b}) = ${a} + ${b} = ${a + b}.`,
+    };
+  }
+  const a = rand(2, 7), b = rand(2, 7);
+  const ans = -(a + b);
+  return {
+    question: `−${a} + (−${b}) = ?`,
+    options: shuffle([ans, a + b, a - b, -(a - b)]),
+    correctAnswer: ans,
+    explanation: `Both negative: −${a} + (−${b}) = −(${a} + ${b}) = −${a + b}.`,
+  };
+}
+
+function p5l13(): Problem {
+  // Probability: complementary, simple combined
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    // Complementary: P(not A) = 1 − P(A)
+    const num = rand(1, 4), den = rand(num + 1, 8);
+    const compStr = fractionStr(den - num, den);
+    const origStr = fractionStr(num, den);
+    return {
+      question: `P(event A) = ${origStr}.\nWhat is P(not A)?`,
+      options: shuffle([compStr, origStr, fractionStr(num + 1, den), fractionStr(den - num - 1, den)].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+      correctAnswer: compStr,
+      explanation: `P(not A) = 1 − P(A) = 1 − ${origStr} = ${compStr}.`,
+    };
+  }
+  if (variant === 1) {
+    // P(A and B) for independent events
+    const pA = [1, 1, 1, 2, 3].map((n, _, arr) => fractionStr(n, arr.length));
+    const num1 = rand(1, 3), den1 = rand(num1 + 1, 6);
+    const num2 = rand(1, 3), den2 = rand(num2 + 1, 6);
+    const numAns = num1 * num2, denAns = den1 * den2;
+    const ansStr = fractionStr(numAns, denAns);
+    const w1 = fractionStr(num1 + num2, den1 + den2);
+    const w2 = fractionStr(numAns + 1, denAns);
+    const w3 = fractionStr(numAns, denAns + den1);
+    return {
+      question: `P(A) = ${fractionStr(num1, den1)}, P(B) = ${fractionStr(num2, den2)}.\nA and B are independent.\nP(A and B) = ?`,
+      options: shuffle([ansStr, w1, w2, w3].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+      correctAnswer: ansStr,
+      explanation: `P(A and B) = P(A) × P(B) = ${fractionStr(num1, den1)} × ${fractionStr(num2, den2)} = ${ansStr}.`,
+    };
+  }
+  // Expected frequency: P × trials
+  const num = rand(1, 4), den = rand(num + 2, 8);
+  const trials = rand(2, 8) * den;
+  const expected = (num / den) * trials;
+  return {
+    question: `P(event) = ${fractionStr(num, den)}.\nIn ${trials} trials, expected frequency?`,
+    options: numericOptions(expected, 4, 0, Math.max(4, Math.round(expected * 0.2))),
+    correctAnswer: expected,
+    explanation: `Expected = P × trials = ${fractionStr(num, den)} × ${trials} = ${expected}.`,
+  };
+}
+
+function p5l14(): Problem {
+  // Data: quartiles, range, interquartile range
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    // Median of 7 values
+    const base = rand(3, 8), d = rand(2, 5);
+    const vals = [base, base+d, base+2*d, base+3*d, base+4*d, base+5*d, base+6*d];
+    const median = vals[3];
+    const display = shuffle([...vals]).join(', ');
+    return {
+      question: `Find the MEDIAN of:\n${display}`,
+      options: numericOptions(median, 4, base, d * 2),
+      correctAnswer: median,
+      explanation: `Sort: ${vals.join(', ')}. Middle value (4th of 7) = ${median}.`,
+    };
+  }
+  if (variant === 1) {
+    // IQR = Q3 − Q1
+    const base = rand(2, 6), d = rand(3, 7);
+    const vals = [base, base+d, base+2*d, base+3*d, base+4*d, base+5*d, base+6*d, base+7*d];
+    const q1 = vals[1], q3 = vals[5], iqr = q3 - q1;
+    return {
+      question: `Data (sorted): ${vals.join(', ')}.\nFind the interquartile range (Q3 − Q1).`,
+      options: numericOptions(iqr, 4, 0, d * 2),
+      correctAnswer: iqr,
+      explanation: `Q1 = ${q1} (2nd value), Q3 = ${q3} (6th value). IQR = ${q3} − ${q1} = ${iqr}.`,
+    };
+  }
+  // Range of a dataset
+  const n = rand(5, 8);
+  const vals = Array.from({length: n}, () => rand(5, 40));
+  const range = Math.max(...vals) - Math.min(...vals);
+  return {
+    question: `Find the RANGE of:\n${vals.join(', ')}`,
+    options: numericOptions(range, 4, 0, Math.max(6, Math.round(range * 0.2))),
+    correctAnswer: range,
+    explanation: `Range = max − min = ${Math.max(...vals)} − ${Math.min(...vals)} = ${range}.`,
+  };
+}
+
+function p5l15(): Problem {
+  // FINAL BOSS — synthesis: algebra + geometry + data
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    // Pythagoras + cost
+    const triples = [[3,4,5],[5,12,13],[6,8,10]];
+    const [a, b, c] = triples[rand(0, triples.length - 1)];
+    const price = rand(3, 8) * 10;
+    return {
+      question: `Right triangle: legs ${a} m, ${b} m.\nRope along hypotenuse costs R${price}/m.\nTotal cost?`,
+      options: numericOptions(c * price, 4, 0, price * 2),
+      correctAnswer: c * price,
+      explanation: `Hypotenuse = ${c} m. Cost = ${c} × R${price} = R${c * price}.`,
+    };
+  }
+  if (variant === 1) {
+    // Substitution into expanded expression
+    const a = rand(2, 4), b = rand(2, 5), x = rand(3, 6);
+    const ans = (x + a) * (x + b);
+    return {
+      question: `Evaluate (x + ${a})(x + ${b}) for x = ${x}.`,
+      options: numericOptions(ans, 4, 0, Math.max(10, Math.round(ans * 0.15))),
+      correctAnswer: ans,
+      explanation: `(${x} + ${a})(${x} + ${b}) = ${x + a} × ${x + b} = ${ans}.`,
+    };
+  }
+  // Probability × expected frequency
+  const num = rand(1, 3), den = rand(num + 2, 6);
+  const trials = rand(3, 8) * den;
+  const expected = (num / den) * trials;
+  return {
+    question: `P(win) = ${fractionStr(num, den)}.\nIn ${trials} games, how many expected wins?`,
+    options: numericOptions(expected, 4, 0, Math.max(4, Math.round(expected * 0.2))),
+    correctAnswer: expected,
+    explanation: `Expected wins = ${fractionStr(num, den)} × ${trials} = ${expected}.`,
+  };
+}
+
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 const GENERATORS: Record<string, () => Problem> = {
@@ -1965,6 +2443,9 @@ const GENERATORS: Record<string, () => Problem> = {
   '4-1': p4l1, '4-2': p4l2, '4-3': p4l3, '4-4': p4l4, '4-5': p4l5,
   '4-6': p4l6, '4-7': p4l7, '4-8': p4l8, '4-9': p4l9, '4-10': p4l10,
   '4-11': p4l11, '4-12': p4l12, '4-13': p4l13, '4-14': p4l14, '4-15': p4l15,
+  '5-1': p5l1, '5-2': p5l2, '5-3': p5l3, '5-4': p5l4, '5-5': p5l5,
+  '5-6': p5l6, '5-7': p5l7, '5-8': p5l8, '5-9': p5l9, '5-10': p5l10,
+  '5-11': p5l11, '5-12': p5l12, '5-13': p5l13, '5-14': p5l14, '5-15': p5l15,
 };
 
 export function generateProblem(phase: number, level: number): Problem {

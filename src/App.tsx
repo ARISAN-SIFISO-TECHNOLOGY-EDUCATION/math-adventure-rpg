@@ -10,6 +10,7 @@ import PreSchoolPage from './pages/PreSchoolPage';
 import LowerPrimaryPage from './pages/LowerPrimaryPage';
 import HigherPrimaryPage from './pages/HigherPrimaryPage';
 import AdvancedPrimaryPage from './pages/AdvancedPrimaryPage';
+import SecondaryPage from './pages/SecondaryPage';
 import GrownUpCorner from './pages/GrownUpCorner';
 import Game from './game/Game';
 
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/lower-primary" element={<LowerPrimaryPage />} />
         <Route path="/higher-primary" element={<HigherPrimaryPage />} />
         <Route path="/advanced-primary" element={<AdvancedPrimaryPage />} />
+        <Route path="/secondary" element={<SecondaryPage />} />
         <Route path="/play" element={<Game />} />
         <Route path="/grown-up-corner" element={<GrownUpCorner />} />
         <Route path="*" element={<Navigate to="/" replace />} />
