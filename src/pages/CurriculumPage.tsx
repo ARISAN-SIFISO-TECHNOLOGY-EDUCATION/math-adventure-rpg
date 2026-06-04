@@ -92,16 +92,16 @@ export default function CurriculumPage() {
       <section className="py-16 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-            K–6 aligned
+            Ages 3–17 · CAPS aligned
           </span>
           <h1
             className="font-[Nunito] text-5xl font-extrabold leading-tight mb-5"
             style={{ background: 'linear-gradient(135deg,#4F46E5,#7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
           >
-            45 Levels.<br />4 Phases.<br />One Complete Journey.
+            105 Levels.<br />9 Phases.<br />One Complete Journey.
           </h1>
           <p className="text-xl text-gray-500 max-w-xl mx-auto">
-            Every level is mapped to K–6 math standards. Progress is sequential — each level builds directly on the one before it.
+            Every level is mapped to South African CAPS math standards. Progress is sequential — each level builds directly on the one before it.
           </p>
         </div>
       </section>
