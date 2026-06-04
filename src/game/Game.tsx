@@ -11,6 +11,7 @@ import { generateProblem, type Problem } from '../mathEngine';
 import confetti from 'canvas-confetti';
 import { Companion, type CompanionEmotion } from './Companion';
 import { useNarration } from './useNarration';
+import { registerScreenBack } from '../lib/backHandler';
 
 // --- Types ---
 type GameState = 'START' | 'TUTORIAL' | 'LEVEL_INTRO' | 'PLAYING' | 'VICTORY';
@@ -1470,6 +1471,30 @@ export default function Game() {
     setWrongAttempts(0);
     loadQuestion(phase, levelInPhase);
   }, [phase, levelInPhase, loadQuestion]);
+
+  // ── Android Back / edge-swipe inside the game ───────────────────────────────
+  // Pops one in-game UI level at a time: open overlays first, then the game
+  // state machine, then surface the pause menu while playing. When there is
+  // nothing left to pop (the START screen), returns false so App.tsx falls
+  // through to route-level back (→ home). A ref keeps the logic fresh each
+  // render without re-subscribing the native listener.
+  const gameBackRef = useRef<() => boolean>(() => false);
+  gameBackRef.current = (): boolean => {
+    if (showBreakGate)      { setShowBreakGate(false); return true; }
+    if (showBreakOverlay)   { return true; }                       // forced break — swallow Back
+    if (showCompanionSetup) { setShowCompanionSetup(false); return true; }
+    if (showParentalGate)   { setShowParentalGate(false); return true; }
+    if (showPhaseSelect)    { setShowPhaseSelect(false); return true; }
+    if (showPauseMenu)      { setShowPauseMenu(false); return true; }
+    if (showBadges)         { setShowBadges(false); return true; }
+    if (levelFailed)        { setLevelFailed(false); return true; }
+    if (gameState === 'PLAYING' || gameState === 'LEVEL_INTRO' || gameState === 'TUTORIAL') {
+      setShowPauseMenu(true); return true;
+    }
+    if (gameState === 'VICTORY') { setGameState('START'); return true; }
+    return false; // START screen — let the app navigate home
+  };
+  useEffect(() => registerScreenBack(() => gameBackRef.current()), []);
 
   // After state updates in handleAnswer, phase/levelInPhase already reflect the NEW values
   const victoryPhaseConfig = PHASES[phase - 1];
