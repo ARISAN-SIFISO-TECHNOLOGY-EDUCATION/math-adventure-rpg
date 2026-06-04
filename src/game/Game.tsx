@@ -332,11 +332,11 @@ const P6_WORLDS = [
   { levels: [11, 12, 13, 14, 15], name: 'The Data Observatory', emoji: '🔭', color: '#7C3AED', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#C4B5FD]' },
 ];
 
-// ─── Phase 7 constants — Age 15 · Grade 10 · School of Foundations ────────────
+// ─── Phase 7 constants — Age 15 · School of Foundations ───────────────────────
 
 const P7_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
   // World 1 — The Algebra Foundry
-  1:  { emoji: '🏭', title: 'Enter the Algebra Foundry!',  body: 'Exponent laws and rational exponents — the building blocks of FET algebra.', tip: 'aᵐ × aⁿ = aᵐ⁺ⁿ. And a^(1/2) = √a.' },
+  1:  { emoji: '🏭', title: 'Enter the Algebra Foundry!',  body: 'Exponent laws and rational exponents — the building blocks of senior-phase algebra.', tip: 'aᵐ × aⁿ = aᵐ⁺ⁿ. And a^(1/2) = √a.' },
   2:  { emoji: '🔩', title: 'Factorising',                 body: 'Reverse expansion: common factors, difference of squares, and trinomials.', tip: 'a² − b² = (a − b)(a + b).' },
   3:  { emoji: '➗', title: 'Algebraic Fractions',         body: 'Factorise the top and bottom, then cancel common factors.', tip: '(x² − a²)/(x − a) = x + a.' },
   4:  { emoji: '⚖️', title: 'Solving Equations',          body: 'Linear, quadratic (by factorising), and simultaneous equations.', tip: 'Factorise quadratics to find the roots.' },
@@ -352,7 +352,7 @@ const P7_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: stri
   12: { emoji: '📐', title: 'Analytical Geometry',         body: 'Distance, midpoint, and gradient between two points.', tip: 'm = (y₂ − y₁)/(x₂ − x₁).' },
   13: { emoji: '📏', title: 'Euclidean Geometry',          body: 'Angles on lines, in triangles, and in quadrilaterals.', tip: 'Angles in a triangle add to 180°.' },
   14: { emoji: '📊', title: 'Statistics & Probability',    body: 'Mean, median, and basic probability.', tip: 'P(event) = favourable ÷ total.' },
-  15: { emoji: '🎓', title: 'FINAL BOSS: The Citadel Guardian!', body: 'Trigonometry, geometry, and data — the Grade 10 summit!', tip: 'Identify the topic, pick the formula, execute.' },
+  15: { emoji: '🎓', title: 'FINAL BOSS: The Citadel Guardian!', body: 'Trigonometry, geometry, and data — the Age 15 summit!', tip: 'Identify the topic, pick the formula, execute.' },
 };
 
 const P7_HINTS: Record<number, string> = {
@@ -379,7 +379,7 @@ const P7_WORLDS = [
   { levels: [11, 12, 13, 14, 15], name: 'The Geometry Citadel',    emoji: '🏰', color: '#4F46E5', bgHex: '#EEF2FF', bg: 'bg-[#EEF2FF]', badge: 'bg-[#A5B4FC]' },
 ];
 
-// ─── Phase 8 constants — Age 16 · Grade 11 · School of Mastery ────────────────
+// ─── Phase 8 constants — Age 16 · School of Mastery ───────────────────────────
 
 const P8_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
   // World 1 — The Quadratic Forge
@@ -399,7 +399,7 @@ const P8_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: stri
   12: { emoji: '📐', title: 'Sine, Cosine & Area Rules',   body: 'Solve any triangle, not just right-angled ones.', tip: 'Area = ½·a·b·sin C.' },
   13: { emoji: '⭕', title: 'Circle Geometry & Measurement', body: 'Circle theorems and volumes of solids.', tip: 'Angle at centre = 2 × angle at circumference.' },
   14: { emoji: '🎲', title: 'Probability & Statistics',    body: 'Tree diagrams, independent events, and spread.', tip: 'Independent events: multiply the probabilities.' },
-  15: { emoji: '🎓', title: 'FINAL BOSS: The Sanctum Keeper!', body: 'Trigonometry, geometry, and statistics — the Grade 11 summit!', tip: 'Read carefully, then apply.' },
+  15: { emoji: '🎓', title: 'FINAL BOSS: The Sanctum Keeper!', body: 'Trigonometry, geometry, and statistics — the Age 16 summit!', tip: 'Read carefully, then apply.' },
 };
 
 const P8_HINTS: Record<number, string> = {
@@ -426,7 +426,7 @@ const P8_WORLDS = [
   { levels: [11, 12, 13, 14, 15], name: 'The Trigon Sanctum',   emoji: '📐', color: '#0F766E', bgHex: '#F0FDFA', bg: 'bg-[#F0FDFA]', badge: 'bg-[#99F6E4]' },
 ];
 
-// ─── Phase 9 constants — Age 17 · Grade 12 · School of Excellence ─────────────
+// ─── Phase 9 constants — Age 17 · School of Excellence ────────────────────────
 
 const P9_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
   // World 1 — The Sequence Spire
@@ -446,7 +446,7 @@ const P9_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: stri
   12: { emoji: '🌐', title: 'Compound & Double Angles',    body: 'Identities that expand and combine angles.', tip: 'sin2θ = 2sinθcosθ; cos2θ = cos²θ − sin²θ.' },
   13: { emoji: '📐', title: 'Similar Triangles',           body: 'Proportionality and similarity.', tip: 'Corresponding sides are in proportion.' },
   14: { emoji: '🎲', title: 'Counting & Statistics',       body: 'The counting principle, factorials, and correlation.', tip: 'm × n arrangements; n! orderings.' },
-  15: { emoji: '🏆', title: 'FINAL BOSS: The Matric Apex!', body: 'The ultimate challenge — every Grade 12 skill at once!', tip: 'Matric mastery — you have trained for this.' },
+  15: { emoji: '🏆', title: 'FINAL BOSS: The Apex Challenge!', body: 'The ultimate challenge — every Age 17 skill at once!', tip: 'You have trained for this.' },
 };
 
 const P9_HINTS: Record<number, string> = {
@@ -464,7 +464,7 @@ const P9_HINTS: Record<number, string> = {
   12: '🌐 sin2θ = 2sinθcosθ.',
   13: '📐 Sides in proportion.',
   14: '🎲 m × n; n! orderings.',
-  15: '🏆 Matric mastery — go!',
+  15: '🏆 You have trained for this — go!',
 };
 
 const P9_WORLDS = [
@@ -481,9 +481,9 @@ const BADGES: { id: string; emoji: string; label: string; desc: string }[] = [
   { id: 'phase4_complete', emoji: '🏆', label: 'Legend',           desc: 'Master all 4 phases'       },
   { id: 'phase5_complete', emoji: '🧠', label: 'Mastermind',       desc: 'Complete Age 13'           },
   { id: 'phase6_complete', emoji: '🎓', label: 'Graduate',         desc: 'Complete Age 14'           },
-  { id: 'phase7_complete', emoji: '🏭', label: 'Foundationeer',    desc: 'Complete Age 15 (Grade 10)'},
-  { id: 'phase8_complete', emoji: '⚒️', label: 'Forge Master',     desc: 'Complete Age 16 (Grade 11)'},
-  { id: 'phase9_complete', emoji: '🏆', label: 'Matriculant',      desc: 'Master all 9 phases'       },
+  { id: 'phase7_complete', emoji: '🏭', label: 'Foundationeer',    desc: 'Complete Age 15'           },
+  { id: 'phase8_complete', emoji: '⚒️', label: 'Forge Master',     desc: 'Complete Age 16'           },
+  { id: 'phase9_complete', emoji: '🏆', label: 'Top Scholar',      desc: 'Master all 9 phases'       },
   { id: 'boss_slayer',     emoji: '💀', label: 'Boss Slayer',      desc: 'Defeat your first boss'    },
   { id: 'streak_3',        emoji: '🔥', label: 'Hot Streak',       desc: 'Play 3 days in a row'      },
   { id: 'streak_7',        emoji: '🔥🔥','label': 'On Fire!',      desc: 'Play 7 days in a row'      },
@@ -696,7 +696,7 @@ export const PHASES: PhaseConfig[] = [
   },
   {
     id: 7,
-    name: 'FET Grade 10',
+    name: 'School of Foundations',
     ageRange: 'Age 15',
     emoji: '🏭',
     bgColor: 'bg-[#FFFBEB]',
@@ -725,7 +725,7 @@ export const PHASES: PhaseConfig[] = [
   },
   {
     id: 8,
-    name: 'FET Grade 11',
+    name: 'School of Mastery',
     ageRange: 'Age 16',
     emoji: '⚒️',
     bgColor: 'bg-[#FEF2F2]',
@@ -754,7 +754,7 @@ export const PHASES: PhaseConfig[] = [
   },
   {
     id: 9,
-    name: 'FET Grade 12',
+    name: 'School of Excellence',
     ageRange: 'Age 17',
     emoji: '🎓',
     bgColor: 'bg-[#EFF6FF]',
@@ -778,7 +778,7 @@ export const PHASES: PhaseConfig[] = [
       { n: 102, topic: 'compound and double angle identities' },
       { n: 103, topic: 'proportionality and similar triangles' },
       { n: 104, topic: 'counting principle, factorials, and correlation' },
-      { n: 105, topic: 'final boss — the Matric apex' },
+      { n: 105, topic: 'final boss — the apex challenge' },
     ],
   },
 ];
@@ -2206,7 +2206,7 @@ export default function Game() {
                   <div className="text-6xl mb-3">🏆</div>
                   <h2 className="text-4xl font-black mb-3">CHAMPION!</h2>
                   <p className="text-xl font-bold mb-2">You've mastered all 9 phases!</p>
-                  <p className="text-sm font-bold text-gray-400 mb-6">From Pre-School counting to Grade 12 calculus. Incredible!</p>
+                  <p className="text-sm font-bold text-gray-400 mb-6">From Pre-School counting to Age 17 calculus. Incredible!</p>
                   <button onClick={startGame}
                     className="bg-[#FFD700] hover:bg-[#F59E0B] text-black px-10 py-4 rounded-full border-4 border-black text-xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto">
                     PLAY AGAIN <Sparkles size={24} />

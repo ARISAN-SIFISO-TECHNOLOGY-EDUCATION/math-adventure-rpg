@@ -2,27 +2,27 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-export default function Grade12Page() {
+export default function Age17Page() {
   return (
     <div className="font-[Inter] bg-gradient-to-br from-[#EFF6FF] to-[#F5F3FF] text-gray-800 min-h-screen">
-      <Navbar breadcrumb="Grade 12" accentColor="#1D4ED8" borderColor="#93C5FD" />
+      <Navbar breadcrumb="Age 17" accentColor="#1D4ED8" borderColor="#93C5FD" />
 
       <section className="py-16 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-            Age 17 · CAPS FET Grade 12 · Matric
+            Age 17 · School of Excellence
           </span>
           <h1 className="font-[Nunito] text-5xl font-extrabold leading-tight mb-4"
             style={{ background: 'linear-gradient(135deg,#1D4ED8,#6D28D9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            🎓 Grade 12<br />School of Excellence
+            🎓 Age 17<br />School of Excellence
           </h1>
           <p className="text-lg text-gray-500 max-w-xl mx-auto mb-8">
-            The matric summit. Sequences and series, financial maths, differential calculus,
-            the equation of a circle, compound-angle trig, and statistics — the final apex.
+            The summit. Sequences and series, financial maths, differential calculus,
+            the equation of a circle, compound-angle trigonometry, and statistics — the final apex.
           </p>
           <Link to="/play?phase=9"
             className="font-[Nunito] inline-flex items-center gap-2 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white px-8 py-4 rounded-full font-bold text-base shadow-lg transition-all no-underline hover:scale-105">
-            🎓 Enter Grade 12
+            🎓 Enter Age 17
           </Link>
         </div>
       </section>

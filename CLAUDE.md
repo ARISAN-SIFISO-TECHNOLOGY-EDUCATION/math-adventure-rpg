@@ -43,17 +43,19 @@ React 19 + TypeScript + Vite + Tailwind CSS v4 + Capacitor 8 (Android wrapper).
 
 ## Phases, Levels, and Generators
 
-| Phase | Ages | CAPS | Worlds | Levels (lip) | Generator keys |
-|-------|------|------|--------|--------------|----------------|
+The app is presented by **age only — never grades** (a non-negotiable product rule). Phase names below are the in-app `PHASES[].name`; the curriculum is CAPS-aligned internally but grade labels never appear in the UI.
+
+| Phase | Ages | Phase name | Worlds | Levels (lip) | Generator keys |
+|-------|------|------------|--------|--------------|----------------|
 | 1 | 3–5 | Pre-School | Pre-School (no worlds) | 1–15 | `1-1` … `1-15` |
-| 2 | 6–8 | Foundation | Academy, Merchant's Guild, Dragon's Tower, Star Observatory | 1–20 | `2-1` … `2-20` |
-| 3 | 9–12 | Intermediate | Merchant Republic, Engineers' Citadel, Storm Observatory | 1–15 | `3-1` … `3-15` |
+| 2 | 6–8 | Lower Primary | Academy, Merchant's Guild, Dragon's Tower, Star Observatory | 1–20 | `2-1` … `2-20` |
+| 3 | 9–12 | Higher Primary | Merchant Republic, Engineers' Citadel, Storm Observatory | 1–15 | `3-1` … `3-15` |
 | 4 | 11–12 | Advanced Primary | The Pinnacle, Geometry Forge, Summit Academy | 1–15 | `4-1` … `4-15` |
-| 5 | 13 | Gr 8 | Iron Citadel, Storm Fortress, Oracle's Nexus | 1–15 | `5-1` … `5-15` |
-| 6 | 14 | Gr 9 | Algebra Lab, Proof Chamber, Data Observatory | 1–15 | `6-1` … `6-15` |
-| 7 | 15 | FET Gr 10 | Algebra Foundry, Function Observatory, Geometry Citadel | 1–15 | `7-1` … `7-15` |
-| 8 | 16 | FET Gr 11 | Quadratic Forge, Analytical Tower, Trigon Sanctum | 1–15 | `8-1` … `8-15` |
-| 9 | 17 | FET Gr 12 | Sequence Spire, Calculus Crucible, Apex Observatory | 1–15 | `9-1` … `9-15` |
+| 5 | 13 | Secondary | Iron Citadel, Storm Fortress, Oracle's Nexus | 1–15 | `5-1` … `5-15` |
+| 6 | 14 | Upper Secondary | Algebra Lab, Proof Chamber, Data Observatory | 1–15 | `6-1` … `6-15` |
+| 7 | 15 | School of Foundations | Algebra Foundry, Function Observatory, Geometry Citadel | 1–15 | `7-1` … `7-15` |
+| 8 | 16 | School of Mastery | Quadratic Forge, Analytical Tower, Trigon Sanctum | 1–15 | `8-1` … `8-15` |
+| 9 | 17 | School of Excellence | Sequence Spire, Calculus Crucible, Apex Observatory | 1–15 | `9-1` … `9-15` |
 
 `levelInPhase` (lip) is the 1-indexed position within the phase. `PHASES[phase-1].levels[lip-1].n` is the display number shown to the player (cumulative 1–105). Boss levels are lip 5, 10, 15, 20 for Phase 2+ (require 7 correct instead of 5). For phases with three 5-level worlds, world entries are lip 1, 6, 11; wire new world phases into `P{n}_WORLDS`, `P{n}_LEVEL_INTROS`, `P{n}_HINTS`, `getHint`, the intro/world lookup, the world-entry detection in `startGame`/`handleAnswer`, and the in-game hint render block.
 

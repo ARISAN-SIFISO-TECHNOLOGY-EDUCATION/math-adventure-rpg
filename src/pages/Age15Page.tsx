@@ -2,27 +2,27 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-export default function Grade10Page() {
+export default function Age15Page() {
   return (
     <div className="font-[Inter] bg-gradient-to-br from-[#FFFBEB] to-[#ECFEFF] text-gray-800 min-h-screen">
-      <Navbar breadcrumb="Grade 10" accentColor="#B45309" borderColor="#FCD34D" />
+      <Navbar breadcrumb="Age 15" accentColor="#B45309" borderColor="#FCD34D" />
 
       <section className="py-16 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-amber-100 text-amber-700 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-            Age 15 · CAPS FET Grade 10
+            Age 15 · School of Foundations
           </span>
           <h1 className="font-[Nunito] text-5xl font-extrabold leading-tight mb-4"
             style={{ background: 'linear-gradient(135deg,#B45309,#0891B2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            🏭 Grade 10<br />School of Foundations
+            🏭 Age 15<br />School of Foundations
           </h1>
           <p className="text-lg text-gray-500 max-w-xl mx-auto mb-8">
-            The FET phase begins. Algebra and exponents, functions and patterns, trigonometry,
-            analytical &amp; Euclidean geometry, finance and statistics — the foundation for matric.
+            The senior phase begins. Algebra and exponents, functions and patterns, trigonometry,
+            analytical &amp; Euclidean geometry, finance and statistics — the foundation for everything ahead.
           </p>
           <Link to="/play?phase=7"
             className="font-[Nunito] inline-flex items-center gap-2 bg-[#B45309] hover:bg-[#92400E] text-white px-8 py-4 rounded-full font-bold text-base shadow-lg transition-all no-underline hover:scale-105">
-            🏭 Enter Grade 10
+            🏭 Enter Age 15
           </Link>
         </div>
       </section>

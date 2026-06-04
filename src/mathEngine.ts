@@ -2871,7 +2871,7 @@ function p6l15(): Problem {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PHASE 7 — Age 15 · CAPS Grade 10 (FET) — "School of Foundations"
+// PHASE 7 — Age 15 · "School of Foundations" (CAPS senior-phase maths)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // ── World 1: The Algebra Foundry ──────────────────────────────────────────────
@@ -3380,7 +3380,7 @@ function p7l15(): Problem {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PHASE 8 — Age 16 · CAPS Grade 11 (FET) — "School of Mastery"
+// PHASE 8 — Age 16 · "School of Mastery" (CAPS senior-phase maths)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // ── World 1: The Quadratic Forge ──────────────────────────────────────────────
@@ -3851,7 +3851,7 @@ function p8l15(): Problem {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// PHASE 9 — Age 17 · CAPS Grade 12 (Matric) — "School of Excellence"
+// PHASE 9 — Age 17 · "School of Excellence" (CAPS senior-phase maths)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // ── World 1: The Sequence Spire ───────────────────────────────────────────────
@@ -4299,7 +4299,7 @@ function p9l14(): Problem {
 }
 
 function p9l15(): Problem {
-  // FINAL BOSS: Matric mixed
+  // FINAL BOSS: Age 17 mixed
   const variant = rand(0, 3);
   if (variant === 0) {
     const a = rand(2, 7), d = rand(2, 5), n = rand(6, 12);
