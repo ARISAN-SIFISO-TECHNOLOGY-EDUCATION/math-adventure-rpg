@@ -28,7 +28,7 @@ React 19 + TypeScript + Vite + Tailwind CSS v4 + Capacitor 8 (Android wrapper).
 
 **Math engine** (`src/mathEngine.ts`): All question generation lives here. `generateProblem(phase, level)` looks up a key `'${phase}-${level}'` in the `GENERATORS` map and calls the matching function. There are 105 generators total: `p1l1`–`p1l15`, `p2l1`–`p2l20`, and `p3`–`p9` with 15 levels each (`pNl1`–`pNl15`). Key helpers: `numericOptions(correct, count, minVal, spread)`, `shuffle<T>()`, `fractionStr(num, den)`, `rand(min, max)`.
 
-**Data layer** (`src/data/grades.ts`): `GRADES[]` is a 9-item config array (one per phase) that drives the landing-page grade cards, phase names, topic lists, and play/detail links. When adding a phase or changing level counts, update `GRADES` here AND `PHASES[]` inside `Game.tsx`.
+**Data layer** (`src/data/grades.ts`): `GRADES[]` is a 9-item config array (one per phase) that drives the landing-page age cards, phase names, topic lists, and play/detail links. (The `GRADES`/`GradeConfig` identifiers are legacy internal names — the UI shows ages only, never grades.) When adding a phase or changing level counts, update `GRADES` here AND `PHASES[]` inside `Game.tsx`.
 
 **Companion** (`src/game/Companion.tsx`): Displays the player's named character. Accepts an `emotion` prop (`'idle' | 'happy' | 'excited' | 'thinking' | 'encouraging' | 'celebrating'`) which drives animation and picks a random message from `MESSAGES[emotion]`. Pass `customMessage` to override the random pick.
 

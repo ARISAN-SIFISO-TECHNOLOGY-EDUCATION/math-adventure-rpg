@@ -32,16 +32,16 @@ export default function LandingPage() {
               🎮 Play Now — It's Free
             </Link>
             <a
-              href="#grades"
+              href="#ages"
               className="font-[Nunito] inline-flex items-center gap-2 bg-white border-2 border-[#4F46E5] text-[#4F46E5] hover:bg-indigo-50 hover:scale-105 px-8 py-4 rounded-full font-bold text-base transition-all no-underline"
             >
-              📖 Choose a Grade
+              📖 Choose an Age
             </a>
           </div>
           <div className="flex justify-center gap-12 flex-wrap">
             {[
-              { num: '55', label: 'Difficulty Levels' },
-              { num: '4',  label: 'Learning Phases' },
+              { num: '105', label: 'Difficulty Levels' },
+              { num: '9',  label: 'Learning Phases' },
               { num: '100%', label: 'Offline & Ad‑Free' },
             ].map(s => (
               <div key={s.label} className="text-center">
@@ -53,12 +53,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Grade Cards ── */}
-      <section id="grades" className="py-20 bg-white px-6">
+      {/* ── Age Cards ── */}
+      <section id="ages" className="py-20 bg-white px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-[Nunito] text-4xl font-bold text-center mb-3">Choose Your Grade</h2>
+          <h2 className="font-[Nunito] text-4xl font-bold text-center mb-3">Choose Your Age</h2>
           <p className="text-center text-gray-500 max-w-xl mx-auto mb-12">
-            Tap a grade to jump straight into the right level for your child. You can switch any
+            Tap an age to jump straight into the right level for your child. You can switch any
             time inside the game using the parental lock.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -94,7 +94,7 @@ export default function LandingPage() {
                     className="font-[Nunito] text-center text-white text-sm font-black py-3 px-4 rounded-2xl no-underline hover:opacity-90 transition-opacity"
                     style={{ background: g.color }}
                   >
-                    🎮 Play This Grade
+                    🎮 Play This Age
                   </Link>
                   <Link
                     to={g.detailLink}

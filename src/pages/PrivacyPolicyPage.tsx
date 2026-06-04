@@ -49,7 +49,7 @@ const SECTIONS = [
   },
   {
     title: '5. Parental Gate',
-    body: 'A parental gate (a math problem only an adult can solve comfortably) is required before any grade-level change. This prevents children from accidentally advancing to content outside their ability range.',
+    body: 'A parental gate (a math problem only an adult can solve comfortably) is required before any age-group change. This prevents children from accidentally advancing to content outside their ability range.',
     bullets: [],
   },
   {

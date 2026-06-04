@@ -10,14 +10,14 @@ export default function SecondaryPage() {
       <section className="py-16 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-            Ages 13–14 · CAPS Grade 8–9
+            Ages 13–14 · Secondary
           </span>
           <h1 className="font-[Nunito] text-5xl font-extrabold leading-tight mb-4"
             style={{ background: 'linear-gradient(135deg,#4338CA,#6D28D9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             🧠 Secondary<br />Phase
           </h1>
           <p className="text-lg text-gray-500 max-w-xl mx-auto mb-8">
-            Grade 8–9 CAPS content — algebra, Pythagoras, parallel lines, probability and data.
+            Ages 13–14 CAPS-aligned content — algebra, Pythagoras, parallel lines, probability and data.
             Same adventure format, secondary-school difficulty.
           </p>
           <Link to="/play?phase=5"

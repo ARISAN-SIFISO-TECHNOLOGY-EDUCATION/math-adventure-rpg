@@ -66,7 +66,7 @@ export default function HigherPrimaryPage() {
       <section className="py-12 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-violet-100 text-violet-800 text-xs font-semibold px-4 py-1 rounded-full mb-6">
-            🎯 Grades 4–6 | Ages 9–12
+            🎯 Ages 9–12 · Higher Primary
           </span>
           <h1 className="font-[Nunito] text-6xl font-extrabold leading-tight mb-6"
             style={{ background: `linear-gradient(135deg,${accent},#8B5CF6)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>

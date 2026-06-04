@@ -50,7 +50,7 @@ const FEATURES = [
 const SAFETY = [
   { badge: '🚫', title: 'No Ads — Ever',        desc: 'Zero third-party ad networks. No interstitials, no banners, no interruptions.' },
   { badge: '🔐', title: 'No Data Collection',    desc: 'We collect nothing. No names, emails, location, or usage data — not even anonymised.' },
-  { badge: '👨‍👩‍👧', title: 'Parental Gate',       desc: 'Grade changes require a parent to solve a math problem — young children cannot accidentally switch.' },
+  { badge: '👨‍👩‍👧', title: 'Parental Gate',       desc: 'Age-group changes require a parent to solve a math problem — young children cannot accidentally switch.' },
   { badge: '📜', title: 'COPPA, GDPR-K & POPIA',  desc: 'Compliant with child-privacy law in South Africa (POPIA), the US (COPPA), and the EU/UK (GDPR-K). The curriculum follows South African CAPS.' },
   { badge: '📴', title: 'Fully Offline',          desc: 'No CDN calls, no analytics beacons, no third-party scripts. The game is self-contained.' },
   { badge: '🏠', title: 'No External Links',      desc: 'Children cannot accidentally navigate away from the game — every link stays within the app.' },
@@ -126,7 +126,7 @@ export default function FeaturesPage() {
       <section className="py-20 text-center px-6" style={{ background: 'linear-gradient(135deg,#4F46E5,#7C3AED)', color: 'white' }}>
         <div className="max-w-2xl mx-auto">
           <h2 className="font-[Nunito] text-3xl font-bold text-white mb-4">See it for yourself.</h2>
-          <p className="mb-8 opacity-90 text-lg">No sign-up. No account. Pick a grade and play in seconds.</p>
+          <p className="mb-8 opacity-90 text-lg">No sign-up. No account. Pick an age and play in seconds.</p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link to="/play" className="font-[Nunito] inline-flex items-center gap-2 bg-white text-[#4F46E5] px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all no-underline">
               🎮 Play Now

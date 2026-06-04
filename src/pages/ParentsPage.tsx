@@ -8,7 +8,7 @@ const accent = '#4F46E5';
 const TIPS = [
   {
     icon: '🔒',
-    title: 'Switching Grade Levels',
+    title: 'Switching Age Levels',
     body: 'Tap the lock icon ("Change") on the game start screen. You\'ll need to solve a short math puzzle — designed so young children can\'t accidentally change levels.',
   },
   {
@@ -199,7 +199,7 @@ export default function ParentsPage() {
       <section className="py-20 text-center px-6" style={{ background: 'linear-gradient(135deg,#4F46E5,#7C3AED)', color: 'white' }}>
         <div className="max-w-2xl mx-auto">
           <h2 className="font-[Nunito] text-3xl font-bold text-white mb-4">Ready to get started?</h2>
-          <p className="mb-8 opacity-90 text-lg">Pick your child's grade and play together right now — no download needed.</p>
+          <p className="mb-8 opacity-90 text-lg">Pick your child's age and play together right now — no download needed.</p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link to="/play" className="font-[Nunito] inline-flex items-center gap-2 bg-white text-[#4F46E5] px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all no-underline">
               🎮 Play Now

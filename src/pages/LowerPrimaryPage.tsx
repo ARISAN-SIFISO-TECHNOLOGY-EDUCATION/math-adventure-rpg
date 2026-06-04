@@ -81,7 +81,7 @@ export default function LowerPrimaryPage() {
       <section className="py-12 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-amber-100 text-amber-800 text-xs font-semibold px-4 py-1 rounded-full mb-6">
-            🎯 Grades 1–3 | Ages 6–8
+            🎯 Ages 6–8 · Lower Primary
           </span>
           <h1 className="font-[Nunito] text-6xl font-extrabold leading-tight mb-6"
             style={{ background: `linear-gradient(135deg,${accent},#F59E0B)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>

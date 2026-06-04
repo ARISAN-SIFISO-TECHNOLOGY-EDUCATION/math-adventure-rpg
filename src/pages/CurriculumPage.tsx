@@ -198,7 +198,7 @@ export default function CurriculumPage() {
       <section className="py-20 text-center px-6" style={{ background: 'linear-gradient(135deg,#4F46E5,#7C3AED)', color: 'white' }}>
         <div className="max-w-2xl mx-auto">
           <h2 className="font-[Nunito] text-3xl font-bold text-white mb-4">Start at the right level today.</h2>
-          <p className="mb-8 opacity-90 text-lg">No download. No sign-up. Just pick a grade and play.</p>
+          <p className="mb-8 opacity-90 text-lg">No download. No sign-up. Just pick an age and play.</p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link to="/play" className="font-[Nunito] inline-flex items-center gap-2 bg-white text-[#4F46E5] px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all no-underline">
               🎮 Play Now

@@ -1949,7 +1949,7 @@ function p4l15(): Problem {
   };
 }
 
-// PHASE 5 — Secondary (Ages 13–14) — CAPS Grade 8–9
+// PHASE 5 — Secondary (Age 13)
 // World 1: The Iron Citadel   (algebra)           — levels  1–5
 // World 2: The Storm Fortress (geometry)           — levels  6–10
 // World 3: The Oracle's Nexus (data & science)    — levels 11–15
@@ -2244,7 +2244,7 @@ function p5l10(): Problem {
 // ── World 3: The Oracle's Nexus ───────────────────────────────────────────────
 
 function p5l11(): Problem {
-  // Scientific notation — large numbers only (Grade 8)
+  // Scientific notation — large numbers only (Age 13)
   const mantissas = [1.2, 1.5, 2.0, 2.4, 3.0, 3.5, 4.0, 5.0, 6.0, 7.5, 8.0, 9.0];
   const m = mantissas[rand(0, mantissas.length - 1)];
   const exp = rand(3, 8);
