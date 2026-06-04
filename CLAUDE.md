@@ -26,9 +26,9 @@ React 19 + TypeScript + Vite + Tailwind CSS v4 + Capacitor 8 (Android wrapper).
 
 **Game engine** (`src/game/Game.tsx`): One large component that owns all game state. Uses a `GameState` enum — `'START' | 'TUTORIAL' | 'LEVEL_INTRO' | 'PLAYING' | 'VICTORY'` — and transitions between them via event handlers (`startGame`, `handleAnswer`, `handleTutorialDone`, etc.).
 
-**Math engine** (`src/mathEngine.ts`): All question generation lives here. `generateProblem(phase, level)` looks up a key `'${phase}-${level}'` in the `GENERATORS` map and calls the matching function. There are 55 generators total: `p1l1`–`p1l15`, `p2l1`–`p2l20`, `p3l1`–`p3l15`, `p4l1`–`p4l5`. Key helpers: `numericOptions(correct, count, minVal, spread)`, `shuffle<T>()`, `fractionStr(num, den)`, `rand(min, max)`.
+**Math engine** (`src/mathEngine.ts`): All question generation lives here. `generateProblem(phase, level)` looks up a key `'${phase}-${level}'` in the `GENERATORS` map and calls the matching function. There are 105 generators total: `p1l1`–`p1l15`, `p2l1`–`p2l20`, and `p3`–`p9` with 15 levels each (`pNl1`–`pNl15`). Key helpers: `numericOptions(correct, count, minVal, spread)`, `shuffle<T>()`, `fractionStr(num, den)`, `rand(min, max)`.
 
-**Data layer** (`src/data/grades.ts`): `GRADES[]` is a 4-item config array (one per phase) that drives the landing-page grade cards, phase names, topic lists, and play/detail links. When adding a phase or changing level counts, update `GRADES` here AND `PHASES[]` inside `Game.tsx`.
+**Data layer** (`src/data/grades.ts`): `GRADES[]` is a 9-item config array (one per phase) that drives the landing-page grade cards, phase names, topic lists, and play/detail links. When adding a phase or changing level counts, update `GRADES` here AND `PHASES[]` inside `Game.tsx`.
 
 **Companion** (`src/game/Companion.tsx`): Displays the player's named character. Accepts an `emotion` prop (`'idle' | 'happy' | 'excited' | 'thinking' | 'encouraging' | 'celebrating'`) which drives animation and picks a random message from `MESSAGES[emotion]`. Pass `customMessage` to override the random pick.
 
@@ -43,14 +43,19 @@ React 19 + TypeScript + Vite + Tailwind CSS v4 + Capacitor 8 (Android wrapper).
 
 ## Phases, Levels, and Generators
 
-| Phase | Ages | Worlds | Levels (lip) | Generator keys |
-|-------|------|--------|--------------|----------------|
-| 1 | 3–5 | Pre-School (no worlds) | 1–15 | `1-1` … `1-15` |
-| 2 | 6–8 | Academy, Merchant's Guild, Dragon's Tower, Star Observatory | 1–20 | `2-1` … `2-20` |
-| 3 | 9–12 | Merchant Republic, Engineers' Citadel, Storm Observatory | 1–15 | `3-1` … `3-15` |
-| 4 | 11–12 | Advanced Primary (no worlds) | 1–5 | `4-1` … `4-5` |
+| Phase | Ages | CAPS | Worlds | Levels (lip) | Generator keys |
+|-------|------|------|--------|--------------|----------------|
+| 1 | 3–5 | Pre-School | Pre-School (no worlds) | 1–15 | `1-1` … `1-15` |
+| 2 | 6–8 | Foundation | Academy, Merchant's Guild, Dragon's Tower, Star Observatory | 1–20 | `2-1` … `2-20` |
+| 3 | 9–12 | Intermediate | Merchant Republic, Engineers' Citadel, Storm Observatory | 1–15 | `3-1` … `3-15` |
+| 4 | 11–12 | Advanced Primary | The Pinnacle, Geometry Forge, Summit Academy | 1–15 | `4-1` … `4-15` |
+| 5 | 13 | Gr 8 | Iron Citadel, Storm Fortress, Oracle's Nexus | 1–15 | `5-1` … `5-15` |
+| 6 | 14 | Gr 9 | Algebra Lab, Proof Chamber, Data Observatory | 1–15 | `6-1` … `6-15` |
+| 7 | 15 | FET Gr 10 | Algebra Foundry, Function Observatory, Geometry Citadel | 1–15 | `7-1` … `7-15` |
+| 8 | 16 | FET Gr 11 | Quadratic Forge, Analytical Tower, Trigon Sanctum | 1–15 | `8-1` … `8-15` |
+| 9 | 17 | FET Gr 12 | Sequence Spire, Calculus Crucible, Apex Observatory | 1–15 | `9-1` … `9-15` |
 
-`levelInPhase` (lip) is the 1-indexed position within the phase. `PHASES[phase-1].levels[lip-1].n` is the display number shown to the player. Boss levels are lip 5, 10, 15, 20 for Phase 2+ (require 7 correct instead of 5).
+`levelInPhase` (lip) is the 1-indexed position within the phase. `PHASES[phase-1].levels[lip-1].n` is the display number shown to the player (cumulative 1–105). Boss levels are lip 5, 10, 15, 20 for Phase 2+ (require 7 correct instead of 5). For phases with three 5-level worlds, world entries are lip 1, 6, 11; wire new world phases into `P{n}_WORLDS`, `P{n}_LEVEL_INTROS`, `P{n}_HINTS`, `getHint`, the intro/world lookup, the world-entry detection in `startGame`/`handleAnswer`, and the in-game hint render block.
 
 ## Adding a New Level (e.g. Phase 2 lip 21)
 

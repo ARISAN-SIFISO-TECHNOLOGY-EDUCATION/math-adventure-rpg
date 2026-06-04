@@ -13,6 +13,9 @@ import HigherPrimaryPage from './pages/HigherPrimaryPage';
 import AdvancedPrimaryPage from './pages/AdvancedPrimaryPage';
 import SecondaryPage from './pages/SecondaryPage';
 import Age14Page from './pages/Age14Page';
+import Grade10Page from './pages/Grade10Page';
+import Grade11Page from './pages/Grade11Page';
+import Grade12Page from './pages/Grade12Page';
 import GrownUpCorner from './pages/GrownUpCorner';
 import Game from './game/Game';
 import BottomNav from './components/BottomNav';
@@ -74,6 +77,9 @@ function AppShell() {
           <Route path="/advanced-primary" element={<AdvancedPrimaryPage />} />
           <Route path="/secondary" element={<SecondaryPage />} />
           <Route path="/age14" element={<Age14Page />} />
+          <Route path="/grade10" element={<Grade10Page />} />
+          <Route path="/grade11" element={<Grade11Page />} />
+          <Route path="/grade12" element={<Grade12Page />} />
           <Route path="/play" element={<Game />} />
           <Route path="/grown-up-corner" element={<GrownUpCorner />} />
           <Route path="*" element={<Navigate to="/" replace />} />

@@ -2870,6 +2870,1476 @@ function p6l15(): Problem {
   };
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// PHASE 7 — Age 15 · CAPS Grade 10 (FET) — "School of Foundations"
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ── World 1: The Algebra Foundry ──────────────────────────────────────────────
+
+function p7l1(): Problem {
+  // Exponent laws + rational exponents
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const base = rand(2, 5), m = rand(2, 5), n = rand(2, 5);
+    return {
+      question: `Simplify: ${base}^${m} × ${base}^${n} = ${base}^?`,
+      options: numericOptions(m + n, 4, 2, 3),
+      correctAnswer: m + n,
+      explanation: `Product law: aᵐ × aⁿ = aᵐ⁺ⁿ. Add the exponents: ${m} + ${n} = ${m + n}.`,
+    };
+  }
+  if (variant === 1) {
+    const base = rand(2, 4), m = rand(2, 4), n = rand(2, 3);
+    return {
+      question: `Simplify: (${base}^${m})^${n} = ${base}^?`,
+      options: numericOptions(m * n, 4, 2, 3),
+      correctAnswer: m * n,
+      explanation: `Power law: (aᵐ)ⁿ = aᵐⁿ. Multiply the exponents: ${m} × ${n} = ${m * n}.`,
+    };
+  }
+  const roots: [number, number, number][] = [[16, 2, 4], [25, 2, 5], [27, 3, 3], [8, 3, 2], [64, 3, 4], [36, 2, 6]];
+  const [val, r, ans] = roots[rand(0, roots.length - 1)];
+  const label = r === 2 ? '1/2' : '1/3';
+  return {
+    question: `Evaluate: ${val}^(${label})`,
+    options: numericOptions(ans, 4, 1, 3),
+    correctAnswer: ans,
+    explanation: `A power of 1/${r} means the ${r === 2 ? 'square' : 'cube'} root. ${val}^(${label}) = ${ans}.`,
+  };
+}
+
+function p7l2(): Problem {
+  // Factorising: difference of squares, common factor, trinomial
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = rand(2, 9);
+    const ans = `(x − ${a})(x + ${a})`;
+    return {
+      question: `Factorise: x² − ${a * a}`,
+      options: shuffle([ans, `(x − ${a})(x − ${a})`, `(x + ${a})(x + ${a})`, `(x − ${a * a})(x + 1)`]),
+      correctAnswer: ans,
+      explanation: `Difference of squares: a² − b² = (a − b)(a + b). x² − ${a * a} = (x − ${a})(x + ${a}).`,
+    };
+  }
+  if (variant === 1) {
+    const k = rand(2, 6), b = rand(2, 6);
+    const ans = `${k}(x + ${b})`;
+    return {
+      question: `Factorise: ${k}x + ${k * b}`,
+      options: shuffle([ans, `${k}(x + ${k * b})`, `${k * b}(x + 1)`, `x(${k} + ${k * b})`]),
+      correctAnswer: ans,
+      explanation: `Take out the highest common factor ${k}: ${k}x + ${k * b} = ${k}(x + ${b}).`,
+    };
+  }
+  const pairs: [number, number][] = [[2, 3], [1, 4], [3, 4], [2, 5], [1, 6], [3, 5]];
+  const [a, b] = pairs[rand(0, pairs.length - 1)];
+  const s = a + b, p = a * b;
+  const ans = `(x + ${a})(x + ${b})`;
+  return {
+    question: `Factorise: x² + ${s}x + ${p}`,
+    options: shuffle([ans, `(x + ${s})(x + ${p})`, `(x + ${a + 1})(x + ${b})`, `(x − ${a})(x − ${b})`]),
+    correctAnswer: ans,
+    explanation: `Find two numbers that add to ${s} and multiply to ${p}: ${a} and ${b} → (x + ${a})(x + ${b}).`,
+  };
+}
+
+function p7l3(): Problem {
+  // Simplifying algebraic fractions
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const k = rand(2, 6), m = rand(2, 4);
+    const ans = `${k}x`;
+    return {
+      question: `Simplify: (${k * m}x²) / (${m}x)`,
+      options: shuffle([ans, `${k}x²`, `${k * m}x`, `${k}`]),
+      correctAnswer: ans,
+      explanation: `Divide coefficients (${k * m} ÷ ${m} = ${k}) and x² ÷ x = x → ${k}x.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(2, 7);
+    const ans = `x + ${a}`;
+    return {
+      question: `Simplify: (x² − ${a * a}) / (x − ${a})`,
+      options: shuffle([ans, `x − ${a}`, `x + ${a * a}`, `x`]),
+      correctAnswer: ans,
+      explanation: `x² − ${a * a} = (x − ${a})(x + ${a}). Cancel (x − ${a}) → x + ${a}.`,
+    };
+  }
+  const a = rand(2, 7);
+  const ans = `x − ${a}`;
+  return {
+    question: `Simplify: (x² − ${a * a}) / (x + ${a})`,
+    options: shuffle([ans, `x + ${a}`, `x − ${a * a}`, `x`]),
+    correctAnswer: ans,
+    explanation: `x² − ${a * a} = (x − ${a})(x + ${a}). Cancel (x + ${a}) → x − ${a}.`,
+  };
+}
+
+function p7l4(): Problem {
+  // Solving equations: linear, quadratic, simultaneous
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const x = rand(2, 9), a = rand(2, 6), b = rand(1, 10);
+    const c = a * x + b;
+    return {
+      question: `Solve for x: ${a}x + ${b} = ${c}`,
+      options: numericOptions(x, 4, 0, 3),
+      correctAnswer: x,
+      explanation: `${a}x = ${c} − ${b} = ${a * x}. x = ${a * x} ÷ ${a} = ${x}.`,
+    };
+  }
+  if (variant === 1) {
+    const pairs: [number, number][] = [[2, 3], [1, 4], [3, 5], [2, 5], [1, 6]];
+    const [a, b] = pairs[rand(0, pairs.length - 1)];
+    const s = a + b, p = a * b;
+    const ans = `x = −${a} or x = −${b}`;
+    return {
+      question: `Solve: x² + ${s}x + ${p} = 0`,
+      options: shuffle([ans, `x = ${a} or x = ${b}`, `x = −${s} or x = −${p}`, `x = ${a} or x = −${b}`]),
+      correctAnswer: ans,
+      explanation: `Factorise: (x + ${a})(x + ${b}) = 0 → x = −${a} or x = −${b}.`,
+    };
+  }
+  // Simultaneous: x + y = S, x − y = D
+  const x = rand(4, 12), y = rand(1, x - 1);
+  const S = x + y, D = x - y;
+  return {
+    question: `Solve simultaneously:\nx + y = ${S}\nx − y = ${D}\nWhat is x?`,
+    options: numericOptions(x, 4, 0, 3),
+    correctAnswer: x,
+    explanation: `Add the equations: 2x = ${S} + ${D} = ${S + D}. x = ${x}.`,
+  };
+}
+
+function p7l5(): Problem {
+  // BOSS: mixed algebra & exponents
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const base = rand(2, 4), m = rand(2, 4), n = rand(2, 4);
+    return {
+      question: `Simplify: ${base}^${m} × ${base}^${n} = ${base}^?`,
+      options: numericOptions(m + n, 4, 2, 3),
+      correctAnswer: m + n,
+      explanation: `Add exponents: ${m} + ${n} = ${m + n}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(2, 8);
+    const ans = `(x − ${a})(x + ${a})`;
+    return {
+      question: `Factorise: x² − ${a * a}`,
+      options: shuffle([ans, `(x − ${a})(x − ${a})`, `(x + ${a})(x + ${a})`, `(x − ${a * a})(x + 1)`]),
+      correctAnswer: ans,
+      explanation: `Difference of squares → (x − ${a})(x + ${a}).`,
+    };
+  }
+  const x = rand(2, 9), a = rand(2, 5), b = rand(1, 9);
+  const c = a * x + b;
+  return {
+    question: `Solve for x: ${a}x + ${b} = ${c}`,
+    options: numericOptions(x, 4, 0, 3),
+    correctAnswer: x,
+    explanation: `${a}x = ${a * x}, so x = ${x}.`,
+  };
+}
+
+// ── World 2: The Function Observatory ─────────────────────────────────────────
+
+function p7l6(): Problem {
+  // Linear number patterns
+  const a = rand(2, 8), d = rand(2, 6);
+  const variant = rand(0, 1);
+  if (variant === 0) {
+    const n = rand(6, 12);
+    const tn = a + (n - 1) * d;
+    return {
+      question: `Pattern: ${a}, ${a + d}, ${a + 2 * d}, ${a + 3 * d}, …\nFind the ${n}th term.`,
+      options: numericOptions(tn, 4, 0, d * 2),
+      correctAnswer: tn,
+      explanation: `Tₙ = a + (n−1)d = ${a} + (${n}−1)×${d} = ${tn}.`,
+    };
+  }
+  const ans = `${d}n + ${a - d}`;
+  return {
+    question: `Pattern: ${a}, ${a + d}, ${a + 2 * d}, ${a + 3 * d}, …\nFind the general term Tₙ.`,
+    options: shuffle([ans, `${d}n + ${a}`, `${a}n + ${d}`, `${d}n − ${a - d}`]),
+    correctAnswer: ans,
+    explanation: `Common difference d = ${d}, so Tₙ = ${d}n + (a − d) = ${d}n + ${a - d}.`,
+  };
+}
+
+function p7l7(): Problem {
+  // Linear & quadratic functions: intercepts, turning point
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const m = rand(2, 5), c = rand(-6, 6);
+    const cStr = c >= 0 ? `+ ${c}` : `− ${-c}`;
+    return {
+      question: `For y = ${m}x ${cStr}, what is the y-intercept?`,
+      options: numericOptions(c, 4, c - 6, 4),
+      correctAnswer: c,
+      explanation: `The y-intercept is the value of y when x = 0 → y = ${c}.`,
+    };
+  }
+  if (variant === 1) {
+    const q = rand(-6, 6);
+    const ans = `(0, ${q})`;
+    return {
+      question: `For y = x² ${q >= 0 ? '+ ' + q : '− ' + -q}, what is the turning point?`,
+      options: shuffle([ans, `(${q}, 0)`, `(0, ${-q})`, `(1, ${q})`]),
+      correctAnswer: ans,
+      explanation: `y = x² + q has its turning point at (0, q) = (0, ${q}).`,
+    };
+  }
+  const a = rand(1, 3), x = rand(2, 5), q = rand(-4, 4);
+  const y = a * x * x + q;
+  return {
+    question: `For y = ${a}x² ${q >= 0 ? '+ ' + q : '− ' + -q}, find y when x = ${x}.`,
+    options: numericOptions(y, 4, 0, 6),
+    correctAnswer: y,
+    explanation: `y = ${a}×${x}² ${q >= 0 ? '+ ' + q : '− ' + -q} = ${a * x * x} ${q >= 0 ? '+ ' + q : '− ' + -q} = ${y}.`,
+  };
+}
+
+function p7l8(): Problem {
+  // Hyperbola & exponential functions
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = [6, 8, 12, 12, 24][rand(0, 4)];
+    const divisors = [2, 3, 4, 6].filter(d => a % d === 0);
+    const x = divisors[rand(0, divisors.length - 1)];
+    const y = a / x;
+    return {
+      question: `For y = ${a}/x, find y when x = ${x}.`,
+      options: numericOptions(y, 4, 1, 4),
+      correctAnswer: y,
+      explanation: `y = ${a} ÷ ${x} = ${y}.`,
+    };
+  }
+  if (variant === 1) {
+    const q = rand(1, 5);
+    const ans = `y = ${q}`;
+    return {
+      question: `What is the horizontal asymptote of y = 3/x + ${q}?`,
+      options: shuffle([ans, `y = 0`, `x = ${q}`, `y = ${q + 3}`]),
+      correctAnswer: ans,
+      explanation: `For y = a/x + q the horizontal asymptote is y = q → y = ${q}.`,
+    };
+  }
+  const base = rand(2, 4), x = rand(2, 3);
+  const a = rand(1, 3);
+  const y = a * Math.pow(base, x);
+  return {
+    question: `For y = ${a}·${base}ˣ, find y when x = ${x}.`,
+    options: numericOptions(y, 4, 1, Math.max(4, Math.round(y * 0.3))),
+    correctAnswer: y,
+    explanation: `y = ${a} × ${base}^${x} = ${a} × ${Math.pow(base, x)} = ${y}.`,
+  };
+}
+
+function p7l9(): Problem {
+  // Simple & compound interest
+  const variant = rand(0, 2);
+  const P = rand(1, 9) * 1000;
+  if (variant === 0) {
+    const i = [5, 10][rand(0, 1)], n = rand(2, 5);
+    const A = P + (P * i * n) / 100;
+    return {
+      question: `Simple interest: invest R${P} at ${i}% per year for ${n} years.\nFinal amount?`,
+      options: numericOptions(A, 4, P, Math.max(50, Math.round(A * 0.08))),
+      correctAnswer: A,
+      explanation: `A = P(1 + i·n) = ${P}(1 + ${i / 100}×${n}) = R${A}.`,
+    };
+  }
+  if (variant === 1) {
+    const i = 10, n = rand(2, 4);
+    const I = (P * i * n) / 100;
+    return {
+      question: `Simple interest only: R${P} at ${i}% per year for ${n} years.\nInterest earned?`,
+      options: numericOptions(I, 4, 0, Math.max(50, Math.round(I * 0.15))),
+      correctAnswer: I,
+      explanation: `I = P·i·n = ${P} × ${i / 100} × ${n} = R${I}.`,
+    };
+  }
+  const A = Math.round(P * 1.21); // 10% compound for 2 years
+  return {
+    question: `Compound interest: R${P} at 10% per year for 2 years.\nFinal amount?`,
+    options: numericOptions(A, 4, P, Math.max(50, Math.round(A * 0.08))),
+    correctAnswer: A,
+    explanation: `A = P(1 + i)ⁿ = ${P}(1.1)² = ${P} × 1.21 = R${A}.`,
+  };
+}
+
+function p7l10(): Problem {
+  // BOSS: functions, patterns & finance
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = rand(2, 6), d = rand(2, 5), n = rand(6, 10);
+    const tn = a + (n - 1) * d;
+    return {
+      question: `Pattern ${a}, ${a + d}, ${a + 2 * d}, …\nFind term ${n}.`,
+      options: numericOptions(tn, 4, 0, d * 2),
+      correctAnswer: tn,
+      explanation: `Tₙ = ${a} + (${n}−1)×${d} = ${tn}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(1, 3), x = rand(2, 4), q = rand(-3, 3);
+    const y = a * x * x + q;
+    return {
+      question: `y = ${a}x² ${q >= 0 ? '+ ' + q : '− ' + -q}. Find y when x = ${x}.`,
+      options: numericOptions(y, 4, 0, 6),
+      correctAnswer: y,
+      explanation: `y = ${a}×${x * x} ${q >= 0 ? '+ ' + q : '− ' + -q} = ${y}.`,
+    };
+  }
+  const P = rand(2, 8) * 1000;
+  const A = Math.round(P * 1.21);
+  return {
+    question: `R${P} at 10% compound interest for 2 years. Final amount?`,
+    options: numericOptions(A, 4, P, Math.max(50, Math.round(A * 0.08))),
+    correctAnswer: A,
+    explanation: `${P} × 1.21 = R${A}.`,
+  };
+}
+
+// ── World 3: The Geometry Citadel ─────────────────────────────────────────────
+
+function p7l11(): Problem {
+  // Trig ratios & special angles
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const specials = [
+      { q: 'tan 45°', a: '1' }, { q: 'sin 30°', a: '1/2' }, { q: 'cos 60°', a: '1/2' },
+      { q: 'sin 90°', a: '1' }, { q: 'cos 0°', a: '1' }, { q: 'sin 0°', a: '0' },
+    ];
+    const s = specials[rand(0, specials.length - 1)];
+    return {
+      question: `What is ${s.q}?`,
+      options: shuffle(['0', '1/2', '1', '√3/2']),
+      correctAnswer: s.a,
+      explanation: `${s.q} = ${s.a} (a standard special-angle value).`,
+    };
+  }
+  const triples: [number, number, number][] = [[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17]];
+  const [opp, adj, hyp] = triples[rand(0, triples.length - 1)];
+  if (variant === 1) {
+    const ans = fractionStr(opp, hyp);
+    return {
+      question: `Right triangle: opposite = ${opp}, hypotenuse = ${hyp}.\nWhat is sin θ?`,
+      options: shuffle([ans, fractionStr(adj, hyp), fractionStr(opp, adj), fractionStr(hyp, opp)].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+      correctAnswer: ans,
+      explanation: `sin θ = opposite ÷ hypotenuse = ${opp}/${hyp} = ${ans}.`,
+    };
+  }
+  const ans = fractionStr(opp, adj);
+  return {
+    question: `Right triangle: opposite = ${opp}, adjacent = ${adj}.\nWhat is tan θ?`,
+    options: shuffle([ans, fractionStr(adj, opp), fractionStr(opp, hyp), fractionStr(adj, hyp)].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+    correctAnswer: ans,
+    explanation: `tan θ = opposite ÷ adjacent = ${opp}/${adj} = ${ans}.`,
+  };
+}
+
+function p7l12(): Problem {
+  // Analytical geometry: distance, midpoint, gradient
+  const variant = rand(0, 2);
+  const triples: [number, number, number][] = [[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 6, 10]];
+  if (variant === 0) {
+    const [dx, dy, dist] = triples[rand(0, triples.length - 1)];
+    const x1 = rand(-3, 3), y1 = rand(-3, 3);
+    return {
+      question: `Distance between (${x1}, ${y1}) and (${x1 + dx}, ${y1 + dy})?`,
+      options: numericOptions(dist, 4, 1, 4),
+      correctAnswer: dist,
+      explanation: `d = √((${dx})² + (${dy})²) = √${dx * dx + dy * dy} = ${dist}.`,
+    };
+  }
+  if (variant === 1) {
+    const x1 = rand(-4, 4) * 2, y1 = rand(-4, 4) * 2, x2 = rand(-4, 4) * 2, y2 = rand(-4, 4) * 2;
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const ans = `(${mx}, ${my})`;
+    return {
+      question: `Midpoint of (${x1}, ${y1}) and (${x2}, ${y2})?`,
+      options: shuffle([ans, `(${mx + 1}, ${my})`, `(${mx}, ${my + 1})`, `(${x1 + x2}, ${y1 + y2})`]),
+      correctAnswer: ans,
+      explanation: `Midpoint = ((${x1}+${x2})/2, (${y1}+${y2})/2) = (${mx}, ${my}).`,
+    };
+  }
+  const x1 = rand(0, 3), y1 = rand(0, 3), run = rand(1, 4), m = rand(1, 4);
+  const x2 = x1 + run, y2 = y1 + m * run;
+  return {
+    question: `Gradient of the line through (${x1}, ${y1}) and (${x2}, ${y2})?`,
+    options: numericOptions(m, 4, 0, 3),
+    correctAnswer: m,
+    explanation: `m = (y₂−y₁)/(x₂−x₁) = (${y2}−${y1})/(${x2}−${x1}) = ${m}.`,
+  };
+}
+
+function p7l13(): Problem {
+  // Euclidean geometry: angles
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = rand(30, 120);
+    const ans = 180 - a;
+    return {
+      question: `Two angles on a straight line. One is ${a}°.\nFind the other.`,
+      options: numericOptions(ans, 4, 0, 20),
+      correctAnswer: ans,
+      explanation: `Angles on a straight line add to 180°. 180 − ${a} = ${ans}°.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(30, 80), b = rand(30, 80);
+    const ans = 180 - a - b;
+    return {
+      question: `Triangle angles: ${a}° and ${b}°.\nFind the third angle.`,
+      options: numericOptions(ans, 4, 0, 20),
+      correctAnswer: ans,
+      explanation: `Angles in a triangle add to 180°. 180 − ${a} − ${b} = ${ans}°.`,
+    };
+  }
+  const a = rand(60, 130), b = rand(40, 110);
+  const ans = 360 - a - b - 90;
+  const safe = ans > 0 ? ans : 360 - a - b - 60;
+  const c = ans > 0 ? 90 : 60;
+  return {
+    question: `Quadrilateral angles: ${a}°, ${b}°, ${c}°.\nFind the fourth angle.`,
+    options: numericOptions(safe, 4, 0, 20),
+    correctAnswer: safe,
+    explanation: `Angles in a quadrilateral add to 360°. 360 − ${a} − ${b} − ${c} = ${safe}°.`,
+  };
+}
+
+function p7l14(): Problem {
+  // Statistics & probability
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const m = rand(8, 14);
+    const first4 = Array.from({ length: 4 }, () => rand(m - 2, m + 2));
+    const data = [...first4, 5 * m - first4.reduce((s, v) => s + v, 0)];
+    return {
+      question: `Find the mean: ${data.join(', ')}`,
+      options: numericOptions(m, 4, 0, 5),
+      correctAnswer: m,
+      explanation: `Mean = sum ÷ count = ${5 * m} ÷ 5 = ${m}.`,
+    };
+  }
+  if (variant === 1) {
+    const vals = Array.from({ length: 5 }, () => rand(1, 20)).sort((a, b) => a - b);
+    const median = vals[2];
+    return {
+      question: `Find the median: ${vals.join(', ')}`,
+      options: numericOptions(median, 4, 0, 5),
+      correctAnswer: median,
+      explanation: `With 5 sorted values, the median is the middle (3rd) value = ${median}.`,
+    };
+  }
+  const fav = rand(1, 5), total = fav + rand(1, 5);
+  const ans = fractionStr(fav, total);
+  return {
+    question: `A bag has ${total} marbles, ${fav} are red.\nP(red) = ?`,
+    options: shuffle([ans, fractionStr(total - fav, total), fractionStr(fav, total + 1), fractionStr(1, total)].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+    correctAnswer: ans,
+    explanation: `P(red) = favourable ÷ total = ${fav}/${total} = ${ans}.`,
+  };
+}
+
+function p7l15(): Problem {
+  // FINAL BOSS: trig, geometry, stats
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const triples: [number, number, number][] = [[3, 4, 5], [6, 8, 10], [5, 12, 13]];
+    const [opp, , hyp] = triples[rand(0, triples.length - 1)];
+    const ans = fractionStr(opp, hyp);
+    return {
+      question: `Right triangle: opposite ${opp}, hypotenuse ${hyp}.\nsin θ = ?`,
+      options: shuffle([ans, fractionStr(hyp, opp), fractionStr(opp, hyp - opp), fractionStr(1, 2)].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+      correctAnswer: ans,
+      explanation: `sin θ = ${opp}/${hyp} = ${ans}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(40, 80), b = rand(40, 80);
+    const ans = 180 - a - b;
+    return {
+      question: `Triangle angles ${a}° and ${b}°. Third angle?`,
+      options: numericOptions(ans, 4, 0, 20),
+      correctAnswer: ans,
+      explanation: `180 − ${a} − ${b} = ${ans}°.`,
+    };
+  }
+  const vals = Array.from({ length: 5 }, () => rand(1, 20)).sort((a, b) => a - b);
+  return {
+    question: `Median of ${vals.join(', ')}?`,
+    options: numericOptions(vals[2], 4, 0, 5),
+    correctAnswer: vals[2],
+    explanation: `Middle value = ${vals[2]}.`,
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PHASE 8 — Age 16 · CAPS Grade 11 (FET) — "School of Mastery"
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ── World 1: The Quadratic Forge ──────────────────────────────────────────────
+
+function p8l1(): Problem {
+  // Exponents & surds
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const surds: [number, number, number][] = [[12, 2, 3], [18, 3, 2], [8, 2, 2], [20, 2, 5], [27, 3, 3], [50, 5, 2]];
+    const [val, a, b] = surds[rand(0, surds.length - 1)];
+    const ans = `${a}√${b}`;
+    return {
+      question: `Simplify: √${val}`,
+      options: shuffle([ans, `${b}√${a}`, `${a}√${a}`, `√${val}`]),
+      correctAnswer: ans,
+      explanation: `√${val} = √(${a * a}×${b}) = ${a}√${b}.`,
+    };
+  }
+  if (variant === 1) {
+    const opts: [number, string, number][] = [[8, '2/3', 4], [16, '3/2', 64], [27, '2/3', 9], [25, '3/2', 125], [9, '3/2', 27]];
+    const [val, exp, ans] = opts[rand(0, opts.length - 1)];
+    return {
+      question: `Evaluate: ${val}^(${exp})`,
+      options: numericOptions(ans, 4, 1, Math.max(4, Math.round(ans * 0.3))),
+      correctAnswer: ans,
+      explanation: `${val}^(${exp}) = (root then power) = ${ans}.`,
+    };
+  }
+  const a = rand(2, 6), b = rand(2, 6);
+  const ans = a * b;
+  return {
+    question: `Simplify: √${a * a} × √${b * b}`,
+    options: numericOptions(ans, 4, 1, Math.max(4, Math.round(ans * 0.3))),
+    correctAnswer: ans,
+    explanation: `√${a * a} = ${a}, √${b * b} = ${b}. ${a} × ${b} = ${ans}.`,
+  };
+}
+
+function p8l2(): Problem {
+  // Quadratic equations: factorisation & formula
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const pairs: [number, number][] = [[2, 3], [1, 5], [3, 4], [2, 6], [4, 5]];
+    const [a, b] = pairs[rand(0, pairs.length - 1)];
+    const ans = `x = ${a} or x = ${b}`;
+    return {
+      question: `Solve: x² − ${a + b}x + ${a * b} = 0`,
+      options: shuffle([ans, `x = −${a} or x = −${b}`, `x = ${a + b} or x = ${a * b}`, `x = ${a} or x = −${b}`]),
+      correctAnswer: ans,
+      explanation: `(x − ${a})(x − ${b}) = 0 → x = ${a} or x = ${b}.`,
+    };
+  }
+  if (variant === 1) {
+    const k = [4, 9, 16, 25, 36][rand(0, 4)];
+    const r = Math.sqrt(k);
+    const ans = `x = ±${r}`;
+    return {
+      question: `Solve: x² = ${k}`,
+      options: shuffle([ans, `x = ${r}`, `x = ±${k}`, `x = ±${r + 1}`]),
+      correctAnswer: ans,
+      explanation: `x = ±√${k} = ±${r}.`,
+    };
+  }
+  const pairs: [number, number][] = [[1, 6], [2, 5], [3, 5], [1, 8]];
+  const [a, b] = pairs[rand(0, pairs.length - 1)];
+  const ans = `x = −${a} or x = ${b}`;
+  return {
+    question: `Solve: x² + ${a - b}x − ${a * b} = 0`,
+    options: shuffle([ans, `x = ${a} or x = −${b}`, `x = ${a} or x = ${b}`, `x = −${a} or x = −${b}`]),
+    correctAnswer: ans,
+    explanation: `(x + ${a})(x − ${b}) = 0 → x = −${a} or x = ${b}.`,
+  };
+}
+
+function p8l3(): Problem {
+  // Discriminant & nature of roots
+  const variant = rand(0, 1);
+  const a = 1, b = rand(-6, 6), c = rand(-6, 6);
+  const disc = b * b - 4 * a * c;
+  if (variant === 0) {
+    return {
+      question: `Find the discriminant (b² − 4ac) of x² ${b >= 0 ? '+ ' + b : '− ' + -b}x ${c >= 0 ? '+ ' + c : '− ' + -c} = 0`,
+      options: numericOptions(disc, 4, disc - 10, 6),
+      correctAnswer: disc,
+      explanation: `Δ = b² − 4ac = (${b})² − 4(1)(${c}) = ${b * b} − ${4 * c} = ${disc}.`,
+    };
+  }
+  const nature = disc > 0 ? 'Two real, unequal roots' : disc === 0 ? 'Two real, equal roots' : 'Non-real roots';
+  return {
+    question: `Δ = ${disc}. What is the nature of the roots?`,
+    options: shuffle(['Two real, unequal roots', 'Two real, equal roots', 'Non-real roots', 'No solution exists']),
+    correctAnswer: nature,
+    explanation: `Δ ${disc > 0 ? '> 0 → two real, unequal' : disc === 0 ? '= 0 → two real, equal' : '< 0 → non-real'} roots.`,
+  };
+}
+
+function p8l4(): Problem {
+  // Quadratic number patterns
+  const a = rand(1, 3);
+  // sequence Tn = a n² + bn + c — build from first terms with 2nd difference 2a
+  const b = rand(0, 3), c = rand(0, 4);
+  const T = (n: number) => a * n * n + b * n + c;
+  const seq = [T(1), T(2), T(3), T(4)];
+  const variant = rand(0, 1);
+  if (variant === 0) {
+    return {
+      question: `Quadratic pattern: ${seq.join(', ')}, …\nFind the next term.`,
+      options: numericOptions(T(5), 4, 0, Math.max(4, Math.round(T(5) * 0.2))),
+      correctAnswer: T(5),
+      explanation: `Second difference is constant (${2 * a}). Continuing the pattern → ${T(5)}.`,
+    };
+  }
+  return {
+    question: `Quadratic pattern: ${seq.join(', ')}, …\nWhat is the constant second difference?`,
+    options: numericOptions(2 * a, 4, 0, 3),
+    correctAnswer: 2 * a,
+    explanation: `First differences: ${seq[1] - seq[0]}, ${seq[2] - seq[1]}, ${seq[3] - seq[2]}. Second difference = ${2 * a}.`,
+  };
+}
+
+function p8l5(): Problem {
+  // BOSS: algebra, equations & patterns
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const surds: [number, number, number][] = [[12, 2, 3], [18, 3, 2], [20, 2, 5], [27, 3, 3]];
+    const [val, a, b] = surds[rand(0, surds.length - 1)];
+    const ans = `${a}√${b}`;
+    return {
+      question: `Simplify: √${val}`,
+      options: shuffle([ans, `${b}√${a}`, `${a}√${a}`, `√${val}`]),
+      correctAnswer: ans,
+      explanation: `√${val} = ${a}√${b}.`,
+    };
+  }
+  if (variant === 1) {
+    const pairs: [number, number][] = [[2, 3], [1, 5], [3, 4]];
+    const [a, b] = pairs[rand(0, pairs.length - 1)];
+    const ans = `x = ${a} or x = ${b}`;
+    return {
+      question: `Solve: x² − ${a + b}x + ${a * b} = 0`,
+      options: shuffle([ans, `x = −${a} or x = −${b}`, `x = ${a + b} or x = ${a * b}`, `x = ${a} or x = −${b}`]),
+      correctAnswer: ans,
+      explanation: `(x − ${a})(x − ${b}) = 0 → x = ${a} or x = ${b}.`,
+    };
+  }
+  const a = rand(1, 3), b = rand(0, 3), c = rand(0, 4);
+  const T = (n: number) => a * n * n + b * n + c;
+  return {
+    question: `Quadratic pattern: ${[T(1), T(2), T(3), T(4)].join(', ')}, …\nNext term?`,
+    options: numericOptions(T(5), 4, 0, Math.max(4, Math.round(T(5) * 0.2))),
+    correctAnswer: T(5),
+    explanation: `Second difference ${2 * a} stays constant → ${T(5)}.`,
+  };
+}
+
+// ── World 2: The Analytical Tower ─────────────────────────────────────────────
+
+function p8l6(): Problem {
+  // Quadratic functions & shifts
+  const variant = rand(0, 2);
+  const p = rand(-4, 4), q = rand(-4, 4);
+  if (variant === 0) {
+    const ans = `(${p}, ${q})`;
+    return {
+      question: `Turning point of y = (x ${p >= 0 ? '− ' + p : '+ ' + -p})² ${q >= 0 ? '+ ' + q : '− ' + -q}?`,
+      options: shuffle([ans, `(${-p}, ${q})`, `(${p}, ${-q})`, `(${q}, ${p})`]),
+      correctAnswer: ans,
+      explanation: `y = (x − p)² + q has turning point (p, q) = (${p}, ${q}).`,
+    };
+  }
+  if (variant === 1) {
+    const ans = `x = ${p}`;
+    return {
+      question: `Axis of symmetry of y = (x ${p >= 0 ? '− ' + p : '+ ' + -p})² ${q >= 0 ? '+ ' + q : '− ' + -q}?`,
+      options: shuffle([ans, `x = ${-p}`, `y = ${q}`, `x = ${q}`]),
+      correctAnswer: ans,
+      explanation: `The axis of symmetry is x = p = ${p}.`,
+    };
+  }
+  const x = p + rand(1, 3);
+  const y = (x - p) * (x - p) + q;
+  return {
+    question: `For y = (x ${p >= 0 ? '− ' + p : '+ ' + -p})² ${q >= 0 ? '+ ' + q : '− ' + -q}, find y when x = ${x}.`,
+    options: numericOptions(y, 4, 0, 5),
+    correctAnswer: y,
+    explanation: `y = (${x} − ${p})² ${q >= 0 ? '+ ' + q : '− ' + -q} = ${(x - p) * (x - p)} ${q >= 0 ? '+ ' + q : '− ' + -q} = ${y}.`,
+  };
+}
+
+function p8l7(): Problem {
+  // Hyperbola / exponential shifts: asymptotes
+  const variant = rand(0, 2);
+  const p = rand(-4, 4), q = rand(-4, 4);
+  if (variant === 0) {
+    const ans = `x = ${p}`;
+    return {
+      question: `Vertical asymptote of y = 2/(x ${p >= 0 ? '− ' + p : '+ ' + -p}) ${q >= 0 ? '+ ' + q : '− ' + -q}?`,
+      options: shuffle([ans, `x = ${-p}`, `y = ${q}`, `x = ${q}`]),
+      correctAnswer: ans,
+      explanation: `For y = a/(x − p) + q the vertical asymptote is x = p = ${p}.`,
+    };
+  }
+  if (variant === 1) {
+    const ans = `y = ${q}`;
+    return {
+      question: `Horizontal asymptote of y = 2/(x ${p >= 0 ? '− ' + p : '+ ' + -p}) ${q >= 0 ? '+ ' + q : '− ' + -q}?`,
+      options: shuffle([ans, `y = ${-q}`, `x = ${p}`, `y = 0`]),
+      correctAnswer: ans,
+      explanation: `The horizontal asymptote is y = q = ${q}.`,
+    };
+  }
+  const ans = `y = ${q}`;
+  return {
+    question: `Horizontal asymptote of y = 3ˣ ${q >= 0 ? '+ ' + q : '− ' + -q}?`,
+    options: shuffle([ans, `y = ${q + 3}`, `x = ${q}`, `y = 0`]),
+    correctAnswer: ans,
+    explanation: `y = b^x + q has horizontal asymptote y = q = ${q}.`,
+  };
+}
+
+function p8l8(): Problem {
+  // Analytical geometry: line equations, parallel/perpendicular
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const m = rand(2, 5);
+    const ans = `${m}`;
+    return {
+      question: `A line parallel to y = ${m}x + 3 has what gradient?`,
+      options: numericOptions(m, 4, 0, 3),
+      correctAnswer: m,
+      explanation: `Parallel lines have equal gradients → ${m}.`,
+    };
+  }
+  if (variant === 1) {
+    const m = [2, 3, 4, 5][rand(0, 3)];
+    const ans = fractionStr(-1, m);
+    return {
+      question: `A line perpendicular to y = ${m}x − 1 has what gradient?`,
+      options: shuffle([ans, fractionStr(1, m), `${m}`, `${-m}`].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+      correctAnswer: ans,
+      explanation: `Perpendicular gradient = −1/m = −1/${m} = ${ans}.`,
+    };
+  }
+  const m = rand(2, 4), x = rand(1, 4), y = rand(1, 10);
+  const c = y - m * x;
+  return {
+    question: `Line y = ${m}x + c passes through (${x}, ${y}).\nFind c.`,
+    options: numericOptions(c, 4, c - 6, 4),
+    correctAnswer: c,
+    explanation: `${y} = ${m}×${x} + c → c = ${y} − ${m * x} = ${c}.`,
+  };
+}
+
+function p8l9(): Problem {
+  // Finance: depreciation, growth
+  const variant = rand(0, 2);
+  const P = rand(1, 9) * 10000;
+  if (variant === 0) {
+    const A = Math.round(P * 0.81); // 10% reducing balance, 2 years
+    return {
+      question: `A car worth R${P} depreciates at 10% per year (reducing balance).\nValue after 2 years?`,
+      options: numericOptions(A, 4, 0, Math.max(100, Math.round(A * 0.08))),
+      correctAnswer: A,
+      explanation: `A = P(1 − i)ⁿ = ${P}(0.9)² = ${P} × 0.81 = R${A}.`,
+    };
+  }
+  if (variant === 1) {
+    const i = 10, n = rand(2, 4);
+    const A = P - (P * i * n) / 100;
+    return {
+      question: `Straight-line depreciation: R${P} at ${i}% per year for ${n} years.\nValue left?`,
+      options: numericOptions(A, 4, 0, Math.max(100, Math.round(A * 0.1))),
+      correctAnswer: A,
+      explanation: `A = P(1 − i·n) = ${P}(1 − ${i / 100}×${n}) = R${A}.`,
+    };
+  }
+  const A = Math.round(P * 1.21);
+  return {
+    question: `R${P} grows at 10% compound for 2 years.\nFinal value?`,
+    options: numericOptions(A, 4, P, Math.max(100, Math.round(A * 0.08))),
+    correctAnswer: A,
+    explanation: `${P} × 1.21 = R${A}.`,
+  };
+}
+
+function p8l10(): Problem {
+  // BOSS: functions, analytical geom & finance
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const p = rand(-4, 4), q = rand(-4, 4);
+    const ans = `(${p}, ${q})`;
+    return {
+      question: `Turning point of y = (x ${p >= 0 ? '− ' + p : '+ ' + -p})² ${q >= 0 ? '+ ' + q : '− ' + -q}?`,
+      options: shuffle([ans, `(${-p}, ${q})`, `(${p}, ${-q})`, `(${q}, ${p})`]),
+      correctAnswer: ans,
+      explanation: `Turning point (p, q) = (${p}, ${q}).`,
+    };
+  }
+  if (variant === 1) {
+    const m = [2, 3, 4][rand(0, 2)];
+    const ans = fractionStr(-1, m);
+    return {
+      question: `Gradient perpendicular to y = ${m}x + 1?`,
+      options: shuffle([ans, fractionStr(1, m), `${m}`, `${-m}`].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+      correctAnswer: ans,
+      explanation: `−1/${m} = ${ans}.`,
+    };
+  }
+  const P = rand(2, 8) * 10000;
+  const A = Math.round(P * 0.81);
+  return {
+    question: `R${P} depreciates 10% per year (reducing balance) for 2 years. Value?`,
+    options: numericOptions(A, 4, 0, Math.max(100, Math.round(A * 0.08))),
+    correctAnswer: A,
+    explanation: `${P} × 0.81 = R${A}.`,
+  };
+}
+
+// ── World 3: The Trigon Sanctum ───────────────────────────────────────────────
+
+function p8l11(): Problem {
+  // Trig identities & reduction formulae
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const ans = 'sin θ';
+    return {
+      question: `Simplify using reduction: sin(180° − θ)`,
+      options: shuffle(['sin θ', '− sin θ', 'cos θ', '− cos θ']),
+      correctAnswer: ans,
+      explanation: `sin(180° − θ) = sin θ (2nd quadrant, sine positive).`,
+    };
+  }
+  if (variant === 1) {
+    const ans = 'cos θ';
+    return {
+      question: `Simplify using reduction: cos(360° − θ)`,
+      options: shuffle(['cos θ', '− cos θ', 'sin θ', '− sin θ']),
+      correctAnswer: ans,
+      explanation: `cos(360° − θ) = cos θ (4th quadrant, cosine positive).`,
+    };
+  }
+  return {
+    question: `Simplify: sin²θ + cos²θ`,
+    options: shuffle(['1', '0', '2', 'sin θ cos θ']),
+    correctAnswer: '1',
+    explanation: `The fundamental identity: sin²θ + cos²θ = 1.`,
+  };
+}
+
+function p8l12(): Problem {
+  // Sine, cosine & area rules
+  const variant = rand(0, 1);
+  if (variant === 0) {
+    // area = 1/2 ab sin C, C = 30° → sin = 1/2; a is a multiple of 4 so area is whole
+    const a = rand(2, 6) * 4, b = rand(3, 8);
+    const area = (a * b * 0.5) / 2;
+    return {
+      question: `Triangle: a = ${a}, b = ${b}, included angle C = 30°.\nArea = ½·a·b·sin C = ?`,
+      options: numericOptions(area, 4, 0, Math.max(4, Math.round(area * 0.3))),
+      correctAnswer: area,
+      explanation: `Area = ½ × ${a} × ${b} × sin30° = ½ × ${a} × ${b} × 0.5 = ${area}.`,
+    };
+  }
+  // cosine rule with C = 90° → c² = a² + b²
+  const triples: [number, number, number][] = [[3, 4, 5], [6, 8, 10], [5, 12, 13]];
+  const [a, b, c] = triples[rand(0, triples.length - 1)];
+  return {
+    question: `Cosine rule with C = 90°: c² = a² + b² − 2ab·cos90°.\na = ${a}, b = ${b}. Find c.`,
+    options: numericOptions(c, 4, 1, 4),
+    correctAnswer: c,
+    explanation: `cos90° = 0, so c² = ${a}² + ${b}² = ${a * a + b * b}. c = ${c}.`,
+  };
+}
+
+function p8l13(): Problem {
+  // Circle geometry & measurement
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const circ = rand(20, 70);
+    const ans = circ * 2;
+    return {
+      question: `Angle at the circumference is ${circ}°.\nAngle at the centre (same arc)?`,
+      options: numericOptions(ans, 4, 0, 20),
+      correctAnswer: ans,
+      explanation: `Angle at centre = 2 × angle at circumference = 2 × ${circ}° = ${ans}°.`,
+    };
+  }
+  if (variant === 1) {
+    return {
+      question: `An angle in a semicircle (subtended by the diameter) equals?`,
+      options: shuffle(['90°', '45°', '180°', '60°']),
+      correctAnswer: '90°',
+      explanation: `The angle in a semicircle is always 90° (Thales' theorem).`,
+    };
+  }
+  const l = rand(2, 8), b = rand(2, 6), h = rand(2, 6);
+  const v = l * b * h;
+  return {
+    question: `Volume of a box ${l} × ${b} × ${h} (cm)?`,
+    options: numericOptions(v, 4, 0, Math.max(8, Math.round(v * 0.25))),
+    correctAnswer: v,
+    explanation: `V = l × b × h = ${l} × ${b} × ${h} = ${v} cm³.`,
+  };
+}
+
+function p8l14(): Problem {
+  // Probability: tree diagrams, mutually exclusive, complement
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const red = rand(2, 4), total = red + rand(2, 4);
+    const ans = fractionStr(red * red, total * total);
+    return {
+      question: `Bag: ${red} red of ${total} balls, replaced each time.\nP(red then red)?`,
+      options: shuffle([ans, fractionStr(red, total), fractionStr(red * 2, total * 2), fractionStr((total - red) * (total - red), total * total)].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+      correctAnswer: ans,
+      explanation: `Independent: P = ${red}/${total} × ${red}/${total} = ${ans}.`,
+    };
+  }
+  if (variant === 1) {
+    const total = [6, 8, 10][rand(0, 2)];
+    const a = rand(1, 2), b = rand(1, 2);
+    const ans = fractionStr(a + b, total);
+    return {
+      question: `Mutually exclusive events: P(A) = ${fractionStr(a, total)}, P(B) = ${fractionStr(b, total)}.\nP(A or B)?`,
+      options: shuffle([ans, fractionStr(a * b, total * total), fractionStr(a, total), fractionStr(a + b + 1, total)].filter((v, i, a2) => a2.indexOf(v) === i).slice(0, 4)),
+      correctAnswer: ans,
+      explanation: `Mutually exclusive: P(A or B) = P(A) + P(B) = ${ans}.`,
+    };
+  }
+  const total = [4, 5, 8, 10][rand(0, 3)], fav = rand(1, total - 1);
+  const ans = fractionStr(total - fav, total);
+  return {
+    question: `P(A) = ${fractionStr(fav, total)}.\nFind P(not A).`,
+    options: shuffle([ans, fractionStr(fav, total), fractionStr(total - fav, total + 1), fractionStr(1, total)].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+    correctAnswer: ans,
+    explanation: `P(not A) = 1 − P(A) = 1 − ${fractionStr(fav, total)} = ${ans}.`,
+  };
+}
+
+function p8l15(): Problem {
+  // FINAL BOSS: trig, geometry & stats
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    return {
+      question: `Simplify: sin²θ + cos²θ`,
+      options: shuffle(['1', '0', '2', 'tan θ']),
+      correctAnswer: '1',
+      explanation: `Identity: sin²θ + cos²θ = 1.`,
+    };
+  }
+  if (variant === 1) {
+    const circ = rand(20, 70);
+    return {
+      question: `Angle at circumference ${circ}°. Angle at centre?`,
+      options: numericOptions(circ * 2, 4, 0, 20),
+      correctAnswer: circ * 2,
+      explanation: `2 × ${circ}° = ${circ * 2}°.`,
+    };
+  }
+  const total = [4, 5, 8, 10][rand(0, 3)], fav = rand(1, total - 1);
+  const ans = fractionStr(total - fav, total);
+  return {
+    question: `P(A) = ${fractionStr(fav, total)}. Find P(not A).`,
+    options: shuffle([ans, fractionStr(fav, total), fractionStr(1, total), fractionStr(total - fav, total + 1)].filter((v, i, a) => a.indexOf(v) === i).slice(0, 4)),
+    correctAnswer: ans,
+    explanation: `1 − ${fractionStr(fav, total)} = ${ans}.`,
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PHASE 9 — Age 17 · CAPS Grade 12 (Matric) — "School of Excellence"
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ── World 1: The Sequence Spire ───────────────────────────────────────────────
+
+function p9l1(): Problem {
+  // Arithmetic sequences & series
+  const a = rand(2, 8), d = rand(2, 6);
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const n = rand(6, 15);
+    const tn = a + (n - 1) * d;
+    return {
+      question: `Arithmetic: a = ${a}, d = ${d}.\nFind T${n}.`,
+      options: numericOptions(tn, 4, 0, d * 2),
+      correctAnswer: tn,
+      explanation: `Tₙ = a + (n−1)d = ${a} + ${n - 1}×${d} = ${tn}.`,
+    };
+  }
+  if (variant === 1) {
+    const n = rand(4, 8);
+    const sn = (n / 2) * (2 * a + (n - 1) * d);
+    return {
+      question: `Arithmetic: a = ${a}, d = ${d}.\nFind S${n} (sum of first ${n} terms).`,
+      options: numericOptions(sn, 4, 0, Math.max(8, Math.round(sn * 0.2))),
+      correctAnswer: sn,
+      explanation: `Sₙ = n/2·(2a + (n−1)d) = ${n}/2·(${2 * a} + ${(n - 1) * d}) = ${sn}.`,
+    };
+  }
+  const t1 = a, t2 = a + d, t3 = a + 2 * d;
+  return {
+    question: `Sequence: ${t1}, ${t2}, ${t3}, …\nFind the common difference d.`,
+    options: numericOptions(d, 4, 0, 4),
+    correctAnswer: d,
+    explanation: `d = T₂ − T₁ = ${t2} − ${t1} = ${d}.`,
+  };
+}
+
+function p9l2(): Problem {
+  // Geometric sequences & series
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = rand(1, 4), r = rand(2, 3), n = rand(3, 5);
+    const tn = a * Math.pow(r, n - 1);
+    return {
+      question: `Geometric: a = ${a}, r = ${r}.\nFind T${n}.`,
+      options: numericOptions(tn, 4, 1, Math.max(4, Math.round(tn * 0.3))),
+      correctAnswer: tn,
+      explanation: `Tₙ = a·rⁿ⁻¹ = ${a}×${r}^${n - 1} = ${tn}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = [4, 6, 8, 12, 16][rand(0, 4)];
+    const sInf = a * 2; // r = 1/2 → S∞ = a/(1−1/2) = 2a
+    return {
+      question: `Infinite geometric series: a = ${a}, r = ½.\nFind the sum to infinity.`,
+      options: numericOptions(sInf, 4, 1, Math.max(4, Math.round(sInf * 0.3))),
+      correctAnswer: sInf,
+      explanation: `S∞ = a/(1 − r) = ${a}/(1 − ½) = ${a}/½ = ${sInf}.`,
+    };
+  }
+  const a = rand(1, 3), r = rand(2, 3);
+  const t1 = a, t2 = a * r;
+  return {
+    question: `Geometric: ${t1}, ${t2}, ${t2 * r}, …\nFind the common ratio r.`,
+    options: numericOptions(r, 4, 1, 3),
+    correctAnswer: r,
+    explanation: `r = T₂ ÷ T₁ = ${t2} ÷ ${t1} = ${r}.`,
+  };
+}
+
+function p9l3(): Problem {
+  // Sigma notation
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const n = rand(4, 10);
+    const sum = (n * (n + 1)) / 2;
+    return {
+      question: `Evaluate: Σ (k=1 to ${n}) k`,
+      options: numericOptions(sum, 4, 0, Math.max(5, Math.round(sum * 0.3))),
+      correctAnswer: sum,
+      explanation: `Σk = n(n+1)/2 = ${n}×${n + 1}/2 = ${sum}.`,
+    };
+  }
+  if (variant === 1) {
+    const n = rand(3, 7);
+    const sum = n * (n + 1); // Σ 2k = 2·n(n+1)/2 = n(n+1)
+    return {
+      question: `Evaluate: Σ (k=1 to ${n}) 2k`,
+      options: numericOptions(sum, 4, 0, Math.max(5, Math.round(sum * 0.3))),
+      correctAnswer: sum,
+      explanation: `Σ2k = 2·n(n+1)/2 = n(n+1) = ${n}×${n + 1} = ${sum}.`,
+    };
+  }
+  const n = rand(3, 8), c = rand(2, 6);
+  const sum = c * n;
+  return {
+    question: `Evaluate: Σ (k=1 to ${n}) ${c}`,
+    options: numericOptions(sum, 4, 0, Math.max(5, Math.round(sum * 0.3))),
+    correctAnswer: sum,
+    explanation: `A constant summed ${n} times: ${c} × ${n} = ${sum}.`,
+  };
+}
+
+function p9l4(): Problem {
+  // Finance: future/present value, loans
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const P = rand(2, 9) * 1000;
+    const A = Math.round(P * 1.21);
+    return {
+      question: `Future value: R${P} invested at 10% compound for 2 years?`,
+      options: numericOptions(A, 4, P, Math.max(100, Math.round(A * 0.08))),
+      correctAnswer: A,
+      explanation: `F = P(1 + i)ⁿ = ${P}(1.1)² = R${A}.`,
+    };
+  }
+  if (variant === 1) {
+    const A = rand(2, 9) * 1210;
+    const P = Math.round(A / 1.21);
+    return {
+      question: `Present value: how much now to have R${A} in 2 years at 10% compound?`,
+      options: numericOptions(P, 4, 0, Math.max(100, Math.round(P * 0.1))),
+      correctAnswer: P,
+      explanation: `P = A/(1 + i)ⁿ = ${A}/1.21 = R${P}.`,
+    };
+  }
+  const inst = rand(5, 20) * 100, months = [12, 24, 36][rand(0, 2)];
+  const total = inst * months;
+  return {
+    question: `A loan is repaid at R${inst} per month for ${months} months.\nTotal repaid?`,
+    options: numericOptions(total, 4, 0, Math.max(200, Math.round(total * 0.1))),
+    correctAnswer: total,
+    explanation: `Total = installment × number of payments = ${inst} × ${months} = R${total}.`,
+  };
+}
+
+function p9l5(): Problem {
+  // BOSS: sequences, series & finance
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = rand(2, 7), d = rand(2, 5), n = rand(6, 12);
+    const tn = a + (n - 1) * d;
+    return {
+      question: `Arithmetic a = ${a}, d = ${d}. Find T${n}.`,
+      options: numericOptions(tn, 4, 0, d * 2),
+      correctAnswer: tn,
+      explanation: `Tₙ = ${a} + ${n - 1}×${d} = ${tn}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = [4, 6, 8, 12][rand(0, 3)];
+    return {
+      question: `Infinite geometric: a = ${a}, r = ½. Sum to infinity?`,
+      options: numericOptions(a * 2, 4, 1, Math.max(4, Math.round(a * 0.5))),
+      correctAnswer: a * 2,
+      explanation: `S∞ = a/(1 − ½) = ${a * 2}.`,
+    };
+  }
+  const P = rand(2, 8) * 1000;
+  const A = Math.round(P * 1.21);
+  return {
+    question: `Future value of R${P} at 10% compound for 2 years?`,
+    options: numericOptions(A, 4, P, Math.max(100, Math.round(A * 0.08))),
+    correctAnswer: A,
+    explanation: `${P} × 1.21 = R${A}.`,
+  };
+}
+
+// ── World 2: The Calculus Crucible ────────────────────────────────────────────
+
+function p9l6(): Problem {
+  // Functions, inverses & logs
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const logs: [string, number][] = [['log₂ 8', 3], ['log₃ 9', 2], ['log₁₀ 100', 2], ['log₂ 16', 4], ['log₅ 25', 2], ['log₂ 32', 5]];
+    const [q, ans] = logs[rand(0, logs.length - 1)];
+    return {
+      question: `Evaluate: ${q}`,
+      options: numericOptions(ans, 4, 0, 3),
+      correctAnswer: ans,
+      explanation: `${q} asks "what power gives the number" → ${ans}.`,
+    };
+  }
+  if (variant === 1) {
+    const ans = 'y = log₂ x';
+    return {
+      question: `What is the inverse of y = 2ˣ?`,
+      options: shuffle(['y = log₂ x', 'y = 2⁻ˣ', 'y = x²', 'y = ½x']),
+      correctAnswer: ans,
+      explanation: `The inverse of an exponential y = bˣ is the logarithm y = log_b x.`,
+    };
+  }
+  const k = [3, 4, 5][rand(0, 2)];
+  const ans = k;
+  return {
+    question: `Solve for x: 2ˣ = ${Math.pow(2, k)}`,
+    options: numericOptions(ans, 4, 0, 3),
+    correctAnswer: ans,
+    explanation: `2ˣ = ${Math.pow(2, k)} = 2^${k} → x = ${k}.`,
+  };
+}
+
+function p9l7(): Problem {
+  // Limits & first principles
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = rand(1, 4), c = rand(1, 6);
+    const val = a * a + c;
+    return {
+      question: `Find the limit: lim(x→${a}) (x² + ${c})`,
+      options: numericOptions(val, 4, 0, 5),
+      correctAnswer: val,
+      explanation: `Substitute x = ${a}: ${a}² + ${c} = ${val}.`,
+    };
+  }
+  if (variant === 1) {
+    const ans = '2x';
+    return {
+      question: `Using first principles, the derivative of f(x) = x² is?`,
+      options: shuffle(['2x', 'x', 'x²', '2']),
+      correctAnswer: ans,
+      explanation: `f'(x) = lim(h→0) [(x+h)² − x²]/h = lim(2x + h) = 2x.`,
+    };
+  }
+  const a = rand(2, 6);
+  const ans = 2 * a;
+  return {
+    question: `For f(x) = x², the derivative is f'(x) = 2x.\nFind f'(${a}).`,
+    options: numericOptions(ans, 4, 0, 4),
+    correctAnswer: ans,
+    explanation: `f'(${a}) = 2 × ${a} = ${ans}.`,
+  };
+}
+
+function p9l8(): Problem {
+  // Differentiation rules & cubic graphs
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = rand(2, 6);
+    const ans = `${2 * a}x`;
+    return {
+      question: `Differentiate: f(x) = ${a}x²`,
+      options: shuffle([ans, `${a}x`, `${2 * a}x²`, `${a * a}x`]),
+      correctAnswer: ans,
+      explanation: `d/dx(axⁿ) = naxⁿ⁻¹. d/dx(${a}x²) = ${2 * a}x.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(1, 3), b = rand(2, 5);
+    const ans = `${3 * a}x² + ${b}`;
+    return {
+      question: `Differentiate: f(x) = ${a}x³ + ${b}x`,
+      options: shuffle([ans, `${3 * a}x² + ${b}x`, `${a}x² + ${b}`, `${3 * a}x³ + ${b}`]),
+      correctAnswer: ans,
+      explanation: `d/dx(${a}x³) = ${3 * a}x²; d/dx(${b}x) = ${b}. → ${ans}.`,
+    };
+  }
+  const k = rand(2, 6);
+  const ans = k;
+  return {
+    question: `A curve has f'(x) = 2x − ${2 * k}.\nAt which x is the stationary point (f'(x) = 0)?`,
+    options: numericOptions(ans, 4, 0, 4),
+    correctAnswer: ans,
+    explanation: `Set 2x − ${2 * k} = 0 → x = ${k}.`,
+  };
+}
+
+function p9l9(): Problem {
+  // Tangents, rates of change, optimisation
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const a = rand(2, 6);
+    const ans = 2 * a;
+    return {
+      question: `f(x) = x². The gradient of the tangent at x = ${a} is f'(${a}) = ?`,
+      options: numericOptions(ans, 4, 0, 4),
+      correctAnswer: ans,
+      explanation: `f'(x) = 2x, so the tangent gradient at x = ${a} is ${ans}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(1, 3), t = rand(2, 5);
+    const rate = 2 * a * t;
+    return {
+      question: `Distance s(t) = ${a}t². The rate of change (speed) at t = ${t} is s'(t) = ${2 * a}t = ?`,
+      options: numericOptions(rate, 4, 0, 5),
+      correctAnswer: rate,
+      explanation: `s'(t) = ${2 * a}t, at t = ${t} → ${rate}.`,
+    };
+  }
+  const k = rand(2, 6);
+  return {
+    question: `Maximise/minimise: f'(x) = ${2 * k} − 2x = 0.\nFind x.`,
+    options: numericOptions(k, 4, 0, 4),
+    correctAnswer: k,
+    explanation: `${2 * k} − 2x = 0 → x = ${k}.`,
+  };
+}
+
+function p9l10(): Problem {
+  // BOSS: calculus & functions
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const logs: [string, number][] = [['log₂ 8', 3], ['log₃ 9', 2], ['log₁₀ 100', 2], ['log₂ 16', 4]];
+    const [q, ans] = logs[rand(0, logs.length - 1)];
+    return {
+      question: `Evaluate: ${q}`,
+      options: numericOptions(ans, 4, 0, 3),
+      correctAnswer: ans,
+      explanation: `${q} = ${ans}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(2, 6);
+    const ans = `${2 * a}x`;
+    return {
+      question: `Differentiate: f(x) = ${a}x²`,
+      options: shuffle([ans, `${a}x`, `${2 * a}x²`, `${a * a}x`]),
+      correctAnswer: ans,
+      explanation: `${2 * a}x.`,
+    };
+  }
+  const a = rand(2, 6);
+  return {
+    question: `f(x) = x². Gradient of tangent at x = ${a}?`,
+    options: numericOptions(2 * a, 4, 0, 4),
+    correctAnswer: 2 * a,
+    explanation: `f'(${a}) = 2×${a} = ${2 * a}.`,
+  };
+}
+
+// ── World 3: The Apex Observatory ─────────────────────────────────────────────
+
+function p9l11(): Problem {
+  // Equation of a circle & tangent
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const r = rand(2, 9);
+    return {
+      question: `Circle x² + y² = ${r * r}.\nWhat is the radius?`,
+      options: numericOptions(r, 4, 1, 3),
+      correctAnswer: r,
+      explanation: `x² + y² = r² → r = √${r * r} = ${r}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(-5, 5), b = rand(-5, 5), r = rand(2, 6);
+    const ans = `(${a}, ${b})`;
+    return {
+      question: `Circle (x ${a >= 0 ? '− ' + a : '+ ' + -a})² + (y ${b >= 0 ? '− ' + b : '+ ' + -b})² = ${r * r}.\nWhat is the centre?`,
+      options: shuffle([ans, `(${-a}, ${-b})`, `(${b}, ${a})`, `(${a}, ${-b})`]),
+      correctAnswer: ans,
+      explanation: `(x − a)² + (y − b)² = r² has centre (a, b) = (${a}, ${b}).`,
+    };
+  }
+  const r = rand(3, 8);
+  return {
+    question: `Circle x² + y² = ${r * r} with centre at the origin.\nWhat is the diameter?`,
+    options: numericOptions(2 * r, 4, 1, 4),
+    correctAnswer: 2 * r,
+    explanation: `Radius = ${r}, so diameter = 2 × ${r} = ${2 * r}.`,
+  };
+}
+
+function p9l12(): Problem {
+  // Compound & double angle identities
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    return {
+      question: `Which is the double-angle identity for sin 2θ?`,
+      options: shuffle(['2 sin θ cos θ', 'sin²θ − cos²θ', '2 cos²θ − 1', 'sin θ + cos θ']),
+      correctAnswer: '2 sin θ cos θ',
+      explanation: `sin 2θ = 2 sin θ cos θ.`,
+    };
+  }
+  if (variant === 1) {
+    return {
+      question: `Expand: cos(A + B)`,
+      options: shuffle(['cos A cos B − sin A sin B', 'cos A cos B + sin A sin B', 'sin A cos B + cos A sin B', 'cos A − cos B']),
+      correctAnswer: 'cos A cos B − sin A sin B',
+      explanation: `cos(A + B) = cos A cos B − sin A sin B.`,
+    };
+  }
+  return {
+    question: `Which is an identity for cos 2θ?`,
+    options: shuffle(['cos²θ − sin²θ', '2 sin θ cos θ', '1 + 2sin²θ', 'cos²θ + sin²θ']),
+    correctAnswer: 'cos²θ − sin²θ',
+    explanation: `cos 2θ = cos²θ − sin²θ.`,
+  };
+}
+
+function p9l13(): Problem {
+  // Proportionality & similar triangles
+  const variant = rand(0, 1);
+  if (variant === 0) {
+    const k = rand(2, 4), a = rand(2, 5);
+    const ans = a * k;
+    return {
+      question: `Two similar triangles. Small side ${a} matches large side ?, with scale factor ${k}.\nFind the large side.`,
+      options: numericOptions(ans, 4, 0, 4),
+      correctAnswer: ans,
+      explanation: `Large = small × scale factor = ${a} × ${k} = ${ans}.`,
+    };
+  }
+  // proportionality a/b = c/x
+  const b = rand(2, 5), c = rand(2, 6), k = rand(2, 4);
+  const a = b * k, x = c * k;
+  return {
+    question: `A line parallel to a triangle's side gives ${a}/${b} = ${c}/x.\nFind x.`,
+    options: numericOptions(x, 4, 0, 4),
+    correctAnswer: x,
+    explanation: `${a}/${b} = ${k}, so x = ${c} × ${k} = ${x}.`,
+  };
+}
+
+function p9l14(): Problem {
+  // Counting principle & statistics (correlation)
+  const variant = rand(0, 2);
+  if (variant === 0) {
+    const m = rand(2, 6), n = rand(2, 6);
+    const ans = m * n;
+    return {
+      question: `${m} shirts and ${n} pants.\nHow many different outfits?`,
+      options: numericOptions(ans, 4, 0, 6),
+      correctAnswer: ans,
+      explanation: `Fundamental counting principle: ${m} × ${n} = ${ans}.`,
+    };
+  }
+  if (variant === 1) {
+    const facts: [number, number][] = [[3, 6], [4, 24], [5, 120]];
+    const [n, ans] = facts[rand(0, facts.length - 1)];
+    return {
+      question: `In how many ways can ${n} different books be arranged in a row? (${n}!)`,
+      options: numericOptions(ans, 4, 1, Math.max(6, Math.round(ans * 0.3))),
+      correctAnswer: ans,
+      explanation: `${n}! = ${n}×…×1 = ${ans}.`,
+    };
+  }
+  return {
+    question: `A scatter plot rises steeply left-to-right with points close to a line.\nThe correlation is?`,
+    options: shuffle(['Strong positive', 'Strong negative', 'No correlation', 'Weak positive']),
+    correctAnswer: 'Strong positive',
+    explanation: `Points rising tightly along a line → a strong positive correlation (r close to +1).`,
+  };
+}
+
+function p9l15(): Problem {
+  // FINAL BOSS: Matric mixed
+  const variant = rand(0, 3);
+  if (variant === 0) {
+    const a = rand(2, 7), d = rand(2, 5), n = rand(6, 12);
+    const tn = a + (n - 1) * d;
+    return {
+      question: `Arithmetic a = ${a}, d = ${d}. Find T${n}.`,
+      options: numericOptions(tn, 4, 0, d * 2),
+      correctAnswer: tn,
+      explanation: `Tₙ = ${a} + ${n - 1}×${d} = ${tn}.`,
+    };
+  }
+  if (variant === 1) {
+    const a = rand(2, 6);
+    const ans = `${2 * a}x`;
+    return {
+      question: `Differentiate f(x) = ${a}x².`,
+      options: shuffle([ans, `${a}x`, `${2 * a}x²`, `${a * a}x`]),
+      correctAnswer: ans,
+      explanation: `${2 * a}x.`,
+    };
+  }
+  if (variant === 2) {
+    const r = rand(2, 9);
+    return {
+      question: `Circle x² + y² = ${r * r}. Radius?`,
+      options: numericOptions(r, 4, 1, 3),
+      correctAnswer: r,
+      explanation: `r = √${r * r} = ${r}.`,
+    };
+  }
+  const logs: [string, number][] = [['log₂ 8', 3], ['log₃ 9', 2], ['log₂ 16', 4]];
+  const [q, ans] = logs[rand(0, logs.length - 1)];
+  return {
+    question: `Evaluate: ${q}`,
+    options: numericOptions(ans, 4, 0, 3),
+    correctAnswer: ans,
+    explanation: `${q} = ${ans}.`,
+  };
+}
+
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 const GENERATORS: Record<string, () => Problem> = {
@@ -2892,6 +4362,15 @@ const GENERATORS: Record<string, () => Problem> = {
   '6-1': p6l1, '6-2': p6l2, '6-3': p6l3, '6-4': p6l4, '6-5': p6l5,
   '6-6': p6l6, '6-7': p6l7, '6-8': p6l8, '6-9': p6l9, '6-10': p6l10,
   '6-11': p6l11, '6-12': p6l12, '6-13': p6l13, '6-14': p6l14, '6-15': p6l15,
+  '7-1': p7l1, '7-2': p7l2, '7-3': p7l3, '7-4': p7l4, '7-5': p7l5,
+  '7-6': p7l6, '7-7': p7l7, '7-8': p7l8, '7-9': p7l9, '7-10': p7l10,
+  '7-11': p7l11, '7-12': p7l12, '7-13': p7l13, '7-14': p7l14, '7-15': p7l15,
+  '8-1': p8l1, '8-2': p8l2, '8-3': p8l3, '8-4': p8l4, '8-5': p8l5,
+  '8-6': p8l6, '8-7': p8l7, '8-8': p8l8, '8-9': p8l9, '8-10': p8l10,
+  '8-11': p8l11, '8-12': p8l12, '8-13': p8l13, '8-14': p8l14, '8-15': p8l15,
+  '9-1': p9l1, '9-2': p9l2, '9-3': p9l3, '9-4': p9l4, '9-5': p9l5,
+  '9-6': p9l6, '9-7': p9l7, '9-8': p9l8, '9-9': p9l9, '9-10': p9l10,
+  '9-11': p9l11, '9-12': p9l12, '9-13': p9l13, '9-14': p9l14, '9-15': p9l15,
 };
 
 export function generateProblem(phase: number, level: number): Problem {
