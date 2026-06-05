@@ -229,7 +229,7 @@ export default function ActivityPage() {
   useEffect(() => {
     let probs: Problem[];
     if (mode === 'mock') {
-      probs = generateMockExamProblems(40);
+      probs = generateMockExamProblems(age, 40);
     } else if (isTopicTest) {
       probs = generateTopicTestProblems(topicId, 10);
     } else {

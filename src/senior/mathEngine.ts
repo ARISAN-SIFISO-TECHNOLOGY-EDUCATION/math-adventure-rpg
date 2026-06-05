@@ -2987,6 +2987,451 @@ function genConditionalProbability(): Problem {
   };
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+//  AGE 16 — SCHOOL OF SYSTEMS · added levels (A-Level AS / Cambridge 9709 / CAPS Gr 11)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ── age16-trig2 L4 — Pythagorean Identity ────────────────────────────────────
+function genPythagIdentity(): Problem {
+  const triples: [number, number, number][] = [[3, 4, 5], [5, 12, 13], [8, 15, 17], [7, 24, 25]];
+  const [o, a, h] = triples[randInt(0, triples.length - 1)];
+  const ask = randInt(0, 2);
+  if (ask === 0) {
+    const correct = `cos θ = ${a}/${h}`;
+    return {
+      id: uid(),
+      question: `θ is acute and sin θ = ${o}/${h}.\n\nFind cos θ.`,
+      correctAnswer: correct,
+      options: makeOptions(correct, [`cos θ = ${o}/${h}`, `cos θ = ${h}/${a}`, `cos θ = ${o}/${a}`]),
+      marks: 3,
+      workingSteps: [
+        `sin²θ + cos²θ = 1`,
+        `cos²θ = 1 − (${o}/${h})² = 1 − ${o * o}/${h * h} = ${a * a}/${h * h}`,
+        `cos θ = ${a}/${h}  (positive, since θ is acute)`,
+      ],
+      hints: [`Use sin²θ + cos²θ = 1`, `${o}-${a}-${h} is a Pythagorean triple`],
+      calculatorAllowed: false,
+      commonMistake: `Copying sin: cos θ = ${o}/${h}. cos uses the adjacent side (${a}), giving ${a}/${h}.`,
+      examTip: `Cambridge 9709: recognise ${o}-${a}-${h} triangles instantly — they avoid surd working in 'show that' questions.`,
+    };
+  } else if (ask === 1) {
+    const correct = `tan θ = ${o}/${a}`;
+    return {
+      id: uid(),
+      question: `θ is acute and sin θ = ${o}/${h}.\n\nFind tan θ.`,
+      correctAnswer: correct,
+      options: makeOptions(correct, [`tan θ = ${o}/${h}`, `tan θ = ${a}/${o}`, `tan θ = ${h}/${a}`]),
+      marks: 3,
+      workingSteps: [
+        `cos θ = ${a}/${h}  (from sin²θ + cos²θ = 1)`,
+        `tan θ = sin θ / cos θ = (${o}/${h}) ÷ (${a}/${h})`,
+        `tan θ = ${o}/${a}`,
+      ],
+      hints: [`tan θ = sin θ / cos θ`, `Find cos θ first using the triple ${o}-${a}-${h}`],
+      calculatorAllowed: false,
+      commonMistake: `Writing tan θ = ${o}/${h} — tan is opposite/adjacent = ${o}/${a}, not opposite/hypotenuse.`,
+      examTip: `AS-level: with a triple you can read tan straight off as opp/adj = ${o}/${a}.`,
+    };
+  } else {
+    const correct = `sin θ = ${o}/${h}`;
+    return {
+      id: uid(),
+      question: `θ is acute and cos θ = ${a}/${h}.\n\nFind sin θ.`,
+      correctAnswer: correct,
+      options: makeOptions(correct, [`sin θ = ${a}/${h}`, `sin θ = ${o}/${a}`, `sin θ = ${h}/${o}`]),
+      marks: 3,
+      workingSteps: [
+        `sin²θ + cos²θ = 1`,
+        `sin²θ = 1 − (${a}/${h})² = ${o * o}/${h * h}`,
+        `sin θ = ${o}/${h}`,
+      ],
+      hints: [`sin²θ = 1 − cos²θ`, `${o}-${a}-${h} is a Pythagorean triple`],
+      calculatorAllowed: false,
+      commonMistake: `Copying cos: sin θ = ${a}/${h}. sin uses the opposite side (${o}).`,
+      examTip: `9709: keep answers as exact fractions from the triple, not rounded decimals.`,
+    };
+  }
+}
+
+// ── age16-trig2 L5 — Double-Angle Identities ─────────────────────────────────
+function genDoubleAngle(): Problem {
+  const CASES = [
+    { question: `Simplify:\n2 sin x cos x`, correct: 'sin 2x', wrongs: ['cos 2x', 'sin x', '2 sin x'],
+      steps: ['Double-angle identity: sin 2x = 2 sin x cos x', 'Read it in reverse: 2 sin x cos x = sin 2x'],
+      hints: ['Which double-angle formula contains 2 sin x cos x?'], mistake: 'Writing cos 2x — that comes from cos²x − sin²x, not 2 sin x cos x.',
+      tip: '9709: learn the single form of sin 2x and the three forms of cos 2x.' },
+    { question: `Simplify:\ncos²x − sin²x`, correct: 'cos 2x', wrongs: ['sin 2x', '1', '2 cos x'],
+      steps: ['Double-angle identity: cos 2x = cos²x − sin²x'], hints: ['cos 2x has three equivalent forms — this is the first.'],
+      mistake: 'Writing 1 — that would be cos²x + sin²x. The minus sign gives cos 2x.', tip: 'CAPS Gr 11: cos 2x = cos²x − sin²x = 1 − 2sin²x = 2cos²x − 1.' },
+    { question: `Simplify:\n1 − 2 sin²x`, correct: 'cos 2x', wrongs: ['sin 2x', 'cos²x', '2 cos 2x'],
+      steps: ['cos 2x = 1 − 2 sin²x  (Pythagorean form of the double angle)'], hints: ['One of the three forms of cos 2x.'],
+      mistake: 'Leaving it as cos²x — use the identity 1 − 2sin²x = cos 2x.', tip: 'Pick the cos 2x form that matches the other terms in the equation.' },
+    { question: `sin θ = 3/5 and cos θ = 4/5.\n\nFind sin 2θ.`, correct: '24/25', wrongs: ['12/25', '7/25', '6/5'],
+      steps: ['sin 2θ = 2 sin θ cos θ', '= 2 × (3/5) × (4/5)', '= 24/25'], hints: ['sin 2θ = 2 sin θ cos θ'],
+      mistake: 'Forgetting the factor of 2: (3/5)(4/5) = 12/25. The identity has a leading 2.', tip: '9709: substitute carefully and keep the answer as an exact fraction.' },
+  ];
+  const c = CASES[randInt(0, CASES.length - 1)];
+  return {
+    id: uid(), question: c.question, correctAnswer: c.correct, options: makeOptions(c.correct, c.wrongs),
+    marks: 3, workingSteps: c.steps, hints: c.hints, calculatorAllowed: false, commonMistake: c.mistake, examTip: c.tip,
+  };
+}
+
+// ── age16-calculus L3 — Equation of a Tangent ────────────────────────────────
+function genTangentLine(): Problem {
+  const b = randInt(1, 5), x0 = randInt(1, 4);
+  const m = 2 * x0 + b;        // gradient of y = x² + bx at x = x0
+  const y0 = x0 * x0 + b * x0; // point on the curve
+  const correct = `y = ${m}x − ${x0 * x0}`;
+  return {
+    id: uid(),
+    question: `Find the equation of the tangent to\ny = x² + ${b}x\nat the point where x = ${x0}.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`y = ${m}x`, `y = ${m}x + ${x0 * x0}`, `y = ${m + 1}x − ${x0 * x0}`]),
+    marks: 4,
+    workingSteps: [
+      `dy/dx = 2x + ${b}`,
+      `Gradient at x = ${x0}:  m = 2(${x0}) + ${b} = ${m}`,
+      `Point on curve:  y = ${x0}² + ${b}(${x0}) = ${y0}`,
+      `y − ${y0} = ${m}(x − ${x0})  →  ${correct}`,
+    ],
+    hints: [`Tangent gradient = dy/dx evaluated at x = ${x0}`, `Use y − y₁ = m(x − x₁) with the point of contact`],
+    calculatorAllowed: false,
+    commonMistake: `Stopping at y = ${m}x and forgetting the constant — substitute the point on the curve to find the intercept.`,
+    examTip: `9709: a tangent needs BOTH the gradient and a point. It passes through the point of contact.`,
+  };
+}
+
+// ── age16-calculus L4 — Stationary Points ────────────────────────────────────
+function genStationaryPoint(): Problem {
+  const a = randInt(1, 3);
+  let k = randInt(-3, 3); if (k === 0) k = 2;   // chosen stationary x-coordinate
+  const b = -2 * a * k;                          // so dy/dx = 2a x + b = 0 at x = k
+  const cc = randInt(1, 8);
+  const bStr = b >= 0 ? `+ ${b}x` : `− ${Math.abs(b)}x`;
+  const dStr = b >= 0 ? `+ ${b}` : `− ${Math.abs(b)}`;
+  const correct = `x = ${k}`;
+  return {
+    id: uid(),
+    question: `Find the x-coordinate of the stationary point of\ny = ${a}x² ${bStr} + ${cc}.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`x = ${-k}`, `x = ${b}`, `x = ${k + 1}`]),
+    marks: 4,
+    workingSteps: [
+      `Stationary points occur where dy/dx = 0`,
+      `dy/dx = ${2 * a}x ${dStr}`,
+      `${2 * a}x ${dStr} = 0  →  x = ${-b}/${2 * a} = ${k}`,
+    ],
+    hints: [`Set dy/dx = 0 and solve for x`, `Differentiate first, then solve the equation`],
+    calculatorAllowed: false,
+    commonMistake: `Solving y = 0 instead of dy/dx = 0 — a stationary point is where the GRADIENT is zero.`,
+    examTip: `9709: 'stationary' / 'turning point' always means dy/dx = 0. Differentiate, set to zero, solve.`,
+  };
+}
+
+// ── age16-calculus L5 — Basic Integration ────────────────────────────────────
+function genIntegration(): Problem {
+  const n = randInt(1, 4);
+  const m = n + 1;
+  const rc = randInt(2, 4);   // result coefficient
+  const a = rc * m;           // a/(n+1) = rc, an integer
+  const correct = `${rc}x^${m} + c`;
+  return {
+    id: uid(),
+    question: `Find  ∫ ${a}x^${n} dx`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`${rc}x^${m}`, `${a}x^${m} + c`, `${rc}x^${n} + c`]),
+    marks: 3,
+    workingSteps: [
+      `∫ axⁿ dx = a/(n+1) · x^(n+1) + c`,
+      `= ${a}/${m} · x^${m} + c`,
+      `= ${rc}x^${m} + c`,
+    ],
+    hints: [`Add 1 to the power, then divide by the new power`, `Never forget the constant of integration + c`],
+    calculatorAllowed: false,
+    commonMistake: `Dropping the "+ c", or not dividing by the new power ${m} — integration adds 1 to the power then divides by it.`,
+    examTip: `9709: indefinite integrals ALWAYS need + c. Omitting it loses a mark.`,
+  };
+}
+
+// ── age16-exponential L2 — Solving Exponential Equations ──────────────────────
+function genSolveExponential(): Problem {
+  const b = [2, 3, 5][randInt(0, 2)];
+  const x = randInt(2, 4);
+  const value = Math.pow(b, x);
+  const correct = `x = ${x}`;
+  return {
+    id: uid(),
+    question: `Solve for x:\n${b}^x = ${value}`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`x = ${x + 1}`, `x = ${x - 1}`, `x = ${value / b}`]),
+    marks: 2,
+    workingSteps: [
+      `Write ${value} as a power of ${b}:  ${value} = ${b}^${x}`,
+      `${b}^x = ${b}^${x}`,
+      `Equal bases ⇒ equal exponents:  x = ${x}`,
+    ],
+    hints: [`Express the right-hand side as ${b} raised to a power`, `Equal bases ⇒ equate the exponents`],
+    calculatorAllowed: false,
+    commonMistake: `Dividing ${value} by ${b} to get x = ${value / b} — instead write ${value} as ${b}^x and compare exponents.`,
+    examTip: `9709: same-base method — rewrite both sides with one base, then set the indices equal.`,
+  };
+}
+
+// ── age16-exponential L3 — Exponential Models ────────────────────────────────
+function genExpModel(): Problem {
+  const CASES = [
+    { question: `y = 5 × 2^x.\n\nState the y-intercept.`, correct: '5', wrongs: ['2', '10', '0'],
+      steps: ['The y-intercept is y when x = 0', 'y = 5 × 2⁰ = 5 × 1 = 5'], hints: ['Substitute x = 0', 'Any non-zero base to the power 0 is 1'],
+      mistake: 'Using the base 2 — at x = 0 the power 2⁰ = 1, so y = 5 × 1 = 5 (the coefficient).', tip: 'For y = a·bˣ the y-intercept is always a (the coefficient).' },
+    { question: `y = 3 × (0.5)^x.\n\nIs this growth or decay?`, correct: 'Decay — base is between 0 and 1',
+      wrongs: ['Growth — base is between 0 and 1', 'Growth — coefficient is positive', 'Decay — coefficient is positive'],
+      steps: ['For y = a·bˣ:  b > 1 → growth,  0 < b < 1 → decay', 'Here b = 0.5, so 0 < b < 1 → decay'], hints: ['Look at the base b, not the coefficient a'],
+      mistake: 'Judging by the coefficient 3 — growth vs decay depends on the BASE: 0.5 < 1 means decay.', tip: '9709: base > 1 grows, base < 1 decays. The coefficient only sets the starting value.' },
+    { question: `A colony of 200 bacteria doubles every hour.\n\nWhich model gives the number after t hours?`, correct: 'N = 200 × 2^t',
+      wrongs: ['N = 200 × t²', 'N = 200 + 2t', 'N = 200 × 0.5^t'],
+      steps: ['Start value 200 → coefficient', '"Doubles" → base 2', 'N = 200 × 2^t'], hints: ['Doubling means ×2 each period → base 2'],
+      mistake: 'Writing 200 × t² — exponential growth uses a constant base raised to t, not t squared.', tip: 'Constant multiple change each period ⇒ exponential model a·bᵗ.' },
+  ];
+  const c = CASES[randInt(0, CASES.length - 1)];
+  return {
+    id: uid(), question: c.question, correctAnswer: c.correct, options: makeOptions(c.correct, c.wrongs),
+    marks: 2, workingSteps: c.steps, hints: c.hints, calculatorAllowed: false, commonMistake: c.mistake, examTip: c.tip,
+  };
+}
+
+// ── age16-algebra3 L3 — Remainder Theorem ────────────────────────────────────
+function genRemainderTheorem(): Problem {
+  const a = randInt(1, 4), b = randInt(1, 6), cc = randInt(1, 6);
+  const rem = a * a + b * a + cc;   // f(a) for f(x) = x² + bx + c
+  const correct = `${rem}`;
+  return {
+    id: uid(),
+    question: `Find the remainder when\nx² + ${b}x + ${cc}\nis divided by (x − ${a}).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`${a * a - b * a + cc}`, `${rem - a}`, `${rem + b}`]),
+    marks: 3,
+    workingSteps: [
+      `Remainder theorem: remainder = f(${a})`,
+      `f(${a}) = (${a})² + ${b}(${a}) + ${cc}`,
+      `= ${a * a} + ${b * a} + ${cc} = ${rem}`,
+    ],
+    hints: [`Remainder theorem: dividing by (x − a) gives remainder f(a)`, `Substitute x = ${a}`],
+    calculatorAllowed: false,
+    commonMistake: `Substituting x = −${a} — for divisor (x − ${a}) the root is x = +${a}, so evaluate f(${a}).`,
+    examTip: `9709: (x − a) ⇒ use +a; (x + a) ⇒ use −a. The remainder is f(that value).`,
+  };
+}
+
+// ── age16-algebra3 L4 — Factor Theorem ───────────────────────────────────────
+function genFactorTheorem(): Problem {
+  let r = randInt(1, 5), s = randInt(1, 5);
+  while (s === r) s = randInt(1, 5);
+  const b = -(r + s), cc = r * s;   // f(x) = x² − (r+s)x + rs = (x−r)(x−s)
+  const bStr = b >= 0 ? `+ ${b}x` : `− ${Math.abs(b)}x`;
+  const correct = `(x − ${r})`;
+  return {
+    id: uid(),
+    question: `Which of these is a factor of\nx² ${bStr} + ${cc} ?`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`(x + ${r})`, `(x + ${s})`, `(x − ${r + s})`]),
+    marks: 3,
+    workingSteps: [
+      `Factor theorem: (x − k) is a factor ⇔ f(k) = 0`,
+      `f(${r}) = ${r}² − ${r + s}(${r}) + ${cc} = ${r * r} − ${(r + s) * r} + ${cc} = 0`,
+      `So (x − ${r}) is a factor.  It factorises as (x − ${r})(x − ${s}).`,
+    ],
+    hints: [`Test each option: substitute its root and check f = 0`, `Both x = ${r} and x = ${s} give f = 0`],
+    calculatorAllowed: false,
+    commonMistake: `Choosing (x + ${r}) — that has root −${r}, and f(−${r}) ≠ 0. The factor (x − ${r}) has root +${r}.`,
+    examTip: `9709: a factor (x − k) means f(k) = 0. Test the roots, not random numbers.`,
+  };
+}
+
+// ── age16-algebra3 L5 — Binomial Expansion ───────────────────────────────────
+function genBinomial(): Problem {
+  const a = randInt(2, 4);
+  const correct = `${3 * a}`;
+  return {
+    id: uid(),
+    question: `Expand (x + ${a})³ and state the coefficient of x².`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`${a}`, `${a * a * a}`, `${3 * a * a}`]),
+    marks: 3,
+    workingSteps: [
+      `(x + a)³ = x³ + 3a·x² + 3a²·x + a³`,
+      `Here a = ${a}`,
+      `Coefficient of x² = 3a = 3 × ${a} = ${3 * a}`,
+    ],
+    hints: [`Use (x + a)³ = x³ + 3ax² + 3a²x + a³`, `The x² term has coefficient 3a`],
+    calculatorAllowed: false,
+    commonMistake: `Giving the x-term coefficient 3a² = ${3 * a * a} — the x² coefficient is 3a = ${3 * a}.`,
+    examTip: `9709: Pascal's row for power 3 is 1, 3, 3, 1. Pair these with increasing powers of a.`,
+  };
+}
+
+// ── age16-functions2 L3 — Composite Functions ────────────────────────────────
+function genComposite(): Problem {
+  const a = randInt(2, 4), b = randInt(1, 5), c = randInt(2, 4), d = randInt(1, 5), k = randInt(1, 4);
+  const gk = c * k + d;
+  const fgk = a * gk + b;
+  const gfk = c * (a * k + b) + d;
+  const correct = `${fgk}`;
+  return {
+    id: uid(),
+    question: `f(x) = ${a}x + ${b},   g(x) = ${c}x + ${d}\n\nFind fg(${k}).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`${gfk}`, `${a * c * k + b + d}`, `${(a * k + b) + (c * k + d)}`]),
+    marks: 3,
+    workingSteps: [
+      `fg(x) means apply g first, then f`,
+      `g(${k}) = ${c}(${k}) + ${d} = ${gk}`,
+      `f(${gk}) = ${a}(${gk}) + ${b} = ${fgk}`,
+    ],
+    hints: [`fg(x) = f(g(x)) — the inner function g acts first`, `Work from the inside out`],
+    calculatorAllowed: false,
+    commonMistake: `Doing f first then g (that gives gf(${k}) = ${gfk}). fg means g first, then f.`,
+    examTip: `9709: fg(x) = f(g(x)). The function nearest x acts first.`,
+  };
+}
+
+// ── age16-functions2 L4 — Solve for the Input ────────────────────────────────
+function genSolveForInput(): Problem {
+  const a = randInt(2, 5), b = randInt(1, 6), xv = randInt(2, 6);
+  const value = a * xv + b;
+  const correct = `x = ${xv}`;
+  return {
+    id: uid(),
+    question: `f(x) = ${a}x + ${b}.\n\nGiven f(x) = ${value}, find x.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`x = ${value - b}`, `x = ${xv + 1}`, `x = ${value}`]),
+    marks: 3,
+    workingSteps: [
+      `${a}x + ${b} = ${value}`,
+      `${a}x = ${value} − ${b} = ${value - b}`,
+      `x = ${value - b} ÷ ${a} = ${xv}`,
+    ],
+    hints: [`Set the rule equal to ${value} and solve`, `Subtract ${b}, then divide by ${a}`],
+    calculatorAllowed: false,
+    commonMistake: `Stopping at ${a}x = ${value - b} and forgetting to divide by ${a}.`,
+    examTip: `9709: 'find x given f(x)' = solve the equation; it is the inverse process.`,
+  };
+}
+
+// ── age16-analytical-geo L3 — Perpendicular Gradients ────────────────────────
+function genPerpendicular(): Problem {
+  const CASES = [
+    { m: '2', perp: '−1/2', wrongs: ['1/2', '2', '−2'] },
+    { m: '3', perp: '−1/3', wrongs: ['1/3', '3', '−3'] },
+    { m: '4', perp: '−1/4', wrongs: ['1/4', '4', '−4'] },
+    { m: '−1/2', perp: '2', wrongs: ['−2', '1/2', '−1/2'] },
+    { m: '−1/3', perp: '3', wrongs: ['−3', '1/3', '−1/3'] },
+    { m: '1/2', perp: '−2', wrongs: ['2', '1/2', '−1/2'] },
+  ];
+  const c = CASES[randInt(0, CASES.length - 1)];
+  const correct = `gradient = ${c.perp}`;
+  return {
+    id: uid(),
+    question: `A line has gradient ${c.m}.\n\nFind the gradient of a line perpendicular to it.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, c.wrongs.map(w => `gradient = ${w}`)),
+    marks: 2,
+    workingSteps: [
+      `Perpendicular gradients multiply to −1:  m₁ × m₂ = −1`,
+      `m₂ = −1 ÷ (${c.m})`,
+      `gradient = ${c.perp}`,
+    ],
+    hints: [`Perpendicular ⇒ negative reciprocal`, `Flip the fraction AND change the sign`],
+    calculatorAllowed: false,
+    commonMistake: `Only flipping or only negating — you must do both: the negative reciprocal of ${c.m} is ${c.perp}.`,
+    examTip: `9709: parallel ⇒ equal gradients; perpendicular ⇒ negative reciprocal (m₁m₂ = −1).`,
+  };
+}
+
+// ── age16-analytical-geo L4 — Equation of a Circle ───────────────────────────
+function genCircleEquation(): Problem {
+  const a = randInt(-4, 4) || 1, b = randInt(-4, 4) || 1, r = randInt(2, 6);
+  const ax = a >= 0 ? `− ${a}` : `+ ${-a}`;
+  const by = b >= 0 ? `− ${b}` : `+ ${-b}`;
+  const eqn = `(x ${ax})² + (y ${by})² = ${r * r}`;
+  if (randInt(0, 1) === 0) {
+    const correct = `(${a}, ${b})`;
+    return {
+      id: uid(),
+      question: `A circle has equation\n${eqn}\n\nState the coordinates of its centre.`,
+      correctAnswer: correct,
+      options: makeOptions(correct, [`(${-a}, ${-b})`, `(${b}, ${a})`, `(${-a}, ${b})`]),
+      marks: 2,
+      workingSteps: [`Compare with (x − h)² + (y − k)² = r²`, `Centre is (h, k) = (${a}, ${b})`],
+      hints: [`Centre (h, k) comes from (x − h)² + (y − k)²`, `Signs flip: (x − ${a}) ⇒ h = ${a}`],
+      calculatorAllowed: false,
+      commonMistake: `Flipping to (${-a}, ${-b}) — the centre takes the opposite sign of what's inside: (x − ${a}) gives +${a}.`,
+      examTip: `9709: in (x − h)² + (y − k)² = r², the centre is (h, k) and the radius is √(r²).`,
+    };
+  } else {
+    const correct = `${r}`;
+    return {
+      id: uid(),
+      question: `A circle has equation\n${eqn}\n\nState its radius.`,
+      correctAnswer: correct,
+      options: makeOptions(correct, [`${r * r}`, `${2 * r}`, `${r + 1}`]),
+      marks: 2,
+      workingSteps: [`Compare with (x − h)² + (y − k)² = r²`, `r² = ${r * r}`, `r = √${r * r} = ${r}`],
+      hints: [`The right-hand side equals r², not r`, `Take the square root of ${r * r}`],
+      calculatorAllowed: false,
+      commonMistake: `Giving ${r * r} as the radius — the RHS is r², so the radius is √${r * r} = ${r}.`,
+      examTip: `9709: remember to square-root the right-hand side to get the radius.`,
+    };
+  }
+}
+
+// ── age16-stats2 L3 — Variance ───────────────────────────────────────────────
+function genVariance(): Problem {
+  const CASES = [
+    { data: '1, 2, 3, 4, 5', mean: 3, variance: '2', wrongs: ['3', '2.5', '4'] },
+    { data: '2, 5, 8', mean: 5, variance: '6', wrongs: ['5', '3', '8'] },
+    { data: '2, 4, 6, 8, 10', mean: 6, variance: '8', wrongs: ['6', '4', '10'] },
+    { data: '10, 20, 30, 40, 50', mean: 30, variance: '200', wrongs: ['30', '100', '20'] },
+    { data: '4, 4, 4, 4', mean: 4, variance: '0', wrongs: ['4', '1', '2'] },
+  ];
+  const c = CASES[randInt(0, CASES.length - 1)];
+  return {
+    id: uid(),
+    question: `Find the variance of the data set:\n${c.data}`,
+    correctAnswer: `${c.variance}`,
+    options: makeOptions(`${c.variance}`, c.wrongs),
+    marks: 4,
+    workingSteps: [
+      `Mean  x̄ = ${c.mean}`,
+      `Variance = Σ(x − x̄)² / n`,
+      `Average the squared deviations from the mean = ${c.variance}`,
+    ],
+    hints: [`Variance = mean of the squared deviations`, `Find the mean first, then average each (x − mean)²`],
+    calculatorAllowed: false,
+    commonMistake: `Reporting the mean (${c.mean}) instead of the variance — variance measures spread, not the average.`,
+    examTip: `9709/CAPS: variance = Σ(x − x̄)²/n;  standard deviation = √variance.`,
+  };
+}
+
+// ── age16-stats2 L4 — Expected Value ─────────────────────────────────────────
+function genExpectedValue(): Problem {
+  const CASES = [
+    { question: `A discrete random variable X:\nX:    1     2     3\nP(X): 0.2   0.5   0.3\n\nFind E(X).`, correct: '2.1', wrongs: ['2', '1.8', '3'],
+      steps: ['E(X) = Σ x·P(x)', '= 1(0.2) + 2(0.5) + 3(0.3)', '= 0.2 + 1.0 + 0.9 = 2.1'] },
+    { question: `X:    0     1     2\nP(X): 0.5   0.3   0.2\n\nFind E(X).`, correct: '0.7', wrongs: ['1', '0.5', '1.5'],
+      steps: ['E(X) = Σ x·P(x)', '= 0(0.5) + 1(0.3) + 2(0.2)', '= 0 + 0.3 + 0.4 = 0.7'] },
+    { question: `A fair six-sided die is rolled.\n\nFind E(X), the expected score.`, correct: '3.5', wrongs: ['3', '4', '6'],
+      steps: ['E(X) = Σ x·P(x), each P = 1/6', '= (1 + 2 + 3 + 4 + 5 + 6)/6', '= 21/6 = 3.5'] },
+  ];
+  const c = CASES[randInt(0, CASES.length - 1)];
+  return {
+    id: uid(), question: c.question, correctAnswer: c.correct, options: makeOptions(c.correct, c.wrongs),
+    marks: 4, workingSteps: c.steps, hints: ['E(X) = Σ x · P(x)', 'Multiply each value by its probability, then add'],
+    calculatorAllowed: false, commonMistake: 'Averaging the x-values without weighting — multiply each x by its P(x) first.',
+    examTip: '9709: E(X) = Σ x·P(x). Check the probabilities sum to 1 before starting.',
+  };
+}
+
 // ── age15-numbers L6 — Standard Form ─────────────────────────────────────────
 
 function genStandardForm(): Problem {
@@ -4304,13 +4749,13 @@ const TOPIC_LEVELS: Record<string, TopicLevels> = {
   'age15-functions':  { 1: genFunctionsDomain,   2: genFunctionsGraphs                                                                                                                                                      },
   'age15-matrices':   { 1: genTransformations,   2: genMatrices,          3: genInverseMatrix                                                                                                                               },
   // ── Age 16 ────────────────────────────────────────────────────────────────
-  'age16-trig2':           { 1: genTrigIdentities,              2: genTrigEquations,             3: genRadians },
-  'age16-calculus':        { 1: genDifferentiationFirstPrinciples, 2: genBasicDifferentiation    },
-  'age16-exponential':     { 1: genExponentialFunctions                                          },
-  'age16-algebra3':        { 1: genPolynomialDivision,          2: genLogsAdvanced               },
-  'age16-functions2':      { 1: genFunctionTransformations,     2: genInverseFunctions16         },
-  'age16-analytical-geo':  { 1: genEquationOfLine16,            2: genVectors2D                  },
-  'age16-stats2':          { 1: genStandardDeviation,           2: genConditionalProbability     },
+  'age16-trig2':           { 1: genTrigIdentities, 2: genTrigEquations, 3: genRadians, 4: genPythagIdentity, 5: genDoubleAngle },
+  'age16-calculus':        { 1: genDifferentiationFirstPrinciples, 2: genBasicDifferentiation, 3: genTangentLine, 4: genStationaryPoint, 5: genIntegration },
+  'age16-exponential':     { 1: genExponentialFunctions, 2: genSolveExponential, 3: genExpModel },
+  'age16-algebra3':        { 1: genPolynomialDivision, 2: genLogsAdvanced, 3: genRemainderTheorem, 4: genFactorTheorem, 5: genBinomial },
+  'age16-functions2':      { 1: genFunctionTransformations, 2: genInverseFunctions16, 3: genComposite, 4: genSolveForInput },
+  'age16-analytical-geo':  { 1: genEquationOfLine16, 2: genVectors2D, 3: genPerpendicular, 4: genCircleEquation },
+  'age16-stats2':          { 1: genStandardDeviation, 2: genConditionalProbability, 3: genVariance, 4: genExpectedValue },
 };
 
 export function generateProblems(
@@ -4324,10 +4769,11 @@ export function generateProblems(
   return Array.from({ length: count }, gen);
 }
 
-export function generateMockExamProblems(count = 40): Problem[] {
-  // Restrict to Age 15 topics only — Age 16 generators are harder and not yet unlocked
-  const age15Keys = Object.keys(TOPIC_LEVELS).filter(k => k.startsWith('age15-'));
-  const allGens: LevelGenerator[] = age15Keys.flatMap(k => Object.values(TOPIC_LEVELS[k]));
+export function generateMockExamProblems(age = 15, count = 40): Problem[] {
+  // Pull every level generator across the given age's topics for a full paper.
+  const prefix = `age${age}-`;
+  const keys = Object.keys(TOPIC_LEVELS).filter(k => k.startsWith(prefix));
+  const allGens: LevelGenerator[] = keys.flatMap(k => Object.values(TOPIC_LEVELS[k]));
   const problems: Problem[] = [];
   for (let i = 0; i < count; i++) {
     problems.push(allGens[i % allGens.length]());
