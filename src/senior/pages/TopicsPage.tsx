@@ -1,13 +1,15 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowLeft, Lock, CheckCircle, NotebookPen } from 'lucide-react';
+import { ArrowLeft, Lock, CheckCircle, NotebookPen, BookOpen } from 'lucide-react';
 import { CURRICULUM, type TopicCard } from '../curriculum';
+import { FORMULAS } from '../formulas';
 import {
   isTopicUnlocked,
   isTopicTestPassed,
   getLevelProgress,
   isLevelUnlocked,
   isDevUnlockAll,
+  getMockExamScores,
 } from '../progress';
 
 // ─── Level dot ───────────────────────────────────────────────────────────────
@@ -114,22 +116,34 @@ function TopicRow({
         ))}
       </div>
 
-      {/* Topic test */}
-      {unlocked && topic.hasTest && (
-        <div className="pt-1">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() =>
-              navigate(`/senior/activity?topicId=${topic.id}&level=1&mode=test&isTopicTest=true`)
-            }
-            className={`w-full py-2 rounded-xl text-sm font-outfit font-semibold transition-colors ${
-              testPassed
-                ? 'bg-sprout-green/20 text-sprout-green border border-sprout-green/30'
-                : 'bg-teal text-white'
-            }`}
-          >
-            {testPassed ? '✓ Topic Test Passed' : 'Topic Test'}
-          </motion.button>
+      {/* Actions: topic test + formula vault */}
+      {unlocked && (
+        <div className="flex gap-2 pt-1">
+          {topic.hasTest && (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() =>
+                navigate(`/senior/activity?topicId=${topic.id}&level=1&mode=test&isTopicTest=true`)
+              }
+              className={`flex-1 py-2 rounded-xl text-sm font-outfit font-semibold transition-colors ${
+                testPassed
+                  ? 'bg-sprout-green/20 text-sprout-green border border-sprout-green/30'
+                  : 'bg-teal text-white'
+              }`}
+            >
+              {testPassed ? '✓ Topic Test Passed' : 'Topic Test'}
+            </motion.button>
+          )}
+          {(FORMULAS[topic.id]?.length ?? 0) > 0 && (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate(`/senior/formulas/${topic.id}`)}
+              aria-label="Formula Vault"
+              className="w-10 h-10 rounded-xl bg-slate-700 flex items-center justify-center flex-shrink-0"
+            >
+              <BookOpen className="w-4 h-4 text-slate-300" />
+            </motion.button>
+          )}
         </div>
       )}
     </div>
@@ -182,6 +196,7 @@ export default function TopicsPage() {
   }
 
   const allTopicIds = group.topics.map(t => t.id);
+  const lastMock = getMockExamScores().filter(m => m.age === ageNum).slice(-1)[0];
 
   return (
     <div className="min-h-screen bg-slate-900 max-w-md mx-auto px-4 pb-8">
@@ -221,6 +236,35 @@ export default function TopicsPage() {
           </motion.div>
         ))}
       </div>
+
+      {/* Mock Exam — full 40-question timed-style paper across all topics */}
+      {group.hasMockExam && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: group.topics.length * 0.05 }}
+          className="mt-4"
+        >
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() =>
+              navigate(`/senior/activity?topicId=mock-age${ageNum}&level=1&mode=mock&isTopicTest=false&age=${ageNum}`)
+            }
+            className={`w-full rounded-2xl p-5 text-left text-white ${group.color}`}
+          >
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-inter opacity-80">Age {age} Mock Exam</p>
+              {lastMock && (
+                <span className="text-xs font-outfit font-bold bg-white/20 rounded-full px-2.5 py-1">
+                  Best/last: {lastMock.score}%
+                </span>
+              )}
+            </div>
+            <h3 className="text-xl font-outfit font-extrabold mt-0.5">40-Question Mock Paper</h3>
+            <p className="text-sm opacity-70 mt-1 font-inter">All topics · IGCSE style · marks &amp; exam tips</p>
+          </motion.button>
+        </motion.div>
+      )}
     </div>
   );
 }

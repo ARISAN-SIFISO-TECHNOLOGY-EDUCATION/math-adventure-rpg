@@ -8,7 +8,7 @@ import {
   generateTopicTestProblems,
   type Problem,
 } from '../mathEngine';
-import { recordAttempt, addMistake } from '../progress';
+import { recordAttempt, addMistake, recordMockExam } from '../progress';
 
 // ─── Option button ────────────────────────────────────────────────────────────
 function OptionBtn({
@@ -217,6 +217,7 @@ export default function ActivityPage() {
   const level = Number(searchParams.get('level') ?? 1);
   const mode = searchParams.get('mode') ?? 'topic'; // 'topic' | 'test' | 'mock'
   const isTopicTest = searchParams.get('isTopicTest') === 'true';
+  const age = Number(searchParams.get('age') ?? 15);
 
   const [problems, setProblems] = useState<Problem[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -268,7 +269,11 @@ export default function ActivityPage() {
       // Done — calculate score and navigate to success
       const correct = results.filter(r => r.correct).length;
       const score = Math.round((correct / problems.length) * 100);
-      recordAttempt(topicId, level, score, isTopicTest);
+      if (mode === 'mock') {
+        recordMockExam(age, score);
+      } else {
+        recordAttempt(topicId, level, score, isTopicTest);
+      }
       navigate(
         `/senior/success?score=${score}&total=${problems.length}&topicId=${topicId}&level=${level}&isTopicTest=${isTopicTest}&mode=${mode}`,
         { replace: true }

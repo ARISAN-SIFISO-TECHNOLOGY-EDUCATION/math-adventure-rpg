@@ -160,7 +160,7 @@ export default function SuccessPage() {
 
         <motion.button
           whileTap={{ scale: 0.97 }}
-          onClick={() => navigate(`/senior/topics/${topicId.startsWith('age16') ? 16 : topicId.startsWith('age17') ? 17 : 15}`)}
+          onClick={() => navigate(`/senior/topics/${topicId.match(/age(\d+)/)?.[1] ?? 15}`)}
           className="w-full py-4 bg-slate-800 text-white font-outfit font-semibold text-lg rounded-2xl flex items-center justify-center gap-2"
         >
           <Home className="w-5 h-5" />

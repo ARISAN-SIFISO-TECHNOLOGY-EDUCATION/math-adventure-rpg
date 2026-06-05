@@ -50,3 +50,7 @@
 .animate-pop-in    { animation: popIn     0.6s ease forwards; }
 .animate-pulse-slow { animation: pulseBeat 0.6s  infinite; }
 .animate-pulse-fast { animation: pulseBeat 0.35s infinite; }
+
+/* Hide the scrollbar on the senior Formula Vault topic tabs (still scrollable). */
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }

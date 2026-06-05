@@ -24,6 +24,7 @@ const SeniorTopicsPage = lazy(() => import('./senior/pages/TopicsPage'));
 const SeniorActivityPage = lazy(() => import('./senior/pages/ActivityPage'));
 const SeniorSuccessPage = lazy(() => import('./senior/pages/SuccessPage'));
 const SeniorMistakeBookPage = lazy(() => import('./senior/pages/MistakeBookPage'));
+const SeniorFormulaVaultPage = lazy(() => import('./senior/pages/FormulaVaultPage'));
 import BottomNav from './components/BottomNav';
 import { consumeScreenBack } from './lib/backHandler';
 
@@ -101,6 +102,7 @@ function AppShell() {
           <Route path="/senior/activity" element={<SeniorActivityPage />} />
           <Route path="/senior/success" element={<SeniorSuccessPage />} />
           <Route path="/senior/mistakes" element={<SeniorMistakeBookPage />} />
+          <Route path="/senior/formulas/:topicId" element={<SeniorFormulaVaultPage />} />
           <Route path="/grown-up-corner" element={<GrownUpCorner />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
