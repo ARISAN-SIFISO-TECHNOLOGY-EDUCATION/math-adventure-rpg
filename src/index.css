@@ -1,5 +1,42 @@
 @import "tailwindcss";
 
+/* ── Senior Exam Studio theme tokens (ages 15–17) ──────────────────────────
+   These add NEW utilities only (teal / sprout-* / font-outfit). The kids' RPG
+   and marketing pages keep Tailwind's default palette + Nunito/Inter fonts;
+   the dark slate background is applied per-page inside the senior layout, not
+   globally, so nothing else is affected. */
+@theme {
+  --color-teal: #2CA9A0;
+  --color-teal-dark: #1E8A82;
+  --color-teal-light: #4FC4BB;
+
+  --color-sprout-orange: #FF7043;
+  --color-sprout-orange-dark: #E64A19;
+  --color-sprout-orange-light: #FF8A65;
+
+  --color-sprout-purple: #7C4DFF;
+  --color-sprout-purple-dark: #6200EA;
+  --color-sprout-purple-light: #9E7BFF;
+
+  --color-sprout-green: #43A047;
+  --color-sprout-green-dark: #2E7D32;
+  --color-sprout-green-light: #66BB6A;
+
+  --color-sprout-pink: #EC407A;
+  --color-sprout-pink-dark: #C2185B;
+  --color-sprout-pink-light: #F48FB1;
+
+  --color-sprout-blue: #1E88E5;
+  --color-sprout-blue-dark: #1565C0;
+  --color-sprout-blue-light: #64B5F6;
+
+  --color-sprout-gold: #FFB300;
+  --color-sprout-gold-dark: #E65100;
+
+  --font-outfit: "Outfit", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
 @keyframes popIn {
   0%   { opacity: 0; transform: scale(0.85); }
   70%  { transform: scale(1.03); }

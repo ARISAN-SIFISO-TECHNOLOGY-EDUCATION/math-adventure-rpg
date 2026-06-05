@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LandingPage from './pages/LandingPage';
@@ -18,6 +18,12 @@ import Age16Page from './pages/Age16Page';
 import Age17Page from './pages/Age17Page';
 import GrownUpCorner from './pages/GrownUpCorner';
 import Game from './game/Game';
+// Senior Exam Studio (ages 15–17) is lazy-loaded: its large IGCSE engine only
+// ships to players who actually open ages 15–17, keeping the kids' start fast.
+const SeniorTopicsPage = lazy(() => import('./senior/pages/TopicsPage'));
+const SeniorActivityPage = lazy(() => import('./senior/pages/ActivityPage'));
+const SeniorSuccessPage = lazy(() => import('./senior/pages/SuccessPage'));
+const SeniorMistakeBookPage = lazy(() => import('./senior/pages/MistakeBookPage'));
 import BottomNav from './components/BottomNav';
 import { consumeScreenBack } from './lib/backHandler';
 
@@ -56,13 +62,22 @@ function AndroidBackHandler() {
 
 function AppShell() {
   const { pathname } = useLocation();
-  const isGame = pathname === '/play';
+  // Immersive screens own the full viewport: the kids' RPG and the senior
+  // Exam Studio both hide the light marketing BottomNav and skip its padding.
+  const isImmersive = pathname === '/play' || pathname.startsWith('/senior');
 
   return (
     <>
       <AndroidBackHandler />
       {/* Pad the page so its bottom content clears the fixed BottomNav (mobile only). */}
-      <div className={isGame ? undefined : 'pb-16 lg:pb-0'}>
+      <div className={isImmersive ? undefined : 'pb-16 lg:pb-0'}>
+        <Suspense
+          fallback={
+            <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+              <div className="text-teal text-xl animate-pulse">Loading…</div>
+            </div>
+          }
+        >
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<LandingPage />} />
@@ -81,11 +96,17 @@ function AppShell() {
           <Route path="/age16" element={<Age16Page />} />
           <Route path="/age17" element={<Age17Page />} />
           <Route path="/play" element={<Game />} />
+          {/* Senior Exam Studio (ages 15–17) — IGCSE interface, dark theme */}
+          <Route path="/senior/topics/:age" element={<SeniorTopicsPage />} />
+          <Route path="/senior/activity" element={<SeniorActivityPage />} />
+          <Route path="/senior/success" element={<SeniorSuccessPage />} />
+          <Route path="/senior/mistakes" element={<SeniorMistakeBookPage />} />
           <Route path="/grown-up-corner" element={<GrownUpCorner />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </Suspense>
       </div>
-      {!isGame && <BottomNav />}
+      {!isImmersive && <BottomNav />}
     </>
   );
 }

@@ -9,6 +9,7 @@ type AgeCard = {
   border: string;
   phase: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
   advanced?: boolean;
+  senior?: boolean; // ages 15–17 → IGCSE Exam Studio instead of the RPG
 };
 
 const AGE_CARDS: AgeCard[] = [
@@ -32,16 +33,16 @@ const AGE_CARDS: AgeCard[] = [
   { age: 13, label: 'Secondary',      emoji: '🧠', color: '#4338CA', bg: '#EEF2FF', border: '#A5B4FC', phase: 5 },
   { age: 14, label: 'Upper Secondary', emoji: '🎓', color: '#0369A1', bg: '#F0F9FF', border: '#7DD3FC', phase: 6 },
   { age: 14, label: 'Upper Secondary', emoji: '🔭', color: '#0F766E', bg: '#F0FDFA', border: '#99F6E4', phase: 6, advanced: true },
-  // Row 6 — Ages 15–17 (Senior phase)
-  { age: 15, label: 'Foundations', emoji: '🏭', color: '#B45309', bg: '#FFFBEB', border: '#FCD34D', phase: 7 },
-  { age: 16, label: 'Mastery',     emoji: '⚒️', color: '#B91C1C', bg: '#FEF2F2', border: '#FCA5A5', phase: 8 },
-  { age: 17, label: 'Excellence',  emoji: '🎓', color: '#1D4ED8', bg: '#EFF6FF', border: '#93C5FD', phase: 9 },
+  // Row 6 — Ages 15–17 (Senior Exam Studio · IGCSE)
+  { age: 15, label: 'Builders', emoji: '🏗️', color: '#0F766E', bg: '#F0FDFA', border: '#5EEAD4', phase: 7, senior: true },
+  { age: 16, label: 'Systems',  emoji: '🛰️', color: '#6D28D9', bg: '#F5F3FF', border: '#C4B5FD', phase: 8, senior: true },
+  { age: 17, label: 'Thinkers', emoji: '🧩', color: '#B45309', bg: '#FFFBEB', border: '#FCD34D', phase: 9, senior: true },
 ];
 
 function AgeCardItem({ card }: { card: AgeCard }) {
   return (
     <Link
-      to={`/play?phase=${card.phase}`}
+      to={card.senior ? `/senior/topics/${card.age}` : `/play?phase=${card.phase}`}
       className="flex flex-col items-center justify-center rounded-2xl border-2 py-3 px-1 gap-0.5 no-underline active:scale-95 transition-transform shadow-sm"
       style={{ background: card.bg, borderColor: card.border }}
     >
