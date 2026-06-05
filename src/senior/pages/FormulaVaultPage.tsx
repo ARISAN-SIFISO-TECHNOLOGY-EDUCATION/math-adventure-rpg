@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft, Search } from 'lucide-react';
 import { FORMULAS } from '../formulas';
 import { CURRICULUM } from '../curriculum';
+import SeniorNav from '../SeniorNav';
 
 // Build flat list of all topic IDs and their display names
 const ALL_TOPICS = CURRICULUM.flatMap(g =>
@@ -71,7 +72,7 @@ export default function FormulaVaultPage() {
       </div>
 
       {/* Formula list */}
-      <div className="flex-1 overflow-y-auto px-4 pb-8 space-y-3">
+      <div className="flex-1 overflow-y-auto px-4 pb-24 space-y-3">
         {filtered.length === 0 ? (
           <div className="text-center text-slate-500 font-inter text-sm py-12">
             {search ? 'No formulas match your search.' : 'No formulas for this topic yet.'}
@@ -101,6 +102,8 @@ export default function FormulaVaultPage() {
           ))
         )}
       </div>
+
+      <SeniorNav />
     </div>
   );
 }

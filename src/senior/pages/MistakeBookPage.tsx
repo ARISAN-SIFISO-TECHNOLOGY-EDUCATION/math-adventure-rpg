@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Trash2, RefreshCw } from 'lucide-react';
 import { getMistakes, removeMistake, type MistakeEntry } from '../progress';
+import SeniorNav from '../SeniorNav';
 
 function MistakeCard({ entry, onRemove }: { key?: string | number; entry: MistakeEntry; onRemove: () => void }) {
   const [expanded, setExpanded] = useState(false);
@@ -94,12 +95,12 @@ export default function MistakeBookPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 max-w-md mx-auto px-4 pb-8">
+    <div className="min-h-screen bg-slate-900 max-w-md mx-auto px-4 pb-24">
       {/* Header */}
       <div className="pt-8 pb-4 flex items-center gap-3">
         <motion.button
           whileTap={{ scale: 0.9 }}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/senior/topics/15')}
           className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center"
         >
           <ArrowLeft className="w-5 h-5 text-white" />
@@ -145,6 +146,8 @@ export default function MistakeBookPage() {
           </div>
         </AnimatePresence>
       )}
+
+      <SeniorNav />
     </div>
   );
 }

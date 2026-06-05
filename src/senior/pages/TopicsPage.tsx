@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowLeft, Lock, CheckCircle, NotebookPen, BookOpen } from 'lucide-react';
+import { ArrowLeft, Lock, CheckCircle, BookOpen } from 'lucide-react';
 import { CURRICULUM, type TopicCard } from '../curriculum';
 import { FORMULAS } from '../formulas';
+import SeniorNav from '../SeniorNav';
 import {
   isTopicUnlocked,
   isTopicTestPassed,
@@ -161,7 +162,7 @@ export default function TopicsPage() {
   // Unknown age, or a school that isn't open yet → friendly "coming soon".
   if (!group || group.locked || group.topics.length === 0) {
     return (
-      <div className="min-h-screen bg-slate-900 max-w-md mx-auto px-4">
+      <div className="min-h-screen bg-slate-900 max-w-md mx-auto px-4 pb-24">
         <div className="pt-8 pb-4 flex items-center gap-3">
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -191,6 +192,7 @@ export default function TopicsPage() {
             Go to Age 15 →
           </motion.button>
         </div>
+        <SeniorNav />
       </div>
     );
   }
@@ -199,7 +201,7 @@ export default function TopicsPage() {
   const lastMock = getMockExamScores().filter(m => m.age === ageNum).slice(-1)[0];
 
   return (
-    <div className="min-h-screen bg-slate-900 max-w-md mx-auto px-4 pb-8">
+    <div className="min-h-screen bg-slate-900 max-w-md mx-auto px-4 pb-24">
       {/* Header */}
       <div className="pt-8 pb-4 flex items-center gap-3">
         <motion.button
@@ -213,14 +215,6 @@ export default function TopicsPage() {
           <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">Age {age} · IGCSE</p>
           <h1 className="text-xl font-outfit font-extrabold text-white">{group.school}</h1>
         </div>
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={() => navigate('/senior/mistakes')}
-          className="flex items-center gap-1.5 bg-slate-800 text-slate-300 rounded-xl px-3 py-2 text-sm font-outfit font-semibold"
-        >
-          <NotebookPen className="w-4 h-4" />
-          Mistakes
-        </motion.button>
       </div>
 
       {/* Topics */}
@@ -265,6 +259,8 @@ export default function TopicsPage() {
           </motion.button>
         </motion.div>
       )}
+
+      <SeniorNav />
     </div>
   );
 }
