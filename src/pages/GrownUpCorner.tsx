@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { PHASES } from '../game/Game';
+import { PHASES } from '../game/phases';
 import { safeGet } from '../lib/safeStorage';
 
 const GATE_PROBLEMS = [

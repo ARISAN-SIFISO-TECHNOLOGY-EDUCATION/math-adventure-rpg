@@ -1,25 +1,29 @@
 import { useEffect, useRef, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import LandingPage from './pages/LandingPage';
-import FeaturesPage from './pages/FeaturesPage';
-import CurriculumPage from './pages/CurriculumPage';
-import ParentsPage from './pages/ParentsPage';
-import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
-import ContactPage from './pages/ContactPage';
-import PreSchoolPage from './pages/PreSchoolPage';
-import LowerPrimaryPage from './pages/LowerPrimaryPage';
-import HigherPrimaryPage from './pages/HigherPrimaryPage';
-import AdvancedPrimaryPage from './pages/AdvancedPrimaryPage';
-import SecondaryPage from './pages/SecondaryPage';
-import Age14Page from './pages/Age14Page';
-import Age15Page from './pages/Age15Page';
-import Age16Page from './pages/Age16Page';
-import Age17Page from './pages/Age17Page';
-import GrownUpCorner from './pages/GrownUpCorner';
-import Game from './game/Game';
-// Senior Exam Studio (ages 15–17) is lazy-loaded: its large IGCSE engine only
-// ships to players who actually open ages 15–17, keeping the kids' start fast.
+// Marketing pages are lazy-loaded: they're only reached from secondary nav, so
+// they shouldn't weigh down the initial Home paint on low-end Android.
+const LandingPage = lazy(() => import('./pages/LandingPage'));
+const FeaturesPage = lazy(() => import('./pages/FeaturesPage'));
+const CurriculumPage = lazy(() => import('./pages/CurriculumPage'));
+const ParentsPage = lazy(() => import('./pages/ParentsPage'));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const PreSchoolPage = lazy(() => import('./pages/PreSchoolPage'));
+const LowerPrimaryPage = lazy(() => import('./pages/LowerPrimaryPage'));
+const HigherPrimaryPage = lazy(() => import('./pages/HigherPrimaryPage'));
+const AdvancedPrimaryPage = lazy(() => import('./pages/AdvancedPrimaryPage'));
+const SecondaryPage = lazy(() => import('./pages/SecondaryPage'));
+const Age14Page = lazy(() => import('./pages/Age14Page'));
+const Age15Page = lazy(() => import('./pages/Age15Page'));
+const Age16Page = lazy(() => import('./pages/Age16Page'));
+const Age17Page = lazy(() => import('./pages/Age17Page'));
+const GrownUpCorner = lazy(() => import('./pages/GrownUpCorner'));
+// The kids' RPG carries the large procedural engine; lazy-load it so it only
+// ships when a child actually opens /play.
+const Game = lazy(() => import('./game/Game'));
+// The Academy (ages 13–17) is lazy-loaded: its large IGCSE engine only ships to
+// players who actually open ages 13–17, keeping the kids' start fast.
 const SeniorTopicsPage = lazy(() => import('./senior/pages/TopicsPage'));
 const SeniorActivityPage = lazy(() => import('./senior/pages/ActivityPage'));
 const SeniorSuccessPage = lazy(() => import('./senior/pages/SuccessPage'));
