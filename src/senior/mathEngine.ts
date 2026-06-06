@@ -7867,6 +7867,661 @@ function genTwoWay13(): Problem {
   ]);
 }
 
+// ── age14-algebra L1 — Expanding (with a coefficient) ────────────────────────
+function genExpandDouble14(): Problem {
+  const a = randInt(2, 3), b = randInt(1, 5), d = randInt(1, 5);
+  const mid = a * d + b, last = b * d;
+  return {
+    id: uid(),
+    question: `Expand and simplify: (${a}x + ${b})(x + ${d})`,
+    correctAnswer: `${a}x² + ${mid}x + ${last}`,
+    options: makeOptions(`${a}x² + ${mid}x + ${last}`, [`${a}x² + ${b + d}x + ${last}`, `${a}x² + ${mid}x + ${b + d}`, `${a}x² + ${last}x + ${mid}`]),
+    marks: 3,
+    workingSteps: [`FOIL: ${a}x·x + ${a}x·${d} + ${b}·x + ${b}·${d}`, `= ${a}x² + ${a * d}x + ${b}x + ${last}`, `= ${a}x² + ${mid}x + ${last}`],
+    hints: [`Multiply each term in the first bracket by each in the second`, `Combine the two x-terms`],
+    calculatorAllowed: false,
+    commonMistake: `Forgetting to multiply the ${a}x by ${d}.`,
+    examTip: `Four products, then collect the middle x-terms.`,
+  };
+}
+
+// ── age14-algebra L2 — Factorising Trinomials ────────────────────────────────
+function genTrinomial14(): Problem {
+  const p = randInt(1, 6), q = randInt(1, 6);
+  const mid = p + q, last = p * q;
+  return {
+    id: uid(),
+    question: `Factorise: x² + ${mid}x + ${last}`,
+    correctAnswer: `(x + ${p})(x + ${q})`,
+    options: makeOptions(`(x + ${p})(x + ${q})`, [`(x + ${p})(x + ${q + 1})`, `(x + ${mid})(x + ${last})`, `(x + ${p + 1})(x + ${q})`]),
+    marks: 3,
+    workingSteps: [`Find two numbers that MULTIPLY to ${last} and ADD to ${mid}`, `${p} and ${q} work`, `(x + ${p})(x + ${q})`],
+    hints: [`Product = ${last}, sum = ${mid}`],
+    calculatorAllowed: false,
+    commonMistake: `Picking numbers that add to ${mid} but don't multiply to ${last}.`,
+    examTip: `Two numbers: product = constant, sum = middle coefficient.`,
+  };
+}
+
+// ── age14-algebra L3 — Common Factor (with variables) ────────────────────────
+function genCommonFactor14(): Problem {
+  const g = randInt(2, 4);
+  const [a, b] = COPRIME_PAIRS[randInt(0, COPRIME_PAIRS.length - 1)];
+  const t1 = g * a, t2 = g * b;
+  return {
+    id: uid(),
+    question: `Factorise fully: ${t1}x² + ${t2}x`,
+    correctAnswer: `${g}x(${a}x + ${b})`,
+    options: makeOptions(`${g}x(${a}x + ${b})`, [`${g}(${a}x² + ${b}x)`, `x(${t1}x + ${t2})`, `${g}x(${a}x + ${b + 1})`]),
+    marks: 3,
+    workingSteps: [`Common factor of ${t1}x² and ${t2}x is ${g}x`, `= ${g}x(${a}x + ${b})`],
+    hints: [`Take out the highest common factor — including x`],
+    calculatorAllowed: false,
+    commonMistake: `Taking out only the number (${g}) and leaving the x inside.`,
+    examTip: `Pull out every common factor: the number AND the x.`,
+  };
+}
+
+// ── age14-algebra L4 — Equations with x on Both Sides ────────────────────────
+function genSolveBothSides14(): Problem {
+  const a = randInt(3, 6), c = randInt(1, a - 1), x = randInt(2, 6), b = randInt(1, 6);
+  const d = (a - c) * x + b;
+  return {
+    id: uid(),
+    question: `Solve: ${a}x + ${b} = ${c}x + ${d}`,
+    correctAnswer: `x = ${x}`,
+    options: makeOptions(`x = ${x}`, [`x = ${x + 1}`, `x = ${d - b}`, `x = ${Math.round(d / a)}`]),
+    marks: 3,
+    workingSteps: [`Subtract ${c}x from both sides: ${a - c}x + ${b} = ${d}`, `Subtract ${b}: ${a - c}x = ${d - b}`, `Divide by ${a - c}: x = ${x}`],
+    hints: [`Collect the x-terms on one side, numbers on the other`],
+    calculatorAllowed: false,
+    commonMistake: `Forgetting to move the ${c}x across first.`,
+    examTip: `Gather x's on one side before solving.`,
+  };
+}
+
+// ── age14-algebra L5 — Substituting into Formulae ────────────────────────────
+function genSubstituteFormula14(): Problem {
+  return fromCases([
+    { q: `Use v = u + at with u = 5, a = 3, t = 4.\nFind v.`, c: '17', w: ['12', '60', '20'], s: ['v = 5 + 3×4', '= 5 + 12 = 17'], h: ['Multiply a×t first (BODMAS)'], mistake: 'Adding before multiplying.', tip: 'Substitute, then follow BODMAS.' },
+    { q: `Use A = ½bh with b = 6, h = 8.\nFind A.`, c: '24', w: ['48', '14', '28'], s: ['A = ½ × 6 × 8', '= ½ × 48 = 24'], h: ['Area of a triangle'], mistake: 'Forgetting the ½.', tip: 'Don\'t drop the ½.' },
+    { q: `Use P = 2(l + w) with l = 7, w = 3.\nFind P.`, c: '20', w: ['10', '21', '13'], s: ['P = 2(7 + 3) = 2 × 10 = 20'], h: ['Do the bracket first'], mistake: 'Multiplying only l by 2.', tip: 'Brackets before multiplying.' },
+    { q: `Use s = d ÷ t with d = 100, t = 4.\nFind s.`, c: '25', w: ['400', '96', '104'], s: ['s = 100 ÷ 4 = 25'], h: ['Divide distance by time'], mistake: 'Multiplying instead of dividing.', tip: 'Read the operation in the formula.' },
+  ]);
+}
+
+// ── age14-algebra L6 — Simplifying Algebraic Fractions ───────────────────────
+function genSimplifyAlgFrac14(): Problem {
+  return fromCases([
+    { q: `Simplify: 6x ÷ 3`, c: '2x', w: ['3x', '2', '18x'], s: ['6x ÷ 3 = (6÷3)x = 2x'], h: ['Divide the number part'], mistake: 'Dividing the x away too.', tip: 'Only the coefficient divides.' },
+    { q: `Simplify: 4x² ÷ 2x`, c: '2x', w: ['2', '2x²', '8x'], s: ['4x²/2x = (4/2)(x²/x) = 2x'], h: ['Divide numbers and subtract powers of x'], mistake: 'Leaving x² on top.', tip: 'x² ÷ x = x.' },
+    { q: `Simplify: 10x ÷ 5x`, c: '2', w: ['2x', '5', '2x²'], s: ['10x/5x = 10/5 = 2 (the x\'s cancel)'], h: ['The x cancels top and bottom'], mistake: 'Keeping an x.', tip: 'Same factor top and bottom cancels.' },
+    { q: `Simplify: x² ÷ x`, c: 'x', w: ['x²', '1', '2x'], s: ['x²/x = x^(2−1) = x'], h: ['Subtract the powers'], mistake: 'Writing 1.', tip: 'x²/x = x.' },
+  ]);
+}
+
+// ── age14-algebra L7 — Changing the Subject ──────────────────────────────────
+function genChangeSubject14(): Problem {
+  return fromCases([
+    { q: `Make x the subject:  y = x + 5`, c: 'x = y − 5', w: ['x = y + 5', 'x = 5 − y', 'x = 5y'], s: ['Subtract 5 from both sides', 'x = y − 5'], h: ['Undo the + 5'], mistake: 'Adding instead of subtracting.', tip: 'Do the inverse operation.' },
+    { q: `Make x the subject:  y = 2x`, c: 'x = y/2', w: ['x = 2y', 'x = y − 2', 'x = 2/y'], s: ['Divide both sides by 2', 'x = y/2'], h: ['Undo the × 2'], mistake: 'Multiplying by 2.', tip: 'Divide to undo a multiply.' },
+    { q: `Make x the subject:  y = 3x − 1`, c: 'x = (y + 1)/3', w: ['x = (y − 1)/3', 'x = 3(y + 1)', 'x = y/3 − 1'], s: ['Add 1: y + 1 = 3x', 'Divide by 3: x = (y + 1)/3'], h: ['Undo − 1 first, then ÷ 3'], mistake: 'Dividing before adding 1.', tip: 'Reverse operations in reverse order.' },
+    { q: `Make a the subject:  v = u + at`, c: 'a = (v − u)/t', w: ['a = (v + u)/t', 'a = (v − u)t', 'a = v − u − t'], s: ['v − u = at', 'a = (v − u)/t'], h: ['Subtract u, then divide by t'], mistake: 'Not dividing the whole bracket by t.', tip: 'Isolate the at term first.' },
+  ]);
+}
+
+// ── age14-algebra L8 — Linear Inequalities ───────────────────────────────────
+function genInequality14(): Problem {
+  const a = randInt(2, 4), bnd = randInt(2, 7), b = randInt(1, 6);
+  const rhs = a * bnd + b;
+  const lt = Math.random() < 0.5;
+  const correct = lt ? `x < ${bnd}` : `x > ${bnd}`;
+  return {
+    id: uid(),
+    question: `Solve:  ${a}x + ${b} ${lt ? '<' : '>'} ${rhs}`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [lt ? `x > ${bnd}` : `x < ${bnd}`, lt ? `x < ${bnd + 1}` : `x > ${bnd + 1}`, `x ${lt ? '<' : '>'} ${rhs - b}`]),
+    marks: 3,
+    workingSteps: [`Subtract ${b}: ${a}x ${lt ? '<' : '>'} ${rhs - b}`, `Divide by ${a}: x ${lt ? '<' : '>'} ${bnd}`],
+    hints: [`Solve like an equation`, `The sign only flips if you ÷ by a negative (not here)`],
+    calculatorAllowed: false,
+    commonMistake: `Flipping the inequality sign when dividing by a positive number.`,
+    examTip: `Only flip < / > when multiplying or dividing by a NEGATIVE.`,
+  };
+}
+
+// ── age14-finance L1 — VAT ───────────────────────────────────────────────────
+function genVAT14(): Problem {
+  const price = randInt(1, 9) * 100;
+  const vat = price * 0.15, total = price + vat;
+  return {
+    id: uid(),
+    question: `A jacket costs R${price} before VAT.\nVAT is 15%.\n\nFind the price including VAT.`,
+    correctAnswer: `R${total}`,
+    options: makeOptions(`R${total}`, [`R${vat}`, `R${price}`, `R${price + price * 0.5}`]),
+    marks: 3,
+    workingSteps: [`VAT = 15% of ${price} = ${vat}`, `Total = ${price} + ${vat} = R${total}`],
+    hints: [`Find 15%, then add it on`, `Or multiply by 1.15`],
+    calculatorAllowed: true,
+    commonMistake: `Giving just the VAT amount instead of the total price.`,
+    examTip: `Including VAT = price × 1.15.`,
+  };
+}
+
+// ── age14-finance L2 — Profit & Loss ─────────────────────────────────────────
+function genProfitLoss14(): Problem {
+  const cost = randInt(2, 9) * 50;
+  const profit = randInt(1, 5) * 20;
+  const gain = Math.random() < 0.6;
+  const sell = gain ? cost + profit : cost - profit;
+  return {
+    id: uid(),
+    question: `An item is bought for R${cost} and sold for R${sell}.\n\nFind the ${gain ? 'profit' : 'loss'}.`,
+    correctAnswer: `R${profit}`,
+    options: makeOptions(`R${profit}`, [`R${profit + 20}`, `R${cost + sell}`, `R${Math.abs(profit - 20) || 10}`]),
+    marks: 2,
+    workingSteps: [gain ? `Profit = selling − cost = ${sell} − ${cost} = R${profit}` : `Loss = cost − selling = ${cost} − ${sell} = R${profit}`],
+    hints: [gain ? `Profit = selling price − cost price` : `Loss = cost price − selling price`],
+    calculatorAllowed: true,
+    commonMistake: `Adding the two prices instead of finding the difference.`,
+    examTip: `Profit/loss = the difference between cost and selling price.`,
+  };
+}
+
+// ── age14-finance L3 — Simple Interest ───────────────────────────────────────
+function genSimpleInterest14(): Problem {
+  const P = randInt(2, 9) * 1000, R = [5, 8, 10][randInt(0, 2)], T = randInt(2, 5);
+  const I = (P * R * T) / 100;
+  return {
+    id: uid(),
+    question: `Find the simple interest on R${P} at ${R}% per year for ${T} years.`,
+    correctAnswer: `R${I}`,
+    options: makeOptions(`R${I}`, [`R${P + I}`, `R${(P * R) / 100}`, `R${I + 100}`]),
+    marks: 3,
+    workingSteps: [`I = P × R × T ÷ 100`, `= ${P} × ${R} × ${T} ÷ 100 = R${I}`],
+    hints: [`I = PRT/100`],
+    calculatorAllowed: true,
+    commonMistake: `Giving the total amount (P + I) instead of just the interest.`,
+    examTip: `Simple interest is the same amount each year: R${I / T}.`,
+  };
+}
+
+// ── age14-finance L4 — Discount ──────────────────────────────────────────────
+function genDiscount14(): Problem {
+  const price = randInt(1, 9) * 100, r = [10, 20, 25, 50][randInt(0, 3)];
+  const sale = price * (1 - r / 100), saved = price - sale;
+  return {
+    id: uid(),
+    question: `A R${price} item has a ${r}% discount.\n\nFind the sale price.`,
+    correctAnswer: `R${sale}`,
+    options: makeOptions(`R${sale}`, [`R${saved}`, `R${price}`, `R${sale - 10}`]),
+    marks: 3,
+    workingSteps: [`Discount = ${r}% of ${price} = ${saved}`, `Sale price = ${price} − ${saved} = R${sale}`],
+    hints: [`Find the discount, then subtract`, `Or multiply by ${1 - r / 100}`],
+    calculatorAllowed: true,
+    commonMistake: `Giving the amount saved instead of the price paid.`,
+    examTip: `Sale price = original × (1 − rate).`,
+  };
+}
+
+// ── age14-finance L5 — Hire Purchase ─────────────────────────────────────────
+function genHirePurchase14(): Problem {
+  const dep = randInt(2, 8) * 100, n = [6, 12][randInt(0, 1)], m = randInt(2, 9) * 50;
+  const total = dep + n * m;
+  return {
+    id: uid(),
+    question: `A fridge is bought with a R${dep} deposit and ${n} monthly payments of R${m}.\n\nFind the total amount paid.`,
+    correctAnswer: `R${total}`,
+    options: makeOptions(`R${total}`, [`R${n * m}`, `R${dep + m}`, `R${total + m}`]),
+    marks: 3,
+    workingSteps: [`Instalments = ${n} × ${m} = ${n * m}`, `Total = deposit + instalments = ${dep} + ${n * m} = R${total}`],
+    hints: [`Total = deposit + (months × monthly payment)`],
+    calculatorAllowed: true,
+    commonMistake: `Forgetting to add the deposit.`,
+    examTip: `Hire purchase total = deposit + all instalments.`,
+  };
+}
+
+// ── age14-finance L6 — Exchange Rates ────────────────────────────────────────
+function genExchangeRate14(): Problem {
+  const rate = [15, 18, 20][randInt(0, 2)], d = randInt(2, 9) * 10;
+  const rand = d * rate;
+  return {
+    id: uid(),
+    question: `The exchange rate is R${rate} to $1.\n\nHow many rand do you get for $${d}?`,
+    correctAnswer: `R${rand}`,
+    options: makeOptions(`R${rand}`, [`R${d}`, `R${Math.round(d / rate)}`, `R${rand + rate}`]),
+    marks: 2,
+    workingSteps: [`Each dollar = R${rate}`, `$${d} × ${rate} = R${rand}`],
+    hints: [`Multiply the dollars by the rate`],
+    calculatorAllowed: true,
+    commonMistake: `Dividing when converting dollars to rand here.`,
+    examTip: `Dollars → rand: multiply by the rate (rand per dollar).`,
+  };
+}
+
+// ── age14-finance L7 — Budgeting ─────────────────────────────────────────────
+function genBudget14(): Problem {
+  return fromCases([
+    { q: `Monthly income: R5000.\nRent R2000, food R1500, transport R800.\nHow much is left?`, c: 'R700', w: ['R4300', 'R300', 'R800'], s: ['Total spent = 2000 + 1500 + 800 = 4300', 'Left = 5000 − 4300 = R700'], h: ['Add the expenses, then subtract from income'], mistake: 'Forgetting one expense.', tip: 'Income − total expenses = savings.', calc: true },
+    { q: `Income R3000. You spend 2/3 of it.\nHow much do you SAVE?`, c: 'R1000', w: ['R2000', 'R1500', 'R3000'], s: ['Spent = 2/3 × 3000 = 2000', 'Saved = 3000 − 2000 = R1000'], h: ['Saved = 1/3 of the income'], mistake: 'Giving the amount spent.', tip: 'Saved = income − spent.', calc: true },
+    { q: `You save R250 every month.\nHow much have you saved after 1 year?`, c: 'R3000', w: ['R2500', 'R250', 'R1500'], s: ['12 months × R250 = R3000'], h: ['1 year = 12 months'], mistake: 'Using the wrong number of months.', tip: 'Multiply the monthly amount by 12.', calc: true },
+  ]);
+}
+
+// ── age14-finance L8 — Percentage Profit ─────────────────────────────────────
+function genPercentProfit14(): Problem {
+  const cost = randInt(1, 5) * 100, pct = [10, 20, 25, 50][randInt(0, 3)];
+  const profit = (cost * pct) / 100, sell = cost + profit;
+  return {
+    id: uid(),
+    question: `An item is bought for R${cost} and sold for R${sell}.\n\nFind the percentage profit.`,
+    correctAnswer: `${pct}%`,
+    options: makeOptions(`${pct}%`, [`${pct + 10}%`, `${profit}%`, `${Math.round((profit / sell) * 100)}%`]),
+    marks: 3,
+    workingSteps: [`Profit = ${sell} − ${cost} = ${profit}`, `% profit = profit ÷ cost × 100 = ${profit}/${cost} × 100 = ${pct}%`],
+    hints: [`% profit = profit ÷ COST × 100`],
+    calculatorAllowed: true,
+    commonMistake: `Dividing the profit by the selling price instead of the cost price.`,
+    examTip: `Percentage profit is always based on the COST price.`,
+  };
+}
+
+// ── age14-geometry L1 — Translation ──────────────────────────────────────────
+function genTranslation14(): Problem {
+  const x = randInt(1, 6), y = randInt(1, 6), a = randInt(-4, 5), b = randInt(-4, 5);
+  return {
+    id: uid(),
+    question: `Translate the point (${x}, ${y}) by the vector (${a}, ${b}).\n\nFind the image.`,
+    correctAnswer: `(${x + a}, ${y + b})`,
+    options: makeOptions(`(${x + a}, ${y + b})`, [`(${x - a}, ${y - b})`, `(${x + b}, ${y + a})`, `(${x + a}, ${y + b + 1})`]),
+    marks: 2,
+    workingSteps: [`Add the vector to the point`, `(${x} + ${a}, ${y} + ${b}) = (${x + a}, ${y + b})`],
+    hints: [`Add the vector components to the coordinates`],
+    calculatorAllowed: false,
+    commonMistake: `Subtracting the vector instead of adding it.`,
+    examTip: `Translation: new point = point + vector.`,
+  };
+}
+
+// ── age14-geometry L2 — Reflection ───────────────────────────────────────────
+function genReflection14(): Problem {
+  const x = randInt(1, 6), y = randInt(1, 6), t = randInt(0, 2);
+  const lines = ['the x-axis', 'the y-axis', 'the line y = x'];
+  const imgs = [`(${x}, ${-y})`, `(${-x}, ${y})`, `(${y}, ${x})`];
+  const correct = imgs[t];
+  const wrong = imgs.filter((_, i) => i !== t);
+  return {
+    id: uid(),
+    question: `Reflect the point (${x}, ${y}) in ${lines[t]}.\n\nFind the image.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [...wrong, `(${-x}, ${-y})`]),
+    marks: 2,
+    workingSteps: [
+      t === 0 ? `Reflection in x-axis: (x, y) → (x, −y)` : t === 1 ? `Reflection in y-axis: (x, y) → (−x, y)` : `Reflection in y = x: swap → (y, x)`,
+      `Image = ${correct}`,
+    ],
+    hints: [`x-axis: negate y · y-axis: negate x · y = x: swap`],
+    calculatorAllowed: false,
+    commonMistake: `Negating the wrong coordinate.`,
+    examTip: `Know the three standard reflection rules.`,
+  };
+}
+
+// ── age14-geometry L3 — Rotation ─────────────────────────────────────────────
+function genRotation14(): Problem {
+  const x = randInt(1, 6), y = randInt(1, 6), t = randInt(0, 2);
+  const desc = ['90° clockwise', '90° anticlockwise', '180°'];
+  const imgs = [`(${y}, ${-x})`, `(${-y}, ${x})`, `(${-x}, ${-y})`];
+  const correct = imgs[t];
+  const wrong = imgs.filter((_, i) => i !== t);
+  return {
+    id: uid(),
+    question: `Rotate the point (${x}, ${y}) by ${desc[t]} about the origin.\n\nFind the image.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [...wrong, `(${x}, ${y})`]),
+    marks: 3,
+    workingSteps: [
+      t === 0 ? `90° clockwise: (x, y) → (y, −x)` : t === 1 ? `90° anticlockwise: (x, y) → (−y, x)` : `180°: (x, y) → (−x, −y)`,
+      `Image = ${correct}`,
+    ],
+    hints: [`90° CW: (y, −x) · 90° ACW: (−y, x) · 180°: (−x, −y)`],
+    calculatorAllowed: false,
+    commonMistake: `Mixing up clockwise and anticlockwise.`,
+    examTip: `State the rule for the given direction before substituting.`,
+  };
+}
+
+// ── age14-geometry L4 — Enlargement ──────────────────────────────────────────
+function genEnlargement14(): Problem {
+  const k = randInt(2, 4), x = randInt(1, 5), y = randInt(1, 5);
+  return {
+    id: uid(),
+    question: `Enlarge the point (${x}, ${y}) by scale factor ${k}, centre the origin.\n\nFind the image.`,
+    correctAnswer: `(${k * x}, ${k * y})`,
+    options: makeOptions(`(${k * x}, ${k * y})`, [`(${x + k}, ${y + k})`, `(${k * x}, ${k * y + 1})`, `(${x}, ${y})`]),
+    marks: 2,
+    workingSteps: [`Multiply each coordinate by ${k}`, `(${k}×${x}, ${k}×${y}) = (${k * x}, ${k * y})`],
+    hints: [`Enlargement from the origin: multiply by the scale factor`],
+    calculatorAllowed: false,
+    commonMistake: `Adding the scale factor instead of multiplying.`,
+    examTip: `From the origin: image = (kx, ky).`,
+  };
+}
+
+// ── age14-geometry L5 — Congruency Tests ─────────────────────────────────────
+function genCongruency14(): Problem {
+  return fromCases([
+    { q: `Two triangles have all three pairs of sides equal.\nWhich congruency test is this?`, c: 'SSS', w: ['SAS', 'AAS', 'RHS'], s: ['Three equal sides → SSS'], h: ['Side-Side-Side'], mistake: 'Confusing with SAS.', tip: 'SSS = three sides.' },
+    { q: `Two sides and the angle BETWEEN them are equal.\nWhich test?`, c: 'SAS', w: ['SSS', 'AAS', 'RHS'], s: ['Two sides + included angle → SAS'], h: ['The angle is between the two sides'], mistake: 'Using AAS.', tip: 'SAS = side-angle-side (included angle).' },
+    { q: `Two angles and a corresponding side are equal.\nWhich test?`, c: 'AAS', w: ['SSS', 'SAS', 'RHS'], s: ['Two angles + a side → AAS'], h: ['Angle-Angle-Side'], mistake: 'Using SAS.', tip: 'AAS = two angles and a side.' },
+    { q: `Right-angled triangles with equal hypotenuse and one side.\nWhich test?`, c: 'RHS', w: ['SSS', 'SAS', 'AAS'], s: ['Right angle, Hypotenuse, Side → RHS'], h: ['Only for right-angled triangles'], mistake: 'Using SSS.', tip: 'RHS = right-angle, hypotenuse, side.' },
+  ]);
+}
+
+// ── age14-geometry L6 — Similar Triangles ────────────────────────────────────
+function genSimilarTriangles14(): Problem {
+  const k = randInt(2, 4), s1 = randInt(2, 5), s2 = randInt(3, 6);
+  return {
+    id: uid(),
+    question: `Two triangles are similar with scale factor ${k}.\nA side on the small triangle is ${s2}.\n\nFind the matching side on the large triangle.`,
+    correctAnswer: `${k * s2}`,
+    options: makeOptions(`${k * s2}`, [`${s2 + k}`, `${k * s2 + 1}`, `${Math.round(s2 / k) || 1}`]),
+    marks: 3,
+    workingSteps: [`Similar triangles: multiply matching sides by the scale factor`, `${s2} × ${k} = ${k * s2}`],
+    hints: [`Multiply by the scale factor ${k}`],
+    calculatorAllowed: false,
+    commonMistake: `Adding the scale factor instead of multiplying.`,
+    examTip: `Corresponding sides of similar shapes are in the same ratio.`,
+  };
+}
+
+// ── age14-geometry L7 — Angle Relationships ──────────────────────────────────
+function genAngleRelationships14(): Problem {
+  const t = randInt(0, 2);
+  if (t === 0) { const a = randInt(20, 70); return { id: uid(), question: `Two angles are COMPLEMENTARY. One is ${a}°.\n\nFind the other.`, correctAnswer: `${90 - a}°`, options: makeOptions(`${90 - a}°`, [`${180 - a}°`, `${a}°`, `${90 - a + 10}°`]), marks: 2, workingSteps: [`Complementary angles add up to 90°`, `90 − ${a} = ${90 - a}°`], hints: [`Complementary → sum 90°`], calculatorAllowed: false, commonMistake: `Using 180° (that's supplementary).`, examTip: `Complementary = 90°, Supplementary = 180°.` }; }
+  if (t === 1) { const a = randInt(95, 160); return { id: uid(), question: `Two angles are SUPPLEMENTARY. One is ${a}°.\n\nFind the other.`, correctAnswer: `${180 - a}°`, options: makeOptions(`${180 - a}°`, [`${90 - a < 0 ? 90 : 90 - a}°`, `${a}°`, `${180 - a + 10}°`]), marks: 2, workingSteps: [`Supplementary angles add up to 180°`, `180 − ${a} = ${180 - a}°`], hints: [`Supplementary → sum 180°`], calculatorAllowed: false, commonMistake: `Using 90° instead of 180°.`, examTip: `Supplementary = 180°.` }; }
+  const a = randInt(40, 140); return { id: uid(), question: `Two angles are VERTICALLY OPPOSITE. One is ${a}°.\n\nFind the other.`, correctAnswer: `${a}°`, options: makeOptions(`${a}°`, [`${180 - a}°`, `${90 - a < 0 ? 360 - a : 90 - a}°`, `${a + 10}°`]), marks: 2, workingSteps: [`Vertically opposite angles are equal`, `So the other angle is ${a}°`], hints: [`Vertically opposite → equal`], calculatorAllowed: false, commonMistake: `Treating them as supplementary.`, examTip: `Vertically opposite angles are always equal.` };
+}
+
+// ── age14-geometry L8 — Symmetry ─────────────────────────────────────────────
+function genSymmetry14(): Problem {
+  return fromCases([
+    { q: `How many lines of symmetry does a SQUARE have?`, c: '4', w: ['2', '1', '8'], s: ['A square has 4 lines of symmetry'], h: ['Two diagonals plus two through the midpoints'], mistake: 'Counting only 2.', tip: 'Square = 4 lines of symmetry.' },
+    { q: `What is the order of ROTATIONAL symmetry of an equilateral triangle?`, c: '3', w: ['1', '6', '2'], s: ['It looks the same 3 times in a full turn'], h: ['How many times does it match in 360°?'], mistake: 'Saying 1.', tip: 'Equilateral triangle: order 3.' },
+    { q: `How many lines of symmetry does a (non-square) RECTANGLE have?`, c: '2', w: ['4', '1', '0'], s: ['Two lines through the midpoints of opposite sides'], h: ['The diagonals are NOT lines of symmetry here'], mistake: 'Counting the diagonals.', tip: 'Rectangle = 2 lines of symmetry.' },
+    { q: `How many lines of symmetry does a regular PENTAGON have?`, c: '5', w: ['10', '4', '1'], s: ['A regular n-gon has n lines of symmetry → 5'], h: ['One line per vertex'], mistake: 'Doubling to 10.', tip: 'Regular n-gon: n lines of symmetry.' },
+  ]);
+}
+
+// ── age14-measurement L1 — Perimeter ─────────────────────────────────────────
+function genPerimeter14(): Problem {
+  const l = randInt(4, 12), w = randInt(2, 10);
+  return {
+    id: uid(),
+    question: `A rectangle is ${l} cm long and ${w} cm wide.\n\nFind its perimeter.`,
+    correctAnswer: `${2 * (l + w)} cm`,
+    options: makeOptions(`${2 * (l + w)} cm`, [`${l * w} cm`, `${l + w} cm`, `${2 * (l + w) + 2} cm`]),
+    marks: 2,
+    workingSteps: [`Perimeter = 2(l + w) = 2(${l} + ${w})`, `= 2 × ${l + w} = ${2 * (l + w)} cm`],
+    hints: [`Perimeter = distance all the way around = 2(l + w)`],
+    calculatorAllowed: false,
+    commonMistake: `Multiplying l × w — that gives area, not perimeter.`,
+    examTip: `Perimeter adds the sides; area multiplies them.`,
+  };
+}
+
+// ── age14-measurement L2 — Area of a Rectangle ───────────────────────────────
+function genAreaRect14(): Problem {
+  const l = randInt(4, 12), w = randInt(2, 10);
+  return {
+    id: uid(),
+    question: `A rectangle is ${l} cm by ${w} cm.\n\nFind its area.`,
+    correctAnswer: `${l * w} cm²`,
+    options: makeOptions(`${l * w} cm²`, [`${2 * (l + w)} cm²`, `${l + w} cm²`, `${l * w + l} cm²`]),
+    marks: 2,
+    workingSteps: [`Area = length × width = ${l} × ${w} = ${l * w} cm²`],
+    hints: [`Area = length × width`],
+    calculatorAllowed: false,
+    commonMistake: `Adding instead of multiplying (that's perimeter).`,
+    examTip: `Area units are squared (cm²).`,
+  };
+}
+
+// ── age14-measurement L3 — Area of a Triangle ────────────────────────────────
+function genAreaTriangle14(): Problem {
+  const b = 2 * randInt(2, 7), h = randInt(3, 10);
+  return {
+    id: uid(),
+    question: `A triangle has base ${b} cm and height ${h} cm.\n\nFind its area.`,
+    correctAnswer: `${(b * h) / 2} cm²`,
+    options: makeOptions(`${(b * h) / 2} cm²`, [`${b * h} cm²`, `${(b * h) / 2 + b} cm²`, `${b + h} cm²`]),
+    marks: 2,
+    workingSteps: [`Area = ½ × base × height = ½ × ${b} × ${h}`, `= ${(b * h) / 2} cm²`],
+    hints: [`Area of a triangle = ½ × base × height`],
+    calculatorAllowed: false,
+    commonMistake: `Forgetting the ½.`,
+    examTip: `Always halve base × height for a triangle.`,
+  };
+}
+
+// ── age14-measurement L4 — Area of a Circle ──────────────────────────────────
+function genAreaCircle14(): Problem {
+  const r = randInt(2, 9);
+  return {
+    id: uid(),
+    question: `Find the area of a circle with radius ${r} cm.\nGive your answer in terms of π.`,
+    correctAnswer: `${r * r}π cm²`,
+    options: makeOptions(`${r * r}π cm²`, [`${2 * r}π cm²`, `${r * r} cm²`, `${r * r + 1}π cm²`]),
+    marks: 2,
+    workingSteps: [`Area = πr² = π × ${r}² = ${r * r}π cm²`],
+    hints: [`Area of a circle = πr²`],
+    calculatorAllowed: false,
+    commonMistake: `Using 2πr (that's the circumference) or forgetting to square r.`,
+    examTip: `Area = πr²; circumference = 2πr or πd.`,
+  };
+}
+
+// ── age14-measurement L5 — Circumference ─────────────────────────────────────
+function genCircumference14(): Problem {
+  const d = randInt(2, 12);
+  return {
+    id: uid(),
+    question: `Find the circumference of a circle with diameter ${d} cm.\nGive your answer in terms of π.`,
+    correctAnswer: `${d}π cm`,
+    options: makeOptions(`${d}π cm`, [`${d * d}π cm`, `${2 * d}π cm`, `${d}π cm²`]),
+    marks: 2,
+    workingSteps: [`Circumference = πd = ${d}π cm`],
+    hints: [`Circumference = πd (or 2πr)`],
+    calculatorAllowed: false,
+    commonMistake: `Using πr² (that's area) or squaring the diameter.`,
+    examTip: `C = πd. Circumference is a length (cm, not cm²).`,
+  };
+}
+
+// ── age14-measurement L6 — Compound Areas ────────────────────────────────────
+function genCompoundArea14(): Problem {
+  return fromCases([
+    { q: `An L-shape is a 6 × 4 rectangle with a 2 × 2 square cut from one corner.\nFind the area.`, c: '20 cm²', w: ['24 cm²', '16 cm²', '28 cm²'], s: ['Big rectangle = 6 × 4 = 24', 'Cut-out = 2 × 2 = 4', 'Area = 24 − 4 = 20 cm²'], h: ['Find the whole, then subtract the missing piece'], mistake: 'Forgetting to subtract the cut-out.', tip: 'Split or subtract: whole − hole.', calc: true },
+    { q: `Two rectangles are joined: 5 × 3 and 4 × 2.\nFind the total area.`, c: '23 cm²', w: ['20 cm²', '14 cm²', '26 cm²'], s: ['5 × 3 = 15', '4 × 2 = 8', 'Total = 15 + 8 = 23 cm²'], h: ['Add the two rectangle areas'], mistake: 'Adding the dimensions instead of the areas.', tip: 'Split into rectangles, add the areas.', calc: true },
+    { q: `A 10 × 6 rectangle has a 4 × 3 rectangle cut out.\nFind the remaining area.`, c: '48 cm²', w: ['60 cm²', '12 cm²', '42 cm²'], s: ['10 × 6 = 60', '4 × 3 = 12', '60 − 12 = 48 cm²'], h: ['Whole minus the hole'], mistake: 'Subtracting perimeters.', tip: 'Subtract the cut-out area.', calc: true },
+  ]);
+}
+
+// ── age14-measurement L7 — Volume of a Prism ─────────────────────────────────
+function genVolumePrism14(): Problem {
+  const l = randInt(2, 8), w = randInt(2, 6), h = randInt(2, 6);
+  return {
+    id: uid(),
+    question: `A rectangular box is ${l} cm by ${w} cm by ${h} cm.\n\nFind its volume.`,
+    correctAnswer: `${l * w * h} cm³`,
+    options: makeOptions(`${l * w * h} cm³`, [`${2 * (l * w + l * h + w * h)} cm³`, `${l + w + h} cm³`, `${l * w} cm³`]),
+    marks: 2,
+    workingSteps: [`Volume = length × width × height`, `= ${l} × ${w} × ${h} = ${l * w * h} cm³`],
+    hints: [`Volume = l × w × h`],
+    calculatorAllowed: false,
+    commonMistake: `Adding the dimensions instead of multiplying.`,
+    examTip: `Volume units are cubed (cm³).`,
+  };
+}
+
+// ── age14-measurement L8 — Surface Area ──────────────────────────────────────
+function genSurfaceArea14(): Problem {
+  const l = randInt(2, 6), w = randInt(2, 5), h = randInt(2, 5);
+  const sa = 2 * (l * w + l * h + w * h);
+  return {
+    id: uid(),
+    question: `A rectangular box is ${l} cm by ${w} cm by ${h} cm.\n\nFind its total surface area.`,
+    correctAnswer: `${sa} cm²`,
+    options: makeOptions(`${sa} cm²`, [`${l * w * h} cm²`, `${sa / 2} cm²`, `${sa + 2} cm²`]),
+    marks: 3,
+    workingSteps: [`Surface area = 2(lw + lh + wh)`, `= 2(${l * w} + ${l * h} + ${w * h}) = 2 × ${l * w + l * h + w * h} = ${sa} cm²`],
+    hints: [`Six faces in three matching pairs: 2(lw + lh + wh)`],
+    calculatorAllowed: true,
+    commonMistake: `Computing the volume instead of the surface area.`,
+    examTip: `Surface area = sum of all 6 faces = 2(lw + lh + wh).`,
+  };
+}
+
+// ── age14-data L1 — Mean from a Frequency Table ──────────────────────────────
+function genMeanFreq14(): Problem {
+  const vals = [1, 2, 3, 4];
+  const f = [randInt(1, 6), randInt(1, 6), randInt(1, 6), randInt(1, 6)];
+  const sumF = f.reduce((a, b) => a + b, 0);
+  const sumFX = vals.reduce((a, v, i) => a + v * f[i], 0);
+  const mean = sumFX / sumF;
+  const correct = Number.isInteger(mean) ? `${mean}` : mean.toFixed(2);
+  const table = vals.map((v, i) => `|   ${v}   |  ${f[i]}   |`).join('\n');
+  return {
+    id: uid(),
+    question: `| Value | Freq |\n|-------|------|\n${table}\n\nFind the mean.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [(mean + 1).toFixed(2), (sumFX / 4).toFixed(2), (mean + 0.5).toFixed(2)]),
+    marks: 3,
+    workingSteps: [`Σfx = ${vals.map((v, i) => `${v}×${f[i]}`).join(' + ')} = ${sumFX}`, `Σf = ${sumF}`, `Mean = ${sumFX} ÷ ${sumF} = ${correct}`],
+    hints: [`Mean = Σfx ÷ Σf`],
+    calculatorAllowed: true,
+    commonMistake: `Dividing by the number of rows instead of Σf (${sumF}).`,
+    examTip: `Add an fx column, total it, divide by total frequency.`,
+  };
+}
+
+// ── age14-data L2 — Median (even count) ──────────────────────────────────────
+function genMedianEven14(): Problem {
+  const d = Array.from({ length: 6 }, () => randInt(2, 20)).sort((a, b) => a - b);
+  const med = (d[2] + d[3]) / 2;
+  const correct = Number.isInteger(med) ? `${med}` : med.toFixed(1);
+  return {
+    id: uid(),
+    question: `Find the median of:\n${d.join(', ')}`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`${d[2]}`, `${d[3]}`, `${(med + 1).toFixed(1)}`]),
+    marks: 2,
+    workingSteps: [`6 values → average the 3rd and 4th`, `(${d[2]} + ${d[3]}) ÷ 2 = ${correct}`],
+    hints: [`Even count → mean of the two middle values`],
+    calculatorAllowed: false,
+    commonMistake: `Picking one middle value instead of averaging the two.`,
+    examTip: `Even number of values → average the middle pair.`,
+  };
+}
+
+// ── age14-data L3 — Mode from a Frequency Table ──────────────────────────────
+function genModeFreq14(): Problem {
+  const vals = [2, 4, 6, 8];
+  const f = [randInt(1, 4), randInt(1, 4), randInt(1, 4), randInt(1, 4)];
+  let mi = 0; for (let i = 1; i < 4; i++) if (f[i] > f[mi]) mi = i;
+  // ensure a unique maximum
+  if (f.filter(v => v === f[mi]).length > 1) f[mi] += 2;
+  const table = vals.map((v, i) => `|   ${v}   |  ${f[i]}   |`).join('\n');
+  return {
+    id: uid(),
+    question: `| Value | Freq |\n|-------|------|\n${table}\n\nWhat is the mode?`,
+    correctAnswer: `${vals[mi]}`,
+    options: makeOptions(`${vals[mi]}`, [`${f[mi]}`, `${vals[(mi + 1) % 4]}`, `${vals[(mi + 2) % 4]}`]),
+    marks: 2,
+    workingSteps: [`The mode is the VALUE with the highest frequency`, `Highest frequency is ${f[mi]}, for the value ${vals[mi]}`],
+    hints: [`Mode = the value (not the frequency) that occurs most`],
+    calculatorAllowed: false,
+    commonMistake: `Giving the frequency (${f[mi]}) instead of the value (${vals[mi]}).`,
+    examTip: `Mode = the data value with the biggest frequency.`,
+  };
+}
+
+// ── age14-data L4 — Range & IQR ──────────────────────────────────────────────
+function genRangeIQR14(): Problem {
+  const d = Array.from({ length: 7 }, () => randInt(10, 50)).sort((a, b) => a - b);
+  const q1 = d[1], q3 = d[5], iqr = q3 - q1;
+  return {
+    id: uid(),
+    question: `Ordered data:\n${d.join(', ')}\n\nFind the interquartile range (IQR).\n(Q1 = ${q1}, Q3 = ${q3})`,
+    correctAnswer: `${iqr}`,
+    options: makeOptions(`${iqr}`, [`${d[6] - d[0]}`, `${iqr + 1}`, `${q3}`]),
+    marks: 2,
+    workingSteps: [`IQR = Q3 − Q1 = ${q3} − ${q1} = ${iqr}`],
+    hints: [`IQR = Q3 − Q1`, `Don't confuse it with the full range`],
+    calculatorAllowed: false,
+    commonMistake: `Giving the full range (max − min) instead of Q3 − Q1.`,
+    examTip: `IQR uses the quartiles, not the extremes.`,
+  };
+}
+
+// ── age14-data L5 — Tree Diagrams ────────────────────────────────────────────
+function genTreeProb14(): Problem {
+  const total = randInt(6, 9), r = randInt(2, total - 2);
+  const num = r * (r - 1), den = total * (total - 1);
+  const correct = simplify(num, den);
+  return {
+    id: uid(),
+    question: `A bag has ${total} balls, ${r} red.\nTwo are taken WITHOUT replacement.\n\nFind P(both red).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [simplify(r * r, total * total), `${r}/${total}`, simplify(r * (r - 1), total * total)]),
+    marks: 3,
+    workingSteps: [`P(1st red) = ${r}/${total}`, `P(2nd red | 1st) = ${r - 1}/${total - 1}`, `Multiply: ${r}/${total} × ${r - 1}/${total - 1} = ${correct}`],
+    hints: [`Without replacement → reduce both top and bottom for the 2nd draw`],
+    calculatorAllowed: false,
+    commonMistake: `Using ${r}/${total} twice (that's WITH replacement).`,
+    examTip: `Multiply along the branches; adjust the 2nd fraction.`,
+  };
+}
+
+// ── age14-data L6 — Expected Frequency ───────────────────────────────────────
+function genExpFreq14(): Problem {
+  const opts = [[1, 5, 60], [1, 4, 80], [1, 6, 60], [2, 5, 50], [3, 10, 100]];
+  const [num, den, trials] = opts[randInt(0, opts.length - 1)];
+  const exp = (num / den) * trials;
+  return {
+    id: uid(),
+    question: `The probability of winning a game is ${num}/${den}.\nYou play ${trials} times.\n\nHow many wins would you EXPECT?`,
+    correctAnswer: `${exp}`,
+    options: makeOptions(`${exp}`, [`${trials - exp}`, `${exp + den}`, `${Math.round(trials / den)}`]),
+    marks: 2,
+    workingSteps: [`Expected = probability × number of games`, `= ${num}/${den} × ${trials} = ${exp}`],
+    hints: [`Expected frequency = P × number of trials`],
+    calculatorAllowed: true,
+    commonMistake: `Using only the probability or only the number of games.`,
+    examTip: `Expected frequency = P(event) × trials.`,
+  };
+}
+
+// ── age14-data L7 — Scatter Graphs ───────────────────────────────────────────
+function genScatter14(): Problem {
+  return fromCases([
+    { q: `As study time increases, test scores increase.\nWhat correlation does the scatter graph show?`, c: 'Positive correlation', w: ['Negative correlation', 'No correlation', 'Zero gradient'], s: ['Both increase together → positive'], h: ['Do both go up together?'], mistake: 'Confusing positive with negative.', tip: 'Both rise → positive.' },
+    { q: `As a phone gets older, its value decreases.\nWhat correlation is this?`, c: 'Negative correlation', w: ['Positive correlation', 'No correlation', 'Perfect correlation'], s: ['One up, one down → negative'], h: ['One increases while the other falls'], mistake: 'Calling it positive.', tip: 'One up, one down → negative.' },
+    { q: `Height vs phone number gives a random scatter.\nWhat correlation?`, c: 'No correlation', w: ['Positive correlation', 'Negative correlation', 'Strong correlation'], s: ['No pattern → no correlation'], h: ['Is there any trend?'], mistake: 'Inventing a trend.', tip: 'No pattern → no correlation.' },
+    { q: `A line of best fit slopes UP from left to right.\nWhat correlation?`, c: 'Positive correlation', w: ['Negative correlation', 'No correlation', 'Zero correlation'], s: ['Upward slope → positive'], h: ['Which way does it slope?'], mistake: 'Reading the slope backwards.', tip: 'Upward line → positive.' },
+  ]);
+}
+
+// ── age14-data L8 — Modal Class (grouped data) ───────────────────────────────
+function genGroupedModal14(): Problem {
+  return fromCases([
+    { q: `| Mass (g) | Freq |\n|----------|------|\n| 0–10     |  3   |\n| 10–20    |  9   |\n| 20–30    |  5   |\n\nWhat is the modal class?`, c: '10–20', w: ['0–10', '20–30', '9'], s: ['The modal class has the highest frequency', 'Highest frequency is 9 → class 10–20'], h: ['Find the class with the biggest frequency'], mistake: 'Giving the frequency instead of the class.', tip: 'Modal CLASS = the interval, not the frequency.' },
+    { q: `| Height (cm) | Freq |\n|-------------|------|\n| 100–120     |  6   |\n| 120–140     |  4   |\n| 140–160     | 10   |\n\nWhat is the modal class?`, c: '140–160', w: ['100–120', '120–140', '10'], s: ['Highest frequency is 10 → class 140–160'], h: ['Largest frequency wins'], mistake: 'Choosing the first class.', tip: 'Pick the interval with the most data.' },
+    { q: `| Score | Freq |\n|-------|------|\n| 0–5   |  2   |\n| 5–10  |  7   |\n| 10–15 |  7   |\n| 15–20 |  3   |\n\nWhich statement is true?`, c: 'There are two modal classes', w: ['The modal class is 0–5', 'The modal class is 15–20', 'There is no mode'], s: ['Both 5–10 and 10–15 have frequency 7', 'So there are TWO modal classes'], h: ['Can two classes tie for the highest?'], mistake: 'Assuming there is always one modal class.', tip: 'Ties → more than one modal class.' },
+  ]);
+}
+
 export const TOPIC_LEVELS: Record<string, TopicLevels> = {
   // ── Ages 13/14 (Explorers / Pioneers) ───────────────────────────────────────
   'age13-algebra':    { 1: genSubstitution13, 2: genLikeTerms13, 3: genExpandSingle13, 4: genExpandDouble13, 5: genFactoriseCommon13, 6: genSolveLinear13, 7: genSolveBrackets13, 8: genWordEquation13 },
@@ -7876,6 +8531,11 @@ export const TOPIC_LEVELS: Record<string, TopicLevels> = {
   'age13-proportion': { 1: genRatioShare13, 2: genSimplifyRatio13, 3: genUnitRate13, 4: genPercentOf13, 5: genPercentChange13, 6: genUnitConvert13, 7: genBestBuy13, 8: genScale13 },
   'age13-data':       { 1: genSingleProb13, 2: genComplement13, 3: genIndependent13, 4: genMean13, 5: genMedianMode13, 6: genRange13, 7: genQuartiles13, 8: genTwoWay13 },
   'age14-exponents':  { 1: genExpProduct14, 2: genExpQuotient14, 3: genExpPower14, 4: genExpZeroNeg14, 5: genSciNotation14, 6: genExpEvaluate14, 7: genExpSimplify14, 8: genIndexEquation14 },
+  'age14-algebra':     { 1: genExpandDouble14, 2: genTrinomial14, 3: genCommonFactor14, 4: genSolveBothSides14, 5: genSubstituteFormula14, 6: genSimplifyAlgFrac14, 7: genChangeSubject14, 8: genInequality14 },
+  'age14-finance':     { 1: genVAT14, 2: genProfitLoss14, 3: genSimpleInterest14, 4: genDiscount14, 5: genHirePurchase14, 6: genExchangeRate14, 7: genBudget14, 8: genPercentProfit14 },
+  'age14-geometry':    { 1: genTranslation14, 2: genReflection14, 3: genRotation14, 4: genEnlargement14, 5: genCongruency14, 6: genSimilarTriangles14, 7: genAngleRelationships14, 8: genSymmetry14 },
+  'age14-measurement': { 1: genPerimeter14, 2: genAreaRect14, 3: genAreaTriangle14, 4: genAreaCircle14, 5: genCircumference14, 6: genCompoundArea14, 7: genVolumePrism14, 8: genSurfaceArea14 },
+  'age14-data':        { 1: genMeanFreq14, 2: genMedianEven14, 3: genModeFreq14, 4: genRangeIQR14, 5: genTreeProb14, 6: genExpFreq14, 7: genScatter14, 8: genGroupedModal14 },
   // ── Age 15 ────────────────────────────────────────────────────────────────
   'age15-numbers':    { 1: genSurds, 2: genIndices, 3: genQuadraticsFactor, 4: genSequences, 5: genLogs, 6: genStandardForm, 7: genEstimationRounding, 8: genLogQuotient },
   'age15-algebra':    { 1: genQuadraticFormula, 2: genSimultaneous, 3: genInequalities, 4: genAlgebraicFractions, 5: genCompletingSquare, 6: genSimultaneousLinQuad, 7: genChangeSubject, 8: genFactorGrouping },
