@@ -9,11 +9,13 @@ export default function Footer({ edition, borderColor = '#E5E7EB' }: FooterProps
   return (
     <footer style={{ borderTop: `1px solid ${borderColor}` }} className="bg-white py-12 text-center">
       <div className="max-w-7xl mx-auto px-6">
+        {/* Info pages only — matches the home footer. 'Curriculum' lives in the
+            bottom bar as 'Learn', so it is not repeated here. */}
         <div className="flex justify-center gap-8 flex-wrap mb-6">
           {[
-            { label: 'Privacy Policy', to: '/privacy', ariaLabel: undefined },
+            { label: 'About', to: '/about', ariaLabel: undefined },
             { label: 'Parent Guide', to: '/parents', ariaLabel: undefined },
-            { label: 'Curriculum Details', to: '/curriculum', ariaLabel: undefined },
+            { label: 'Privacy', to: '/privacy', ariaLabel: undefined },
             { label: 'Contact', to: '/contact', ariaLabel: undefined },
           ].map(link => (
             <Link key={link.label} to={link.to} aria-label={link.ariaLabel} className="text-gray-600 text-sm font-semibold hover:text-indigo-600 no-underline">
