@@ -6479,6 +6479,362 @@ function genCountingPrinciple(): Problem {
   };
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+//  Age 17 (Thinkers) expansion — bring every topic up to 8 distinct levels.
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── age17-diff L6 — Quotient Rule ────────────────────────────────────────────
+function genQuotientRule(): Problem {
+  return fromCases([
+    { q: `Differentiate y = x/(x + 1) using the quotient rule.`, c: '1/(x + 1)²', w: ['x/(x + 1)²', '−1/(x + 1)²', '1/(x + 1)'], s: ['u = x, u′ = 1; v = x + 1, v′ = 1', '(u′v − uv′)/v² = ((x+1) − x)/(x+1)²', '= 1/(x + 1)²'], h: ['Quotient rule: (u′v − uv′)/v²'], mistake: 'Forgetting to square the denominator.', tip: 'Quotient rule: (u′v − uv′) / v².' },
+    { q: `Differentiate y = (x + 2)/x using the quotient rule.`, c: '−2/x²', w: ['2/x²', '1/x²', '−2/x'], s: ['u = x + 2, u′ = 1; v = x, v′ = 1', '(1·x − (x+2)·1)/x² = (x − x − 2)/x²', '= −2/x²'], h: ['(u′v − uv′)/v²'], mistake: 'Sign error in the numerator.', tip: 'Expand the numerator carefully before simplifying.' },
+    { q: `Differentiate y = x/(x − 3) using the quotient rule.`, c: '−3/(x − 3)²', w: ['3/(x − 3)²', '1/(x − 3)²', '−3/(x − 3)'], s: ['u = x, u′ = 1; v = x − 3, v′ = 1', '((x−3) − x)/(x−3)² = −3/(x−3)²'], h: ['(u′v − uv′)/v²'], mistake: 'Dropping the minus sign.', tip: 'Keep the order u′v − uv′ (not uv′ − u′v).' },
+    { q: `State the quotient rule for y = u/v.`, c: "dy/dx = (u′v − uv′)/v²", w: ["(uv′ − u′v)/v²", "(u′v + uv′)/v²", "u′/v′"], s: ['The quotient rule is (u′v − uv′)/v²'], h: ['"Low d-high minus high d-low, over low squared"'], mistake: 'Reversing the numerator order.', tip: 'Order matters: u′v comes first.' },
+  ]);
+}
+
+// ── age17-diff L7 — Equation of a Tangent ────────────────────────────────────
+function genTangentEqn17(): Problem {
+  const p = randInt(1, 4);
+  const m = 2 * p, c = p * p;
+  const correct = `y = ${m}x − ${c}`;
+  return {
+    id: uid(),
+    question: `Find the equation of the tangent to y = x² at the point where x = ${p}.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`y = ${m}x + ${c}`, `y = ${p}x − ${c}`, `y = ${c}x − ${m}`]),
+    marks: 4,
+    workingSteps: [
+      `dy/dx = 2x → at x = ${p}, gradient = ${m}`,
+      `Point on curve: (${p}, ${p * p})`,
+      `y − ${p * p} = ${m}(x − ${p})`,
+      `y = ${m}x − ${c}`,
+    ],
+    hints: [`Find the gradient from dy/dx`, `Use y − y₁ = m(x − x₁)`],
+    calculatorAllowed: false,
+    commonMistake: `Using the y-coordinate as the gradient — the gradient comes from dy/dx, not the point.`,
+    examTip: `Tangent: differentiate for m, find the point, then y − y₁ = m(x − x₁).`,
+  };
+}
+
+// ── age17-diff L8 — Connected Rates of Change ─────────────────────────────────
+function genConnectedRates(): Problem {
+  return fromCases([
+    { q: `Given dy/dx = 3 and dx/dt = 2, find dy/dt.`, c: '6', w: ['1.5', '5', '2/3'], s: ['Chain rule: dy/dt = dy/dx × dx/dt', '= 3 × 2 = 6'], h: ['dy/dt = dy/dx × dx/dt'], mistake: 'Dividing instead of multiplying.', tip: 'Connected rates link via the chain rule — multiply.' },
+    { q: `Area A = x², so dA/dx = 2x. At x = 5, dx/dt = 3. Find dA/dt.`, c: '30', w: ['10', '15', '6'], s: ['dA/dt = dA/dx × dx/dt = 2x × dx/dt', '= 2(5) × 3 = 10 × 3 = 30'], h: ['dA/dt = dA/dx × dx/dt', 'Substitute x = 5 into dA/dx first'], mistake: 'Forgetting to substitute x = 5 into 2x.', tip: 'Evaluate dA/dx at the given x, then multiply by dx/dt.' },
+    { q: `Given dy/dx = 4 and dx/dt = 0.5, find dy/dt.`, c: '2', w: ['8', '4.5', '0.125'], s: ['dy/dt = dy/dx × dx/dt = 4 × 0.5 = 2'], h: ['Multiply the two rates'], mistake: 'Adding the rates.', tip: 'dy/dt = dy/dx × dx/dt.' },
+    { q: `A balloon\'s volume grows at dV/dt = 12 cm³/s. If dV/dh = 4, find dh/dt.`, c: '3 cm/s', w: ['48 cm/s', '8 cm/s', '0.33 cm/s'], s: ['dV/dt = dV/dh × dh/dt', '12 = 4 × dh/dt', 'dh/dt = 12 ÷ 4 = 3 cm/s'], h: ['Rearrange dV/dt = dV/dh × dh/dt'], mistake: 'Multiplying 12 × 4 instead of dividing.', tip: 'Set up the chain, then solve for the unknown rate.' },
+  ]);
+}
+
+// ── age17-int L6 — Indefinite Integration ────────────────────────────────────
+function genIndefiniteIntegral(): Problem {
+  const a = 2 * randInt(1, 3), b = randInt(1, 6);
+  const correct = `${a / 2}x² + ${b}x + C`;
+  return {
+    id: uid(),
+    question: `Find ∫(${a}x + ${b}) dx`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`${a}x² + ${b}x + C`, `${a / 2}x² + ${b}x`, `${a}x + ${b} + C`]),
+    marks: 3,
+    workingSteps: [
+      `Increase each power by 1 and divide by the new power`,
+      `∫${a}x dx = ${a}x²/2 = ${a / 2}x²`,
+      `∫${b} dx = ${b}x`,
+      `= ${a / 2}x² + ${b}x + C`,
+    ],
+    hints: [`∫xⁿ dx = xⁿ⁺¹/(n+1)`, `Don't forget + C`],
+    calculatorAllowed: false,
+    commonMistake: `Omitting the constant of integration + C — indefinite integrals always need it.`,
+    examTip: `Indefinite integral → always add + C.`,
+  };
+}
+
+// ── age17-int L7 — Area Between Curves ────────────────────────────────────────
+function genAreaBetweenCurves(): Problem {
+  return fromCases([
+    { q: `Find the area enclosed between y = x and y = x² from x = 0 to x = 1.`, c: '1/6', w: ['1/2', '1/3', '5/6'], s: ['Area = ∫₀¹ (x − x²) dx (top − bottom)', '= [x²/2 − x³/3]₀¹', '= 1/2 − 1/3 = 1/6'], h: ['Integrate (top curve − bottom curve)', 'On 0→1, x ≥ x²'], mistake: 'Integrating x² − x (the wrong way round) gives −1/6.', tip: 'Always subtract bottom curve from top curve.' },
+    { q: `Find the area enclosed between y = 2x and y = x².`, c: '4/3', w: ['2/3', '8/3', '4'], s: ['Intersections: 2x = x² → x = 0, 2', 'Area = ∫₀² (2x − x²) dx = [x² − x³/3]₀²', '= 4 − 8/3 = 4/3'], h: ['Find the intersection points first', 'Integrate (line − curve)'], mistake: 'Forgetting to find the limits from the intersections.', tip: 'Set the curves equal to find the integration limits.' },
+    { q: `Find the area between y = 4 and y = x² for −2 ≤ x ≤ 2.`, c: '32/3', w: ['16/3', '16', '8'], s: ['Area = ∫₋₂² (4 − x²) dx = [4x − x³/3]₋₂²', '= (8 − 8/3) − (−8 + 8/3) = 16/3 + 16/3 = 32/3'], h: ['Integrate (upper − lower) over the interval'], mistake: 'Forgetting the lower limit contribution (the −2 part).', tip: 'Evaluate F(b) − F(a) carefully with negative limits.' },
+  ]);
+}
+
+// ── age17-int L8 — Volume of Revolution ──────────────────────────────────────
+function genVolumeRevolution(): Problem {
+  return fromCases([
+    { q: `The region under y = x from x = 0 to x = 3 is rotated 360° about the x-axis.\nFind the volume.`, c: '9π', w: ['3π', '27π', '9π/2'], s: ['V = π ∫₀³ y² dx = π ∫₀³ x² dx', '= π [x³/3]₀³ = π × 9 = 9π'], h: ['V = π ∫ y² dx', 'Square y before integrating'], mistake: 'Forgetting to square y, or dropping π.', tip: 'Volume of revolution: V = π ∫ y² dx.' },
+    { q: `The line y = 2 from x = 0 to x = 4 is rotated about the x-axis.\nFind the volume.`, c: '16π', w: ['8π', '32π', '4π'], s: ['V = π ∫₀⁴ 2² dx = π ∫₀⁴ 4 dx', '= π [4x]₀⁴ = π × 16 = 16π'], h: ['y² = 4 is constant'], mistake: 'Using y instead of y² (4, not 2).', tip: 'Square y first: 2² = 4.' },
+    { q: `The region under y = √x from x = 0 to x = 4 is rotated about the x-axis.\nFind the volume.`, c: '8π', w: ['4π', '16π', '2π'], s: ['y² = x', 'V = π ∫₀⁴ x dx = π [x²/2]₀⁴ = π × 8 = 8π'], h: ['(√x)² = x'], mistake: 'Leaving √x unsquared.', tip: 'Squaring √x conveniently gives x.' },
+    { q: `The region under y = x from x = 0 to x = 2 is rotated about the x-axis.\nFind the volume.`, c: '8π/3', w: ['4π/3', '8π', '4π'], s: ['V = π ∫₀² x² dx = π [x³/3]₀² = 8π/3'], h: ['V = π ∫ y² dx'], mistake: 'Dropping the /3 from integrating x².', tip: '∫x² dx = x³/3.' },
+  ]);
+}
+
+// ── age17-series L6 — Arithmetic from Two Terms ──────────────────────────────
+function genArithFromTerms(): Problem {
+  const a = randInt(1, 6), d = randInt(2, 6);
+  const t3 = a + 2 * d, t7 = a + 6 * d;
+  return {
+    id: uid(),
+    question: `In an arithmetic sequence the 3rd term is ${t3} and the 7th term is ${t7}.\n\nFind the common difference d.`,
+    correctAnswer: `${d}`,
+    options: makeOptions(`${d}`, [`${t7 - t3}`, `${d + 1}`, `${a}`]),
+    marks: 3,
+    workingSteps: [`T₇ − T₃ = (a + 6d) − (a + 2d) = 4d`, `${t7} − ${t3} = ${t7 - t3} = 4d`, `d = ${t7 - t3} ÷ 4 = ${d}`],
+    hints: [`Subtract the two term equations to eliminate a`, `The gap is 7 − 3 = 4 common differences`],
+    calculatorAllowed: false,
+    commonMistake: `Dividing by 7 − 3 wrongly, or by the term values instead of 4.`,
+    examTip: `Tₘ − Tₙ = (m − n)d. Here (7 − 3) = 4, so divide the difference by 4.`,
+  };
+}
+
+// ── age17-series L7 — Geometric Common Ratio ─────────────────────────────────
+function genGeoFindR(): Problem {
+  const a = randInt(2, 5), r = [2, 3][randInt(0, 1)];
+  const t2 = a * r, t3 = a * r * r;
+  return {
+    id: uid(),
+    question: `A geometric sequence has 2nd term ${t2} and 3rd term ${t3}.\n\nFind the common ratio r.`,
+    correctAnswer: `${r}`,
+    options: makeOptions(`${r}`, [`${t3 - t2}`, `${r + 1}`, `${a}`]),
+    marks: 3,
+    workingSteps: [`r = any term ÷ the previous term`, `r = T₃ ÷ T₂ = ${t3} ÷ ${t2} = ${r}`],
+    hints: [`Divide consecutive terms to get r`, `r = Tₙ₊₁ ÷ Tₙ`],
+    calculatorAllowed: false,
+    commonMistake: `Subtracting terms (that finds d for arithmetic, not r for geometric).`,
+    examTip: `Geometric: divide consecutive terms; Arithmetic: subtract them.`,
+  };
+}
+
+// ── age17-series L8 — Sum to Infinity (find a) ───────────────────────────────
+function genSumInfinityFind(): Problem {
+  return fromCases([
+    { q: `A geometric series has sum to infinity 20 and common ratio 1/2.\n\nFind the first term a.`, c: '10', w: ['40', '20', '5'], s: ['S∞ = a/(1 − r)', '20 = a/(1 − 1/2) = a/(1/2) = 2a', 'a = 10'], h: ['S∞ = a/(1 − r)', 'Rearrange for a'], mistake: 'Multiplying instead of dividing by 2.', tip: 'a = S∞ × (1 − r).' },
+    { q: `A geometric series has sum to infinity 18 and common ratio 1/3.\n\nFind the first term a.`, c: '12', w: ['6', '54', '9'], s: ['S∞ = a/(1 − r)', '18 = a/(2/3)', 'a = 18 × 2/3 = 12'], h: ['a = S∞ × (1 − r)'], mistake: 'Using 1/3 instead of (1 − 1/3) = 2/3.', tip: 'Always use (1 − r), not r.' },
+    { q: `A geometric series has sum to infinity 24 and common ratio 2/3.\n\nFind the first term a.`, c: '8', w: ['16', '36', '12'], s: ['S∞ = a/(1 − r)', '24 = a/(1/3)', 'a = 24 × 1/3 = 8'], h: ['a = S∞ × (1 − r)'], mistake: 'Forgetting 1 − 2/3 = 1/3.', tip: 'a = S∞(1 − r) = 24 × 1/3 = 8.' },
+    { q: `A geometric series has sum to infinity 16 and common ratio 1/4.\n\nFind the first term a.`, c: '12', w: ['4', '64', '20'], s: ['S∞ = a/(1 − r)', '16 = a/(3/4)', 'a = 16 × 3/4 = 12'], h: ['a = S∞ × (1 − r)'], mistake: 'Using 1/4 instead of 3/4.', tip: 'a = 16 × 3/4 = 12.' },
+  ]);
+}
+
+// ── age17-trig3 L5 — Double Angle Formulae ───────────────────────────────────
+function genDoubleAngle17(): Problem {
+  return fromCases([
+    { q: `Express sin 2x in terms of sin x and cos x.`, c: '2 sin x cos x', w: ['sin²x − cos²x', '2 cos²x − 1', 'sin x cos x'], s: ['Double angle: sin 2x = 2 sin x cos x'], h: ['Memorise the double-angle formulae'], mistake: 'Dropping the factor of 2.', tip: 'sin 2x = 2 sin x cos x.' },
+    { q: `Which is a correct form of cos 2x?`, c: 'cos²x − sin²x', w: ['2 sin x cos x', 'cos²x + sin²x', '2 cos x'], s: ['cos 2x = cos²x − sin²x = 1 − 2sin²x = 2cos²x − 1'], h: ['Three equivalent forms exist'], mistake: 'Confusing cos 2x with sin 2x.', tip: 'cos 2x has three equivalent forms.' },
+    { q: `Given sin x = 3/5 and cos x = 4/5, find sin 2x.`, c: '24/25', w: ['12/25', '7/25', '6/5'], s: ['sin 2x = 2 sin x cos x', '= 2 × (3/5) × (4/5) = 24/25'], h: ['sin 2x = 2 sin x cos x'], mistake: 'Forgetting to multiply by 2.', tip: 'Substitute into 2 sin x cos x.' },
+    { q: `Given sin x = 1/2 and cos x = √3/2, find sin 2x.`, c: '√3/2', w: ['1/2', '√3/4', '1'], s: ['sin 2x = 2 sin x cos x', '= 2 × (1/2) × (√3/2) = √3/2'], h: ['sin 2x = 2 sin x cos x'], mistake: 'Dropping the 2.', tip: 'This shows sin 60° = √3/2 (since 2×30° = 60°).' },
+  ]);
+}
+
+// ── age17-trig3 L6 — Arc Length & Sector Area (radians) ──────────────────────
+function genRadianArcSector(): Problem {
+  const r = randInt(3, 8), theta = [2, 4][randInt(0, 1)];
+  const arc = r * theta, area = 0.5 * r * r * theta;
+  const askArc = Math.random() < 0.5;
+  const correct = askArc ? `${arc} cm` : `${area} cm²`;
+  return {
+    id: uid(),
+    question: `A sector has radius ${r} cm and angle ${theta} radians.\n\nFind the ${askArc ? 'arc length' : 'area'}.`,
+    correctAnswer: correct,
+    options: askArc
+      ? makeOptions(`${arc} cm`, [`${r + theta} cm`, `${arc + r} cm`, `${0.5 * r * theta} cm`])
+      : makeOptions(`${area} cm²`, [`${arc} cm²`, `${r * r * theta} cm²`, `${area + r} cm²`]),
+    marks: 2,
+    workingSteps: askArc
+      ? [`Arc length s = rθ`, `= ${r} × ${theta} = ${arc} cm`]
+      : [`Sector area = ½r²θ`, `= ½ × ${r}² × ${theta} = ${area} cm²`],
+    hints: askArc ? [`s = rθ (θ in radians)`] : [`Area = ½r²θ (θ in radians)`],
+    calculatorAllowed: true,
+    commonMistake: `Using degrees — these formulas need the angle in RADIANS.`,
+    examTip: `In radians: arc s = rθ, sector area = ½r²θ.`,
+  };
+}
+
+// ── age17-trig3 L7 — Quadratic Trig Equations ────────────────────────────────
+function genTrigQuadratic(): Problem {
+  return fromCases([
+    { q: `Solve sin²x = sin x for sin x.`, c: 'sin x = 0 or 1', w: ['sin x = 1 only', 'sin x = 0 only', 'sin x = −1 or 1'], s: ['sin²x − sin x = 0', 'sin x(sin x − 1) = 0', 'sin x = 0 or sin x = 1'], h: ['Move everything to one side, then factorise', 'Do NOT divide by sin x (you lose a solution)'], mistake: 'Dividing both sides by sin x and losing sin x = 0.', tip: 'Never divide by a variable — factorise instead.' },
+    { q: `Solve 2cos²x − cos x − 1 = 0 for cos x.`, c: 'cos x = 1 or −1/2', w: ['cos x = 1 or 1/2', 'cos x = −1 or 1/2', 'cos x = 2 or −1'], s: ['Factorise: (2cos x + 1)(cos x − 1) = 0', 'cos x = −1/2 or cos x = 1'], h: ['Treat cos x as a single variable and factorise'], mistake: 'Sign errors when factorising.', tip: 'Let c = cos x: 2c² − c − 1 = (2c + 1)(c − 1).' },
+    { q: `Solve tan²x = 1 for 0° ≤ x ≤ 180°.`, c: 'x = 45° and 135°', w: ['x = 45° only', 'x = 45° and 225°', 'x = 90°'], s: ['tan x = ±1', 'tan x = 1 → x = 45°', 'tan x = −1 → x = 135°'], h: ['Take ± when square-rooting'], mistake: 'Taking only the positive root.', tip: 'tan²x = 1 means tan x = +1 OR −1.' },
+    { q: `Factorise to solve: 2sin²x + sin x = 0.`, c: 'sin x(2 sin x + 1) = 0', w: ['sin x(2 sin x − 1) = 0', '2 sin x(sin x + 1) = 0', '(sin x + 1)(sin x + 1) = 0'], s: ['Common factor sin x', 'sin x(2 sin x + 1) = 0'], h: ['Take out the common factor sin x'], mistake: 'Wrong sign inside the bracket.', tip: 'Factor out sin x first, then solve each bracket.' },
+  ]);
+}
+
+// ── age17-trig3 L8 — Simplifying / Proving Identities ────────────────────────
+function genTrigProve(): Problem {
+  return fromCases([
+    { q: `Simplify: 1 − cos²x.`, c: 'sin²x', w: ['cos²x', '1', 'tan²x'], s: ['sin²x + cos²x = 1', 'So 1 − cos²x = sin²x'], h: ['Rearrange the Pythagorean identity'], mistake: 'Leaving it as 1 − cos²x.', tip: '1 − cos²x = sin²x (and 1 − sin²x = cos²x).' },
+    { q: `Simplify: sin x / cos x.`, c: 'tan x', w: ['cot x', 'sec x', 'sin x cos x'], s: ['Quotient identity: tan x = sin x / cos x'], h: ['Recall the quotient identity'], mistake: 'Writing cot x (that is cos/sin).', tip: 'tan x = sin x / cos x.' },
+    { q: `Simplify: 1 + tan²x.`, c: 'sec²x', w: ['cosec²x', 'cos²x', 'tan x'], s: ['Identity: 1 + tan²x = sec²x'], h: ['A Pythagorean-type identity'], mistake: 'Confusing sec with cosec.', tip: '1 + tan²x = sec²x; 1 + cot²x = cosec²x.' },
+    { q: `Simplify: cos²x − 1.`, c: '−sin²x', w: ['sin²x', '−cos²x', '1'], s: ['cos²x − 1 = −(1 − cos²x) = −sin²x'], h: ['Factor out the minus sign'], mistake: 'Forgetting the negative sign.', tip: 'cos²x − 1 = −sin²x.' },
+  ]);
+}
+
+// ── age17-logexp L5 — Solving Exponential Equations (e) ──────────────────────
+function genSolveExpEquation17(): Problem {
+  return fromCases([
+    { q: `Solve eˣ = 10. Give x in exact form.`, c: 'x = ln 10', w: ['x = log 10', 'x = e¹⁰', 'x = 10/e'], s: ['Take ln of both sides', 'ln(eˣ) = ln 10', 'x = ln 10'], h: ['ln is the inverse of eˣ'], mistake: 'Using log base 10 instead of ln.', tip: 'eˣ = a ⟺ x = ln a.' },
+    { q: `Solve e^(2x) = 7. Give x in exact form.`, c: 'x = (ln 7)/2', w: ['x = ln 7', 'x = 2 ln 7', 'x = ln(7/2)'], s: ['ln both sides: 2x = ln 7', 'x = (ln 7)/2'], h: ['Bring the 2x down with ln, then divide'], mistake: 'Forgetting to divide by 2.', tip: 'e^(kx) = a → x = (ln a)/k.' },
+    { q: `Solve 3eˣ = 12. Give x in exact form.`, c: 'x = ln 4', w: ['x = ln 12', 'x = ln 9', 'x = 4/e'], s: ['Divide by 3: eˣ = 4', 'x = ln 4'], h: ['Isolate eˣ first'], mistake: 'Taking ln before dividing by 3.', tip: 'Get eˣ alone, then take ln.' },
+    { q: `Solve e^(x+1) = 5. Give x in exact form.`, c: 'x = ln 5 − 1', w: ['x = ln 5 + 1', 'x = ln 4', 'x = (ln 5)/1'], s: ['ln both sides: x + 1 = ln 5', 'x = ln 5 − 1'], h: ['ln undoes the exponential, then solve the linear bit'], mistake: 'Adding 1 instead of subtracting.', tip: 'x + 1 = ln 5 → x = ln 5 − 1.' },
+  ]);
+}
+
+// ── age17-logexp L6 — Solving Natural Log Equations ──────────────────────────
+function genLnEquation(): Problem {
+  return fromCases([
+    { q: `Solve ln x = 3. Give x in exact form.`, c: 'x = e³', w: ['x = 3e', 'x = e/3', 'x = ln 3'], s: ['Exponentiate both sides', 'e^(ln x) = e³', 'x = e³'], h: ['eˣ undoes ln'], mistake: 'Writing 3e instead of e³.', tip: 'ln x = k ⟺ x = eᵏ.' },
+    { q: `Solve ln x = 0.`, c: 'x = 1', w: ['x = 0', 'x = e', 'x = −1'], s: ['x = e⁰ = 1'], h: ['e⁰ = 1'], mistake: 'Giving x = 0.', tip: 'ln 1 = 0, so x = 1.' },
+    { q: `Solve ln(2x) = 1. Give x in exact form.`, c: 'x = e/2', w: ['x = 2e', 'x = e', 'x = 1/2'], s: ['2x = e¹ = e', 'x = e/2'], h: ['Exponentiate, then solve for x'], mistake: 'Forgetting to divide by 2.', tip: 'ln(2x) = 1 → 2x = e → x = e/2.' },
+    { q: `Solve ln x = −1. Give x in exact form.`, c: 'x = 1/e', w: ['x = −e', 'x = e', 'x = −1'], s: ['x = e⁻¹ = 1/e'], h: ['e⁻¹ = 1/e'], mistake: 'Writing −e.', tip: 'ln x = −1 → x = e⁻¹ = 1/e.' },
+  ]);
+}
+
+// ── age17-logexp L7 — Evaluating Logarithms ──────────────────────────────────
+function genLogSimplify(): Problem {
+  return fromCases([
+    { q: `Evaluate log₂ 32.`, c: '5', w: ['16', '6', '4'], s: ['2? = 32', '2⁵ = 32', 'log₂ 32 = 5'], h: ['Ask: 2 to what power is 32?'], mistake: 'Dividing 32 by 2.', tip: 'log₂ 32 = 5 since 2⁵ = 32.' },
+    { q: `Evaluate log₃ 81.`, c: '4', w: ['27', '3', '9'], s: ['3⁴ = 81', 'log₃ 81 = 4'], h: ['3 to what power is 81?'], mistake: 'Confusing with 81/3.', tip: '3⁴ = 81.' },
+    { q: `Evaluate ln(e⁴).`, c: '4', w: ['e⁴', '1', 'e'], s: ['ln and e are inverses', 'ln(e⁴) = 4'], h: ['ln(eᵏ) = k'], mistake: 'Leaving it as e⁴.', tip: 'ln(eᵏ) = k.' },
+    { q: `Evaluate log₁₀ 1000.`, c: '3', w: ['100', '4', '2'], s: ['10³ = 1000', 'log₁₀ 1000 = 3'], h: ['Count the zeros for base 10'], mistake: 'Giving 100.', tip: 'log₁₀(10ⁿ) = n.' },
+    { q: `Evaluate log₅ 1.`, c: '0', w: ['1', '5', '−1'], s: ['Any base to the power 0 is 1', 'log₅ 1 = 0'], h: ['logₐ 1 = 0 for any base'], mistake: 'Giving 1.', tip: 'logₐ 1 = 0 always.' },
+  ]);
+}
+
+// ── age17-logexp L8 — Continuous Growth Models ───────────────────────────────
+function genExpGrowthContinuous(): Problem {
+  return fromCases([
+    { q: `A = 100e^(0.5t). Find the initial value (at t = 0).`, c: '100', w: ['150', '50', '0'], s: ['At t = 0, e⁰ = 1', 'A = 100 × 1 = 100'], h: ['Substitute t = 0', 'e⁰ = 1'], mistake: 'Multiplying by 0.5.', tip: 'In A = A₀eᵏᵗ, A₀ is the value at t = 0.' },
+    { q: `In the model A = A₀eᵏᵗ, what does A₀ represent?`, c: 'The initial amount', w: ['The growth rate', 'The final amount', 'The time taken'], s: ['At t = 0, A = A₀e⁰ = A₀', 'A₀ is the starting value'], h: ['Set t = 0'], mistake: 'Confusing A₀ with the rate k.', tip: 'A₀ = value when t = 0.' },
+    { q: `Is A = 50e^(0.2t) growth or decay?`, c: 'Growth', w: ['Decay', 'Neither', 'Constant'], s: ['The exponent coefficient k = 0.2 > 0', 'Positive k → growth'], h: ['Check the sign of k'], mistake: 'Ignoring the sign of k.', tip: 'k > 0 → growth; k < 0 → decay.' },
+    { q: `Is A = 80e^(−0.3t) growth or decay?`, c: 'Decay', w: ['Growth', 'Neither', 'Constant'], s: ['k = −0.3 < 0', 'Negative k → decay'], h: ['Check the sign of k'], mistake: 'Reading the negative as growth.', tip: 'A negative exponent coefficient means decay.' },
+  ]);
+}
+
+// ── age17-func3 L5 — Modulus Inequalities ────────────────────────────────────
+function genModulusInequality(): Problem {
+  return fromCases([
+    { q: `Solve |x| < 3.`, c: '−3 < x < 3', w: ['x < 3', 'x > 3', 'x < −3 or x > 3'], s: ['|x| < a means −a < x < a', '−3 < x < 3'], h: ['|x| < a → a "sandwich"'], mistake: 'Giving only x < 3.', tip: '|x| < a → −a < x < a.' },
+    { q: `Solve |x − 2| < 5.`, c: '−3 < x < 7', w: ['−5 < x < 5', '3 < x < 7', 'x < 7'], s: ['−5 < x − 2 < 5', 'Add 2: −3 < x < 7'], h: ['Write the double inequality, then add 2'], mistake: 'Forgetting to shift by +2.', tip: '|x − k| < a → k − a < x < k + a.' },
+    { q: `Solve |x| > 4.`, c: 'x < −4 or x > 4', w: ['−4 < x < 4', 'x > 4', 'x < 4'], s: ['|x| > a means x < −a OR x > a', 'x < −4 or x > 4'], h: ['Greater-than splits into two regions'], mistake: 'Writing a sandwich inequality.', tip: '|x| > a → x < −a or x > a.' },
+    { q: `Solve |x + 1| ≤ 3.`, c: '−4 ≤ x ≤ 2', w: ['−3 ≤ x ≤ 3', '−2 ≤ x ≤ 4', 'x ≤ 2'], s: ['−3 ≤ x + 1 ≤ 3', 'Subtract 1: −4 ≤ x ≤ 2'], h: ['Double inequality, then subtract 1'], mistake: 'Adding 1 instead of subtracting.', tip: '|x + 1| ≤ 3 → −3 ≤ x + 1 ≤ 3.' },
+  ]);
+}
+
+// ── age17-func3 L6 — Inverse Domain & Range ──────────────────────────────────
+function genInverseRange(): Problem {
+  return fromCases([
+    { q: `f has domain x ≥ 0 and range f(x) ≥ 2.\nState the DOMAIN of f⁻¹.`, c: 'x ≥ 2', w: ['x ≥ 0', 'x ≤ 2', 'all x'], s: ['Domain of f⁻¹ = range of f', 'Range of f is f(x) ≥ 2', 'Domain of f⁻¹: x ≥ 2'], h: ['Inverse swaps domain and range'], mistake: 'Using the domain of f instead of its range.', tip: 'Domain of f⁻¹ = range of f.' },
+    { q: `The range of f⁻¹ equals the ______ of f.`, c: 'domain', w: ['range', 'gradient', 'inverse'], s: ['Inverting swaps domain and range', 'Range of f⁻¹ = domain of f'], h: ['Inverse reflects in y = x'], mistake: 'Saying "range".', tip: 'f⁻¹ swaps the roles of domain and range.' },
+    { q: `f has range y ≥ 5.\nState the DOMAIN of f⁻¹.`, c: 'x ≥ 5', w: ['x ≤ 5', 'x ≥ 0', 'all x'], s: ['Domain of f⁻¹ = range of f = y ≥ 5', 'So x ≥ 5'], h: ['Range of f becomes domain of f⁻¹'], mistake: 'Flipping the inequality.', tip: 'Domain of f⁻¹ = range of f.' },
+  ]);
+}
+
+// ── age17-func3 L7 — Evaluating Inverse Functions ────────────────────────────
+function genCompositeInverse(): Problem {
+  const a = randInt(2, 4), b = randInt(1, 5), k = randInt(1, 5);
+  const y = a * k + b;
+  return {
+    id: uid(),
+    question: `f(x) = ${a}x + ${b}.\n\nFind f⁻¹(${y}).`,
+    correctAnswer: `${k}`,
+    options: makeOptions(`${k}`, [`${a * y + b}`, `${y - b}`, `${k + 1}`]),
+    marks: 3,
+    workingSteps: [`f⁻¹(x) = (x − ${b})/${a}`, `f⁻¹(${y}) = (${y} − ${b})/${a} = ${y - b}/${a} = ${k}`],
+    hints: [`Find f⁻¹ first: swap x and y, solve`, `Then substitute ${y}`],
+    calculatorAllowed: false,
+    commonMistake: `Substituting ${y} into f instead of f⁻¹.`,
+    examTip: `f⁻¹(${y}) asks "what input gives ${y}?" — solve ${a}x + ${b} = ${y}.`,
+  };
+}
+
+// ── age17-func3 L8 — Combined Transformations ────────────────────────────────
+function genTransformationCombined(): Problem {
+  return fromCases([
+    { q: `y = 2f(x) is f(x) stretched vertically by scale factor ___.`, c: '2', w: ['1/2', '−2', '4'], s: ['Multiplying f(x) by 2 stretches vertically by factor 2'], h: ['Outside multiplier → vertical stretch'], mistake: 'Confusing with a horizontal stretch.', tip: 'y = a·f(x): vertical stretch factor a.' },
+    { q: `y = f(2x) is f(x) stretched horizontally by scale factor ___.`, c: '1/2', w: ['2', '−2', '1/4'], s: ['Inside multiplier 2 compresses horizontally by factor 1/2'], h: ['Inside multiplier → horizontal stretch by 1/(factor)'], mistake: 'Saying factor 2 (it is the reciprocal).', tip: 'y = f(bx): horizontal stretch factor 1/b.' },
+    { q: `y = f(x − 3) + 2 is a translation by vector ___.`, c: '(3, 2)', w: ['(−3, 2)', '(3, −2)', '(2, 3)'], s: ['(x − 3) → right 3', '+ 2 → up 2', 'Vector (3, 2)'], h: ['Inside opposite sign (right), outside same sign (up)'], mistake: 'Sign error on the horizontal shift.', tip: 'y = f(x − a) + b → translation (a, b).' },
+    { q: `y = −f(x) + 1: a reflection in the x-axis, then a translation up by ___.`, c: '1', w: ['−1', '0', 'f(x)'], s: ['−f(x) reflects in the x-axis', '+ 1 translates up 1'], h: ['Apply the reflection, then the shift'], mistake: 'Missing the + 1 shift.', tip: 'Read transformations from the inside out.' },
+  ]);
+}
+
+// ── age17-algebra4 L4 — Binomial Term ────────────────────────────────────────
+function genBinomialTerm17(): Problem {
+  const n = randInt(3, 5), b = randInt(2, 3), r = randInt(1, n - 1);
+  const coeff = comb(n, r) * Math.pow(b, r);
+  return {
+    id: uid(),
+    question: `Find the coefficient of x^${r} in the expansion of (1 + ${b}x)^${n}.`,
+    correctAnswer: `${coeff}`,
+    options: makeOptions(`${coeff}`, [`${comb(n, r)}`, `${comb(n, r) * b}`, `${Math.pow(b, r)}`]),
+    marks: 4,
+    workingSteps: [
+      `General term: ⁿCᵣ × (${b}x)ʳ`,
+      `Coefficient = ${n}C${r} × ${b}^${r} = ${comb(n, r)} × ${Math.pow(b, r)} = ${coeff}`,
+    ],
+    hints: [`Term in xʳ is ⁿCᵣ (bx)ʳ`, `Remember to raise ${b} to the power ${r} too`],
+    calculatorAllowed: true,
+    commonMistake: `Using only ⁿCᵣ and forgetting the ${b}^${r} factor from (${b}x)ʳ.`,
+    examTip: `The coefficient includes BOTH ⁿCᵣ and the constant raised to the power r.`,
+  };
+}
+
+// ── age17-algebra4 L5 — Remainder Theorem ────────────────────────────────────
+function genRemainderTheorem17(): Problem {
+  const a = randInt(1, 5), b = randInt(1, 6), k = randInt(1, 4);
+  const rem = k * k + a * k + b;
+  return {
+    id: uid(),
+    question: `Find the remainder when x² + ${a}x + ${b} is divided by (x − ${k}).`,
+    correctAnswer: `${rem}`,
+    options: makeOptions(`${rem}`, [`${rem + 1}`, `${k * k + a * k}`, `${a * k + b}`]),
+    marks: 3,
+    workingSteps: [`Remainder Theorem: remainder = f(${k})`, `f(${k}) = ${k}² + ${a}×${k} + ${b} = ${k * k} + ${a * k} + ${b} = ${rem}`],
+    hints: [`Dividing by (x − k) → remainder is f(k)`, `Substitute x = ${k}`],
+    calculatorAllowed: false,
+    commonMistake: `Using x = −${k} — for (x − k) the remainder is f(+k).`,
+    examTip: `Remainder when dividing by (x − k) is f(k). For (x + k) use f(−k).`,
+  };
+}
+
+// ── age17-algebra4 L6 — Completing the Square ────────────────────────────────
+function genCompleteSquare17(): Problem {
+  const b = 2 * randInt(1, 4), c = randInt(1, 8), p = b / 2, q = c - p * p;
+  const qStr = q >= 0 ? `+ ${q}` : `− ${-q}`;
+  const correct = `(x + ${p})² ${qStr}`;
+  return {
+    id: uid(),
+    question: `Express x² + ${b}x + ${c} in the form (x + p)² + q.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`(x + ${b})² + ${c}`, `(x + ${p})² ${(-q) >= 0 ? `+ ${-q}` : `− ${q}`}`, `(x + ${p * 2})² + ${q}`]),
+    marks: 3,
+    workingSteps: [`p = b ÷ 2 = ${b} ÷ 2 = ${p}`, `q = c − p² = ${c} − ${p * p} = ${q}`, `= (x + ${p})² ${qStr}`],
+    hints: [`p is half the coefficient of x`, `q = c − p²`],
+    calculatorAllowed: false,
+    commonMistake: `Forgetting to subtract p² — q = c − p², not c.`,
+    examTip: `Completing the square: p = b/2, q = c − (b/2)².`,
+  };
+}
+
+// ── age17-algebra4 L7 — Polynomial Identities ────────────────────────────────
+function genPolynomialIdentity(): Problem {
+  return fromCases([
+    { q: `If x² + 5x + 6 ≡ (x + 2)(x + a), find a.`, c: 'a = 3', w: ['a = 2', 'a = 6', 'a = 5'], s: ['(x + 2)(x + a) = x² + (a + 2)x + 2a', 'Compare constants: 2a = 6 → a = 3', '(check: a + 2 = 5 ✓)'], h: ['Expand, then equate coefficients'], mistake: 'Guessing without comparing coefficients.', tip: 'Equate the constant terms: 2a = 6.' },
+    { q: `If 3x + 7 ≡ A(x + 1) + B, find A.`, c: 'A = 3', w: ['A = 7', 'A = 4', 'A = 1'], s: ['A(x + 1) + B = Ax + (A + B)', 'Compare x terms: A = 3'], h: ['Compare the coefficients of x'], mistake: 'Confusing A with B.', tip: 'The coefficient of x gives A directly.' },
+    { q: `If x² + bx + 9 is a perfect square (x + 3)², find b.`, c: 'b = 6', w: ['b = 3', 'b = 9', 'b = 18'], s: ['(x + 3)² = x² + 6x + 9', 'Compare: b = 6'], h: ['Expand (x + 3)²'], mistake: 'Using b = 3 (the root) instead of 6.', tip: 'For a perfect square, b = 2 × (the root).' },
+    { q: `If 2x² + 8x + c ≡ 2(x + 2)², find c.`, c: 'c = 8', w: ['c = 4', 'c = 2', 'c = 16'], s: ['2(x + 2)² = 2(x² + 4x + 4) = 2x² + 8x + 8', 'Compare constants: c = 8'], h: ['Expand the right-hand side fully'], mistake: 'Forgetting to multiply the 4 by 2.', tip: 'Distribute the leading 2 across all terms.' },
+  ]);
+}
+
+// ── age17-algebra4 L8 — Discriminant & Nature of Roots ───────────────────────
+function genDiscriminant17(): Problem {
+  return fromCases([
+    { q: `For x² + 4x + 4 = 0, find the discriminant b² − 4ac.`, c: '0', w: ['16', '32', '8'], s: ['a = 1, b = 4, c = 4', 'b² − 4ac = 16 − 16 = 0'], h: ['Discriminant = b² − 4ac'], mistake: 'Forgetting the −4ac part.', tip: 'Δ = b² − 4ac.' },
+    { q: `x² + 4x + 4 = 0 has what kind of roots?`, c: 'Equal (repeated) roots', w: ['Two distinct real roots', 'No real roots', 'Three roots'], s: ['Discriminant = 16 − 16 = 0', 'Δ = 0 → equal (repeated) roots'], h: ['Δ = 0 means a repeated root'], mistake: 'Saying two distinct roots.', tip: 'Δ = 0 → one repeated root.' },
+    { q: `For 2x² + 3x + 5 = 0, describe the roots.`, c: 'No real roots', w: ['Two distinct real roots', 'Equal roots', 'One real root'], s: ['Δ = 3² − 4(2)(5) = 9 − 40 = −31', 'Δ < 0 → no real roots'], h: ['Check the sign of the discriminant'], mistake: 'Ignoring that a negative Δ means no real roots.', tip: 'Δ < 0 → no real roots.' },
+    { q: `For x² − 5x + 6 = 0, describe the roots.`, c: 'Two distinct real roots', w: ['Equal roots', 'No real roots', 'No solution'], s: ['Δ = 25 − 24 = 1', 'Δ > 0 → two distinct real roots'], h: ['Δ > 0 means two different real roots'], mistake: 'Thinking Δ = 1 means one root.', tip: 'Δ > 0 → two distinct real roots.' },
+  ]);
+}
+
 export const TOPIC_LEVELS: Record<string, TopicLevels> = {
   // ── Age 15 ────────────────────────────────────────────────────────────────
   'age15-numbers':    { 1: genSurds, 2: genIndices, 3: genQuadraticsFactor, 4: genSequences, 5: genLogs, 6: genStandardForm, 7: genEstimationRounding, 8: genLogQuotient },
@@ -6499,13 +6855,13 @@ export const TOPIC_LEVELS: Record<string, TopicLevels> = {
   'age16-analytical-geo':  { 1: genEquationOfLine16, 2: genVectors2D, 3: genPerpendicular, 4: genCircleEquation, 5: genMidpointDistance, 6: genParallelLine, 7: genCircleCentreRadius, 8: genTangentLength },
   'age16-stats2':          { 1: genStandardDeviation, 2: genConditionalProbability, 3: genVariance, 4: genExpectedValue, 5: genProbDistribution, 6: genCombinations, 7: genPermutations, 8: genCountingPrinciple },
   // ── Age 17 ────────────────────────────────────────────────────────────────
-  'age17-diff':      { 1: genChainRule, 2: genProductRule, 3: genSecondDerivative, 4: genStationaryNature, 5: genMinValue },
-  'age17-int':       { 1: genDefiniteIntegral, 2: genAreaUnderCurve, 3: genIntegrateChain, 4: genIntegratePoly, 5: genDefiniteEval },
-  'age17-series':    { 1: genArithSum, 2: genGeoSum, 3: genSumInfinity, 4: genFindTermNumber, 5: genSigma },
-  'age17-trig3':     { 1: genSolveTrig17, 2: genCompoundAngle, 3: genExactRadian, 4: genTrigSimplify },
-  'age17-logexp':    { 1: genLnLaws, 2: genSolveLog, 3: genLogLawSolve, 4: genChangeBase },
-  'age17-func3':     { 1: genCompositeQuad, 2: genInverseLinear17, 3: genModulusEq, 4: genRangeDomain },
-  'age17-algebra4':  { 1: genPartialFraction, 2: genBinomialCoeff, 3: genFactorCubic },
+  'age17-diff':      { 1: genChainRule, 2: genProductRule, 3: genSecondDerivative, 4: genStationaryNature, 5: genMinValue, 6: genQuotientRule, 7: genTangentEqn17, 8: genConnectedRates },
+  'age17-int':       { 1: genDefiniteIntegral, 2: genAreaUnderCurve, 3: genIntegrateChain, 4: genIntegratePoly, 5: genDefiniteEval, 6: genIndefiniteIntegral, 7: genAreaBetweenCurves, 8: genVolumeRevolution },
+  'age17-series':    { 1: genArithSum, 2: genGeoSum, 3: genSumInfinity, 4: genFindTermNumber, 5: genSigma, 6: genArithFromTerms, 7: genGeoFindR, 8: genSumInfinityFind },
+  'age17-trig3':     { 1: genSolveTrig17, 2: genCompoundAngle, 3: genExactRadian, 4: genTrigSimplify, 5: genDoubleAngle17, 6: genRadianArcSector, 7: genTrigQuadratic, 8: genTrigProve },
+  'age17-logexp':    { 1: genLnLaws, 2: genSolveLog, 3: genLogLawSolve, 4: genChangeBase, 5: genSolveExpEquation17, 6: genLnEquation, 7: genLogSimplify, 8: genExpGrowthContinuous },
+  'age17-func3':     { 1: genCompositeQuad, 2: genInverseLinear17, 3: genModulusEq, 4: genRangeDomain, 5: genModulusInequality, 6: genInverseRange, 7: genCompositeInverse, 8: genTransformationCombined },
+  'age17-algebra4':  { 1: genPartialFraction, 2: genBinomialCoeff, 3: genFactorCubic, 4: genBinomialTerm17, 5: genRemainderTheorem17, 6: genCompleteSquare17, 7: genPolynomialIdentity, 8: genDiscriminant17 },
 };
 
 export function generateProblems(

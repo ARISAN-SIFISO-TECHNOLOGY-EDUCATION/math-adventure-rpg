@@ -155,18 +155,18 @@ The three senior bands form an upward arc: **Builders → Systems → Thinkers**
 
 ---
 
-## Age 17 — School of Thinkers · 🧩 (7 topics · 30 levels)
+## Age 17 — School of Thinkers · 🧩 (7 topics · 56 levels)
 *A-Level Pure Mathematics — Cambridge 9709 / CAPS Grade 12 aligned*
 
 | Topic | Levels | Covers |
 |-------|--------|--------|
-| 📉 **Differentiation** | 5 | Chain rule · Product rule · Second derivative · Nature of stationary points · Optimisation (min/max value) |
-| ∫ **Integration** | 5 | Definite integrals · Area under a curve · Reverse chain rule · Polynomials · Evaluation between limits |
-| 🔢 **Sequences & Series** | 5 | Arithmetic sum · Geometric sum · Sum to infinity · Find the term number · Sigma notation |
-| 📐 **Trigonometry III** | 4 | Solving trig equations · Compound angles · Exact radian values · Simplifying expressions |
-| 📈 **Logs & Exponentials** | 4 | ln laws · Solving logs · Log-law equations · Change of base |
-| 🔀 **Functions** | 4 | Composite · Inverse · Modulus equations · Domain & range |
-| 🧮 **Algebra & Proof** | 3 | Partial fractions · Binomial coefficients · Factorising cubics (factor theorem) |
+| 📉 **Differentiation** | 8 | Chain rule · Product rule · Second derivative · Stationary nature · Optimisation · Quotient rule · Tangent equations · Connected rates of change |
+| ∫ **Integration** | 8 | Definite integrals · Area under a curve · Reverse chain · Polynomials · Evaluation · Indefinite integrals · Area between curves · Volumes of revolution |
+| 🔢 **Sequences & Series** | 8 | Arithmetic sum · Geometric sum · Sum to infinity · Find the term · Sigma notation · Arithmetic from two terms · Common ratio · First term from S∞ |
+| 📐 **Trigonometry III** | 8 | Solving equations · Compound angles · Exact radians · Simplifying · Double angle · Arc & sector (radians) · Quadratic trig equations · Identities |
+| 📈 **Logs & Exponentials** | 8 | ln laws · Solving logs · Log-law equations · Change of base · Solving eˣ equations · ln equations · Evaluating logs · Continuous growth models |
+| 🔀 **Functions** | 8 | Composite · Inverse · Modulus equations · Domain & range · Modulus inequalities · Inverse domain/range · Evaluating inverses · Combined transformations |
+| 🧮 **Algebra & Proof** | 8 | Partial fractions · Binomial coefficients · Factorising cubics · Binomial terms · Remainder theorem · Completing the square · Polynomial identities · Discriminant |
 
 ---
 
@@ -182,9 +182,9 @@ The three senior bands form an upward arc: **Builders → Systems → Thinkers**
 | Upper Secondary | 14 | RPG | 3 worlds | 15 |
 | School of Builders | 15 | Exam Studio | 9 topics | 72 |
 | School of Systems | 16 | Exam Studio | 7 topics | 56 |
-| School of Thinkers | 17 | Exam Studio | 7 topics | 30 |
+| School of Thinkers | 17 | Exam Studio | 7 topics | 56 |
 
-**RPG total:** 95 levels (ages 3–14) · **Exam Studio total:** 158 levels across 23 topics (ages 15–17).
+**RPG total:** 95 levels (ages 3–14) · **Exam Studio total:** 184 levels across 23 topics (ages 15–17) — every senior topic is now a uniform 8 levels.
 
 Every generated question is verified to offer **4 distinct multiple-choice options** with the correct answer always present (engine-level guarantee). Senior questions add worked steps, exam tips, and common-mistake notes; senior progress is mastery-gated at ≥ 80% with sequential unlocking.
 
