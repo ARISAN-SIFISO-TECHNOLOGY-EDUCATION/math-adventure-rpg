@@ -41,11 +41,11 @@ export default function Navbar({
             </Link>
           )}
           <Link
-            to="/play"
+            to="/"
             style={{ background: accentColor }}
             className="text-white font-bold px-4 py-2 rounded-full hover:opacity-90 no-underline transition-opacity"
           >
-            Play Now ▶
+            Start ▶
           </Link>
         </div>
       </div>

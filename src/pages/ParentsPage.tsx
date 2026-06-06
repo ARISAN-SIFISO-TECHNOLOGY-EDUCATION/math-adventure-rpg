@@ -201,8 +201,8 @@ export default function ParentsPage() {
           <h2 className="font-[Nunito] text-3xl font-bold text-white mb-4">Ready to get started?</h2>
           <p className="mb-8 opacity-90 text-lg">Pick your child's age and play together right now — no download needed.</p>
           <div className="flex gap-4 justify-center flex-wrap">
-            <Link to="/play" className="font-[Nunito] inline-flex items-center gap-2 bg-white text-[#4F46E5] px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all no-underline">
-              🎮 Play Now
+            <Link to="/" className="font-[Nunito] inline-flex items-center gap-2 bg-white text-[#4F46E5] px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all no-underline">
+              🚀 Start Now
             </Link>
             <Link to="/curriculum" className="font-[Nunito] inline-flex items-center gap-2 bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:scale-105 hover:bg-white/10 transition-all no-underline">
               View Curriculum →

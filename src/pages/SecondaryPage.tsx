@@ -10,19 +10,19 @@ export default function SecondaryPage() {
       <section className="py-16 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-            Ages 13–14 · Secondary
+            Age 13 · School of Explorers
           </span>
           <h1 className="font-[Nunito] text-5xl font-extrabold leading-tight mb-4"
             style={{ background: 'linear-gradient(135deg,#4338CA,#6D28D9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            🧠 Secondary<br />Phase
+            🧭 Age 13<br />School of Explorers
           </h1>
           <p className="text-lg text-gray-500 max-w-xl mx-auto mb-8">
-            Ages 13–14 CAPS-aligned content — algebra, Pythagoras, parallel lines, probability and data.
-            Same adventure format, secondary-school difficulty.
+            The Academy begins — CAPS-aligned algebra, Pythagoras, straight-line graphs, numbers,
+            proportion and data, as exam-style mastery levels.
           </p>
-          <Link to="/play?phase=5"
+          <Link to="/senior/topics/13"
             className="font-[Nunito] inline-flex items-center gap-2 bg-[#4338CA] hover:bg-[#3730A3] text-white px-8 py-4 rounded-full font-bold text-base shadow-lg transition-all no-underline hover:scale-105">
-            ⚔️ Enter Phase 5
+            🧭 Enter the Academy
           </Link>
         </div>
       </section>

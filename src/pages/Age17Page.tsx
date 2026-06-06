@@ -10,19 +10,19 @@ export default function Age17Page() {
       <section className="py-16 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-            Age 17 · School of Excellence
+            Age 17 · School of Thinkers
           </span>
           <h1 className="font-[Nunito] text-5xl font-extrabold leading-tight mb-4"
             style={{ background: 'linear-gradient(135deg,#1D4ED8,#6D28D9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            🎓 Age 17<br />School of Excellence
+            🧩 Age 17<br />School of Thinkers
           </h1>
           <p className="text-lg text-gray-500 max-w-xl mx-auto mb-8">
             The summit. Sequences and series, financial maths, differential calculus,
             the equation of a circle, compound-angle trigonometry, and statistics — the final apex.
           </p>
-          <Link to="/play?phase=9"
+          <Link to="/senior/topics/17"
             className="font-[Nunito] inline-flex items-center gap-2 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white px-8 py-4 rounded-full font-bold text-base shadow-lg transition-all no-underline hover:scale-105">
-            🎓 Enter Age 17
+            🧩 Enter the Academy
           </Link>
         </div>
       </section>

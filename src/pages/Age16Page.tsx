@@ -10,19 +10,19 @@ export default function Age16Page() {
       <section className="py-16 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-red-100 text-red-700 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-            Age 16 · School of Mastery
+            Age 16 · School of Systems
           </span>
           <h1 className="font-[Nunito] text-5xl font-extrabold leading-tight mb-4"
             style={{ background: 'linear-gradient(135deg,#B91C1C,#0F766E)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            ⚒️ Age 16<br />School of Mastery
+            🛰️ Age 16<br />School of Systems
           </h1>
           <p className="text-lg text-gray-500 max-w-xl mx-auto mb-8">
             Deepen the senior-phase skills. Surds and quadratics, the nature of roots, shifted functions,
             analytical geometry, the trig rules, circle geometry, and statistics.
           </p>
-          <Link to="/play?phase=8"
+          <Link to="/senior/topics/16"
             className="font-[Nunito] inline-flex items-center gap-2 bg-[#B91C1C] hover:bg-[#991B1B] text-white px-8 py-4 rounded-full font-bold text-base shadow-lg transition-all no-underline hover:scale-105">
-            ⚒️ Enter Age 16
+            🛰️ Enter the Academy
           </Link>
         </div>
       </section>

@@ -10,19 +10,19 @@ export default function Age15Page() {
       <section className="py-16 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-amber-100 text-amber-700 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-            Age 15 · School of Foundations
+            Age 15 · School of Builders
           </span>
           <h1 className="font-[Nunito] text-5xl font-extrabold leading-tight mb-4"
             style={{ background: 'linear-gradient(135deg,#B45309,#0891B2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            🏭 Age 15<br />School of Foundations
+            🏗️ Age 15<br />School of Builders
           </h1>
           <p className="text-lg text-gray-500 max-w-xl mx-auto mb-8">
             The senior phase begins. Algebra and exponents, functions and patterns, trigonometry,
             analytical &amp; Euclidean geometry, finance and statistics — the foundation for everything ahead.
           </p>
-          <Link to="/play?phase=7"
+          <Link to="/senior/topics/15"
             className="font-[Nunito] inline-flex items-center gap-2 bg-[#B45309] hover:bg-[#92400E] text-white px-8 py-4 rounded-full font-bold text-base shadow-lg transition-all no-underline hover:scale-105">
-            🏭 Enter Age 15
+            🏗️ Enter the Academy
           </Link>
         </div>
       </section>

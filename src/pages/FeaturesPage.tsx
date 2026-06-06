@@ -8,12 +8,12 @@ const FEATURES = [
   {
     icon: '🧮',
     title: 'Adaptive Math',
-    desc: 'Problems scale automatically with your child\'s progress — from counting stars at age 3 to solving BODMAS equations at age 12.',
+    desc: 'Problems scale with progress — from counting at age 3, through the kids\' RPG, to A-level calculus in the Academy at age 17.',
   },
   {
     icon: '🐉',
     title: 'Companion Guide',
-    desc: 'Sparky the Dragon gives encouragement, hints, and reads every question aloud. Ages 6–14 can play independently; ages 3–5 play best alongside a parent.',
+    desc: 'In the Kids\' Adventure (ages 3–12), Sparky the Dragon gives encouragement, hints, and reads each question aloud. Ages 6–12 can play independently; ages 3–5 play best alongside a parent. Teens (13–17) study in The Academy.',
   },
   {
     icon: '🔒',
@@ -128,8 +128,8 @@ export default function FeaturesPage() {
           <h2 className="font-[Nunito] text-3xl font-bold text-white mb-4">See it for yourself.</h2>
           <p className="mb-8 opacity-90 text-lg">No sign-up. No account. Pick an age and play in seconds.</p>
           <div className="flex gap-4 justify-center flex-wrap">
-            <Link to="/play" className="font-[Nunito] inline-flex items-center gap-2 bg-white text-[#4F46E5] px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all no-underline">
-              🎮 Play Now
+            <Link to="/" className="font-[Nunito] inline-flex items-center gap-2 bg-white text-[#4F46E5] px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all no-underline">
+              🚀 Start Now
             </Link>
             <Link to="/curriculum" className="font-[Nunito] inline-flex items-center gap-2 bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:scale-105 hover:bg-white/10 transition-all no-underline">
               View Curriculum →

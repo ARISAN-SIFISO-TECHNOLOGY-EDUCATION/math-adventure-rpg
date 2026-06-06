@@ -10,19 +10,19 @@ export default function Age14Page() {
       <section className="py-16 text-center px-6">
         <div className="max-w-3xl mx-auto">
           <span className="inline-block bg-sky-100 text-sky-700 text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">
-            Age 14 · Advanced Secondary
+            Age 14 · School of Pioneers
           </span>
           <h1 className="font-[Nunito] text-5xl font-extrabold leading-tight mb-4"
             style={{ background: 'linear-gradient(135deg,#0369A1,#0F766E)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            🎓 Age 14<br />Adventure
+            🚩 Age 14<br />School of Pioneers
           </h1>
           <p className="text-lg text-gray-500 max-w-xl mx-auto mb-8">
-            Advanced algebra, transformations on the coordinate plane, financial maths, and data analysis —
-            all wrapped in the same adventure format.
+            Exponents and algebra, financial maths, geometry &amp; transformations, measurement and data —
+            exam-style mastery levels in The Academy.
           </p>
-          <Link to="/play?phase=6"
+          <Link to="/senior/topics/14"
             className="font-[Nunito] inline-flex items-center gap-2 bg-[#0369A1] hover:bg-[#025587] text-white px-8 py-4 rounded-full font-bold text-base shadow-lg transition-all no-underline hover:scale-105">
-            🧪 Enter Age 14
+            🚩 Enter the Academy
           </Link>
         </div>
       </section>
