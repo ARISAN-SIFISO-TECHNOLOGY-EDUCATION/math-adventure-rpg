@@ -1,5 +1,6 @@
 import { useEffect, useRef, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { MotionConfig } from 'motion/react';
 import HomePage from './pages/HomePage';
 // Marketing pages are lazy-loaded: they're only reached from secondary nav, so
 // they shouldn't weigh down the initial Home paint on low-end Android.
@@ -123,8 +124,13 @@ function AppShell() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AppShell />
-    </BrowserRouter>
+    // reducedMotion="user" makes every Motion animation honour the OS
+    // "Reduce motion" setting — transforms/large movement are dropped for users
+    // who get motion sick or are distracted by it, with zero per-component work.
+    <MotionConfig reducedMotion="user">
+      <BrowserRouter>
+        <AppShell />
+      </BrowserRouter>
+    </MotionConfig>
   );
 }

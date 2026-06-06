@@ -135,6 +135,9 @@ function QuestionCard({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-3"
+            // Announce the result + correct answer to screen readers immediately.
+            role="alert"
+            aria-live="assertive"
           >
             <div
               className={`rounded-xl p-4 ${
@@ -306,6 +309,7 @@ function ActivityPageInner() {
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate(-1)}
           className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center"
+          aria-label="Go back"
         >
           <ArrowLeft className="w-5 h-5 text-white" />
         </motion.button>

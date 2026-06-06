@@ -936,6 +936,8 @@ export default function Game() {
             onClick={toggleMute}
             className={`p-2 md:p-3 rounded-2xl border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1 transition-all ${muted ? 'bg-gray-100' : 'bg-[#E0F2FE]'}`}
             title={muted ? 'Unmute' : 'Mute'}
+            aria-label={muted ? 'Unmute sound' : 'Mute sound'}
+            aria-pressed={muted}
           >
             {muted ? <VolumeX className="text-gray-400 w-4 h-4 md:w-6 md:h-6" /> : <Volume2 className="text-[#3B82F6] w-4 h-4 md:w-6 md:h-6" />}
           </button>
@@ -1089,6 +1091,8 @@ export default function Game() {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
+                    role="alert"
+                    aria-live="assertive"
                     className={`absolute inset-0 z-10 flex items-center justify-center text-3xl md:text-5xl font-black border-4 border-black rounded-[28px] text-center px-4 ${
                       feedback.type === 'CORRECT' ? 'bg-[#4ADE80]' : 'bg-[#F87171]'
                     }`}
@@ -1100,6 +1104,8 @@ export default function Game() {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
+                    role="alert"
+                    aria-live="assertive"
                     className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white border-4 border-black rounded-[28px] p-6 text-center"
                   >
                     <div className="text-lg font-black text-gray-500 mb-1">Correct Answer:</div>
