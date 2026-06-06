@@ -140,18 +140,18 @@ The three senior bands form an upward arc: **Builders → Systems → Thinkers**
 
 ---
 
-## Age 16 — School of Systems · 🛰️ (7 topics · 30 levels)
+## Age 16 — School of Systems · 🛰️ (7 topics · 56 levels)
 *IGCSE Extended / A-Level AS — Cambridge 9709 / CAPS Grade 11 aligned*
 
 | Topic | Levels | Covers |
 |-------|--------|--------|
-| 🌊 **Advanced Trigonometry** | 5 | Identities · Equations · Radians · Pythagorean identity · Double angle |
-| ∫ **Calculus** | 5 | First principles · Differentiation · Tangents · Stationary points · Integration |
-| 📈 **Exponential Functions** | 3 | Growth & decay · Solving equations · Models |
-| 🧮 **Algebra III** | 5 | Polynomial division · Logs · Remainder theorem · Factor theorem · Binomial |
-| 🔁 **Functions II** | 4 | Transformations · Inverse · Composite · Solve for input |
-| 📌 **Analytical Geometry II** | 4 | Equation of a line · Vectors · Perpendicular lines · Circle equation |
-| 📉 **Statistics II** | 4 | Standard deviation · Conditional probability · Variance · Expected value E(X) |
+| 🌊 **Advanced Trigonometry** | 8 | Identities · Equations · Radians · Pythagorean identity · Double angle · Graph properties · Interval solutions · Reciprocal ratios |
+| ∫ **Calculus** | 8 | First principles · Differentiation · Tangents · Stationary points · Integration · Gradient at a point · Normals · Rates of change |
+| 📈 **Exponential Functions** | 8 | Growth & decay · Solving equations · Models · Graph properties · Population growth · Half-life · Log form · Doubling time |
+| 🧮 **Algebra III** | 8 | Polynomial division · Logs · Remainder theorem · Factor theorem · Binomial · Solving cubics · Binomial coefficients · Log equations |
+| 🔁 **Functions II** | 8 | Transformations · Inverse · Composite · Solve for input · Domain & range · Composite expressions · Self-inverse · Piecewise |
+| 📌 **Analytical Geometry II** | 8 | Equation of a line · Vectors · Perpendicular · Circle · Midpoint & distance · Parallel lines · Centre & radius · Tangent length |
+| 📉 **Statistics II** | 8 | Standard deviation · Conditional probability · Variance · E(X) · Probability distributions · Combinations · Permutations · Counting principle |
 
 ---
 
@@ -181,10 +181,10 @@ The three senior bands form an upward arc: **Builders → Systems → Thinkers**
 | Secondary | 13 | RPG | 3 worlds | 15 |
 | Upper Secondary | 14 | RPG | 3 worlds | 15 |
 | School of Builders | 15 | Exam Studio | 9 topics | 72 |
-| School of Systems | 16 | Exam Studio | 7 topics | 30 |
+| School of Systems | 16 | Exam Studio | 7 topics | 56 |
 | School of Thinkers | 17 | Exam Studio | 7 topics | 30 |
 
-**RPG total:** 95 levels (ages 3–14) · **Exam Studio total:** 132 levels across 23 topics (ages 15–17).
+**RPG total:** 95 levels (ages 3–14) · **Exam Studio total:** 158 levels across 23 topics (ages 15–17).
 
 Every generated question is verified to offer **4 distinct multiple-choice options** with the correct answer always present (engine-level guarantee). Senior questions add worked steps, exam tips, and common-mistake notes; senior progress is mastery-gated at ≥ 80% with sequential unlocking.
 

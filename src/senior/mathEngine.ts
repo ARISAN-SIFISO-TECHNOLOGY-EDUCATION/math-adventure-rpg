@@ -6056,6 +6056,429 @@ function genExactTrigValues(): Problem {
   ]);
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+//  Age 16 (Systems) expansion — bring every topic up to 8 distinct levels.
+// ═══════════════════════════════════════════════════════════════════════════
+
+function factorial(n: number): number { let r = 1; for (let i = 2; i <= n; i++) r *= i; return r; }
+function comb(n: number, r: number): number { return factorial(n) / (factorial(r) * factorial(n - r)); }
+function perm(n: number, r: number): number { return factorial(n) / factorial(n - r); }
+
+// ── age16-trig2 L6 — Graphs of Trig Functions ────────────────────────────────
+function genTrigGraphProps(): Problem {
+  const a = randInt(2, 5), b = [1, 2, 3, 4][randInt(0, 3)], c = randInt(0, 3);
+  const period = 360 / b;
+  const askPeriod = Math.random() < 0.5;
+  const cStr = c ? ` + ${c}` : '';
+  const correct = askPeriod ? `${period}°` : `${a}`;
+  return {
+    id: uid(),
+    question: `For the graph y = ${a} sin(${b}x)${cStr}, find the ${askPeriod ? 'period' : 'amplitude'}.`,
+    correctAnswer: correct,
+    options: askPeriod
+      ? makeOptions(`${period}°`, [`360°`, `${period * 2}°`, `${a}°`])
+      : makeOptions(`${a}`, [`${a + c}`, `${period}`, `${2 * a}`]),
+    marks: 2,
+    workingSteps: askPeriod
+      ? [`Period = 360° ÷ b`, `= 360° ÷ ${b} = ${period}°`]
+      : [`Amplitude = |a| = the number in front of sin`, `Amplitude = ${a}`],
+    hints: askPeriod ? [`Period = 360° / b`] : [`Amplitude is the coefficient of sin`],
+    calculatorAllowed: false,
+    commonMistake: `Confusing amplitude (a) with period (360/b) — they come from different parts of the equation.`,
+    examTip: `For y = a sin(bx) + c: amplitude = a, period = 360/b, vertical shift = c.`,
+  };
+}
+
+// ── age16-trig2 L7 — Solving in an Interval ───────────────────────────────────
+function genSolveTrigInterval(): Problem {
+  return fromCases([
+    { q: `Solve sin x = 0.5 for 0° ≤ x ≤ 360°.`, c: 'x = 30° and 150°', w: ['x = 30° only', 'x = 30° and 330°', 'x = 60° and 120°'], s: ['Basic angle: sin⁻¹(0.5) = 30°', 'sin is positive in quadrants 1 and 2', 'x = 30° and 180° − 30° = 150°'], h: ['Find the basic angle first', 'sin positive → quadrants 1 and 2'], mistake: 'Giving only the first solution — there are TWO in 0°–360°.', tip: 'Always check all quadrants for the given range.' },
+    { q: `Solve cos x = 0.5 for 0° ≤ x ≤ 360°.`, c: 'x = 60° and 300°', w: ['x = 60° and 120°', 'x = 60° only', 'x = 30° and 330°'], s: ['Basic angle: cos⁻¹(0.5) = 60°', 'cos is positive in quadrants 1 and 4', 'x = 60° and 360° − 60° = 300°'], h: ['cos positive → quadrants 1 and 4'], mistake: 'Using the sine quadrants for a cosine equation.', tip: 'cos positive → 1st and 4th quadrants.' },
+    { q: `Solve tan x = 1 for 0° ≤ x ≤ 360°.`, c: 'x = 45° and 225°', w: ['x = 45° only', 'x = 45° and 135°', 'x = 135° and 315°'], s: ['Basic angle: tan⁻¹(1) = 45°', 'tan is positive in quadrants 1 and 3', 'x = 45° and 180° + 45° = 225°'], h: ['tan repeats every 180°'], mistake: 'Forgetting the 3rd-quadrant solution at 225°.', tip: 'tan positive → quadrants 1 and 3 (180° apart).' },
+    { q: `Solve sin x = 1 for 0° ≤ x ≤ 360°.`, c: 'x = 90°', w: ['x = 90° and 270°', 'x = 0° and 180°', 'x = 180°'], s: ['sin x = 1 at the maximum', 'Only x = 90° in this range'], h: ['Where is sin at its maximum?'], mistake: 'Adding a second solution — the maximum occurs once.', tip: 'sin = 1 only at 90°; sin = −1 only at 270°.' },
+  ]);
+}
+
+// ── age16-trig2 L8 — Reciprocal Trig Ratios ──────────────────────────────────
+function genReciprocalRatios(): Problem {
+  return fromCases([
+    { q: `Express sec θ in terms of cos θ.`, c: 'sec θ = 1/cos θ', w: ['sec θ = cos θ', 'sec θ = 1/sin θ', 'sec θ = sin θ/cos θ'], s: ['sec is the reciprocal of cos', 'sec θ = 1/cos θ'], h: ['sec ↔ cos'], mistake: 'Pairing sec with sin instead of cos.', tip: 'sec–cos, cosec–sin, cot–tan.' },
+    { q: `Express cosec θ in terms of sin θ.`, c: 'cosec θ = 1/sin θ', w: ['cosec θ = sin θ', 'cosec θ = 1/cos θ', 'cosec θ = cos θ/sin θ'], s: ['cosec is the reciprocal of sin', 'cosec θ = 1/sin θ'], h: ['cosec ↔ sin'], mistake: 'Pairing cosec with cos.', tip: 'cosec–sin (both have the same second letter idea).' },
+    { q: `If cos θ = 1/2, find sec θ.`, c: '2', w: ['1/2', '−2', '4'], s: ['sec θ = 1/cos θ', '= 1 ÷ (1/2) = 2'], h: ['Take the reciprocal of cos θ'], mistake: 'Leaving the answer as 1/2.', tip: 'sec = 1/cos → flip the fraction.' },
+    { q: `If sin θ = 1/3, find cosec θ.`, c: '3', w: ['1/3', '−3', '9'], s: ['cosec θ = 1/sin θ', '= 1 ÷ (1/3) = 3'], h: ['Take the reciprocal of sin θ'], mistake: 'Leaving the answer as 1/3.', tip: 'cosec = 1/sin → flip the fraction.' },
+    { q: `Express cot θ in terms of tan θ.`, c: 'cot θ = 1/tan θ', w: ['cot θ = tan θ', 'cot θ = sin θ/cos θ', 'cot θ = 1/sin θ'], s: ['cot is the reciprocal of tan', 'cot θ = 1/tan θ = cos θ/sin θ'], h: ['cot ↔ tan'], mistake: 'Writing cot = sin/cos (that is tan).', tip: 'cot = cos/sin = 1/tan.' },
+  ]);
+}
+
+// ── age16-calculus L6 — Gradient at a Point ──────────────────────────────────
+function genGradientAtPoint(): Problem {
+  const a = randInt(1, 4), b = randInt(1, 6), c = randInt(0, 5), p = randInt(1, 5);
+  const grad = 2 * a * p + b;
+  return {
+    id: uid(),
+    question: `Find the gradient of the curve y = ${a}x² + ${b}x + ${c} at the point where x = ${p}.`,
+    correctAnswer: `${grad}`,
+    options: makeOptions(`${grad}`, [`${a * p * p + b * p + c}`, `${2 * a * p}`, `${grad + a}`]),
+    marks: 3,
+    workingSteps: [`dy/dx = ${2 * a}x + ${b}`, `At x = ${p}: ${2 * a}×${p} + ${b} = ${grad}`],
+    hints: [`Differentiate first, then substitute x = ${p}`, `d/dx(axⁿ) = anxⁿ⁻¹`],
+    calculatorAllowed: false,
+    commonMistake: `Substituting into y instead of dy/dx — the gradient comes from the DERIVATIVE.`,
+    examTip: `Gradient of a curve = value of dy/dx at that point. Differentiate, then substitute.`,
+  };
+}
+
+// ── age16-calculus L7 — Equation of the Normal ───────────────────────────────
+function genNormalLine(): Problem {
+  const m = randInt(2, 5);
+  const correct = `−1/${m}`;
+  return {
+    id: uid(),
+    question: `The tangent to a curve at point P has gradient ${m}.\n\nFind the gradient of the normal at P.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`${m}`, `1/${m}`, `−${m}`]),
+    marks: 2,
+    workingSteps: [`Normal ⟂ tangent`, `Normal gradient = −1 ÷ (tangent gradient)`, `= −1/${m}`],
+    hints: [`The normal is perpendicular to the tangent`, `Perpendicular gradients multiply to −1`],
+    calculatorAllowed: false,
+    commonMistake: `Using the same gradient ${m} — the normal is PERPENDICULAR, so use −1/m.`,
+    examTip: `Perpendicular gradient = negative reciprocal: m → −1/m.`,
+  };
+}
+
+// ── age16-calculus L8 — Rates of Change (Kinematics) ─────────────────────────
+function genRateOfChange(): Problem {
+  const a = randInt(1, 3), b = randInt(1, 6), p = randInt(1, 5);
+  const v = 2 * a * p + b;
+  return {
+    id: uid(),
+    question: `A particle has displacement s = ${a}t² + ${b}t metres at time t seconds.\n\nFind its velocity at t = ${p} s.`,
+    correctAnswer: `${v} m/s`,
+    options: makeOptions(`${v} m/s`, [`${a * p * p + b * p} m/s`, `${2 * a * p} m/s`, `${v + b} m/s`]),
+    marks: 3,
+    workingSteps: [`Velocity v = ds/dt = ${2 * a}t + ${b}`, `At t = ${p}: ${2 * a}×${p} + ${b} = ${v} m/s`],
+    hints: [`Velocity is the rate of change of displacement: v = ds/dt`, `Differentiate s, then substitute t`],
+    calculatorAllowed: false,
+    commonMistake: `Substituting into s (giving displacement) instead of differentiating to get velocity first.`,
+    examTip: `v = ds/dt (differentiate once); acceleration a = dv/dt (differentiate again).`,
+  };
+}
+
+// ── age16-exponential L4 — Properties of Exp Graphs ──────────────────────────
+function genExpGraphProps(): Problem {
+  return fromCases([
+    { q: `State the y-intercept of y = 3 × 2ˣ.`, c: '3', w: ['1', '2', '6'], s: ['At x = 0, 2⁰ = 1', 'y = 3 × 1 = 3'], h: ['Substitute x = 0', 'Any base to the power 0 is 1'], mistake: 'Forgetting that 2⁰ = 1, not 0.', tip: 'For y = a·bˣ, the y-intercept is a.' },
+    { q: `State the horizontal asymptote of y = 2ˣ.`, c: 'y = 0', w: ['y = 1', 'y = 2', 'x = 0'], s: ['As x → −∞, 2ˣ → 0', 'Asymptote: y = 0'], h: ['What does 2ˣ approach for very negative x?'], mistake: 'Giving x = 0 (a vertical line) instead of y = 0.', tip: 'y = bˣ has asymptote y = 0 (the x-axis).' },
+    { q: `State the horizontal asymptote of y = 2ˣ + 4.`, c: 'y = 4', w: ['y = 0', 'y = 2', 'y = 5'], s: ['2ˣ → 0, so y → 0 + 4', 'Asymptote: y = 4'], h: ['The + 4 shifts the whole graph up 4'], mistake: 'Ignoring the + 4 shift.', tip: 'y = bˣ + c has asymptote y = c.' },
+    { q: `Find y when x = 0 for y = 5 × 3ˣ.`, c: '5', w: ['15', '1', '3'], s: ['3⁰ = 1', 'y = 5 × 1 = 5'], h: ['Substitute x = 0'], mistake: 'Multiplying 5 × 3 = 15 (treating 3⁰ as 3).', tip: 'b⁰ = 1 for any base b.' },
+  ]);
+}
+
+// ── age16-exponential L5 — Exponential Growth ────────────────────────────────
+function genPopulationGrowth(): Problem {
+  const P0 = [100, 200, 500][randInt(0, 2)];
+  const factor = [2, 3][randInt(0, 1)];
+  const t = randInt(2, 3);
+  const P = P0 * Math.pow(factor, t);
+  return {
+    id: uid(),
+    question: `A population starts at ${P0} and ${factor === 2 ? 'doubles' : 'triples'} every year.\n\nFind the population after ${t} years.`,
+    correctAnswer: `${P}`,
+    options: makeOptions(`${P}`, [`${P0 * factor * t}`, `${P0 * Math.pow(factor, t + 1)}`, `${P / factor}`]),
+    marks: 3,
+    workingSteps: [`P = ${P0} × ${factor}^t`, `P = ${P0} × ${factor}^${t} = ${P0} × ${Math.pow(factor, t)} = ${P}`],
+    hints: [`Each year multiplies by ${factor}`, `P = P₀ × ${factor}^t`],
+    calculatorAllowed: true,
+    commonMistake: `Multiplying by ${factor}×${t} instead of raising to the power ${t} — growth is exponential, not linear.`,
+    examTip: `Repeated multiplication = a power. After t years, multiply by ${factor}^t.`,
+  };
+}
+
+// ── age16-exponential L6 — Exponential Decay & Half-Life ──────────────────────
+function genHalfLife(): Problem {
+  const A0 = [800, 1000, 1600, 2000][randInt(0, 3)];
+  const n = randInt(2, 3);
+  const A = A0 / Math.pow(2, n);
+  return {
+    id: uid(),
+    question: `A radioactive sample of ${A0} g halves every hour.\n\nFind the mass remaining after ${n} hours.`,
+    correctAnswer: `${A} g`,
+    options: makeOptions(`${A} g`, [`${A0 / 2} g`, `${Math.round(A0 / Math.pow(2, n + 1))} g`, `${A0 - 100 * n} g`]),
+    marks: 3,
+    workingSteps: [`A = ${A0} × (1/2)^n`, `A = ${A0} × (1/2)^${n} = ${A0} ÷ ${Math.pow(2, n)} = ${A} g`],
+    hints: [`Halving means × (1/2) each hour`, `A = A₀ × (1/2)^t`],
+    calculatorAllowed: true,
+    commonMistake: `Subtracting half each time linearly instead of multiplying by 1/2 repeatedly.`,
+    examTip: `Decay is exponential: after n half-lives, divide the start by 2ⁿ.`,
+  };
+}
+
+// ── age16-exponential L7 — Exponential ↔ Log Form ────────────────────────────
+function genExpToLogForm(): Problem {
+  return fromCases([
+    { q: `Write 2³ = 8 in logarithm form.`, c: 'log₂8 = 3', w: ['log₃8 = 2', 'log₈2 = 3', 'log₂3 = 8'], s: ['bˣ = y ⟺ log_b(y) = x', '2³ = 8 → log₂8 = 3'], h: ['The base stays the base', 'The exponent becomes the answer'], mistake: 'Swapping the base and the result.', tip: 'bˣ = y means log_b y = x.' },
+    { q: `Write 10² = 100 in logarithm form.`, c: 'log₁₀100 = 2', w: ['log₂100 = 10', 'log₁₀₀10 = 2', 'log₁₀2 = 100'], s: ['10² = 100 → log₁₀100 = 2'], h: ['Base 10 stays the base'], mistake: 'Putting 100 as the base.', tip: 'The base of the power = base of the log.' },
+    { q: `Write log₃9 = 2 in index (power) form.`, c: '3² = 9', w: ['2³ = 9', '9² = 3', '3⁹ = 2'], s: ['log_b(y) = x ⟺ bˣ = y', 'log₃9 = 2 → 3² = 9'], h: ['The base of the log becomes the base of the power'], mistake: 'Swapping which number is the exponent.', tip: 'log_b y = x means bˣ = y.' },
+    { q: `Write 5² = 25 in logarithm form.`, c: 'log₅25 = 2', w: ['log₂25 = 5', 'log₂₅5 = 2', 'log₅2 = 25'], s: ['5² = 25 → log₅25 = 2'], h: ['Base 5 stays the base'], mistake: 'Confusing the base with the result.', tip: 'bˣ = y → log_b y = x.' },
+  ]);
+}
+
+// ── age16-exponential L8 — Doubling / Scaling Time ───────────────────────────
+function genDoublingTime(): Problem {
+  return fromCases([
+    { q: `A quantity doubles each year. After how many years is it 8 times the start?`, c: '3 years', w: ['4 years', '8 years', '2 years'], s: ['Each year × 2', '2ⁿ = 8 → 2³ = 8', 'n = 3 years'], h: ['Find n where 2ⁿ = 8'], mistake: 'Saying 8 years (multiplying instead of using the power).', tip: '2ⁿ = 8 → n = 3 since 2³ = 8.' },
+    { q: `A quantity triples each year. After how many years is it 27 times the start?`, c: '3 years', w: ['9 years', '27 years', '2 years'], s: ['3ⁿ = 27 → 3³ = 27', 'n = 3 years'], h: ['Find n where 3ⁿ = 27'], mistake: 'Saying 9 years.', tip: '3ⁿ = 27 → n = 3 since 3³ = 27.' },
+    { q: `A quantity doubles each year. After how many years is it 16 times the start?`, c: '4 years', w: ['8 years', '16 years', '5 years'], s: ['2ⁿ = 16 → 2⁴ = 16', 'n = 4 years'], h: ['Find n where 2ⁿ = 16'], mistake: 'Saying 8 years.', tip: '2⁴ = 16 → n = 4.' },
+    { q: `A quantity doubles each year. After how many years is it 4 times the start?`, c: '2 years', w: ['4 years', '1 year', '3 years'], s: ['2ⁿ = 4 → 2² = 4', 'n = 2 years'], h: ['Find n where 2ⁿ = 4'], mistake: 'Saying 4 years.', tip: '2² = 4 → n = 2.' },
+  ]);
+}
+
+// ── age16-algebra3 L6 — Solving Cubics by Factor Theorem ─────────────────────
+function genSolveCubicFactor(): Problem {
+  return fromCases([
+    { q: `Solve x³ − 6x² + 11x − 6 = 0.`, c: 'x = 1, 2, 3', w: ['x = −1, −2, −3', 'x = 1, 2, 6', 'x = 0, 2, 3'], s: ['Try x = 1: 1 − 6 + 11 − 6 = 0 ✓, so (x − 1) is a factor', 'Factorise: (x − 1)(x − 2)(x − 3) = 0', 'x = 1, 2, 3'], h: ['Test small factors of 6 (1, 2, 3, 6)', 'Use the factor theorem'], mistake: 'Giving the roots as negative — (x − 1) = 0 gives x = +1.', tip: 'Roots of (x − a) factors are POSITIVE a.' },
+    { q: `Given (x − 1) is a factor of x³ − 2x² − x + 2, find ALL roots.`, c: 'x = 1, 2, −1', w: ['x = 1, −2, 1', 'x = 1, 2, 1', 'x = −1, −2, 1'], s: ['Divide: x³ − 2x² − x + 2 = (x − 1)(x² − x − 2)', 'Factorise: (x − 1)(x − 2)(x + 1)', 'x = 1, 2, −1'], h: ['Divide out (x − 1) first', 'Then factorise the quadratic'], mistake: 'Stopping after finding one root.', tip: 'After dividing out one factor, solve the remaining quadratic.' },
+    { q: `Factorise fully: x³ − x.`, c: 'x(x − 1)(x + 1)', w: ['x(x² − 1)', 'x(x − 1)²', '(x − 1)(x + 1)'], s: ['Common factor x: x(x² − 1)', 'Difference of squares: x(x − 1)(x + 1)'], h: ['Take out x first', 'x² − 1 is a difference of two squares'], mistake: 'Leaving it as x(x² − 1) — not fully factorised.', tip: 'Always check for a difference of squares after taking out common factors.' },
+    { q: `Solve x³ + 2x² − 5x − 6 = 0.`, c: 'x = 2, −1, −3', w: ['x = −2, 1, 3', 'x = 2, 1, 3', 'x = 2, −1, 3'], s: ['Try x = 2: 8 + 8 − 10 − 6 = 0 ✓', 'Factorise: (x − 2)(x + 1)(x + 3) = 0', 'x = 2, −1, −3'], h: ['Test factors of 6', 'Use the factor theorem'], mistake: 'Sign errors when reading roots from factors.', tip: '(x + 1) → x = −1, (x − 2) → x = 2.' },
+  ]);
+}
+
+// ── age16-algebra3 L7 — Binomial Coefficients ────────────────────────────────
+function genBinomialCoefficient16(): Problem {
+  const n = randInt(4, 6);
+  const r = randInt(2, n - 1);
+  const coeff = comb(n, r);
+  return {
+    id: uid(),
+    question: `Find the coefficient of x^${r} in the expansion of (1 + x)^${n}.`,
+    correctAnswer: `${coeff}`,
+    options: makeOptions(`${coeff}`, [`${comb(n, r - 1)}`, `${comb(n, r + 1) || n}`, `${n * r}`]),
+    marks: 3,
+    workingSteps: [`Coefficient of xʳ in (1 + x)ⁿ is ⁿCᵣ`, `⁞${n}C${r} = ${n}! / (${r}! × ${n - r}!) = ${coeff}`],
+    hints: [`Use ⁿCᵣ = n! / (r!(n−r)!)`, `n = ${n}, r = ${r}`],
+    calculatorAllowed: true,
+    commonMistake: `Using nPr (order matters) instead of nCr — binomial coefficients are combinations.`,
+    examTip: `The coefficient of xʳ in (1 + x)ⁿ is exactly ⁿCᵣ.`,
+  };
+}
+
+// ── age16-algebra3 L8 — Solving Log Equations ────────────────────────────────
+function genLogEquationSolve(): Problem {
+  const a = randInt(2, 4), b = randInt(2, 3);
+  const x = Math.pow(a, b);
+  return {
+    id: uid(),
+    question: `Solve for x:  log${a === 2 ? '₂' : a === 3 ? '₃' : '₄'}(x) = ${b}`,
+    correctAnswer: `x = ${x}`,
+    options: makeOptions(`x = ${x}`, [`x = ${a * b}`, `x = ${a + b}`, `x = ${x + a}`]),
+    marks: 3,
+    workingSteps: [`log_a(x) = b means aᵇ = x`, `x = ${a}^${b} = ${x}`],
+    hints: [`Rewrite in index form: aᵇ = x`, `a = ${a}, b = ${b}`],
+    calculatorAllowed: false,
+    commonMistake: `Computing ${a} × ${b} instead of ${a}^${b} — the log undoes a POWER.`,
+    examTip: `log_a(x) = b ⟺ x = aᵇ. Convert to index form first.`,
+  };
+}
+
+// ── age16-functions2 L5 — Domain & Range (restrictions) ──────────────────────
+function genDomainRange16(): Problem {
+  return fromCases([
+    { q: `f(x) = 2/(x − 3). Which value is excluded from the domain?`, c: 'x = 3', w: ['x = 0', 'x = −3', 'x = 2'], s: ['Denominator ≠ 0', 'x − 3 = 0 → x = 3', 'Exclude x = 3'], h: ['Set the denominator ≠ 0'], mistake: 'Excluding x = 0 instead of x = 3.', tip: 'For a/(x − k), exclude x = k.' },
+    { q: `State the domain of f(x) = √(2x − 6).`, c: 'x ≥ 3', w: ['x ≥ 6', 'x ≥ 0', 'x ≤ 3'], s: ['Inside √ must be ≥ 0', '2x − 6 ≥ 0 → 2x ≥ 6 → x ≥ 3'], h: ['Set the inside of √ ≥ 0', 'Solve the inequality'], mistake: 'Stopping at 2x ≥ 6 without dividing by 2.', tip: 'Solve the inequality fully: x ≥ 3.' },
+    { q: `f(x) = x² − 4 with x ≥ 0. State the range.`, c: 'f(x) ≥ −4', w: ['f(x) ≥ 0', 'f(x) ≥ 4', 'f(x) ≤ −4'], s: ['Minimum of x² − 4 is at x = 0', 'f(0) = −4', 'Range: f(x) ≥ −4'], h: ['Find the minimum value'], mistake: 'Reading the range as ≥ 0.', tip: 'The constant sets the minimum here: −4.' },
+    { q: `f(x) = 3/(x + 1). Which value is excluded from the domain?`, c: 'x = −1', w: ['x = 1', 'x = 0', 'x = −3'], s: ['Denominator ≠ 0', 'x + 1 = 0 → x = −1'], h: ['Set the denominator ≠ 0'], mistake: 'Giving x = 1 instead of x = −1.', tip: 'For a/(x + 1), exclude x = −1.' },
+  ]);
+}
+
+// ── age16-functions2 L6 — Composite Function Expressions ─────────────────────
+function genCompositeExpr(): Problem {
+  const m = randInt(2, 4), k = randInt(1, 5);
+  const correct = `${m}x² + ${k}`;
+  return {
+    id: uid(),
+    question: `f(x) = ${m}x + ${k} and g(x) = x².\n\nFind fg(x).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`(${m}x + ${k})²`, `${m}x + ${k}`, `${m * m}x² + ${k}`]),
+    marks: 3,
+    workingSteps: [`fg(x) = f(g(x)) = f(x²)`, `Substitute x² into f: ${m}(x²) + ${k}`, `= ${m}x² + ${k}`],
+    hints: [`fg(x) means f(g(x)) — inner function g first`, `Put x² wherever x appears in f`],
+    calculatorAllowed: false,
+    commonMistake: `Computing gf(x) = (${m}x + ${k})² instead of fg(x) — order matters.`,
+    examTip: `fg(x) = f(g(x)): substitute the WHOLE of g into f.`,
+  };
+}
+
+// ── age16-functions2 L7 — Self-Inverse Functions ─────────────────────────────
+function genSelfInverse(): Problem {
+  return fromCases([
+    { q: `f(x) = 1/x. Find f⁻¹(x).`, c: 'f⁻¹(x) = 1/x', w: ['f⁻¹(x) = x', 'f⁻¹(x) = −1/x', 'f⁻¹(x) = x − 1'], s: ['Let y = 1/x, swap: x = 1/y', 'Solve: y = 1/x', 'f is self-inverse'], h: ['Swap x and y, then solve for y'], mistake: 'Thinking the inverse must look different.', tip: 'f(x) = 1/x is its own inverse (self-inverse).' },
+    { q: `f(x) = 6 − x. Find f⁻¹(x).`, c: 'f⁻¹(x) = 6 − x', w: ['f⁻¹(x) = x − 6', 'f⁻¹(x) = 6 + x', 'f⁻¹(x) = x/6'], s: ['Let y = 6 − x, swap: x = 6 − y', 'Solve: y = 6 − x', 'Self-inverse'], h: ['Swap x and y, then solve'], mistake: 'Writing x − 6 (sign error).', tip: 'f(x) = a − x is always self-inverse.' },
+    { q: `f(x) = −x. Find f⁻¹(x).`, c: 'f⁻¹(x) = −x', w: ['f⁻¹(x) = x', 'f⁻¹(x) = 1/x', 'f⁻¹(x) = −1/x'], s: ['Let y = −x, swap: x = −y', 'Solve: y = −x', 'Self-inverse'], h: ['Swap x and y'], mistake: 'Giving x instead of −x.', tip: 'f(x) = −x maps to itself when inverted.' },
+  ]);
+}
+
+// ── age16-functions2 L8 — Piecewise Functions ────────────────────────────────
+function genPiecewiseFunc(): Problem {
+  return fromCases([
+    { q: `f(x) = 2x for x < 2,  x + 3 for x ≥ 2.\n\nFind f(5).`, c: '8', w: ['10', '7', '13'], s: ['5 ≥ 2 → use x + 3', 'f(5) = 5 + 3 = 8'], h: ['Check which condition 5 satisfies', '5 ≥ 2 → second rule'], mistake: 'Using 2x (the wrong piece) to get 10.', tip: 'Pick the rule whose condition the input meets.' },
+    { q: `f(x) = 2x for x < 2,  x + 3 for x ≥ 2.\n\nFind f(1).`, c: '2', w: ['4', '5', '1'], s: ['1 < 2 → use 2x', 'f(1) = 2 × 1 = 2'], h: ['1 < 2 → first rule'], mistake: 'Using x + 3 to get 4.', tip: 'Check the condition before substituting.' },
+    { q: `f(x) = x² for x ≤ 0,  3x for x > 0.\n\nFind f(4).`, c: '12', w: ['16', '7', '64'], s: ['4 > 0 → use 3x', 'f(4) = 3 × 4 = 12'], h: ['4 > 0 → second rule'], mistake: 'Using x² to get 16.', tip: 'Match the input to the correct interval first.' },
+    { q: `f(x) = x² for x ≤ 0,  3x for x > 0.\n\nFind f(−2).`, c: '4', w: ['−6', '6', '−4'], s: ['−2 ≤ 0 → use x²', 'f(−2) = (−2)² = 4'], h: ['−2 ≤ 0 → first rule', '(−2)² = 4'], mistake: 'Using 3x to get −6.', tip: 'Negative input here → use the x² rule.' },
+  ]);
+}
+
+// ── age16-analytical-geo L5 — Midpoint & Distance ────────────────────────────
+function genMidpointDistance(): Problem {
+  const x1 = randInt(0, 8), x2 = x1 + 2 * randInt(1, 4);
+  const y1 = randInt(0, 8), y2 = y1 + 2 * randInt(1, 4);
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  const correct = `(${mx}, ${my})`;
+  return {
+    id: uid(),
+    question: `Find the midpoint of A(${x1}, ${y1}) and B(${x2}, ${y2}).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`(${x2 - x1}, ${y2 - y1})`, `(${x1 + x2}, ${y1 + y2})`, `(${mx + 1}, ${my})`]),
+    marks: 2,
+    workingSteps: [`Midpoint = ((x₁ + x₂)/2, (y₁ + y₂)/2)`, `= ((${x1} + ${x2})/2, (${y1} + ${y2})/2) = (${mx}, ${my})`],
+    hints: [`Average the x-coordinates and the y-coordinates`],
+    calculatorAllowed: false,
+    commonMistake: `Subtracting the coordinates (that gives the displacement, not the midpoint).`,
+    examTip: `Midpoint = the AVERAGE of the endpoints.`,
+  };
+}
+
+// ── age16-analytical-geo L6 — Parallel Lines ─────────────────────────────────
+function genParallelLine(): Problem {
+  const m = randInt(2, 4), px = randInt(1, 4), py = randInt(1, 8), oldC = randInt(1, 5);
+  const newC = py - m * px;
+  const cStr = newC >= 0 ? `+ ${newC}` : `− ${-newC}`;
+  const oldCStr = `+ ${oldC}`;
+  const correct = `y = ${m}x ${cStr}`;
+  return {
+    id: uid(),
+    question: `Find the equation of the line parallel to y = ${m}x ${oldCStr} that passes through (${px}, ${py}).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`y = ${m}x ${oldCStr}`, `y = ${-m}x ${cStr}`, `y = ${m}x ${newC + 1 >= 0 ? `+ ${newC + 1}` : `− ${-(newC + 1)}`}`]),
+    marks: 3,
+    workingSteps: [`Parallel lines have the SAME gradient: m = ${m}`, `y = ${m}x + c through (${px}, ${py}): ${py} = ${m}×${px} + c`, `c = ${py} − ${m * px} = ${newC}`, `Equation: ${correct}`],
+    hints: [`Parallel → same gradient`, `Substitute the point to find c`],
+    calculatorAllowed: false,
+    commonMistake: `Changing the gradient — parallel lines keep the SAME gradient, only c changes.`,
+    examTip: `Parallel: keep m, recompute c from the given point.`,
+  };
+}
+
+// ── age16-analytical-geo L7 — Circle: Centre & Radius ────────────────────────
+function genCircleCentreRadius(): Problem {
+  const a = randInt(-4, 4), b = randInt(-4, 4), r = randInt(2, 6);
+  const aStr = a >= 0 ? `− ${a}` : `+ ${-a}`;
+  const bStr = b >= 0 ? `− ${b}` : `+ ${-b}`;
+  const correct = `Centre (${a}, ${b}), r = ${r}`;
+  return {
+    id: uid(),
+    question: `State the centre and radius of the circle:\n(x ${aStr})² + (y ${bStr})² = ${r * r}`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`Centre (${a}, ${b}), r = ${r * r}`, `Centre (${-a}, ${-b}), r = ${r}`, `Centre (${b}, ${a}), r = ${r}`]),
+    marks: 3,
+    workingSteps: [`Compare with (x − a)² + (y − b)² = r²`, `Centre = (${a}, ${b})`, `r² = ${r * r} → r = ${r}`],
+    hints: [`Centre is (a, b) from (x − a)² + (y − b)²`, `Radius = √(right-hand side)`],
+    calculatorAllowed: false,
+    commonMistake: `Giving the radius as ${r * r} — that is r², so take the square root.`,
+    examTip: `(x − a)² + (y − b)² = r²: centre (a, b), radius √(RHS).`,
+  };
+}
+
+// ── age16-analytical-geo L8 — Tangent Length ─────────────────────────────────
+function genTangentLength(): Problem {
+  const triples = [[5, 3, 4], [13, 5, 12], [10, 6, 8], [17, 8, 15], [25, 7, 24]];
+  const [d, r, t] = triples[randInt(0, triples.length - 1)];
+  return {
+    id: uid(),
+    question: `A tangent is drawn from point P to a circle of radius ${r}. P is ${d} units from the centre.\n\nFind the length of the tangent.`,
+    correctAnswer: `${t}`,
+    options: makeOptions(`${t}`, [`${d - r}`, `${d + r}`, `${Math.round(Math.sqrt(d * d + r * r))}`]),
+    marks: 3,
+    workingSteps: [`Tangent ⟂ radius, so use Pythagoras`, `tangent² = d² − r² = ${d * d} − ${r * r} = ${t * t}`, `tangent = √${t * t} = ${t}`],
+    hints: [`The radius meets the tangent at 90°`, `tangent² + r² = d²`],
+    calculatorAllowed: true,
+    commonMistake: `Subtracting d − r instead of using Pythagoras (√(d² − r²)).`,
+    examTip: `Radius ⟂ tangent → right triangle: tangent = √(d² − r²).`,
+  };
+}
+
+// ── age16-stats2 L5 — Probability Distributions ──────────────────────────────
+function genProbDistribution(): Problem {
+  const den = [10, 8, 12][randInt(0, 2)];
+  const a = randInt(1, 3), b = randInt(1, 3), c = randInt(1, 2);
+  const missing = den - a - b - c;
+  const correct = simplify(missing, den);
+  return {
+    id: uid(),
+    question: `A discrete random variable X has probabilities:\nP = ${a}/${den}, ${b}/${den}, ${c}/${den}, k.\n\nFind k (the probabilities must sum to 1).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [simplify(a + b + c, den), `${missing}/${den + 1}`, simplify(missing + 1, den)]),
+    marks: 3,
+    workingSteps: [`All probabilities sum to 1`, `k = 1 − (${a} + ${b} + ${c})/${den} = ${missing}/${den}`, `= ${correct}`],
+    hints: [`ΣP(X) = 1`, `k = 1 − (sum of the others)`],
+    calculatorAllowed: false,
+    commonMistake: `Forgetting that all probabilities must total exactly 1.`,
+    examTip: `For any distribution, the probabilities sum to 1 — use this to find a missing value.`,
+  };
+}
+
+// ── age16-stats2 L6 — Combinations ───────────────────────────────────────────
+function genCombinations(): Problem {
+  const n = randInt(5, 8), r = randInt(2, 4);
+  const val = comb(n, r);
+  return {
+    id: uid(),
+    question: `In how many ways can a team of ${r} be chosen from ${n} people?\n(Order does not matter.)`,
+    correctAnswer: `${val}`,
+    options: makeOptions(`${val}`, [`${perm(n, r)}`, `${comb(n, r - 1)}`, `${n * r}`]),
+    marks: 3,
+    workingSteps: [`Order does not matter → combinations`, `ⁿCᵣ = ${n}! / (${r}! × ${n - r}!) = ${val}`],
+    hints: [`Choosing (not arranging) → use ⁿCᵣ`, `ⁿCᵣ = n!/(r!(n−r)!)`],
+    calculatorAllowed: true,
+    commonMistake: `Using ⁿPᵣ (which counts order) — a team is a SELECTION, so use ⁿCᵣ.`,
+    examTip: `"Choose" / "select" → combinations ⁿCᵣ. "Arrange" / "order" → permutations ⁿPᵣ.`,
+  };
+}
+
+// ── age16-stats2 L7 — Permutations ───────────────────────────────────────────
+function genPermutations(): Problem {
+  const n = randInt(4, 6), r = randInt(2, 3);
+  const val = perm(n, r);
+  return {
+    id: uid(),
+    question: `In how many ways can ${r} people be arranged in a line, chosen from ${n}?\n(Order matters.)`,
+    correctAnswer: `${val}`,
+    options: makeOptions(`${val}`, [`${comb(n, r)}`, `${Math.pow(n, r)}`, `${n * r}`]),
+    marks: 3,
+    workingSteps: [`Order matters → permutations`, `ⁿPᵣ = ${n}! / ${n - r}! = ${val}`],
+    hints: [`Arranging in order → use ⁿPᵣ`, `ⁿPᵣ = n!/(n−r)!`],
+    calculatorAllowed: true,
+    commonMistake: `Using ⁿCᵣ — when ORDER matters, use permutations ⁿPᵣ (always larger).`,
+    examTip: `"Arrange" / "in a line" / "order" → permutations ⁿPᵣ.`,
+  };
+}
+
+// ── age16-stats2 L8 — Fundamental Counting Principle ─────────────────────────
+function genCountingPrinciple(): Problem {
+  const m = randInt(3, 6), n = randInt(3, 6);
+  return {
+    id: uid(),
+    question: `A menu has ${m} starters and ${n} main courses.\n\nHow many different two-course meals are possible?`,
+    correctAnswer: `${m * n}`,
+    options: makeOptions(`${m * n}`, [`${m + n}`, `${m * n + m}`, `${Math.max(m, n)}`]),
+    marks: 2,
+    workingSteps: [`Counting principle: multiply the choices`, `${m} × ${n} = ${m * n}`],
+    hints: [`For independent stages, MULTIPLY the number of options`],
+    calculatorAllowed: false,
+    commonMistake: `Adding ${m} + ${n} instead of multiplying — each starter pairs with EVERY main.`,
+    examTip: `Independent choices "AND" → multiply. (m ways) × (n ways) = m×n total.`,
+  };
+}
+
 export const TOPIC_LEVELS: Record<string, TopicLevels> = {
   // ── Age 15 ────────────────────────────────────────────────────────────────
   'age15-numbers':    { 1: genSurds, 2: genIndices, 3: genQuadraticsFactor, 4: genSequences, 5: genLogs, 6: genStandardForm, 7: genEstimationRounding, 8: genLogQuotient },
@@ -6068,13 +6491,13 @@ export const TOPIC_LEVELS: Record<string, TopicLevels> = {
   'age15-functions':  { 1: genFunctionsDomain, 2: genFunctionsGraphs, 3: genDomainRange15, 4: genGraphTypeRecognition, 5: genLineFromTwoPoints, 6: genTurningPointForm, 7: genFunctionMapping, 8: genGraphTransform },
   'age15-matrices':   { 1: genTransformations, 2: genMatrices, 3: genInverseMatrix, 4: genMatrixAddSub, 5: genScalarMatrix, 6: genMatrixIdentity, 7: genMatrixEquation, 8: genTransformMatrix },
   // ── Age 16 ────────────────────────────────────────────────────────────────
-  'age16-trig2':           { 1: genTrigIdentities, 2: genTrigEquations, 3: genRadians, 4: genPythagIdentity, 5: genDoubleAngle },
-  'age16-calculus':        { 1: genDifferentiationFirstPrinciples, 2: genBasicDifferentiation, 3: genTangentLine, 4: genStationaryPoint, 5: genIntegration },
-  'age16-exponential':     { 1: genExponentialFunctions, 2: genSolveExponential, 3: genExpModel },
-  'age16-algebra3':        { 1: genPolynomialDivision, 2: genLogsAdvanced, 3: genRemainderTheorem, 4: genFactorTheorem, 5: genBinomial },
-  'age16-functions2':      { 1: genFunctionTransformations, 2: genInverseFunctions16, 3: genComposite, 4: genSolveForInput },
-  'age16-analytical-geo':  { 1: genEquationOfLine16, 2: genVectors2D, 3: genPerpendicular, 4: genCircleEquation },
-  'age16-stats2':          { 1: genStandardDeviation, 2: genConditionalProbability, 3: genVariance, 4: genExpectedValue },
+  'age16-trig2':           { 1: genTrigIdentities, 2: genTrigEquations, 3: genRadians, 4: genPythagIdentity, 5: genDoubleAngle, 6: genTrigGraphProps, 7: genSolveTrigInterval, 8: genReciprocalRatios },
+  'age16-calculus':        { 1: genDifferentiationFirstPrinciples, 2: genBasicDifferentiation, 3: genTangentLine, 4: genStationaryPoint, 5: genIntegration, 6: genGradientAtPoint, 7: genNormalLine, 8: genRateOfChange },
+  'age16-exponential':     { 1: genExponentialFunctions, 2: genSolveExponential, 3: genExpModel, 4: genExpGraphProps, 5: genPopulationGrowth, 6: genHalfLife, 7: genExpToLogForm, 8: genDoublingTime },
+  'age16-algebra3':        { 1: genPolynomialDivision, 2: genLogsAdvanced, 3: genRemainderTheorem, 4: genFactorTheorem, 5: genBinomial, 6: genSolveCubicFactor, 7: genBinomialCoefficient16, 8: genLogEquationSolve },
+  'age16-functions2':      { 1: genFunctionTransformations, 2: genInverseFunctions16, 3: genComposite, 4: genSolveForInput, 5: genDomainRange16, 6: genCompositeExpr, 7: genSelfInverse, 8: genPiecewiseFunc },
+  'age16-analytical-geo':  { 1: genEquationOfLine16, 2: genVectors2D, 3: genPerpendicular, 4: genCircleEquation, 5: genMidpointDistance, 6: genParallelLine, 7: genCircleCentreRadius, 8: genTangentLength },
+  'age16-stats2':          { 1: genStandardDeviation, 2: genConditionalProbability, 3: genVariance, 4: genExpectedValue, 5: genProbDistribution, 6: genCombinations, 7: genPermutations, 8: genCountingPrinciple },
   // ── Age 17 ────────────────────────────────────────────────────────────────
   'age17-diff':      { 1: genChainRule, 2: genProductRule, 3: genSecondDerivative, 4: genStationaryNature, 5: genMinValue },
   'age17-int':       { 1: genDefiniteIntegral, 2: genAreaUnderCurve, 3: genIntegrateChain, 4: genIntegratePoly, 5: genDefiniteEval },
