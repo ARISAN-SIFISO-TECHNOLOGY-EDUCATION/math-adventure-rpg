@@ -2,8 +2,13 @@
 // Namespaced keys keep this fully separate from the kids' RPG progress
 // (mathProgress / earnedBadges / companionSetup / streakData).
 
+import { safeLoad, safeSave } from '../lib/safeStorage';
+
 const PROGRESS_KEY = 'mathadv-senior-progress';
 const SETTINGS_KEY = 'mathadv-senior-settings';
+
+// Bump when the persisted shape changes incompatibly; add a migration below.
+const SCHEMA_VERSION = 1;
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -38,28 +43,48 @@ export interface SettingsData {
 
 // ─── Loaders ─────────────────────────────────────────────────────────────────
 
+const emptyProgress = (): ProgressData => ({
+  levels: {}, mistakes: [], mockExamScores: [], devUnlockAll: false,
+});
+
+// Accept only well-formed progress objects; anything else degrades to defaults
+// (rather than throwing later on `data.levels[...]`). Tolerant of an extra
+// `_v` schema tag and of older payloads missing newer fields.
+function isProgressData(v: unknown): v is ProgressData {
+  if (typeof v !== 'object' || v === null) return false;
+  const o = v as Record<string, unknown>;
+  return (
+    typeof o.levels === 'object' && o.levels !== null &&
+    Array.isArray(o.mistakes) &&
+    Array.isArray(o.mockExamScores)
+  );
+}
+
 function loadProgress(): ProgressData {
-  try {
-    const raw = localStorage.getItem(PROGRESS_KEY);
-    if (raw) return JSON.parse(raw) as ProgressData;
-  } catch { /* ignore */ }
-  return { levels: {}, mistakes: [], mockExamScores: [], devUnlockAll: false };
+  const data = safeLoad<ProgressData>(PROGRESS_KEY, isProgressData, emptyProgress());
+  // Fill any fields a forward-compatible older payload might lack.
+  return { ...emptyProgress(), ...data };
 }
 
 function saveProgress(data: ProgressData): void {
-  localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
+  safeSave(PROGRESS_KEY, { ...data, _v: SCHEMA_VERSION });
+}
+
+const defaultSettings = (): SettingsData => ({
+  soundEnabled: true, hapticsEnabled: true, darkMode: true,
+});
+
+function isSettingsData(v: unknown): v is SettingsData {
+  return typeof v === 'object' && v !== null;
 }
 
 export function loadSettings(): SettingsData {
-  try {
-    const raw = localStorage.getItem(SETTINGS_KEY);
-    if (raw) return JSON.parse(raw) as SettingsData;
-  } catch { /* ignore */ }
-  return { soundEnabled: true, hapticsEnabled: true, darkMode: true };
+  const data = safeLoad<SettingsData>(SETTINGS_KEY, isSettingsData, defaultSettings());
+  return { ...defaultSettings(), ...data };
 }
 
 export function saveSettings(settings: SettingsData): void {
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  safeSave(SETTINGS_KEY, settings);
 }
 
 // ─── Level key helpers ───────────────────────────────────────────────────────

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PHASES } from '../game/Game';
+import { safeGet } from '../lib/safeStorage';
 
 const GATE_PROBLEMS = [
   { question: '8 + 5 = ?', answer: 13 },
@@ -33,9 +34,10 @@ export default function GrownUpCorner() {
     () => GATE_PROBLEMS[Math.floor(Math.random() * GATE_PROBLEMS.length)]
   );
 
-  const savedProgress = JSON.parse(localStorage.getItem('mathProgress') || 'null') as
-    | { phase: number; levelInPhase: number }
-    | null;
+  const savedProgress = safeGet<{ phase: number; levelInPhase: number } | null>(
+    'mathProgress',
+    null,
+  );
 
   // Replay/skill-guide cover the live kids' RPG only (phases 1–4). Ages 13–17
   // live in The Academy, which has its own progress; clamp so we never open the
@@ -43,7 +45,7 @@ export default function GrownUpCorner() {
   const [selectedPhase, setSelectedPhase] = useState(Math.min(4, savedProgress?.phase ?? 1));
   const [timerMin, setTimerMin] = useState<TimerMin | null>(null);
   const [activeTimer, setActiveTimer] = useState<{ endTime: number; minutes: number } | null>(
-    () => JSON.parse(localStorage.getItem('sessionTimer') || 'null')
+    () => safeGet<{ endTime: number; minutes: number } | null>('sessionTimer', null)
   );
   const [remaining, setRemaining] = useState(() =>
     activeTimer ? formatRemaining(activeTimer.endTime) : ''
@@ -88,7 +90,7 @@ export default function GrownUpCorner() {
         k => localStorage.removeItem(k)
       );
     } else {
-      const p = JSON.parse(localStorage.getItem('mathProgress') || 'null');
+      const p = safeGet<{ phase: number; levelInPhase: number } | null>('mathProgress', null);
       if (p) localStorage.setItem('mathProgress', JSON.stringify({ phase: p.phase, levelInPhase: 1 }));
     }
     setShowResetConfirm(null);

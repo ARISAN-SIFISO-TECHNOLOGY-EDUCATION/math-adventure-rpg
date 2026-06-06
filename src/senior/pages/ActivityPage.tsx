@@ -10,6 +10,7 @@ import {
   type Problem,
 } from '../mathEngine';
 import { recordAttempt, addMistake, recordMockExam } from '../progress';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
 // ─── Option button ────────────────────────────────────────────────────────────
 function OptionBtn({
@@ -210,7 +211,7 @@ function QuestionCard({
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
-export default function ActivityPage() {
+function ActivityPageInner() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -355,5 +356,23 @@ export default function ActivityPage() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+// A bad question (generator edge case) should never white-screen a study session.
+// Wrap the page in its own boundary that recovers back to the age's topic list.
+export default function ActivityPage() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const age = Number(searchParams.get('age') ?? 15);
+  // Masters Quiz (age 0) isn't tied to a topic list — recover home instead.
+  const recoverTo = age >= 13 && age <= 17 ? `/senior/topics/${age}` : '/';
+  return (
+    <ErrorBoundary
+      scopeLabel="this question"
+      onReset={() => navigate(recoverTo, { replace: true })}
+    >
+      <ActivityPageInner />
+    </ErrorBoundary>
   );
 }

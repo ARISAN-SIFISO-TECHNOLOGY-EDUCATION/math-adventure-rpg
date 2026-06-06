@@ -1,5 +1,13 @@
 apply plugin: 'com.android.application'
 
+// Load signing secrets from a gitignored file (android/keystore.properties).
+// Never commit real passwords or the .jks to source control.
+def keystorePropsFile = rootProject.file('keystore.properties')
+def keystoreProps = new Properties()
+if (keystorePropsFile.exists()) {
+    keystoreProps.load(new FileInputStream(keystorePropsFile))
+}
+
 android {
     namespace = "com.sifiso.mathadventurerpg"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -16,15 +24,20 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('math-adventure-rpg-release.jks')
-            storePassword '***REMOVED***'
-            keyAlias 'math-adventure-rpg'
-            keyPassword '***REMOVED***'
+            if (keystoreProps.getProperty('storeFile')) {
+                storeFile file(keystoreProps.getProperty('storeFile'))
+                storePassword keystoreProps.getProperty('storePassword')
+                keyAlias keystoreProps.getProperty('keyAlias')
+                keyPassword keystoreProps.getProperty('keyPassword')
+            }
         }
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            // Sign only when keystore.properties is present (release builds on the dev machine).
+            if (keystoreProps.getProperty('storeFile')) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

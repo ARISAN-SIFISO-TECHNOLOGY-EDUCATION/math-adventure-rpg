@@ -12,6 +12,7 @@ import confetti from 'canvas-confetti';
 import { Companion, type CompanionEmotion } from './Companion';
 import { useNarration } from './useNarration';
 import { registerScreenBack } from '../lib/backHandler';
+import { safeGet } from '../lib/safeStorage';
 
 // --- Types ---
 type GameState = 'START' | 'TUTORIAL' | 'LEVEL_INTRO' | 'PLAYING' | 'VICTORY';
@@ -1328,19 +1329,19 @@ export default function Game() {
   const [gameState, setGameState] = useState<GameState>('START');
   const [phase, setPhase] = useState(() => {
     if (urlPhaseParam) return Math.min(4, Math.max(1, parseInt(urlPhaseParam, 10) || 1));
-    const saved = JSON.parse(localStorage.getItem('mathProgress') || 'null');
+    const saved = safeGet<{ phase?: number } | null>('mathProgress', null);
     return saved?.phase ?? 1;
   });
   const [levelInPhase, setLevelInPhase] = useState(() => {
     if (urlPhaseParam && urlLevelParam) return Math.max(1, parseInt(urlLevelParam, 10) || 1);
     if (urlPhaseParam) return 1;
-    const saved = JSON.parse(localStorage.getItem('mathProgress') || 'null');
+    const saved = safeGet<{ levelInPhase?: number } | null>('mathProgress', null);
     return saved?.levelInPhase ?? 1;
   });
   const [isReplayMode] = useState(!!urlReplayParam);
   const [hasSavedProgress] = useState(() => {
     if (urlPhaseParam) return false;
-    return !!JSON.parse(localStorage.getItem('mathProgress') || 'null');
+    return !!safeGet('mathProgress', null);
   });
   const [progress, setProgress] = useState(0);
   const [coins, setCoins] = useState(0);
@@ -1367,15 +1368,15 @@ export default function Game() {
   const [streakUpdatedToday, setStreakUpdatedToday] = useState(false);
   // Badge system
   const [earnedBadges, setEarnedBadges] = useState<string[]>(() =>
-    JSON.parse(localStorage.getItem('earnedBadges') || '[]')
+    safeGet<string[]>('earnedBadges', [])
   );
   // B5 — companion personalisation
   const [companionName, setCompanionName] = useState(() => {
-    const saved = JSON.parse(localStorage.getItem('companionSetup') || 'null');
+    const saved = safeGet<{ name?: string } | null>('companionSetup', null);
     return saved?.name ?? 'Sparky';
   });
   const [companionEmoji, setCompanionEmoji] = useState(() => {
-    const saved = JSON.parse(localStorage.getItem('companionSetup') || 'null');
+    const saved = safeGet<{ emoji?: string } | null>('companionSetup', null);
     return saved?.emoji ?? '🐉';
   });
   const [showCompanionSetup, setShowCompanionSetup] = useState(() => !localStorage.getItem('companionSetup'));
@@ -1405,7 +1406,7 @@ export default function Game() {
 
   // B4 — initialise streak from localStorage on mount
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('streakData') || 'null');
+    const saved = safeGet<{ streakCount: number; lastPlayDate: string } | null>('streakData', null);
     if (!saved) return;
     const today = new Date().toISOString().slice(0, 10);
     const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
@@ -1456,7 +1457,7 @@ export default function Game() {
   }, [companionEmotion]);
 
   useEffect(() => {
-    const timer = JSON.parse(localStorage.getItem('sessionTimer') || 'null');
+    const timer = safeGet<{ endTime: number } | null>('sessionTimer', null);
     if (timer && Date.now() > timer.endTime) {
       setShowBreakOverlay(true);
       localStorage.removeItem('sessionTimer');
@@ -1466,7 +1467,7 @@ export default function Game() {
   useEffect(() => {
     if (gameState !== 'PLAYING') return;
     const interval = setInterval(() => {
-      const timer = JSON.parse(localStorage.getItem('sessionTimer') || 'null');
+      const timer = safeGet<{ endTime: number } | null>('sessionTimer', null);
       if (timer && Date.now() > timer.endTime) {
         setShowBreakOverlay(true);
         localStorage.removeItem('sessionTimer');
@@ -1558,7 +1559,7 @@ export default function Game() {
       // B4 — streak: award bonus coins on first correct answer of a new streak day
       if (!streakUpdatedToday) {
         const today = new Date().toISOString().slice(0, 10);
-        const saved = JSON.parse(localStorage.getItem('streakData') || 'null');
+        const saved = safeGet<{ streakCount: number; lastPlayDate: string } | null>('streakData', null);
         const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
         const newStreak = saved?.lastPlayDate === yesterday ? (saved.streakCount + 1) : 1;
         const bonus = Math.min(newStreak * 5, 50);

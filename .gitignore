@@ -6,3 +6,9 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Android signing — never commit keystore or secrets
+*.jks
+*.keystore
+keystore.properties
+android/keystore.properties

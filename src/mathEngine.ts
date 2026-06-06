@@ -103,6 +103,35 @@ function multipleOptions(correct: number, step: number, count = 4): number[] {
   return shuffle([...opts].slice(0, count));
 }
 
+/**
+ * Build exactly `n` distinct, shuffled options from the correct answer plus a
+ * list of candidate distractors, padding with freshly generated fallbacks when
+ * candidates collide (e.g. two formulas evaluating to the same value). Works for
+ * mixed number|string options — equality is by String() so "6" and 6 collide.
+ * Use this whenever distractors are *computed* and could coincide.
+ */
+function pickDistinct(
+  correct: number | string,
+  candidates: (number | string)[],
+  fallback: () => number | string,
+  n = 4,
+): (number | string)[] {
+  const seen = new Set<string>([String(correct)]);
+  const out: (number | string)[] = [correct];
+  for (const c of candidates) {
+    if (out.length >= n) break;
+    const key = String(c);
+    if (!seen.has(key)) { seen.add(key); out.push(c); }
+  }
+  let guard = 0;
+  while (out.length < n && guard++ < 200) {
+    const f = fallback();
+    const key = String(f);
+    if (!seen.has(key)) { seen.add(key); out.push(f); }
+  }
+  return shuffle(out);
+}
+
 function gcd(a: number, b: number): number {
   return b === 0 ? a : gcd(b, a % b);
 }
@@ -1778,11 +1807,10 @@ function p4l11(): Problem {
   if (variant === 0) {
     const red = rand(2, 5), blue = rand(2, 5), total = red + blue;
     const ans = fractionStr(red, total);
-    const wrongs = [fractionStr(blue, total), fractionStr(red, total + 1), fractionStr(red + 1, total)].filter(w => w !== ans);
-    while (wrongs.length < 3) wrongs.push(fractionStr(rand(1, total - 1), total + 1));
+    const wrongs = [fractionStr(blue, total), fractionStr(red, total + 1), fractionStr(red + 1, total)];
     return {
       question: `A bag has ${red} red and ${blue} blue balls.\nP(picking red) = ?`,
-      options: shuffle([ans, ...wrongs.slice(0, 3)]),
+      options: pickDistinct(ans, wrongs, () => fractionStr(rand(1, total - 1), total + rand(1, 3))),
       correctAnswer: ans,
       explanation: `P = favourable ÷ total = ${red} ÷ ${total} = ${ans}.`,
     };
@@ -1791,21 +1819,20 @@ function p4l11(): Problem {
     const favorable = rand(1, 3);
     const label = favorable === 1 ? 'a 1' : favorable === 2 ? 'a 1 or 2' : 'a 1, 2 or 3';
     const ans = fractionStr(favorable, 6);
-    const wrongs = [fractionStr(6 - favorable, 6), fractionStr(favorable, 7), fractionStr(favorable + 1, 6)].filter(w => w !== ans);
+    const wrongs = [fractionStr(6 - favorable, 6), fractionStr(favorable, 7), fractionStr(favorable + 1, 6)];
     return {
       question: `A die is rolled.\nP(getting ${label}) = ?`,
-      options: shuffle([ans, ...wrongs.slice(0, 3)]),
+      options: pickDistinct(ans, wrongs, () => fractionStr(rand(1, 5), rand(7, 9))),
       correctAnswer: ans,
       explanation: `P = ${favorable} out of 6 = ${ans}.`,
     };
   }
   const red = rand(2, 5), total = rand(red + 2, red + 5);
   const ans = fractionStr(total - red, total);
-  const wrongs = [fractionStr(red, total), fractionStr(total - red, total + 1), fractionStr(total - red - 1, total)].filter(w => w !== ans);
-  while (wrongs.length < 3) wrongs.push(fractionStr(rand(1, total - 1), total));
+  const wrongs = [fractionStr(red, total), fractionStr(total - red, total + 1), fractionStr(total - red - 1, total)];
   return {
     question: `A bag has ${red} red balls out of ${total} total.\nP(NOT picking red) = ?`,
-    options: shuffle([ans, ...wrongs.slice(0, 3)]),
+    options: pickDistinct(ans, wrongs, () => fractionStr(rand(1, total - 1), total + rand(1, 3))),
     correctAnswer: ans,
     explanation: `P(not red) = ${total - red} ÷ ${total} = ${ans}.`,
   };
@@ -1817,9 +1844,10 @@ function p4l12(): Problem {
   if (variant === 0) {
     const a = rand(2, 6), b = rand(2, 8), c = rand(2, 8);
     const ans = `${a * b} + ${a * c}`;
+    const wrongs = [`${a + b} + ${a + c}`, `${a * b} + ${c}`, `${a * (b + c)}`];
     return {
       question: `Expand: ${a}(${b} + ${c})`,
-      options: shuffle([ans, `${a + b} + ${a + c}`, `${a * b} + ${c}`, `${a * (b + c)}`]),
+      options: pickDistinct(ans, wrongs, () => `${a * b + rand(1, 4)} + ${a * c}`),
       correctAnswer: ans,
       explanation: `${a}×${b} + ${a}×${c} = ${a*b} + ${a*c}.`,
     };
@@ -1827,18 +1855,20 @@ function p4l12(): Problem {
   if (variant === 1) {
     const a = rand(2, 6), b = rand(5, 12), c = rand(2, b - 2);
     const ans = `${a * b} − ${a * c}`;
+    const wrongs = [`${a + b} − ${a + c}`, `${a * b} − ${c}`, `${a * (b - c)}`];
     return {
       question: `Expand: ${a}(${b} − ${c})`,
-      options: shuffle([ans, `${a + b} − ${a + c}`, `${a * b} − ${c}`, `${a * (b - c)}`]),
+      options: pickDistinct(ans, wrongs, () => `${a * b + rand(1, 4)} − ${a * c}`),
       correctAnswer: ans,
       explanation: `${a}×${b} − ${a}×${c} = ${a*b} − ${a*c}.`,
     };
   }
   const a = rand(2, 7), b = rand(2, 7);
   const ans = `${a + b}x`;
+  const wrongs = [`${a * b}x`, `${Math.abs(a - b)}x`, `${a + b + 1}x`];
   return {
     question: `Simplify: ${a}x + ${b}x`,
-    options: shuffle([ans, `${a * b}x`, `${Math.abs(a - b)}x`, `${a + b + 1}x`]),
+    options: pickDistinct(ans, wrongs, () => `${a + b + rand(2, 6)}x`),
     correctAnswer: ans,
     explanation: `Collect like terms: (${a} + ${b})x = ${a + b}x.`,
   };
