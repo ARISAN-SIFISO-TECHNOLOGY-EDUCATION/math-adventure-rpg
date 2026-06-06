@@ -21,39 +21,6 @@ function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Like rand() but skips one excluded value — useful to avoid accidentally
-// picking the correct answer as a distractor.
-function randInt(min: number, max: number, exclude: number | null = null): number {
-  let n: number;
-  do { n = Math.floor(Math.random() * (max - min + 1)) + min; }
-  while (exclude !== null && n === exclude && max - min > 0);
-  return n;
-}
-
-// Generates `count` unique shuffled options including `correct`.
-// Uses a relative delta so distractors stay plausible regardless of answer magnitude.
-// Guarantees fill via sequential fallback — no duplicates possible.
-function generateDistractors(correct: number, delta = 5, count = 4): string[] {
-  const isFloat = !Number.isInteger(correct) || !Number.isInteger(delta);
-  const step = !Number.isInteger(delta) ? delta : (isFloat ? 0.5 : 1);
-  const range = Math.max(4, Math.ceil(delta / step));
-  const dist = new Set<string>();
-  dist.add(isFloat ? correct.toFixed(2) : String(correct));
-  let attempts = 0;
-  while (dist.size < count && attempts < 100) {
-    attempts++;
-    const offset = randInt(-range, range, 0);
-    const wrong = correct + offset * step;
-    dist.add(isFloat ? wrong.toFixed(2) : String(wrong));
-  }
-  let fallback = 1;
-  while (dist.size < count) {
-    dist.add(isFloat ? (correct + fallback * step).toFixed(2) : String(correct + fallback * step));
-    fallback++;
-  }
-  return shuffle(Array.from(dist));
-}
-
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -89,18 +56,6 @@ function numericOptions(
     fill++;
   }
   return shuffle([...opts]);
-}
-
-/** Nearest clean multiples of `step` around `correct` (for rounding questions). */
-function multipleOptions(correct: number, step: number, count = 4): number[] {
-  const opts = new Set<number>([correct]);
-  const directions = [-3, -2, -1, 1, 2, 3];
-  for (const d of directions) {
-    if (opts.size >= count) break;
-    const candidate = correct + d * step;
-    if (candidate >= 0) opts.add(candidate);
-  }
-  return shuffle([...opts].slice(0, count));
 }
 
 /**
@@ -536,15 +491,8 @@ function p2l8(): Problem {
   const hour = rand(1, 12);
   const minuteOpts = [0, 15, 30, 45];
   const minute = minuteOpts[rand(0, minuteOpts.length - 1)];
-  const minuteStr = minute === 0 ? "o'clock" : `${minute} minutes past ${hour}`;
-  const ans = minute === 0 ? hour * 100 : hour * 100 + minute; // encode as hhmm integer
-  const distractors = [
-    (hour === 12 ? 1 : hour + 1) * 100 + minute,
-    (hour === 1 ? 12 : hour - 1) * 100 + minute,
-    hour * 100 + (minute === 45 ? 30 : minute + 15),
-  ].filter(v => v !== ans);
 
-  // Simpler variant: just ask what time it is
+  // Ask what time it will be after a few hours.
   const addHours = rand(1, 4);
   const newHour = ((hour - 1 + addHours) % 12) + 1;
   return {
@@ -1558,10 +1506,7 @@ function p4l3(): Problem {
   // Reverse percentage: after-discount price → original
   const discountPct = [10, 20, 25][rand(0, 2)];
   const remaining = 100 - discountPct;
-  // original × remaining/100 = salePrice
-  const multiplier = rand(2, 10);
-  const original = multiplier * (100 / (100 - discountPct)) * (100 - discountPct) / 100 * (100 / remaining) * remaining;
-  // Simpler: pick original cleanly divisible
+  // Pick an original price that divides cleanly by the remaining percentage.
   const origClean = rand(3, 15) * (100 / gcd(remaining, 100)) * (remaining / 100);
   const salePrice = Math.round(origClean * remaining / 100);
   const origRound = Math.round(origClean);

@@ -613,7 +613,6 @@ function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: 
 
   const badgeBg  = world ? world.badge : 'bg-[#FEF9C3]';
   const tipBg    = world ? world.bg    : 'bg-[#DCFCE7]';
-  const tipBorder = world ? '' : 'border-[#22C55E]';
   const tipColor  = world ? '' : 'text-[#15803D]';
   const btnColor  = world ? world.color : '#3B82F6';
 
@@ -818,8 +817,9 @@ export default function Game() {
   const [companionMessage, setCompanionMessage] = useState<string | null>(null);
   // B2 — explanatory feedback
   const [wrongAttempts, setWrongAttempts] = useState(0);
-  // Phase 5+ strict mode: track wrong questions across the whole level
-  const [levelWrongCount, setLevelWrongCount] = useState(0);
+  // Legacy per-level failure overlay (was phase 5+ only; now retired but kept
+  // harmless). The wrong-count value is no longer read — keep only the setter.
+  const [, setLevelWrongCount] = useState(0);
   const [levelFailed, setLevelFailed] = useState(false);
   // B3 — boss level tracking
   const [bossDefeated, setBossDefeated] = useState(false);
@@ -847,7 +847,7 @@ export default function Game() {
   const [completedLevel, setCompletedLevel] = useState(1);
 
   const { muted, toggleMute, startBGM, stopBGM, playClick, playCorrect, playWrong, playVictory } = useSoundSystem();
-  const { speakQuestion, speakCorrect, speakWrong, speakLevelUp, speakVictory, speakWelcome } = useNarration(muted);
+  const { speakQuestion, speakCorrect, speakWrong, speakVictory, speakWelcome } = useNarration(muted);
 
   const currentPhaseConfig = PHASES[phase - 1];
 

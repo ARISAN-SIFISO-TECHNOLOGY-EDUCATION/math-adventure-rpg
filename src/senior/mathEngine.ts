@@ -1224,7 +1224,6 @@ function genSequences(): Problem {
     const d = randInt(1, 8);
     const n = randInt(5, 12);
     const correct = `${a + (n - 1) * d}`;
-    const tn = `${a} + (n−1)×${d}`;
     return {
       id: uid(),
       question: `Arithmetic sequence: first term ${a}, common difference ${d}.\n\nFind T${n}.`,
@@ -1641,7 +1640,6 @@ function genFunctionsDomain(): Problem {
   } else {
     // Inverse function
     const a = randInt(2, 5), b = randInt(1, 8);
-    const numStr = b >= 0 ? `+ ${b}` : `− ${Math.abs(b)}`;
     const correct = `f⁻¹(x) = (x − ${b}) / ${a}`;
     return {
       id: uid(),
@@ -1724,7 +1722,6 @@ function genFunctionsGraphs(): Problem {
     const B = -(p + q), C = p * q;
     const bStr = B >= 0 ? `+ ${B}` : `− ${Math.abs(B)}`;
     const cStr = C >= 0 ? `+ ${C}` : `− ${Math.abs(C)}`;
-    const tp = `(${(p + q) / 2}, ${-((p + q) / 2 - p) * ((p + q) / 2 - q)})`;
     const correct = `roots: x = ${p} and x = ${q}`;
     return {
       id: uid(),
@@ -8221,7 +8218,7 @@ function genCongruency14(): Problem {
 
 // ── age14-geometry L6 — Similar Triangles ────────────────────────────────────
 function genSimilarTriangles14(): Problem {
-  const k = randInt(2, 4), s1 = randInt(2, 5), s2 = randInt(3, 6);
+  const k = randInt(2, 4), s2 = randInt(3, 6);
   return {
     id: uid(),
     question: `Two triangles are similar with scale factor ${k}.\nA side on the small triangle is ${s2}.\n\nFind the matching side on the large triangle.`,

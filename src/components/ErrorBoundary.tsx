@@ -20,10 +20,6 @@ interface State {
  * a one-tap escape hatch back to a working screen.
  */
 export default class ErrorBoundary extends Component<Props, State> {
-  // This repo has no @types/react yet (Phase-2 cleanup), so the inherited
-  // Component members aren't typed — declare the ones we use.
-  declare props: Props;
-  declare setState: (state: Partial<State>) => void;
   state: State = { hasError: false, error: null };
 
   static getDerivedStateFromError(error: Error): State {
