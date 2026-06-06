@@ -8,6 +8,8 @@ import {
   isTopicTestPassed,
   getMockExamScores,
   getMistakes,
+  getStreak,
+  getDailyProgress,
 } from '../progress';
 import SeniorNav from '../SeniorNav';
 
@@ -36,6 +38,9 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const mockScores = getMockExamScores();
   const mistakes = getMistakes();
+  const streak = getStreak();
+  const daily = getDailyProgress();
+  const goalMet = daily.passed >= daily.goal;
 
   // Aggregate stats across the OPEN schools only (locked schools aren't playable).
   let totalPassed = 0;
@@ -76,6 +81,52 @@ export default function DashboardPage() {
         </motion.button>
         <h1 className="text-xl font-outfit font-extrabold text-white">Dashboard</h1>
       </div>
+
+      {/* Daily goal + streak — the habit loop */}
+      <div className="bg-slate-800 rounded-2xl p-4 mb-3">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <Flame className={`w-5 h-5 ${streak.count > 0 ? 'text-sprout-orange' : 'text-slate-600'}`} />
+            <span className="text-white font-outfit font-bold">
+              {streak.count > 0 ? `${streak.count}-day streak` : 'Start a streak today'}
+            </span>
+          </div>
+          <span className="text-slate-400 text-xs font-inter">
+            {goalMet ? '✓ Goal done' : `${daily.passed}/${daily.goal} today`}
+          </span>
+        </div>
+        <div className="h-2 bg-slate-700 rounded-full overflow-hidden" role="progressbar" aria-valuenow={daily.passed} aria-valuemin={0} aria-valuemax={daily.goal} aria-label="Daily goal progress">
+          <motion.div
+            className={`h-full rounded-full ${goalMet ? 'bg-sprout-green' : 'bg-teal'}`}
+            initial={{ width: 0 }}
+            animate={{ width: `${Math.min(100, (daily.passed / daily.goal) * 100)}%` }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          />
+        </div>
+        <p className="text-slate-500 text-xs font-inter mt-2">
+          {goalMet
+            ? 'Daily goal smashed — come back tomorrow to keep the streak alive.'
+            : `Pass ${daily.goal - daily.passed} more level${daily.goal - daily.passed === 1 ? '' : 's'} to hit today’s goal.`}
+        </p>
+      </div>
+
+      {/* Mistake Book nudge — surface the built-but-easy-to-forget review tool */}
+      {mistakes.length > 0 && (
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          onClick={() => navigate('/senior/mistakes')}
+          className="w-full bg-sprout-pink/10 border border-sprout-pink/30 rounded-2xl p-4 mb-3 flex items-center gap-3 text-left"
+        >
+          <BookOpen className="w-5 h-5 text-sprout-pink flex-shrink-0" />
+          <div className="flex-1">
+            <p className="text-white font-outfit font-semibold text-sm">Review your mistakes</p>
+            <p className="text-slate-400 text-xs font-inter">
+              {mistakes.length} saved question{mistakes.length === 1 ? '' : 's'} to revisit — your fastest marks.
+            </p>
+          </div>
+          <span className="text-sprout-pink" aria-hidden="true">→</span>
+        </motion.button>
+      )}
 
       {/* Stat grid */}
       <div className="grid grid-cols-2 gap-3">

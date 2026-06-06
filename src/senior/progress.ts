@@ -28,12 +28,28 @@ export interface MistakeEntry {
   timestamp: number;
 }
 
+export interface StreakData {
+  lastActiveDate: string;  // YYYY-MM-DD of the most recent active day
+  count: number;           // current consecutive-day streak
+  longest: number;         // best streak ever
+}
+
+export interface DailyData {
+  date: string;            // YYYY-MM-DD this count applies to
+  passed: number;          // levels newly passed today
+}
+
 export interface ProgressData {
   levels: Record<string, LevelProgress>;   // key: `${topicId}-l${level}` or `${topicId}-test`
   mistakes: MistakeEntry[];
   mockExamScores: { age: number; score: number; date: string }[];
   devUnlockAll: boolean;
+  streak: StreakData;
+  daily: DailyData;
 }
+
+// Levels to pass in a day to hit the daily goal.
+export const DAILY_GOAL = 3;
 
 export interface SettingsData {
   soundEnabled: boolean;
@@ -45,7 +61,30 @@ export interface SettingsData {
 
 const emptyProgress = (): ProgressData => ({
   levels: {}, mistakes: [], mockExamScores: [], devUnlockAll: false,
+  streak: { lastActiveDate: '', count: 0, longest: 0 },
+  daily: { date: '', passed: 0 },
 });
+
+function todayStr(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// Mark today as an active day and roll the consecutive-day streak forward.
+function touchStreak(data: ProgressData): void {
+  const today = todayStr();
+  if (data.streak.lastActiveDate === today) return; // already counted today
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  data.streak.count = data.streak.lastActiveDate === yesterday ? data.streak.count + 1 : 1;
+  data.streak.longest = Math.max(data.streak.longest, data.streak.count);
+  data.streak.lastActiveDate = today;
+}
+
+// Count a newly-passed level toward today's goal.
+function bumpDailyPass(data: ProgressData): void {
+  const today = todayStr();
+  if (data.daily.date !== today) data.daily = { date: today, passed: 0 };
+  data.daily.passed += 1;
+}
 
 // Accept only well-formed progress objects; anything else degrades to defaults
 // (rather than throwing later on `data.levels[...]`). Tolerant of an extra
@@ -199,11 +238,14 @@ export function recordAttempt(topicId: string, level: number, score: number, isT
   const key = isTest ? testKey(topicId) : levelKey(topicId, level);
   const prev = data.levels[key] ?? { bestScore: 0, passed: false, attempts: 0 };
   const bestScore = Math.max(prev.bestScore, score);
+  const passed = bestScore >= 80;
   data.levels[key] = {
     bestScore,
-    passed: bestScore >= 80,
+    passed,
     attempts: prev.attempts + 1,
   };
+  touchStreak(data);
+  if (passed && !prev.passed) bumpDailyPass(data); // count first-time passes only
   saveProgress(data);
 }
 
@@ -223,7 +265,27 @@ export function removeMistake(questionId: string): void {
 export function recordMockExam(age: number, score: number): void {
   const data = loadProgress();
   data.mockExamScores.push({ age, score, date: new Date().toISOString() });
+  touchStreak(data);
   saveProgress(data);
+}
+
+// ─── Retention reads ─────────────────────────────────────────────────────────
+
+/** Current/longest day streak, with the count reset to 0 if a day was missed. */
+export function getStreak(): StreakData {
+  const s = loadProgress().streak;
+  const today = todayStr();
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  // A streak only "counts" if the last active day was today or yesterday.
+  const live = s.lastActiveDate === today || s.lastActiveDate === yesterday;
+  return { ...s, count: live ? s.count : 0 };
+}
+
+/** Levels passed today vs the daily goal. */
+export function getDailyProgress(): { passed: number; goal: number } {
+  const d = loadProgress().daily;
+  const passed = d.date === todayStr() ? d.passed : 0;
+  return { passed, goal: DAILY_GOAL };
 }
 
 export function setDevUnlockAll(value: boolean): void {
