@@ -1,95 +1,11 @@
-// Problem type — IGCSE/CAPS style with marks, working steps, and exam guidance
-export type Problem = {
-  id: string;
-  question: string;
-  correctAnswer: string;
-  options: [string, string, string, string];
-  marks: number;
-  workingSteps: string[];
-  hints: string[];
-  calculatorAllowed: boolean;
-  commonMistake: string;
-  examTip: string;
-};
+import type { Problem, LevelGenerator, TopicLevels } from './engine/types.ts';
+import {
+  randInt, uid, shuffle, makeOptions, gcd, simplify,
+  expOptions, fromCases, comb, perm,
+} from './engine/helpers.ts';
 
-// ── Utilities ─────────────────────────────────────────────────────────────────
-
-function randInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function uid(): string {
-  return Math.random().toString(36).slice(2, 8);
-}
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-// Nudge the last integer found in a string by `delta` — used to synthesise a
-// fresh, plausible distractor ("(7, 3)" → "(7, 4)", "log2(4)" → "log2(5)",
-// "x = 3 or x = 5" → "x = 3 or x = 6").
-function bumpLastNumber(s: string, delta: number): string | null {
-  const matches = [...s.matchAll(/-?\d+/g)];
-  if (matches.length === 0) return null;
-  const m = matches[matches.length - 1];
-  const idx = m.index ?? 0;
-  return s.slice(0, idx) + String(parseInt(m[0], 10) + delta) + s.slice(idx + m[0].length);
-}
-
-function makeOptions(correct: string, wrong: string[]): [string, string, string, string] {
-  // Guarantee four DISTINCT choices. Distractor formulae can coincide with the
-  // correct answer or with each other at edge values (e.g. p×q === p+q, a
-  // repeated root, x === y). We de-duplicate, then — if fewer than three
-  // distinct distractors survive — pad with numeric-neighbour distractors so
-  // the MCQ never renders duplicate or missing options.
-  const seen = new Set<string>([correct]);
-  const distinct: string[] = [];
-  for (const w of wrong) {
-    if (!seen.has(w)) { seen.add(w); distinct.push(w); }
-  }
-  if (distinct.length < 3) {
-    const deltas = [1, -1, 2, -2, 3, -3, 4, -4, 5, -5, 6, -6, 7, -7, 8, -8];
-    for (const d of deltas) {
-      if (distinct.length >= 3) break;
-      for (const base of [...distinct, correct]) {
-        const cand = bumpLastNumber(base, d);
-        if (cand && !seen.has(cand)) { seen.add(cand); distinct.push(cand); break; }
-      }
-    }
-  }
-  return shuffle([correct, ...distinct.slice(0, 3)]) as [string, string, string, string];
-}
-
-function gcd(a: number, b: number): number {
-  return b === 0 ? Math.abs(a) : gcd(b, a % b);
-}
-
-function simplify(num: number, den: number): string {
-  if (den === 0) return '0';
-  const g = gcd(Math.abs(num), Math.abs(den));
-  const n = num / g, d = den / g;
-  return d === 1 ? `${n}` : `${n}/${d}`;
-}
-
-// Build 4 distinct `base^exp` options. Candidate wrong exponents are de-duped
-// against the correct one and each other; if any collide (e.g. p×q === p+q),
-// they're padded with correct±k so the MCQ always has four unique choices.
-function expOptions(base: string, correct: number, candidates: number[]): [string, string, string, string] {
-  const used = new Set<number>([correct]);
-  const wrong: number[] = [];
-  const tryAdd = (e: number) => {
-    if (e >= 0 && !used.has(e) && wrong.length < 3) { used.add(e); wrong.push(e); }
-  };
-  candidates.forEach(tryAdd);
-  for (let k = 1; wrong.length < 3; k++) { tryAdd(correct + k); tryAdd(correct - k); }
-  return makeOptions(`${base}^${correct}`, wrong.map(e => `${base}^${e}`));
-}
+// Re-export Problem so consumers importing from './mathEngine' keep working.
+export type { Problem };
 
 // ── age15-numbers L1 — Surds & Real Numbers ───────────────────────────────────
 
@@ -5369,8 +5285,6 @@ function genFallback(): Problem {
 
 // ── Dispatch ──────────────────────────────────────────────────────────────────
 
-type LevelGenerator = () => Problem;
-type TopicLevels = Record<number, LevelGenerator>;
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  Age 15 (Builders) expansion — bring every topic up to 8 distinct levels.
@@ -5379,20 +5293,6 @@ type TopicLevels = Record<number, LevelGenerator>;
 //  distinct options regardless.
 // ═══════════════════════════════════════════════════════════════════════════
 
-interface CaseDef {
-  q: string; c: string; w: string[]; s: string[]; h: string[];
-  mistake: string; tip: string; m?: number; calc?: boolean;
-}
-
-function fromCases(cases: CaseDef[]): Problem {
-  const c = cases[randInt(0, cases.length - 1)];
-  return {
-    id: uid(), question: c.q, correctAnswer: c.c,
-    options: makeOptions(c.c, c.w), marks: c.m ?? 3,
-    workingSteps: c.s, hints: c.h, calculatorAllowed: c.calc ?? false,
-    commonMistake: c.mistake, examTip: c.tip,
-  };
-}
 
 // ── age15-numeracy L2 — Percentage Change ────────────────────────────────────
 function genPercentChange(): Problem {
@@ -6057,9 +5957,6 @@ function genExactTrigValues(): Problem {
 //  Age 16 (Systems) expansion — bring every topic up to 8 distinct levels.
 // ═══════════════════════════════════════════════════════════════════════════
 
-function factorial(n: number): number { let r = 1; for (let i = 2; i <= n; i++) r *= i; return r; }
-function comb(n: number, r: number): number { return factorial(n) / (factorial(r) * factorial(n - r)); }
-function perm(n: number, r: number): number { return factorial(n) / factorial(n - r); }
 
 // ── age16-trig2 L6 — Graphs of Trig Functions ────────────────────────────────
 function genTrigGraphProps(): Problem {
