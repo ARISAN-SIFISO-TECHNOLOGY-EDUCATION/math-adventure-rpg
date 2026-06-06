@@ -169,6 +169,25 @@ export function revealDevButton(): void {
   } catch { /* ignore */ }
 }
 
+// ─── First-run Academy onboarding ────────────────────────────────────────────
+// Teens land on a dark topic list with mastery gates and no explanation; show a
+// short intro once per device.
+const ONBOARDED_KEY = 'mathadv-senior-onboarded';
+
+export function isAcademyOnboarded(): boolean {
+  try {
+    return localStorage.getItem(ONBOARDED_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function setAcademyOnboarded(): void {
+  try {
+    localStorage.setItem(ONBOARDED_KEY, '1');
+  } catch { /* ignore */ }
+}
+
 // ─── Write helpers ───────────────────────────────────────────────────────────
 
 /**

@@ -5,6 +5,7 @@ import { ArrowLeft, Lock, CheckCircle, BookOpen } from 'lucide-react';
 import { CURRICULUM, type TopicCard } from '../curriculum';
 import { FORMULAS } from '../formulas';
 import SeniorNav from '../SeniorNav';
+import AcademyOnboarding from '../components/AcademyOnboarding';
 import {
   isTopicUnlocked,
   isTopicTestPassed,
@@ -15,6 +16,8 @@ import {
   isDevButtonRevealed,
   revealDevButton,
   getMockExamScores,
+  isAcademyOnboarded,
+  setAcademyOnboarded,
 } from '../progress';
 
 // True only when running the Vite dev server (npm run dev). In a release build
@@ -238,8 +241,16 @@ export default function TopicsPage() {
     }
   }
 
+  // First-run intro to the mastery/exam model (once per device).
+  const [showOnboarding, setShowOnboarding] = useState(!isAcademyOnboarded());
+  function dismissOnboarding() {
+    setAcademyOnboarded();
+    setShowOnboarding(false);
+  }
+
   return (
     <div className="min-h-screen bg-slate-900 max-w-md mx-auto px-4 pb-24">
+      {showOnboarding && <AcademyOnboarding onDone={dismissOnboarding} />}
       {/* Header */}
       <div className="pt-8 pb-4 flex items-center gap-3">
         <motion.button
