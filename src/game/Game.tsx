@@ -239,240 +239,6 @@ const P4_WORLDS = [
   { levels: [11, 12, 13, 14, 15], name: 'The Summit Academy', emoji: '🏆', color: '#7C3AED', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#C4B5FD]' },
 ];
 
-// ─── Phase 5 constants ────────────────────────────────────────────────────────
-
-const P5_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
-  // World 1 — The Iron Citadel
-  1:  { emoji: '⚔️', title: 'Enter the Iron Citadel!',            body: 'Algebra begins — substitute values into expressions and evaluate.', tip: 'Replace x with the given number and calculate.' },
-  2:  { emoji: '🔣', title: 'Double Bracket Expansion',           body: 'Expand (x + a)(x + b) — use FOIL: First, Outer, Inner, Last.', tip: 'FOIL: x² + bx + ax + ab = x² + (a+b)x + ab.' },
-  3:  { emoji: '🔩', title: 'Factorising',                        body: 'Reverse expansion — find the common factor or spot the difference of squares.', tip: 'Find the HCF of all terms first.' },
-  4:  { emoji: '⚖️', title: 'Complex Equations',                 body: 'Solve equations with brackets and fractions — same rules, more steps.', tip: 'Clear brackets first, then isolate x.' },
-  5:  { emoji: '🗡️', title: 'BOSS: The Iron Warden!',            body: 'Full algebra challenge — substitution, expansion, and equations.', tip: 'Take it one step at a time.' },
-  // World 2 — The Storm Fortress
-  6:  { emoji: '⚡', title: 'Enter the Storm Fortress!',          body: 'Pythagoras theorem — c² = a² + b². Find the missing side of any right triangle.', tip: 'Hypotenuse is always the longest side, opposite the right angle.' },
-  7:  { emoji: '📐', title: 'Pythagoras: Shorter Side',           body: 'Find a shorter side: a² = c² − b². Subtract, then square root.', tip: 'Rearrange: a² = c² − b².' },
-  8:  { emoji: '🔀', title: 'Parallel Line Angles',              body: 'Corresponding = equal. Alternate = equal. Co-interior = 180°.', tip: 'Z-angles (alternate) are equal. C-angles (co-interior) add to 180°.' },
-  9:  { emoji: '📈', title: 'Straight Line Functions',            body: 'Gradient = rise ÷ run = (y₂−y₁) ÷ (x₂−x₁). y = mx + c.', tip: 'Gradient tells you how steep the line is.' },
-  10: { emoji: '🌩️', title: 'BOSS: The Storm Marshal!',          body: 'Pythagoras, angles, and straight lines — the fortress is yours to conquer!', tip: 'Identify which formula to use first.' },
-  // World 3 — The Oracle's Nexus
-  11: { emoji: '🔮', title: "Enter the Oracle's Nexus!",          body: 'Scientific notation — write very large numbers as a × 10ⁿ.', tip: 'The number before × 10ⁿ must be between 1 and 10.' },
-  12: { emoji: '➖', title: 'Integer Operations',                 body: 'Negatives: (−)(−) = +. (−)(+) = −. Subtracting a negative = adding.', tip: 'Two negatives make a positive when multiplying or dividing.' },
-  13: { emoji: '🎲', title: 'Advanced Probability',               body: 'P(not A) = 1 − P(A). P(A and B) = P(A) × P(B) for independent events.', tip: 'Always check: do all probabilities add to 1?' },
-  14: { emoji: '📊', title: 'Quartiles and Spread',               body: 'Quartiles split data into four equal parts. IQR = Q3 − Q1.', tip: 'Sort the data first, then find Q1 (25%) and Q3 (75%).' },
-  15: { emoji: '🧠', title: 'FINAL BOSS: The Oracle!',            body: 'The ultimate synthesis — algebra, geometry, data, and probability combined!', tip: 'Identify the topic, choose the right formula, execute.' },
-};
-
-const P5_HINTS: Record<number, string> = {
-  1:  '⚔️ Replace x with the number and calculate.',
-  2:  '🔣 FOIL: x² + (a+b)x + ab.',
-  3:  '🔩 Find the HCF of all terms first.',
-  4:  '⚖️ Clear brackets, then isolate x.',
-  5:  '🗡️ One step at a time.',
-  6:  '⚡ c² = a² + b². Square root at the end.',
-  7:  '📐 a² = c² − b². Subtract then root.',
-  8:  '🔀 Z = equal. C = 180°. F = equal.',
-  9:  '📈 m = (y₂−y₁) ÷ (x₂−x₁).',
-  10: '🌩️ Identify the right formula first.',
-  11: '🔮 1 ≤ a < 10 in a × 10ⁿ.',
-  12: '➖ Two negatives multiplied = positive.',
-  13: '🎲 P(not A) = 1 − P(A).',
-  14: '📊 Sort first, then find the middle.',
-  15: '🧠 Identify the topic, then apply the formula.',
-};
-
-const P5_WORLDS = [
-  { levels: [1, 2, 3, 4, 5],     name: 'The Iron Citadel',    emoji: '⚔️', color: '#4338CA', bgHex: '#EEF2FF', bg: 'bg-[#EEF2FF]', badge: 'bg-[#A5B4FC]' },
-  { levels: [6, 7, 8, 9, 10],    name: 'The Storm Fortress',  emoji: '⚡', color: '#0F766E', bgHex: '#F0FDFA', bg: 'bg-[#F0FDFA]', badge: 'bg-[#99F6E4]' },
-  { levels: [11, 12, 13, 14, 15], name: "The Oracle's Nexus", emoji: '🔮', color: '#6D28D9', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#DDD6FE]' },
-];
-
-// ─── Phase 6 constants ────────────────────────────────────────────────────────
-
-const P6_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
-  // World 1 — The Algebra Lab
-  1:  { emoji: '🧪', title: 'Enter the Algebra Lab!',             body: 'Exponent laws — multiply powers of the same base by adding their exponents.',            tip: 'a^m × a^n = a^(m+n). Same base? Add the exponents.' },
-  2:  { emoji: '0️⃣', title: 'Zero and Negative Exponents',        body: 'Any number to the power 0 equals 1. Negative exponents mean "take the reciprocal".',      tip: 'a^0 = 1. a^(−n) = 1/aⁿ.' },
-  3:  { emoji: '🔬', title: 'Trinomial Factorising',              body: 'Reverse expansion — find two numbers that ADD to the middle and MULTIPLY to the last.',    tip: 'x² + 5x + 6: find factors of 6 that add to 5 → 2 and 3.' },
-  4:  { emoji: '💰', title: 'Financial Maths',                    body: 'VAT is 15% added to a price. Hire purchase = deposit + balance. Exchange rates convert currencies.', tip: 'Including VAT = price × 1.15.' },
-  5:  { emoji: '⚗️', title: 'BOSS: The Lab Master!',              body: 'Exponent laws, trinomial factorising, and financial maths — all in one challenge!',        tip: 'Identify the topic first, then apply the right rule.' },
-  // World 2 — The Proof Chamber
-  6:  { emoji: '🗺️', title: 'Enter the Proof Chamber!',           body: 'Translations move a shape by a vector (a, b). Add the vector to each coordinate.',       tip: '(x, y) + (a, b) = (x+a, y+b).' },
-  7:  { emoji: '🪞', title: 'Reflections',                        body: 'Over x-axis: y changes sign. Over y-axis: x changes sign. Over y=x: swap x and y.',       tip: 'x-axis reflection: (x, y) → (x, −y).' },
-  8:  { emoji: '🌀', title: 'Rotations',                          body: '90° clockwise: (x, y) → (y, −x). 180°: (x, y) → (−x, −y). 90° anti-clockwise: (x, y) → (−y, x).', tip: '90° clockwise = (y, −x). Memorise this one!' },
-  9:  { emoji: '📏', title: 'Congruency Conditions',              body: 'Triangles are congruent by: SAS, SSS, AAS, or RHS. Match what information is given.',     tip: 'RHS only applies to right-angled triangles.' },
-  10: { emoji: '⚔️', title: 'BOSS: The Proof Master!',            body: 'Combine translations, reflections, rotations, and congruency — the chamber is yours!',    tip: 'Do each transformation in order. Step by step.' },
-  // World 3 — The Data Observatory
-  11: { emoji: '🔭', title: 'Enter the Data Observatory!',        body: 'Five-number summary: Minimum, Q1, Median, Q3, Maximum. Q1 and Q3 are quartiles.',        tip: 'Sort the data first. Q1 = median of lower half.' },
-  12: { emoji: '📐', title: 'Compound Shapes',                    body: 'Split complex shapes into rectangles and triangles. Find each area, then add or subtract.', tip: 'Area of triangle = ½ × base × height.' },
-  13: { emoji: '🌳', title: 'Tree Diagrams',                      body: 'Multiply along branches for "AND" probability. P(A and B) = P(A) × P(B).',               tip: 'Independent events: multiply the probabilities.' },
-  14: { emoji: '💱', title: 'Exchange Rates & Ratio',             body: 'Exchange rate converts currencies. Sharing in a ratio: find 1 part first, then multiply.', tip: '1 part = total ÷ sum of ratio.' },
-  15: { emoji: '🎓', title: 'FINAL BOSS: The Observatory Chief!', body: 'The ultimate Age 14 challenge — algebra, transformations, data, and finance combined!',   tip: 'Read carefully. Identify the topic. Execute.' },
-};
-
-const P6_HINTS: Record<number, string> = {
-  1:  '🧪 a^m × a^n = a^(m+n). Same base, add exponents.',
-  2:  '0️⃣ a^0 = 1. a^(−n) = 1/aⁿ.',
-  3:  '🔬 Find factors of the last number that add to the middle.',
-  4:  '💰 Including VAT = price × 1.15.',
-  5:  '⚗️ Identify the topic first, then apply the rule.',
-  6:  '🗺️ Translation: add the vector to each coordinate.',
-  7:  '🪞 x-axis: y changes sign. y-axis: x changes sign.',
-  8:  '🌀 90° clockwise: (x, y) → (y, −x).',
-  9:  '📏 SAS, SSS, AAS, RHS — match what is given.',
-  10: '⚔️ Apply each transformation step by step.',
-  11: '🔭 Sort first. Q1 = median of lower half.',
-  12: '📐 Split into rectangles and triangles. Area of △ = ½bh.',
-  13: '🌳 Multiply along branches: P(A and B) = P(A) × P(B).',
-  14: '💱 1 part = total ÷ sum of ratio.',
-  15: '🎓 One step at a time — you\'ve got this!',
-};
-
-const P6_WORLDS = [
-  { levels: [1, 2, 3, 4, 5],     name: 'The Algebra Lab',       emoji: '🧪', color: '#0369A1', bgHex: '#F0F9FF', bg: 'bg-[#F0F9FF]', badge: 'bg-[#BAE6FD]' },
-  { levels: [6, 7, 8, 9, 10],    name: 'The Proof Chamber',     emoji: '⚔️', color: '#059669', bgHex: '#F0FDF4', bg: 'bg-[#F0FDF4]', badge: 'bg-[#6EE7B7]' },
-  { levels: [11, 12, 13, 14, 15], name: 'The Data Observatory', emoji: '🔭', color: '#7C3AED', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#C4B5FD]' },
-];
-
-// ─── Phase 7 constants — Age 15 · School of Foundations ───────────────────────
-
-const P7_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
-  // World 1 — The Algebra Foundry
-  1:  { emoji: '🏭', title: 'Enter the Algebra Foundry!',  body: 'Exponent laws and rational exponents — the building blocks of senior-phase algebra.', tip: 'aᵐ × aⁿ = aᵐ⁺ⁿ. And a^(1/2) = √a.' },
-  2:  { emoji: '🔩', title: 'Factorising',                 body: 'Reverse expansion: common factors, difference of squares, and trinomials.', tip: 'a² − b² = (a − b)(a + b).' },
-  3:  { emoji: '➗', title: 'Algebraic Fractions',         body: 'Factorise the top and bottom, then cancel common factors.', tip: '(x² − a²)/(x − a) = x + a.' },
-  4:  { emoji: '⚖️', title: 'Solving Equations',          body: 'Linear, quadratic (by factorising), and simultaneous equations.', tip: 'Factorise quadratics to find the roots.' },
-  5:  { emoji: '🗡️', title: 'BOSS: The Foundry Master!',  body: 'Exponents, factorising, and equations — all together.', tip: 'Identify the type of problem first.' },
-  // World 2 — The Function Observatory
-  6:  { emoji: '🔭', title: 'Enter the Function Observatory!', body: 'Linear number patterns — find the rule and any term.', tip: 'Tₙ = a + (n − 1)d.' },
-  7:  { emoji: '📈', title: 'Lines & Parabolas',          body: 'Functions: intercepts of a line, turning point of a parabola.', tip: 'The y-intercept is y when x = 0.' },
-  8:  { emoji: '〰️', title: 'Hyperbolas & Exponentials',  body: 'Read values and asymptotes from y = a/x + q and y = a·bˣ.', tip: 'y = a/x + q has horizontal asymptote y = q.' },
-  9:  { emoji: '💰', title: 'Finance',                     body: 'Simple and compound interest, growth and decay.', tip: 'Compound: A = P(1 + i)ⁿ.' },
-  10: { emoji: '🌟', title: 'BOSS: The Observatory Keeper!', body: 'Patterns, functions, and finance combined.', tip: 'One step at a time.' },
-  // World 3 — The Geometry Citadel
-  11: { emoji: '🏰', title: 'Enter the Geometry Citadel!', body: 'Trigonometry ratios and special angles in right triangles.', tip: 'SOH-CAH-TOA. sin30° = ½, tan45° = 1.' },
-  12: { emoji: '📐', title: 'Analytical Geometry',         body: 'Distance, midpoint, and gradient between two points.', tip: 'm = (y₂ − y₁)/(x₂ − x₁).' },
-  13: { emoji: '📏', title: 'Euclidean Geometry',          body: 'Angles on lines, in triangles, and in quadrilaterals.', tip: 'Angles in a triangle add to 180°.' },
-  14: { emoji: '📊', title: 'Statistics & Probability',    body: 'Mean, median, and basic probability.', tip: 'P(event) = favourable ÷ total.' },
-  15: { emoji: '🎓', title: 'FINAL BOSS: The Citadel Guardian!', body: 'Trigonometry, geometry, and data — the Age 15 summit!', tip: 'Identify the topic, pick the formula, execute.' },
-};
-
-const P7_HINTS: Record<number, string> = {
-  1: '🏭 aᵐ × aⁿ = aᵐ⁺ⁿ. a^(1/n) = ⁿ√a.',
-  2: '🔩 a² − b² = (a − b)(a + b).',
-  3: '➗ Factorise, then cancel common factors.',
-  4: '⚖️ Factorise quadratics to find the roots.',
-  5: '🗡️ Spot the topic, then apply the rule.',
-  6: '🔭 Tₙ = a + (n − 1)d.',
-  7: '📈 y-intercept: set x = 0. y = x² + q turns at (0, q).',
-  8: '〰️ y = a/x + q → asymptote y = q.',
-  9: '💰 Compound: A = P(1 + i)ⁿ.',
-  10: '🌟 One step at a time.',
-  11: '🏰 SOH-CAH-TOA.',
-  12: '📐 m = (y₂ − y₁)/(x₂ − x₁).',
-  13: '📏 Angles in a triangle add to 180°.',
-  14: '📊 Mean = sum ÷ count.',
-  15: '🎓 Identify, then apply the formula.',
-};
-
-const P7_WORLDS = [
-  { levels: [1, 2, 3, 4, 5],      name: 'The Algebra Foundry',     emoji: '🏭', color: '#B45309', bgHex: '#FFFBEB', bg: 'bg-[#FFFBEB]', badge: 'bg-[#FCD34D]' },
-  { levels: [6, 7, 8, 9, 10],     name: 'The Function Observatory', emoji: '🔭', color: '#0891B2', bgHex: '#ECFEFF', bg: 'bg-[#ECFEFF]', badge: 'bg-[#67E8F9]' },
-  { levels: [11, 12, 13, 14, 15], name: 'The Geometry Citadel',    emoji: '🏰', color: '#4F46E5', bgHex: '#EEF2FF', bg: 'bg-[#EEF2FF]', badge: 'bg-[#A5B4FC]' },
-];
-
-// ─── Phase 8 constants — Age 16 · School of Mastery ───────────────────────────
-
-const P8_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
-  // World 1 — The Quadratic Forge
-  1:  { emoji: '⚒️', title: 'Enter the Quadratic Forge!',  body: 'Exponents and surds — simplify roots and rational powers.', tip: '√(a²b) = a√b.' },
-  2:  { emoji: '🧮', title: 'Quadratic Equations',         body: 'Solve by factorising, by the formula, or by square-rooting.', tip: 'x² = k → x = ±√k.' },
-  3:  { emoji: '🔍', title: 'Discriminant & Roots',        body: 'Δ = b² − 4ac tells you the nature of the roots.', tip: 'Δ > 0 real & unequal; Δ = 0 equal; Δ < 0 non-real.' },
-  4:  { emoji: '🔢', title: 'Quadratic Patterns',          body: 'Sequences with a constant second difference.', tip: 'Second difference = 2a.' },
-  5:  { emoji: '🗡️', title: 'BOSS: The Forge Master!',     body: 'Surds, quadratics, and patterns together.', tip: 'Identify the topic first.' },
-  // World 2 — The Analytical Tower
-  6:  { emoji: '🗼', title: 'Enter the Analytical Tower!',  body: 'Quadratic functions in turning-point form.', tip: 'y = (x − p)² + q turns at (p, q).' },
-  7:  { emoji: '〰️', title: 'Hyperbola & Exponential Shifts', body: 'Find asymptotes after horizontal and vertical shifts.', tip: 'y = a/(x − p) + q: asymptotes x = p, y = q.' },
-  8:  { emoji: '📏', title: 'Parallel & Perpendicular',    body: 'Gradients and equations of straight lines.', tip: 'Perpendicular gradients multiply to −1.' },
-  9:  { emoji: '💰', title: 'Finance',                     body: 'Compound depreciation and growth.', tip: 'Reducing balance: A = P(1 − i)ⁿ.' },
-  10: { emoji: '🌟', title: 'BOSS: The Tower Architect!',  body: 'Functions, lines, and finance combined.', tip: 'Step by step.' },
-  // World 3 — The Trigon Sanctum
-  11: { emoji: '📐', title: 'Enter the Trigon Sanctum!',   body: 'Trig identities and reduction formulae.', tip: 'sin²θ + cos²θ = 1.' },
-  12: { emoji: '📐', title: 'Sine, Cosine & Area Rules',   body: 'Solve any triangle, not just right-angled ones.', tip: 'Area = ½·a·b·sin C.' },
-  13: { emoji: '⭕', title: 'Circle Geometry & Measurement', body: 'Circle theorems and volumes of solids.', tip: 'Angle at centre = 2 × angle at circumference.' },
-  14: { emoji: '🎲', title: 'Probability & Statistics',    body: 'Tree diagrams, independent events, and spread.', tip: 'Independent events: multiply the probabilities.' },
-  15: { emoji: '🎓', title: 'FINAL BOSS: The Sanctum Keeper!', body: 'Trigonometry, geometry, and statistics — the Age 16 summit!', tip: 'Read carefully, then apply.' },
-};
-
-const P8_HINTS: Record<number, string> = {
-  1: '⚒️ √(a²b) = a√b.',
-  2: '🧮 Factorise, or x = ±√k.',
-  3: '🔍 Δ = b² − 4ac.',
-  4: '🔢 Second difference = 2a.',
-  5: '🗡️ Identify the topic first.',
-  6: '🗼 y = (x − p)² + q turns at (p, q).',
-  7: '〰️ Asymptotes: x = p, y = q.',
-  8: '📏 Perpendicular: m = −1/m₁.',
-  9: '💰 Reducing balance: A = P(1 − i)ⁿ.',
-  10: '🌟 Step by step.',
-  11: '📐 sin²θ + cos²θ = 1.',
-  12: '📐 Area = ½·a·b·sin C.',
-  13: '⭕ Centre angle = 2 × circumference angle.',
-  14: '🎲 Independent: multiply the probabilities.',
-  15: '🎓 Read carefully, then apply.',
-};
-
-const P8_WORLDS = [
-  { levels: [1, 2, 3, 4, 5],      name: 'The Quadratic Forge',  emoji: '⚒️', color: '#B91C1C', bgHex: '#FEF2F2', bg: 'bg-[#FEF2F2]', badge: 'bg-[#FCA5A5]' },
-  { levels: [6, 7, 8, 9, 10],     name: 'The Analytical Tower', emoji: '🗼', color: '#7C3AED', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#C4B5FD]' },
-  { levels: [11, 12, 13, 14, 15], name: 'The Trigon Sanctum',   emoji: '📐', color: '#0F766E', bgHex: '#F0FDFA', bg: 'bg-[#F0FDFA]', badge: 'bg-[#99F6E4]' },
-];
-
-// ─── Phase 9 constants — Age 17 · School of Excellence ────────────────────────
-
-const P9_LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
-  // World 1 — The Sequence Spire
-  1:  { emoji: '🌀', title: 'Enter the Sequence Spire!',   body: 'Arithmetic sequences and series.', tip: 'Tₙ = a + (n − 1)d. Sₙ = n/2(2a + (n − 1)d).' },
-  2:  { emoji: '🔁', title: 'Geometric Sequences & Series', body: 'Ratios, terms, and sums — including to infinity.', tip: 'S∞ = a/(1 − r) when |r| < 1.' },
-  3:  { emoji: '➕', title: 'Sigma Notation',              body: 'Compact sums written with Σ.', tip: 'Σ k from 1 to n = n(n + 1)/2.' },
-  4:  { emoji: '💰', title: 'Finance',                     body: 'Future value, present value, and loans.', tip: 'FV = P(1 + i)ⁿ; PV = A/(1 + i)ⁿ.' },
-  5:  { emoji: '🗡️', title: 'BOSS: The Spire Sentinel!',   body: 'Sequences, series, and finance together.', tip: 'Pick the right formula.' },
-  // World 2 — The Calculus Crucible
-  6:  { emoji: '🧮', title: 'Enter the Calculus Crucible!', body: 'Functions, inverses, and logarithms.', tip: 'log_b x is the inverse of bˣ.' },
-  7:  { emoji: '➗', title: 'Limits & First Principles',   body: 'The foundation of the derivative.', tip: 'The derivative of x² is 2x.' },
-  8:  { emoji: '📉', title: 'Differentiation Rules',       body: 'Differentiate polynomials; find stationary points.', tip: 'd/dx(axⁿ) = n·a·xⁿ⁻¹.' },
-  9:  { emoji: '📈', title: 'Tangents & Optimisation',     body: 'Gradients of tangents, rates of change, max/min.', tip: 'Stationary point: f′(x) = 0.' },
-  10: { emoji: '🌟', title: 'BOSS: The Crucible Master!',  body: 'Calculus and functions combined.', tip: 'Differentiate, then solve.' },
-  // World 3 — The Apex Observatory
-  11: { emoji: '🏔️', title: 'Enter the Apex Observatory!', body: 'Equation of a circle and its tangent.', tip: 'x² + y² = r². Centre (a, b) for (x − a)² + (y − b)² = r².' },
-  12: { emoji: '🌐', title: 'Compound & Double Angles',    body: 'Identities that expand and combine angles.', tip: 'sin2θ = 2sinθcosθ; cos2θ = cos²θ − sin²θ.' },
-  13: { emoji: '📐', title: 'Similar Triangles',           body: 'Proportionality and similarity.', tip: 'Corresponding sides are in proportion.' },
-  14: { emoji: '🎲', title: 'Counting & Statistics',       body: 'The counting principle, factorials, and correlation.', tip: 'm × n arrangements; n! orderings.' },
-  15: { emoji: '🏆', title: 'FINAL BOSS: The Apex Challenge!', body: 'The ultimate challenge — every Age 17 skill at once!', tip: 'You have trained for this.' },
-};
-
-const P9_HINTS: Record<number, string> = {
-  1: '🌀 Tₙ = a + (n − 1)d.',
-  2: '🔁 S∞ = a/(1 − r).',
-  3: '➕ Σ k = n(n + 1)/2.',
-  4: '💰 FV = P(1 + i)ⁿ.',
-  5: '🗡️ Pick the right formula.',
-  6: '🧮 log_b means "what power".',
-  7: '➗ d/dx(x²) = 2x.',
-  8: '📉 d/dx(axⁿ) = n·a·xⁿ⁻¹.',
-  9: '📈 Tangent gradient = f′(x).',
-  10: '🌟 Differentiate, then solve.',
-  11: '🏔️ x² + y² = r².',
-  12: '🌐 sin2θ = 2sinθcosθ.',
-  13: '📐 Sides in proportion.',
-  14: '🎲 m × n; n! orderings.',
-  15: '🏆 You have trained for this — go!',
-};
-
-const P9_WORLDS = [
-  { levels: [1, 2, 3, 4, 5],      name: 'The Sequence Spire',    emoji: '🌀', color: '#1D4ED8', bgHex: '#EFF6FF', bg: 'bg-[#EFF6FF]', badge: 'bg-[#93C5FD]' },
-  { levels: [6, 7, 8, 9, 10],     name: 'The Calculus Crucible', emoji: '🧮', color: '#C2410C', bgHex: '#FFF7ED', bg: 'bg-[#FFF7ED]', badge: 'bg-[#FDBA74]' },
-  { levels: [11, 12, 13, 14, 15], name: 'The Apex Observatory',  emoji: '🏔️', color: '#6D28D9', bgHex: '#F5F3FF', bg: 'bg-[#F5F3FF]', badge: 'bg-[#DDD6FE]' },
-];
 
 // ─── Badge System ─────────────────────────────────────────────────────────────
 const BADGES: { id: string; emoji: string; label: string; desc: string }[] = [
@@ -480,11 +246,6 @@ const BADGES: { id: string; emoji: string; label: string; desc: string }[] = [
   { id: 'phase2_complete', emoji: '📚', label: 'Scholar',          desc: 'Complete Lower Primary'    },
   { id: 'phase3_complete', emoji: '🗺️', label: 'Navigator',        desc: 'Complete Higher Primary'   },
   { id: 'phase4_complete', emoji: '🏆', label: 'Legend',           desc: 'Master all 4 phases'       },
-  { id: 'phase5_complete', emoji: '🧠', label: 'Mastermind',       desc: 'Complete Age 13'           },
-  { id: 'phase6_complete', emoji: '🎓', label: 'Graduate',         desc: 'Complete Age 14'           },
-  { id: 'phase7_complete', emoji: '🏭', label: 'Foundationeer',    desc: 'Complete Age 15'           },
-  { id: 'phase8_complete', emoji: '⚒️', label: 'Forge Master',     desc: 'Complete Age 16'           },
-  { id: 'phase9_complete', emoji: '🏆', label: 'Top Scholar',      desc: 'Master all 9 phases'       },
   { id: 'boss_slayer',     emoji: '💀', label: 'Boss Slayer',      desc: 'Defeat your first boss'    },
   { id: 'streak_3',        emoji: '🔥', label: 'Hot Streak',       desc: 'Play 3 days in a row'      },
   { id: 'streak_7',        emoji: '🔥🔥','label': 'On Fire!',      desc: 'Play 7 days in a row'      },
@@ -497,12 +258,7 @@ function getHint(phase: number, levelInPhase: number): string {
   if (phase === 1) return PHASE1_HINTS[levelInPhase] ?? '';
   if (phase === 2) return P2_HINTS[levelInPhase] ?? '';
   if (phase === 3) return P3_HINTS[levelInPhase] ?? '';
-  if (phase === 6) return P6_HINTS[levelInPhase] ?? '';
-  if (phase === 5) return P5_HINTS[levelInPhase] ?? '';
   if (phase === 4) return P4_HINTS[levelInPhase] ?? '';
-  if (phase === 7) return P7_HINTS[levelInPhase] ?? '';
-  if (phase === 8) return P8_HINTS[levelInPhase] ?? '';
-  if (phase === 9) return P9_HINTS[levelInPhase] ?? '';
   return '';
 }
 
@@ -635,151 +391,6 @@ export const PHASES: PhaseConfig[] = [
       { n: 28, topic: 'linear equations with variables on both sides' },
       { n: 29, topic: 'arithmetic sequences — finding terms and missing values' },
       { n: 30, topic: 'final boss: geometry, probability, algebra, and sequences combined' },
-    ],
-  },
-  {
-    id: 5,
-    name: 'Secondary',
-    ageRange: 'Age 13',
-    emoji: '🧠',
-    bgColor: 'bg-[#EEF2FF]',
-    borderColor: 'border-[#818CF8]',
-    badgeBg: 'bg-[#A5B4FC]',
-    levels: [
-      // World 1 — The Iron Citadel
-      { n: 31, topic: 'algebraic substitution — evaluate expressions for a given value of x' },
-      { n: 32, topic: 'expanding double brackets — (x + a)(x + b) using FOIL' },
-      { n: 33, topic: 'factorising — common factor and difference of two squares' },
-      { n: 34, topic: 'solving equations with brackets and fractions' },
-      { n: 35, topic: 'combined algebra boss — substitution, expansion, equations' },
-      // World 2 — The Storm Fortress
-      { n: 36, topic: 'Pythagoras theorem — find the hypotenuse' },
-      { n: 37, topic: 'Pythagoras theorem — find a shorter side' },
-      { n: 38, topic: 'parallel line angle relationships — corresponding, alternate, co-interior' },
-      { n: 39, topic: 'straight line functions — gradient and y = mx + c' },
-      { n: 40, topic: 'combined geometry boss — Pythagoras, angles, and straight lines' },
-      // World 3 — The Oracle's Nexus
-      { n: 41, topic: 'scientific notation — express large numbers as a × 10ⁿ' },
-      { n: 42, topic: 'integer operations — multiplying and subtracting negative numbers' },
-      { n: 43, topic: 'advanced probability — complementary events and independent events' },
-      { n: 44, topic: 'quartiles and interquartile range from a dataset' },
-      { n: 45, topic: 'final boss — algebra, geometry, data, and probability combined' },
-    ],
-  },
-  {
-    id: 6,
-    name: 'Upper Secondary',
-    ageRange: 'Age 14',
-    emoji: '🎓',
-    bgColor: 'bg-[#F0F9FF]',
-    borderColor: 'border-[#7DD3FC]',
-    badgeBg: 'bg-[#BAE6FD]',
-    levels: [
-      // World 1 — The Algebra Lab
-      { n: 46, topic: 'exponent laws — product, quotient, and power rules' },
-      { n: 47, topic: 'zero and negative exponents — a^0 = 1, a^(−n) = 1/aⁿ' },
-      { n: 48, topic: 'trinomial factorising — x² + bx + c = (x + p)(x + q)' },
-      { n: 49, topic: 'financial maths — VAT (15%), hire purchase, deposits' },
-      { n: 50, topic: 'combined algebra boss — exponents, trinomials, financial' },
-      // World 2 — The Proof Chamber
-      { n: 51, topic: 'transformations: translation — move by a vector (a, b)' },
-      { n: 52, topic: 'transformations: reflection — over x-axis, y-axis, y = x' },
-      { n: 53, topic: 'transformations: rotation — 90° and 180° about the origin' },
-      { n: 54, topic: 'congruency conditions — SAS, SSS, AAS, RHS' },
-      { n: 55, topic: 'combined geometry boss — transformations and congruency' },
-      // World 3 — The Data Observatory
-      { n: 56, topic: 'five-number summary — Q1, median, Q3, and IQR' },
-      { n: 57, topic: 'compound shapes — area of combined rectangles and triangles' },
-      { n: 58, topic: 'tree diagrams — compound probability by multiplying branches' },
-      { n: 59, topic: 'exchange rates and dividing in a ratio' },
-      { n: 60, topic: 'final boss — algebra, transformations, data, and finance combined' },
-    ],
-  },
-  {
-    id: 7,
-    name: 'School of Foundations',
-    ageRange: 'Age 15',
-    emoji: '🏭',
-    bgColor: 'bg-[#FFFBEB]',
-    borderColor: 'border-[#FCD34D]',
-    badgeBg: 'bg-[#FDE68A]',
-    levels: [
-      // World 1 — The Algebra Foundry
-      { n: 61, topic: 'exponent laws and rational exponents' },
-      { n: 62, topic: 'factorising — common factor, difference of squares, trinomials' },
-      { n: 63, topic: 'simplifying algebraic fractions' },
-      { n: 64, topic: 'solving linear, quadratic, and simultaneous equations' },
-      { n: 65, topic: 'algebra boss — exponents, factorising, equations' },
-      // World 2 — The Function Observatory
-      { n: 66, topic: 'linear number patterns — general term Tₙ' },
-      { n: 67, topic: 'functions — intercepts of lines and turning points of parabolas' },
-      { n: 68, topic: 'hyperbola and exponential functions — values and asymptotes' },
-      { n: 69, topic: 'finance — simple and compound interest, growth and decay' },
-      { n: 70, topic: 'functions boss — patterns, functions, finance' },
-      // World 3 — The Geometry Citadel
-      { n: 71, topic: 'trigonometry — ratios and special angles' },
-      { n: 72, topic: 'analytical geometry — distance, midpoint, gradient' },
-      { n: 73, topic: 'euclidean geometry — angles in lines, triangles, quadrilaterals' },
-      { n: 74, topic: 'statistics and probability — mean, median, probability' },
-      { n: 75, topic: 'final boss — trigonometry, geometry, and data' },
-    ],
-  },
-  {
-    id: 8,
-    name: 'School of Mastery',
-    ageRange: 'Age 16',
-    emoji: '⚒️',
-    bgColor: 'bg-[#FEF2F2]',
-    borderColor: 'border-[#FCA5A5]',
-    badgeBg: 'bg-[#FECACA]',
-    levels: [
-      // World 1 — The Quadratic Forge
-      { n: 76, topic: 'exponents and surds' },
-      { n: 77, topic: 'quadratic equations — factorising and the quadratic formula' },
-      { n: 78, topic: 'discriminant and nature of roots' },
-      { n: 79, topic: 'quadratic number patterns — constant second difference' },
-      { n: 80, topic: 'algebra boss — surds, quadratics, patterns' },
-      // World 2 — The Analytical Tower
-      { n: 81, topic: 'quadratic functions in turning-point form' },
-      { n: 82, topic: 'hyperbola and exponential shifts — asymptotes' },
-      { n: 83, topic: 'analytical geometry — parallel and perpendicular lines' },
-      { n: 84, topic: 'finance — compound depreciation and growth' },
-      { n: 85, topic: 'functions boss — functions, lines, finance' },
-      // World 3 — The Trigon Sanctum
-      { n: 86, topic: 'trig identities and reduction formulae' },
-      { n: 87, topic: 'sine, cosine, and area rules' },
-      { n: 88, topic: 'circle geometry and measurement' },
-      { n: 89, topic: 'probability and statistics — tree diagrams and spread' },
-      { n: 90, topic: 'final boss — trigonometry, geometry, and statistics' },
-    ],
-  },
-  {
-    id: 9,
-    name: 'School of Excellence',
-    ageRange: 'Age 17',
-    emoji: '🎓',
-    bgColor: 'bg-[#EFF6FF]',
-    borderColor: 'border-[#93C5FD]',
-    badgeBg: 'bg-[#BFDBFE]',
-    levels: [
-      // World 1 — The Sequence Spire
-      { n: 91, topic: 'arithmetic sequences and series' },
-      { n: 92, topic: 'geometric sequences and series, including infinite series' },
-      { n: 93, topic: 'sigma notation' },
-      { n: 94, topic: 'finance — future value, present value, and loans' },
-      { n: 95, topic: 'sequences boss — sequences, series, finance' },
-      // World 2 — The Calculus Crucible
-      { n: 96, topic: 'functions, inverses, and logarithms' },
-      { n: 97, topic: 'limits and the derivative from first principles' },
-      { n: 98, topic: 'differentiation rules and stationary points' },
-      { n: 99, topic: 'tangents, rates of change, and optimisation' },
-      { n: 100, topic: 'calculus boss — calculus and functions' },
-      // World 3 — The Apex Observatory
-      { n: 101, topic: 'equation of a circle and its tangent' },
-      { n: 102, topic: 'compound and double angle identities' },
-      { n: 103, topic: 'proportionality and similar triangles' },
-      { n: 104, topic: 'counting principle, factorials, and correlation' },
-      { n: 105, topic: 'final boss — the apex challenge' },
     ],
   },
 ];
@@ -1108,48 +719,23 @@ function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: 
   const isPhase2 = phase === 2;
   const isPhase3 = phase === 3;
   const isPhase4 = phase === 4;
-  const isPhase5 = phase === 5;
-  const isPhase6 = phase === 6;
-  const isPhase7 = phase === 7;
-  const isPhase8 = phase === 8;
-  const isPhase9 = phase === 9;
 
-  const intro = isPhase9
-    ? (P9_LEVEL_INTROS[levelInPhase] ?? P9_LEVEL_INTROS[1])
-    : isPhase8
-    ? (P8_LEVEL_INTROS[levelInPhase] ?? P8_LEVEL_INTROS[1])
-    : isPhase7
-    ? (P7_LEVEL_INTROS[levelInPhase] ?? P7_LEVEL_INTROS[1])
-    : isPhase6
-    ? (P6_LEVEL_INTROS[levelInPhase] ?? P6_LEVEL_INTROS[1])
-    : isPhase5
-      ? (P5_LEVEL_INTROS[levelInPhase] ?? P5_LEVEL_INTROS[1])
-      : isPhase4
-      ? (P4_LEVEL_INTROS[levelInPhase] ?? P4_LEVEL_INTROS[1])
-      : isPhase3
-        ? (P3_LEVEL_INTROS[levelInPhase] ?? P3_LEVEL_INTROS[1])
-        : isPhase2
-          ? (P2_LEVEL_INTROS[levelInPhase] ?? P2_LEVEL_INTROS[1])
-          : (LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1]);
+  const intro = isPhase4
+    ? (P4_LEVEL_INTROS[levelInPhase] ?? P4_LEVEL_INTROS[1])
+    : isPhase3
+      ? (P3_LEVEL_INTROS[levelInPhase] ?? P3_LEVEL_INTROS[1])
+      : isPhase2
+        ? (P2_LEVEL_INTROS[levelInPhase] ?? P2_LEVEL_INTROS[1])
+        : (LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1]);
 
-  const world = isPhase9
-    ? P9_WORLDS.find(w => w.levels.includes(levelInPhase))
-    : isPhase8
-    ? P8_WORLDS.find(w => w.levels.includes(levelInPhase))
-    : isPhase7
-    ? P7_WORLDS.find(w => w.levels.includes(levelInPhase))
-    : isPhase6
-    ? P6_WORLDS.find(w => w.levels.includes(levelInPhase))
-    : isPhase5
-      ? P5_WORLDS.find(w => w.levels.includes(levelInPhase))
-      : isPhase4
-        ? P4_WORLDS.find(w => w.levels.includes(levelInPhase))
-        : isPhase3
-          ? P3_WORLDS.find(w => w.levels.includes(levelInPhase))
-          : isPhase2
-            ? P2_WORLDS.find(w => w.levels.includes(levelInPhase))
-            : null;
-  const isWorldEntry = (isPhase2 || isPhase3 || isPhase4 || isPhase5 || isPhase6 || isPhase7 || isPhase8 || isPhase9) && world?.levels[0] === levelInPhase;
+  const world = isPhase4
+    ? P4_WORLDS.find(w => w.levels.includes(levelInPhase))
+    : isPhase3
+      ? P3_WORLDS.find(w => w.levels.includes(levelInPhase))
+      : isPhase2
+        ? P2_WORLDS.find(w => w.levels.includes(levelInPhase))
+        : null;
+  const isWorldEntry = (isPhase2 || isPhase3 || isPhase4) && world?.levels[0] === levelInPhase;
 
   const badgeBg  = world ? world.badge : 'bg-[#FEF9C3]';
   const tipBg    = world ? world.bg    : 'bg-[#DCFCE7]';
@@ -1505,14 +1091,9 @@ export default function Game() {
     const isP2WorldEntry = startPhase === 2 && [1, 6, 11, 16].includes(startLevel);
     const isP3WorldEntry = startPhase === 3 && [1, 6, 11].includes(startLevel);
     const isP4WorldEntry = startPhase === 4 && [1, 6, 11].includes(startLevel);
-    const isP5WorldEntry = startPhase === 5 && [1, 6, 11].includes(startLevel);
-    const isP6WorldEntry = startPhase === 6 && [1, 6, 11].includes(startLevel);
-    const isP7WorldEntry = startPhase === 7 && [1, 6, 11].includes(startLevel);
-    const isP8WorldEntry = startPhase === 8 && [1, 6, 11].includes(startLevel);
-    const isP9WorldEntry = startPhase === 9 && [1, 6, 11].includes(startLevel);
     if (startPhase === 1 && !tutorialDone) {
       setGameState('TUTORIAL');
-    } else if (startPhase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry || isP5WorldEntry || isP6WorldEntry || isP7WorldEntry || isP8WorldEntry || isP9WorldEntry) {
+    } else if (startPhase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry) {
       setGameState('LEVEL_INTRO');
       loadQuestion(startPhase, startLevel);
     } else {
@@ -1579,7 +1160,7 @@ export default function Game() {
 
       if (newProgress >= requiredToWin) {
         const wasLastLevel = levelInPhase === currentPhaseConfig.levels.length;
-        const wasLastPhase = phase === 9;
+        const wasLastPhase = phase === 4;
         const wasBonus = isBossLevel(phase, levelInPhase);
 
         setTimeout(() => {
@@ -1610,11 +1191,6 @@ export default function Game() {
             if (phase === 2) awardBadge('phase2_complete');
             if (phase === 3) awardBadge('phase3_complete');
             if (phase === 4) awardBadge('phase4_complete');
-            if (phase === 5) awardBadge('phase5_complete');
-            if (phase === 6) awardBadge('phase6_complete');
-            if (phase === 7) awardBadge('phase7_complete');
-            if (phase === 8) awardBadge('phase8_complete');
-            if (phase === 9) awardBadge('phase9_complete');
           }
           // Award boss-slayer badge
           if (wasBonus) awardBadge('boss_slayer');
@@ -1623,11 +1199,6 @@ export default function Game() {
           const isP2WorldEntry = !wasLastLevel && phase === 2 && [6, 11, 16].includes(nextLevelInPhase);
           const isP3WorldEntry = !wasLastLevel && phase === 3 && [6, 11].includes(nextLevelInPhase);
           const isP4WorldEntry = !wasLastLevel && phase === 4 && [6, 11].includes(nextLevelInPhase);
-          const isP5WorldEntry = !wasLastLevel && phase === 5 && [6, 11].includes(nextLevelInPhase);
-          const isP6WorldEntry = !wasLastLevel && phase === 6 && [6, 11].includes(nextLevelInPhase);
-          const isP7WorldEntry = !wasLastLevel && phase === 7 && [6, 11].includes(nextLevelInPhase);
-          const isP8WorldEntry = !wasLastLevel && phase === 8 && [6, 11].includes(nextLevelInPhase);
-          const isP9WorldEntry = !wasLastLevel && phase === 9 && [6, 11].includes(nextLevelInPhase);
 
           if (wasLastLevel) {
             setIsPhaseTransition(true);
@@ -1649,7 +1220,7 @@ export default function Game() {
             confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#F97316', '#EF4444', '#DC2626'] });
           }
           // Pre-load next question so level intro card is ready
-          if (!wasLastLevel && (phase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry || isP5WorldEntry || isP6WorldEntry || isP7WorldEntry || isP8WorldEntry || isP9WorldEntry)) {
+          if (!wasLastLevel && (phase === 1 || isP2WorldEntry || isP3WorldEntry || isP4WorldEntry)) {
             loadQuestion(phase, nextLevelInPhase);
           }
         }, 1500);
@@ -1666,16 +1237,6 @@ export default function Game() {
       setCompanionMessage(null);
       const newWrong = wrongAttempts + 1;
       setWrongAttempts(newWrong);
-
-      // Phase 5+ strict mode: first wrong on this question counts toward level limit
-      if (phase >= 5 && newWrong === 1) {
-        const newLevelWrong = levelWrongCount + 1;
-        setLevelWrongCount(newLevelWrong);
-        if (newLevelWrong >= 3) {
-          setLevelFailed(true);
-          return; // show failure overlay immediately
-        }
-      }
 
       if (newWrong >= 2) {
         // B2 — reveal correct answer after 2 wrong attempts
@@ -2138,46 +1699,6 @@ export default function Game() {
                       </div>
                     );
                   })()}
-                  {phase === 5 && P5_HINTS[levelInPhase] && (() => {
-                    const w5 = P5_WORLDS.find(w => w.levels.includes(levelInPhase));
-                    return (
-                      <div className="border-2 rounded-2xl px-4 py-2 mb-4 text-center" style={{ background: w5?.bgHex ?? '#EEF2FF', borderColor: w5?.color ?? '#4338CA' }}>
-                        <p className="text-sm font-black" style={{ color: w5?.color ?? '#4338CA' }}>{P5_HINTS[levelInPhase]}</p>
-                      </div>
-                    );
-                  })()}
-                  {phase === 6 && P6_HINTS[levelInPhase] && (() => {
-                    const w6 = P6_WORLDS.find(w => w.levels.includes(levelInPhase));
-                    return (
-                      <div className="border-2 rounded-2xl px-4 py-2 mb-4 text-center" style={{ background: w6?.bgHex ?? '#F0F9FF', borderColor: w6?.color ?? '#0369A1' }}>
-                        <p className="text-sm font-black" style={{ color: w6?.color ?? '#0369A1' }}>{P6_HINTS[levelInPhase]}</p>
-                      </div>
-                    );
-                  })()}
-                  {phase === 7 && P7_HINTS[levelInPhase] && (() => {
-                    const w7 = P7_WORLDS.find(w => w.levels.includes(levelInPhase));
-                    return (
-                      <div className="border-2 rounded-2xl px-4 py-2 mb-4 text-center" style={{ background: w7?.bgHex ?? '#FFFBEB', borderColor: w7?.color ?? '#B45309' }}>
-                        <p className="text-sm font-black" style={{ color: w7?.color ?? '#B45309' }}>{P7_HINTS[levelInPhase]}</p>
-                      </div>
-                    );
-                  })()}
-                  {phase === 8 && P8_HINTS[levelInPhase] && (() => {
-                    const w8 = P8_WORLDS.find(w => w.levels.includes(levelInPhase));
-                    return (
-                      <div className="border-2 rounded-2xl px-4 py-2 mb-4 text-center" style={{ background: w8?.bgHex ?? '#FEF2F2', borderColor: w8?.color ?? '#B91C1C' }}>
-                        <p className="text-sm font-black" style={{ color: w8?.color ?? '#B91C1C' }}>{P8_HINTS[levelInPhase]}</p>
-                      </div>
-                    );
-                  })()}
-                  {phase === 9 && P9_HINTS[levelInPhase] && (() => {
-                    const w9 = P9_WORLDS.find(w => w.levels.includes(levelInPhase));
-                    return (
-                      <div className="border-2 rounded-2xl px-4 py-2 mb-4 text-center" style={{ background: w9?.bgHex ?? '#EFF6FF', borderColor: w9?.color ?? '#1D4ED8' }}>
-                        <p className="text-sm font-black" style={{ color: w9?.color ?? '#1D4ED8' }}>{P9_HINTS[levelInPhase]}</p>
-                      </div>
-                    );
-                  })()}
 
                   {/* Answer buttons — hidden during subitizing flash */}
                   {(!problem?.meta?.isSubitizing || !flashVisible) && (
@@ -2206,8 +1727,8 @@ export default function Game() {
                 <>
                   <div className="text-6xl mb-3">🏆</div>
                   <h2 className="text-4xl font-black mb-3">CHAMPION!</h2>
-                  <p className="text-xl font-bold mb-2">You've mastered all 9 phases!</p>
-                  <p className="text-sm font-bold text-gray-400 mb-6">From Pre-School counting to Age 17 calculus. Incredible!</p>
+                  <p className="text-xl font-bold mb-2">You've mastered all 4 phases!</p>
+                  <p className="text-sm font-bold text-gray-400 mb-6">From Pre-School counting to Advanced Primary. Incredible!</p>
                   <button onClick={startGame}
                     className="bg-[#FFD700] hover:bg-[#F59E0B] text-black px-10 py-4 rounded-full border-4 border-black text-xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto">
                     PLAY AGAIN <Sparkles size={24} />
@@ -2233,7 +1754,7 @@ export default function Game() {
                   </div>
                   <h2 className="text-4xl font-black mb-3">{bossDefeated ? 'BOSS DEFEATED! 💀' : 'LEVEL UP!'}</h2>
                   {(phase === 2 || phase === 3 || phase === 4) && (() => {
-                    const worlds = phase === 6 ? P6_WORLDS : phase === 5 ? P5_WORLDS : phase === 4 ? P4_WORLDS : phase === 3 ? P3_WORLDS : P2_WORLDS;
+                    const worlds = phase === 4 ? P4_WORLDS : phase === 3 ? P3_WORLDS : P2_WORLDS;
                     const w = worlds.find(ww => ww.levels.includes(levelInPhase));
                     if (!w) return null;
                     return (
