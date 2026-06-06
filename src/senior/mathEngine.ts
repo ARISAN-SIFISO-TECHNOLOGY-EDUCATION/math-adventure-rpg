@@ -7114,9 +7114,767 @@ function genIndexEquation14(): Problem {
   ]);
 }
 
+// ── PYTHAG TRIPLES (clean answers for age13 geometry) ────────────────────────
+const TRIPLES13: [number, number, number][] = [[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17], [9, 12, 15], [7, 24, 25]];
+const fmtSign = (k: number) => (k >= 0 ? `+ ${k}` : `− ${-k}`);
+
+// ── age13-geometry L1 — Pythagoras: Hypotenuse ───────────────────────────────
+function genPythagHyp13(): Problem {
+  const [a, b, c] = TRIPLES13[randInt(0, TRIPLES13.length - 1)];
+  return {
+    id: uid(),
+    question: `A right-angled triangle has two shorter sides of ${a} cm and ${b} cm.\n\nFind the length of the hypotenuse.`,
+    correctAnswer: `${c} cm`,
+    options: makeOptions(`${c} cm`, [`${a + b} cm`, `${c + 1} cm`, `${c - 1} cm`]),
+    marks: 3,
+    workingSteps: [`c² = a² + b² = ${a}² + ${b}² = ${a * a} + ${b * b} = ${a * a + b * b}`, `c = √${a * a + b * b} = ${c} cm`],
+    hints: [`Pythagoras: c² = a² + b²`, `The hypotenuse is the longest side (opposite the right angle)`],
+    calculatorAllowed: true,
+    commonMistake: `Adding the sides (${a} + ${b}) instead of squaring them first.`,
+    examTip: `Square, add, then square-root. Show c² = ${a * a + b * b} before rooting.`,
+  };
+}
+
+// ── age13-geometry L2 — Pythagoras: Shorter Side ─────────────────────────────
+function genPythagLeg13(): Problem {
+  const [a, b, c] = TRIPLES13[randInt(0, TRIPLES13.length - 1)];
+  return {
+    id: uid(),
+    question: `A right-angled triangle has hypotenuse ${c} cm and one shorter side ${b} cm.\n\nFind the other shorter side.`,
+    correctAnswer: `${a} cm`,
+    options: makeOptions(`${a} cm`, [`${c - b} cm`, `${a + 1} cm`, `${c + b} cm`]),
+    marks: 3,
+    workingSteps: [`a² = c² − b² = ${c}² − ${b}² = ${c * c} − ${b * b} = ${c * c - b * b}`, `a = √${c * c - b * b} = ${a} cm`],
+    hints: [`Rearrange Pythagoras: a² = c² − b²`, `Subtract (don't add) when finding a shorter side`],
+    calculatorAllowed: true,
+    commonMistake: `Adding instead of subtracting — to find a shorter side, SUBTRACT the squares.`,
+    examTip: `Hypotenuse known → subtract: a² = c² − b².`,
+  };
+}
+
+// ── age13-geometry L3 — Pythagoras Applications ──────────────────────────────
+function genPythagApply13(): Problem {
+  return fromCases([
+    { q: `A ladder 5 m long leans against a wall, its foot 3 m from the wall.\nHow high up the wall does it reach?`, c: '4 m', w: ['2 m', '8 m', '4.5 m'], s: ['height² = 5² − 3² = 25 − 9 = 16', 'height = √16 = 4 m'], h: ['The ladder is the hypotenuse', 'a² = c² − b²'], mistake: 'Adding 5 + 3 or 5 − 3 without squaring.', tip: 'Draw the triangle: ladder = hypotenuse.' },
+    { q: `A ship sails 8 km east, then 6 km north.\nHow far is it from the start (straight line)?`, c: '10 km', w: ['14 km', '2 km', '12 km'], s: ['distance² = 8² + 6² = 64 + 36 = 100', 'distance = √100 = 10 km'], h: ['The straight-line distance is the hypotenuse'], mistake: 'Adding 8 + 6 = 14.', tip: 'East then north → right angle → Pythagoras.' },
+    { q: `A TV screen is 24 cm wide and 7 cm tall.\nFind the diagonal.`, c: '25 cm', w: ['31 cm', '17 cm', '24 cm'], s: ['d² = 24² + 7² = 576 + 49 = 625', 'd = √625 = 25 cm'], h: ['The diagonal is the hypotenuse'], mistake: 'Adding the two sides.', tip: 'Diagonal of a rectangle = hypotenuse.' },
+    { q: `A gate is 12 m wide and 5 m tall.\nFind the length of the diagonal brace.`, c: '13 m', w: ['17 m', '7 m', '12 m'], s: ['d² = 12² + 5² = 144 + 25 = 169', 'd = √169 = 13 m'], h: ['Brace = diagonal = hypotenuse'], mistake: 'Adding 12 + 5.', tip: 'Look for the right angle, then apply Pythagoras.' },
+  ]);
+}
+
+// ── age13-geometry L4 — Angles in a Triangle ─────────────────────────────────
+function genTriangleAngleSum13(): Problem {
+  const a = randInt(40, 80), b = randInt(30, 80);
+  const third = 180 - a - b;
+  return {
+    id: uid(),
+    question: `Two angles of a triangle are ${a}° and ${b}°.\n\nFind the third angle.`,
+    correctAnswer: `${third}°`,
+    options: makeOptions(`${third}°`, [`${180 - a}°`, `${third + 10}°`, `${a + b}°`]),
+    marks: 2,
+    workingSteps: [`Angles in a triangle add up to 180°`, `Third = 180 − ${a} − ${b} = ${third}°`],
+    hints: [`The three angles of a triangle sum to 180°`],
+    calculatorAllowed: false,
+    commonMistake: `Subtracting from 360° instead of 180°.`,
+    examTip: `Triangle angle sum = 180°.`,
+  };
+}
+
+// ── age13-geometry L5 — Angles on Parallel Lines ─────────────────────────────
+function genParallelAngles13(): Problem {
+  return fromCases([
+    { q: `Two parallel lines are cut by a transversal. One angle is 75°.\nFind its CORRESPONDING angle.`, c: '75°', w: ['105°', '15°', '180°'], s: ['Corresponding angles are EQUAL', 'So the angle is 75°'], h: ['Corresponding ("F" shape) angles are equal'], mistake: 'Treating corresponding angles as supplementary.', tip: 'Corresponding angles (F-shape) are equal.' },
+    { q: `Co-interior (allied) angles on parallel lines. One is 110°.\nFind the other.`, c: '70°', w: ['110°', '250°', '20°'], s: ['Co-interior angles add up to 180°', '180 − 110 = 70°'], h: ['Co-interior ("C" shape) angles sum to 180°'], mistake: 'Saying they are equal — co-interior angles are supplementary.', tip: 'Co-interior (C-shape) angles add to 180°.' },
+    { q: `Alternate angles on parallel lines. One is 50°.\nFind the other.`, c: '50°', w: ['130°', '40°', '100°'], s: ['Alternate angles are EQUAL', 'So the angle is 50°'], h: ['Alternate ("Z" shape) angles are equal'], mistake: 'Making them supplementary.', tip: 'Alternate angles (Z-shape) are equal.' },
+    { q: `Vertically opposite angles. One is 130°.\nFind the other.`, c: '130°', w: ['50°', '230°', '65°'], s: ['Vertically opposite angles are EQUAL', 'So the angle is 130°'], h: ['Vertically opposite angles are equal'], mistake: 'Treating them as supplementary.', tip: 'Vertically opposite angles are always equal.' },
+  ]);
+}
+
+// ── age13-geometry L6 — Exterior Angle of a Triangle ─────────────────────────
+function genExteriorAngle13(): Problem {
+  const a = randInt(40, 80), b = randInt(40, 80);
+  return {
+    id: uid(),
+    question: `In a triangle, the two interior angles NOT next to an exterior angle are ${a}° and ${b}°.\n\nFind that exterior angle.`,
+    correctAnswer: `${a + b}°`,
+    options: makeOptions(`${a + b}°`, [`${180 - (a + b)}°`, `${a + b + 10}°`, `${180 - a}°`]),
+    marks: 2,
+    workingSteps: [`Exterior angle = sum of the two opposite interior angles`, `= ${a} + ${b} = ${a + b}°`],
+    hints: [`The exterior angle equals the sum of the two remote interior angles`],
+    calculatorAllowed: false,
+    commonMistake: `Subtracting from 180° — the exterior angle is the SUM of the two far interior angles.`,
+    examTip: `Exterior angle = sum of the two non-adjacent interior angles.`,
+  };
+}
+
+// ── age13-geometry L7 — Angles on a Line / at a Point ────────────────────────
+function genAnglesLinePoint13(): Problem {
+  if (Math.random() < 0.5) {
+    const a = randInt(30, 150);
+    return {
+      id: uid(),
+      question: `Two angles lie on a straight line. One is ${a}°.\n\nFind the other.`,
+      correctAnswer: `${180 - a}°`,
+      options: makeOptions(`${180 - a}°`, [`${360 - a}°`, `${a}°`, `${180 - a + 10}°`]),
+      marks: 2,
+      workingSteps: [`Angles on a straight line add up to 180°`, `180 − ${a} = ${180 - a}°`],
+      hints: [`Angles on a straight line sum to 180°`],
+      calculatorAllowed: false,
+      commonMistake: `Using 360° instead of 180° for a straight line.`,
+      examTip: `Straight line = 180°.`,
+    };
+  }
+  const a = randInt(60, 130), b = randInt(60, 130);
+  return {
+    id: uid(),
+    question: `Three angles meet at a point: ${a}°, ${b}° and x.\n\nFind x.`,
+    correctAnswer: `${360 - a - b}°`,
+    options: makeOptions(`${360 - a - b}°`, [`${180 - a - b < 0 ? 180 : 180 - a - b}°`, `${360 - a}°`, `${360 - a - b + 10}°`]),
+    marks: 2,
+    workingSteps: [`Angles around a point add up to 360°`, `x = 360 − ${a} − ${b} = ${360 - a - b}°`],
+    hints: [`Angles around a point sum to 360°`],
+    calculatorAllowed: false,
+    commonMistake: `Using 180° instead of 360° for angles around a point.`,
+    examTip: `Around a point = 360°.`,
+  };
+}
+
+// ── age13-geometry L8 — Isosceles Triangles ──────────────────────────────────
+function genIsosceles13(): Problem {
+  if (Math.random() < 0.5) {
+    const apex = 2 * randInt(20, 50);
+    const base = (180 - apex) / 2;
+    return {
+      id: uid(),
+      question: `An isosceles triangle has an apex (top) angle of ${apex}°.\n\nFind each base angle.`,
+      correctAnswer: `${base}°`,
+      options: makeOptions(`${base}°`, [`${180 - apex}°`, `${base + 10}°`, `${apex}°`]),
+      marks: 3,
+      workingSteps: [`The two base angles are equal`, `Base angles = (180 − ${apex}) ÷ 2 = ${180 - apex} ÷ 2 = ${base}°`],
+      hints: [`Base angles of an isosceles triangle are equal`, `Subtract the apex from 180, then halve`],
+      calculatorAllowed: false,
+      commonMistake: `Forgetting to halve after subtracting the apex angle.`,
+      examTip: `Two equal base angles: (180 − apex) ÷ 2.`,
+    };
+  }
+  const base = randInt(40, 70);
+  const apex = 180 - 2 * base;
+  return {
+    id: uid(),
+    question: `An isosceles triangle has base angles of ${base}° each.\n\nFind the apex (top) angle.`,
+    correctAnswer: `${apex}°`,
+    options: makeOptions(`${apex}°`, [`${base}°`, `${180 - base}°`, `${apex + 10}°`]),
+    marks: 3,
+    workingSteps: [`The two base angles are equal: ${base}° + ${base}° = ${2 * base}°`, `Apex = 180 − ${2 * base} = ${apex}°`],
+    hints: [`Both base angles are ${base}°`, `Subtract their sum from 180°`],
+    calculatorAllowed: false,
+    commonMistake: `Subtracting only one base angle instead of both.`,
+    examTip: `Apex = 180 − 2 × (base angle).`,
+  };
+}
+
+// ── age13-graphs L1 — Gradient from Two Points ───────────────────────────────
+function genGradient2pts13(): Problem {
+  const m = [-3, -2, -1, 1, 2, 3][randInt(0, 5)];
+  const x1 = randInt(0, 4), dx = randInt(1, 3), x2 = x1 + dx;
+  const y1 = randInt(-3, 5), y2 = y1 + m * dx;
+  return {
+    id: uid(),
+    question: `Find the gradient of the line through (${x1}, ${y1}) and (${x2}, ${y2}).`,
+    correctAnswer: `${m}`,
+    options: makeOptions(`${m}`, [`${-m}`, `${m + 1}`, `${dx}`]),
+    marks: 3,
+    workingSteps: [`m = (y₂ − y₁)/(x₂ − x₁)`, `= (${y2} − ${y1})/(${x2} − ${x1}) = ${m * dx}/${dx} = ${m}`],
+    hints: [`Gradient = rise ÷ run`, `(y₂ − y₁)/(x₂ − x₁)`],
+    calculatorAllowed: false,
+    commonMistake: `Dividing run by rise (upside down).`,
+    examTip: `Keep the order consistent: change in y over change in x.`,
+  };
+}
+
+// ── age13-graphs L2 — Read m and c ───────────────────────────────────────────
+function genReadMC13(): Problem {
+  const m = randInt(2, 5), c = randInt(-5, 5);
+  return {
+    id: uid(),
+    question: `For the line y = ${m}x ${fmtSign(c)}, state the gradient and y-intercept.`,
+    correctAnswer: `gradient ${m}, y-intercept ${c}`,
+    options: makeOptions(`gradient ${m}, y-intercept ${c}`, [`gradient ${c}, y-intercept ${m}`, `gradient ${m + 1}, y-intercept ${c}`, `gradient ${m}, y-intercept ${c + 1}`]),
+    marks: 2,
+    workingSteps: [`Compare with y = mx + c`, `m = ${m} (gradient), c = ${c} (y-intercept)`],
+    hints: [`y = mx + c: m is the gradient, c is the y-intercept`],
+    calculatorAllowed: false,
+    commonMistake: `Swapping m and c.`,
+    examTip: `The number in front of x is the gradient; the constant is the y-intercept.`,
+  };
+}
+
+// ── age13-graphs L3 — y-Intercept ────────────────────────────────────────────
+function genYIntercept13(): Problem {
+  const m = randInt(2, 5), c = randInt(-6, 6);
+  return {
+    id: uid(),
+    question: `Where does y = ${m}x ${fmtSign(c)} cross the y-axis?`,
+    correctAnswer: `(0, ${c})`,
+    options: makeOptions(`(0, ${c})`, [`(${c}, 0)`, `(0, ${m})`, `(0, ${c + 1})`]),
+    marks: 2,
+    workingSteps: [`At the y-axis, x = 0`, `y = ${m}(0) ${fmtSign(c)} = ${c}`, `Point: (0, ${c})`],
+    hints: [`Set x = 0`],
+    calculatorAllowed: false,
+    commonMistake: `Writing (${c}, 0) — the y-intercept has x = 0.`,
+    examTip: `y-intercept: set x = 0. It's the constant c.`,
+  };
+}
+
+// ── age13-graphs L4 — x-Intercept ────────────────────────────────────────────
+function genXIntercept13(): Problem {
+  const r = randInt(1, 5), m = randInt(2, 4), c = -m * r;
+  return {
+    id: uid(),
+    question: `Where does y = ${m}x ${fmtSign(c)} cross the x-axis?`,
+    correctAnswer: `(${r}, 0)`,
+    options: makeOptions(`(${r}, 0)`, [`(0, ${c})`, `(${-r}, 0)`, `(${r + 1}, 0)`]),
+    marks: 3,
+    workingSteps: [`At the x-axis, y = 0`, `${m}x ${fmtSign(c)} = 0 → ${m}x = ${m * r}`, `x = ${r}, so (${r}, 0)`],
+    hints: [`Set y = 0 and solve for x`],
+    calculatorAllowed: false,
+    commonMistake: `Setting x = 0 — that gives the y-intercept, not the x-intercept.`,
+    examTip: `x-intercept: set y = 0.`,
+  };
+}
+
+// ── age13-graphs L5 — Point on a Line ────────────────────────────────────────
+function genPointOnLine13(): Problem {
+  const m = randInt(2, 4), c = randInt(-4, 5), x = randInt(1, 6);
+  const y = m * x + c;
+  return {
+    id: uid(),
+    question: `Find y when x = ${x} on the line y = ${m}x ${fmtSign(c)}.`,
+    correctAnswer: `${y}`,
+    options: makeOptions(`${y}`, [`${m * x}`, `${y + m}`, `${m + x + c}`]),
+    marks: 2,
+    workingSteps: [`Substitute x = ${x}`, `y = ${m}(${x}) ${fmtSign(c)} = ${m * x} ${fmtSign(c)} = ${y}`],
+    hints: [`Put x = ${x} into the equation`],
+    calculatorAllowed: false,
+    commonMistake: `Forgetting to add the constant ${c}.`,
+    examTip: `Substitute the x-value and simplify.`,
+  };
+}
+
+// ── age13-graphs L6 — Parallel Lines ─────────────────────────────────────────
+function genParallelGradient13(): Problem {
+  return fromCases([
+    { q: `A line has gradient 3.\nWhat is the gradient of any line parallel to it?`, c: '3', w: ['−3', '1/3', '−1/3'], s: ['Parallel lines have the SAME gradient', 'Gradient = 3'], h: ['Parallel → equal gradients'], mistake: 'Using the negative reciprocal (that is perpendicular).', tip: 'Parallel lines share the same gradient.' },
+    { q: `Which line is parallel to y = 4x + 2?`, c: 'y = 4x − 7', w: ['y = −4x + 2', 'y = 2x + 4', 'y = (1/4)x + 2'], s: ['Parallel means the same gradient (4)', 'y = 4x − 7 has gradient 4'], h: ['Match the number in front of x'], mistake: 'Matching the y-intercept instead of the gradient.', tip: 'Same gradient → parallel.' },
+    { q: `Are y = 2x + 1 and y = 2x − 5 parallel?`, c: 'Yes — same gradient', w: ['No — different y-intercepts', 'No — they cross', 'Only at x = 0'], s: ['Both have gradient 2', 'Equal gradients → parallel'], h: ['Compare the gradients'], mistake: 'Thinking different y-intercepts means not parallel.', tip: 'Different y-intercepts but equal gradients = parallel.' },
+    { q: `Parallel lines always have ______ gradients.`, c: 'equal', w: ['opposite', 'reciprocal', 'zero'], s: ['Parallel ⇒ equal gradients'], h: ['Think about lines that never meet'], mistake: 'Confusing with perpendicular (negative reciprocal).', tip: 'Parallel = equal gradients.' },
+  ]);
+}
+
+// ── age13-graphs L7 — Find x from y (table) ──────────────────────────────────
+function genTableValue13(): Problem {
+  const m = randInt(2, 4), x = randInt(1, 6), c = randInt(-3, 5);
+  const y = m * x + c;
+  return {
+    id: uid(),
+    question: `For y = ${m}x ${fmtSign(c)}, find the value of x when y = ${y}.`,
+    correctAnswer: `${x}`,
+    options: makeOptions(`${x}`, [`${x + 1}`, `${y - c}`, `${y}`]),
+    marks: 3,
+    workingSteps: [`${m}x ${fmtSign(c)} = ${y}`, `${m}x = ${y - c}`, `x = ${x}`],
+    hints: [`Substitute y = ${y}, then solve for x`],
+    calculatorAllowed: false,
+    commonMistake: `Forgetting to undo the constant before dividing.`,
+    examTip: `Treat it as an equation: solve for x.`,
+  };
+}
+
+// ── age13-graphs L8 — Midpoint ───────────────────────────────────────────────
+function genMidpointGraph13(): Problem {
+  const x1 = randInt(0, 8), x2 = x1 + 2 * randInt(1, 4);
+  const y1 = randInt(0, 8), y2 = y1 + 2 * randInt(1, 4);
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  return {
+    id: uid(),
+    question: `Find the midpoint of (${x1}, ${y1}) and (${x2}, ${y2}).`,
+    correctAnswer: `(${mx}, ${my})`,
+    options: makeOptions(`(${mx}, ${my})`, [`(${x2 - x1}, ${y2 - y1})`, `(${x1 + x2}, ${y1 + y2})`, `(${mx + 1}, ${my})`]),
+    marks: 2,
+    workingSteps: [`Midpoint = ((x₁+x₂)/2, (y₁+y₂)/2)`, `= ((${x1}+${x2})/2, (${y1}+${y2})/2) = (${mx}, ${my})`],
+    hints: [`Average the x's and the y's`],
+    calculatorAllowed: false,
+    commonMistake: `Subtracting the coordinates instead of averaging.`,
+    examTip: `Midpoint = average of the endpoints.`,
+  };
+}
+
+// ── age13-numbers L1 — Adding & Subtracting Integers ─────────────────────────
+function genIntegerAddSub13(): Problem {
+  const t = randInt(0, 2);
+  let q: string, ans: number;
+  if (t === 0) { const a = randInt(2, 9), x = randInt(2, 12); q = `(−${a}) + ${x}`; ans = x - a; }
+  else if (t === 1) { const x = randInt(1, 9), p = randInt(2, 9); q = `${x} − (−${p})`; ans = x + p; }
+  else { const a = randInt(2, 9), b = randInt(2, 9); q = `(−${a}) − ${b}`; ans = -(a + b); }
+  return {
+    id: uid(),
+    question: `Calculate:  ${q}`,
+    correctAnswer: `${ans}`,
+    options: makeOptions(`${ans}`, [`${-ans}`, `${ans + 1}`, `${ans - 1}`]),
+    marks: 2,
+    workingSteps: [t === 1 ? `Subtracting a negative is the same as adding: ${q} = ${ans}` : `${q} = ${ans}`],
+    hints: [`Two minus signs together make a plus`, `Use a number line if unsure`],
+    calculatorAllowed: false,
+    commonMistake: `Mishandling the double negative — − (−p) becomes + p.`,
+    examTip: `− (−n) = + n.`,
+  };
+}
+
+// ── age13-numbers L2 — Multiplying & Dividing Integers ───────────────────────
+function genIntegerMulDiv13(): Problem {
+  const t = randInt(0, 2);
+  const a = randInt(2, 9), b = randInt(2, 9);
+  let q: string, ans: number;
+  if (t === 0) { q = `(−${a}) × ${b}`; ans = -(a * b); }
+  else if (t === 1) { q = `(−${a}) × (−${b})`; ans = a * b; }
+  else { q = `${a * b} ÷ (−${b})`; ans = -a; }
+  return {
+    id: uid(),
+    question: `Calculate:  ${q}`,
+    correctAnswer: `${ans}`,
+    options: makeOptions(`${ans}`, [`${-ans}`, `${ans + 1}`, `${ans - 1}`]),
+    marks: 2,
+    workingSteps: [`Apply the sign rule, then the numbers`, `${q} = ${ans}`],
+    hints: [`Same signs → positive; different signs → negative`],
+    calculatorAllowed: false,
+    commonMistake: `Getting the sign wrong — two negatives multiply to a positive.`,
+    examTip: `(−)(−) = +,  (−)(+) = −.`,
+  };
+}
+
+// ── age13-numbers L3 — Order of Operations (BODMAS) ──────────────────────────
+function genBODMAS13(): Problem {
+  const t = randInt(0, 2);
+  const a = randInt(2, 9), b = randInt(2, 6), c = randInt(2, 6);
+  let q: string, ans: number;
+  if (t === 0) { q = `${a} + ${b} × ${c}`; ans = a + b * c; }
+  else if (t === 1) { q = `(${a} + ${b}) × ${c}`; ans = (a + b) * c; }
+  else { q = `${a} × ${b} − ${c}`; ans = a * b - c; }
+  return {
+    id: uid(),
+    question: `Calculate:  ${q}`,
+    correctAnswer: `${ans}`,
+    options: makeOptions(`${ans}`, [`${(a + b) * c === ans ? a + b * c : (a + b) * c}`, `${ans + 1}`, `${ans - 2}`]),
+    marks: 2,
+    workingSteps: [`Follow BODMAS: brackets, then × ÷, then + −`, `${q} = ${ans}`],
+    hints: [`Do brackets and multiplication before addition`],
+    calculatorAllowed: false,
+    commonMistake: `Working strictly left to right instead of following BODMAS.`,
+    examTip: `Brackets → Orders → ÷× → +−.`,
+  };
+}
+
+// ── age13-numbers L4 — HCF & LCM ─────────────────────────────────────────────
+function genHCFLCM13(): Problem {
+  const pairs: [number, number][] = [[12, 18], [8, 12], [15, 20], [6, 9], [10, 15], [14, 21], [16, 24]];
+  const [a, b] = pairs[randInt(0, pairs.length - 1)];
+  const g = gcd(a, b), l = (a * b) / g;
+  if (Math.random() < 0.5) {
+    return {
+      id: uid(),
+      question: `Find the highest common factor (HCF) of ${a} and ${b}.`,
+      correctAnswer: `${g}`,
+      options: makeOptions(`${g}`, [`${l}`, `${g * 2}`, `${a}`]),
+      marks: 2,
+      workingSteps: [`List common factors of ${a} and ${b}`, `The highest is ${g}`],
+      hints: [`HCF = biggest number that divides BOTH`],
+      calculatorAllowed: false,
+      commonMistake: `Giving the LCM (${l}) instead of the HCF.`,
+      examTip: `HCF = Highest Common Factor (divides both).`,
+    };
+  }
+  return {
+    id: uid(),
+    question: `Find the lowest common multiple (LCM) of ${a} and ${b}.`,
+    correctAnswer: `${l}`,
+    options: makeOptions(`${l}`, [`${g}`, `${a * b}`, `${l + a}`]),
+    marks: 2,
+    workingSteps: [`LCM = (${a} × ${b}) ÷ HCF = ${a * b} ÷ ${g} = ${l}`],
+    hints: [`LCM = smallest number BOTH divide into`],
+    calculatorAllowed: false,
+    commonMistake: `Giving the HCF (${g}) instead of the LCM.`,
+    examTip: `LCM = Lowest Common Multiple. Tip: a×b ÷ HCF.`,
+  };
+}
+
+// ── age13-numbers L5 — Squares & Roots ───────────────────────────────────────
+function genSquaresRoots13(): Problem {
+  const n = randInt(4, 12);
+  if (Math.random() < 0.5) {
+    return {
+      id: uid(),
+      question: `Evaluate:  ${n}²`,
+      correctAnswer: `${n * n}`,
+      options: makeOptions(`${n * n}`, [`${n * 2}`, `${n * n + 1}`, `${n * n - n}`]),
+      marks: 1,
+      workingSteps: [`${n}² = ${n} × ${n} = ${n * n}`],
+      hints: [`Squaring means multiplying by itself, not by 2`],
+      calculatorAllowed: false,
+      commonMistake: `Computing ${n} × 2 = ${n * 2} instead of ${n} × ${n}.`,
+      examTip: `n² = n × n.`,
+    };
+  }
+  return {
+    id: uid(),
+    question: `Evaluate:  √${n * n}`,
+    correctAnswer: `${n}`,
+    options: makeOptions(`${n}`, [`${n * n / 2}`, `${n + 1}`, `${n - 1}`]),
+    marks: 1,
+    workingSteps: [`√${n * n} asks: what number squared gives ${n * n}?`, `${n} × ${n} = ${n * n}, so √${n * n} = ${n}`],
+    hints: [`Find the number that squares to ${n * n}`],
+    calculatorAllowed: false,
+    commonMistake: `Halving instead of taking the square root.`,
+    examTip: `√ undoes squaring.`,
+  };
+}
+
+// ── age13-numbers L6 — Rounding ──────────────────────────────────────────────
+function genRounding13(): Problem {
+  return fromCases([
+    { q: `Round 3847 to the nearest 100.`, c: '3800', w: ['3900', '3850', '4000'], s: ['The tens digit is 4 (< 5), so round down', '3847 → 3800'], h: ['Look at the digit after the rounding place'], mistake: 'Rounding up when the next digit is below 5.', tip: '5 or more rounds up; less than 5 rounds down.' },
+    { q: `Round 2.567 to 1 decimal place.`, c: '2.6', w: ['2.5', '2.57', '3.0'], s: ['Second decimal is 6 (≥ 5), round up', '2.567 → 2.6'], h: ['Look at the 2nd decimal digit'], mistake: 'Keeping too many decimals.', tip: '1 d.p. → look at the 2nd decimal.' },
+    { q: `Round 48 to the nearest 10.`, c: '50', w: ['40', '48', '60'], s: ['Units digit is 8 (≥ 5), round up', '48 → 50'], h: ['8 is ≥ 5'], mistake: 'Rounding down to 40.', tip: 'Nearest 10: check the units digit.' },
+    { q: `Round 6 392 to the nearest 1000.`, c: '6000', w: ['7000', '6400', '6300'], s: ['Hundreds digit is 3 (< 5), round down', '6 392 → 6000'], h: ['Look at the hundreds digit'], mistake: 'Rounding up incorrectly.', tip: 'Nearest 1000: check the hundreds digit.' },
+  ]);
+}
+
+// ── age13-numbers L7 — Directed Numbers in Context ───────────────────────────
+function genIntegerWord13(): Problem {
+  return fromCases([
+    { q: `The temperature was −3°C and rose by 8°C.\nWhat is the new temperature?`, c: '5°C', w: ['−11°C', '11°C', '−5°C'], s: ['−3 + 8 = 5°C'], h: ['Rising = adding'], mistake: 'Subtracting instead of adding the rise.', tip: 'A rise adds; a fall subtracts.' },
+    { q: `A diver is 12 m below sea level and descends another 7 m.\nWhat is the new depth?`, c: '19 m below', w: ['5 m below', '19 m above', '5 m above'], s: ['−12 − 7 = −19, i.e. 19 m below'], h: ['Descending makes the depth more negative'], mistake: 'Subtracting the two depths instead of adding the descent.', tip: 'Going deeper adds to the depth.' },
+    { q: `The temperature fell from 4°C to −6°C.\nBy how many degrees did it fall?`, c: '10°C', w: ['2°C', '−2°C', '6°C'], s: ['4 − (−6) = 4 + 6 = 10°C'], h: ['Difference = higher − lower'], mistake: 'Getting 2 by subtracting 6 − 4.', tip: 'Across zero, ADD the two distances.' },
+    { q: `A submarine at −150 m rises 60 m.\nWhat is its new depth?`, c: '−90 m', w: ['−210 m', '90 m', '210 m'], s: ['−150 + 60 = −90 m'], h: ['Rising adds'], mistake: 'Adding to the depth instead of reducing it.', tip: 'Rising reduces depth (adds toward zero).' },
+  ]);
+}
+
+// ── age13-numbers L8 — Primes & Factors ──────────────────────────────────────
+function genPrimes13(): Problem {
+  return fromCases([
+    { q: `Which of these is a prime number?\n9,  15,  17,  21`, c: '17', w: ['9', '15', '21'], s: ['A prime has exactly two factors: 1 and itself', '17 = 1 × 17 only'], h: ['Check which has no factors other than 1 and itself'], mistake: 'Picking an odd number that is not prime (9 = 3×3).', tip: 'Odd ≠ prime. Test for factors.' },
+    { q: `Is 1 a prime number?`, c: 'No', w: ['Yes', 'Sometimes', 'Only if odd'], s: ['A prime needs exactly TWO different factors', '1 has only one factor (itself)'], h: ['How many factors does 1 have?'], mistake: 'Assuming 1 is prime.', tip: '1 is NOT prime (it has only one factor).' },
+    { q: `Write 12 as a product of its prime factors.`, c: '2² × 3', w: ['2 × 6', '3 × 4', '2 × 3 × 3'], s: ['12 = 2 × 2 × 3', '= 2² × 3'], h: ['Keep dividing by primes'], mistake: 'Leaving composite factors like 6 or 4.', tip: 'Break down until every factor is prime.' },
+    { q: `What is the smallest prime number?`, c: '2', w: ['1', '3', '0'], s: ['2 is prime and is the smallest', 'It is also the only even prime'], h: ['1 is not prime'], mistake: 'Saying 1.', tip: '2 is the smallest (and only even) prime.' },
+  ]);
+}
+
+// ── age13-proportion L1 — Sharing in a Ratio ─────────────────────────────────
+function genRatioShare13(): Problem {
+  const p = randInt(1, 4), q = randInt(1, 4), unit = randInt(2, 9) * 10;
+  const total = (p + q) * unit;
+  return {
+    id: uid(),
+    question: `Share R${total} between A and B in the ratio ${p} : ${q}.\n\nHow much does A receive?`,
+    correctAnswer: `R${p * unit}`,
+    options: makeOptions(`R${p * unit}`, [`R${q * unit}`, `R${Math.round(total / 2)}`, `R${p * unit + unit}`]),
+    marks: 3,
+    workingSteps: [`Total parts = ${p} + ${q} = ${p + q}`, `One part = ${total} ÷ ${p + q} = ${unit}`, `A = ${p} × ${unit} = R${p * unit}`],
+    hints: [`Find the total parts, then the value of one part`],
+    calculatorAllowed: true,
+    commonMistake: `Splitting equally instead of by the ratio.`,
+    examTip: `Value of one part = total ÷ sum of parts.`,
+  };
+}
+
+// ── age13-proportion L2 — Simplifying Ratios ─────────────────────────────────
+function genSimplifyRatio13(): Problem {
+  const g = randInt(2, 6);
+  const [a, b] = COPRIME_PAIRS[randInt(0, COPRIME_PAIRS.length - 1)];
+  const A = g * a, B = g * b;
+  return {
+    id: uid(),
+    question: `Simplify the ratio  ${A} : ${B}`,
+    correctAnswer: `${a} : ${b}`,
+    options: makeOptions(`${a} : ${b}`, [`${b} : ${a}`, `${a} : ${b + 1}`, `${a * 2} : ${b * 2}`]),
+    marks: 2,
+    workingSteps: [`Divide both parts by their HCF (${g})`, `${A} ÷ ${g} = ${a},  ${B} ÷ ${g} = ${b}`, `= ${a} : ${b}`],
+    hints: [`Divide both sides by the highest common factor`],
+    calculatorAllowed: false,
+    commonMistake: `Dividing by a factor that isn't the highest, leaving it not fully simplified.`,
+    examTip: `Keep dividing until the two parts share no common factor.`,
+  };
+}
+
+// ── age13-proportion L3 — Unit Rates ─────────────────────────────────────────
+function genUnitRate13(): Problem {
+  if (Math.random() < 0.5) {
+    const n = randInt(2, 8), price = randInt(2, 9), total = n * price;
+    return {
+      id: uid(),
+      question: `${n} identical pens cost R${total} in total.\n\nFind the cost of ONE pen.`,
+      correctAnswer: `R${price}`,
+      options: makeOptions(`R${price}`, [`R${total}`, `R${price + 1}`, `R${n}`]),
+      marks: 2,
+      workingSteps: [`Cost of one = total ÷ number`, `R${total} ÷ ${n} = R${price}`],
+      hints: [`Divide the total by how many there are`],
+      calculatorAllowed: true,
+      commonMistake: `Multiplying instead of dividing.`,
+      examTip: `Unit price = total ÷ quantity.`,
+    };
+  }
+  const s = [40, 50, 60, 80][randInt(0, 3)], t = randInt(2, 5), d = s * t;
+  return {
+    id: uid(),
+    question: `A car travels ${d} km in ${t} hours at a steady speed.\n\nFind its speed.`,
+    correctAnswer: `${s} km/h`,
+    options: makeOptions(`${s} km/h`, [`${d} km/h`, `${s + 10} km/h`, `${d - t} km/h`]),
+    marks: 2,
+    workingSteps: [`Speed = distance ÷ time`, `${d} ÷ ${t} = ${s} km/h`],
+    hints: [`Speed = distance ÷ time`],
+    calculatorAllowed: true,
+    commonMistake: `Multiplying distance by time.`,
+    examTip: `Speed = distance ÷ time.`,
+  };
+}
+
+// ── age13-proportion L4 — Percentage of an Amount ────────────────────────────
+function genPercentOf13(): Problem {
+  const p = [5, 10, 20, 25, 50][randInt(0, 4)], n = randInt(1, 9) * 20;
+  const ans = (n * p) / 100;
+  return {
+    id: uid(),
+    question: `Find ${p}% of ${n}.`,
+    correctAnswer: `${ans}`,
+    options: makeOptions(`${ans}`, [`${ans + p}`, `${Math.round(n / p)}`, `${ans * 2}`]),
+    marks: 2,
+    workingSteps: [`${p}% = ${p}/100`, `${p}/100 × ${n} = ${ans}`],
+    hints: [`"of" means multiply`, `${p}% = ${p / 100}`],
+    calculatorAllowed: true,
+    commonMistake: `Dividing by the percentage instead of multiplying by p/100.`,
+    examTip: `x% of N = (x/100) × N.`,
+  };
+}
+
+// ── age13-proportion L5 — Percentage Change ──────────────────────────────────
+function genPercentChange13(): Problem {
+  const P = randInt(2, 9) * 100, r = [10, 20, 25, 50][randInt(0, 3)];
+  const inc = Math.random() < 0.5, delta = (P * r) / 100, val = inc ? P + delta : P - delta;
+  return {
+    id: uid(),
+    question: `A price of R${P} ${inc ? 'increases' : 'decreases'} by ${r}%.\n\nFind the new price.`,
+    correctAnswer: `R${val}`,
+    options: makeOptions(`R${val}`, [`R${delta}`, `R${inc ? P - delta : P + delta}`, `R${val + (inc ? delta : -delta)}`]),
+    marks: 3,
+    workingSteps: [`${r}% of ${P} = ${delta}`, `New price = ${P} ${inc ? '+' : '−'} ${delta} = R${val}`],
+    hints: [`Find the change first, then ${inc ? 'add it' : 'subtract it'}`],
+    calculatorAllowed: true,
+    commonMistake: `Giving just the change (${delta}) instead of the new price.`,
+    examTip: `Find the % amount, then ${inc ? 'add to' : 'subtract from'} the original.`,
+  };
+}
+
+// ── age13-proportion L6 — Unit Conversion ────────────────────────────────────
+function genUnitConvert13(): Problem {
+  return fromCases([
+    { q: `Convert 3 km to metres.`, c: '3000 m', w: ['300 m', '30 m', '30000 m'], s: ['1 km = 1000 m', '3 × 1000 = 3000 m'], h: ['1 km = 1000 m'], mistake: 'Wrong power of ten.', tip: 'km → m: × 1000.', calc: true },
+    { q: `Convert 2.5 m to centimetres.`, c: '250 cm', w: ['25 cm', '2500 cm', '0.025 cm'], s: ['1 m = 100 cm', '2.5 × 100 = 250 cm'], h: ['1 m = 100 cm'], mistake: 'Using 1000 instead of 100.', tip: 'm → cm: × 100.', calc: true },
+    { q: `Convert 4000 g to kilograms.`, c: '4 kg', w: ['40 kg', '400 kg', '0.4 kg'], s: ['1 kg = 1000 g', '4000 ÷ 1000 = 4 kg'], h: ['g → kg: ÷ 1000'], mistake: 'Dividing by the wrong amount.', tip: 'g → kg: ÷ 1000.', calc: true },
+    { q: `Convert 3 hours to minutes.`, c: '180 min', w: ['30 min', '300 min', '120 min'], s: ['1 hour = 60 minutes', '3 × 60 = 180 min'], h: ['1 hour = 60 min'], mistake: 'Using 100 instead of 60.', tip: 'hours → min: × 60.', calc: true },
+  ]);
+}
+
+// ── age13-proportion L7 — Best Buy ───────────────────────────────────────────
+function genBestBuy13(): Problem {
+  return fromCases([
+    { q: `Which is better value?\n• 2 L of juice for R24\n• 3 L of juice for R30`, c: '3 L for R30', w: ['2 L for R24', 'Same value', 'Cannot tell'], s: ['2 L: 24 ÷ 2 = R12/L', '3 L: 30 ÷ 3 = R10/L', 'R10/L is cheaper'], h: ['Find the price per litre for each'], mistake: 'Choosing the cheaper total instead of the better unit price.', tip: 'Compare price per unit, not the total.', calc: true },
+    { q: `Which is better value?\n• 500 g for R15\n• 1 kg for R28`, c: '1 kg for R28', w: ['500 g for R15', 'Same value', 'Cannot tell'], s: ['500 g → R30/kg', '1 kg → R28/kg', 'R28/kg is cheaper'], h: ['Scale both to the same amount (per kg)'], mistake: 'Comparing different quantities directly.', tip: 'Put both on a per-kg basis.', calc: true },
+    { q: `Which is better value?\n• 4 rolls for R20\n• 6 rolls for R27`, c: '6 rolls for R27', w: ['4 rolls for R20', 'Same value', 'Cannot tell'], s: ['4 rolls: R5 each', '6 rolls: R4.50 each', 'R4.50 is cheaper'], h: ['Find the cost of one roll for each'], mistake: 'Picking the smaller total.', tip: 'Unit price decides best value.', calc: true },
+  ]);
+}
+
+// ── age13-proportion L8 — Scale & Maps ───────────────────────────────────────
+function genScale13(): Problem {
+  return fromCases([
+    { q: `A map scale is 1 cm : 5 km.\nA road is 4 cm long on the map.\nFind its real length.`, c: '20 km', w: ['9 km', '1.25 km', '45 km'], s: ['Each 1 cm = 5 km', '4 × 5 = 20 km'], h: ['Multiply map distance by the scale'], mistake: 'Adding instead of multiplying.', tip: 'Real = map distance × scale.', calc: true },
+    { q: `A scale is 1 cm : 2 m.\nA wall is 6 cm on the plan.\nFind the real length.`, c: '12 m', w: ['3 m', '8 m', '6 m'], s: ['Each 1 cm = 2 m', '6 × 2 = 12 m'], h: ['Multiply by 2 m per cm'], mistake: 'Dividing by the scale.', tip: 'Real = plan length × scale.', calc: true },
+    { q: `A model uses scale 1 : 100.\nThe model car is 4 cm long.\nFind the real length in cm.`, c: '400 cm', w: ['25 cm', '104 cm', '40 cm'], s: ['Real = 4 × 100 = 400 cm'], h: ['1 : 100 means real is 100× bigger'], mistake: 'Dividing instead of multiplying.', tip: '1 : n → multiply the model size by n.', calc: true },
+  ]);
+}
+
+// ── age13-data L1 — Single-Event Probability ─────────────────────────────────
+function genSingleProb13(): Problem {
+  const r = randInt(2, 5), b = randInt(2, 5), g = randInt(2, 5);
+  const total = r + b + g, which = randInt(0, 2);
+  const cnt = [r, b, g][which], name = ['red', 'blue', 'green'][which];
+  const correct = simplify(cnt, total);
+  return {
+    id: uid(),
+    question: `A bag has ${r} red, ${b} blue and ${g} green balls.\nOne ball is taken at random.\n\nFind P(${name}).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [simplify(total - cnt, total), `${cnt}/${total + 1}`, simplify(cnt + 1, total)]),
+    marks: 2,
+    workingSteps: [`P = favourable ÷ total = ${cnt}/${total}`, `= ${correct}`],
+    hints: [`Total balls = ${total}`, `P = favourable / total`],
+    calculatorAllowed: false,
+    commonMistake: `Using the wrong total — count ALL the balls.`,
+    examTip: `Always simplify the probability fraction.`,
+  };
+}
+
+// ── age13-data L2 — Complementary Events ─────────────────────────────────────
+function genComplement13(): Problem {
+  const total = randInt(8, 12), fav = randInt(2, total - 2);
+  const correct = simplify(total - fav, total);
+  return {
+    id: uid(),
+    question: `A bag has ${total} sweets; ${fav} are red.\nOne is taken at random.\n\nFind P(NOT red).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [simplify(fav, total), `${total - fav}/${total + 1}`, simplify(total - fav + 1, total)]),
+    marks: 2,
+    workingSteps: [`P(not red) = 1 − P(red) = 1 − ${fav}/${total}`, `= ${total - fav}/${total} = ${correct}`],
+    hints: [`P(not A) = 1 − P(A)`],
+    calculatorAllowed: false,
+    commonMistake: `Giving P(red) instead of its complement.`,
+    examTip: `Complement rule: P(not A) = 1 − P(A).`,
+  };
+}
+
+// ── age13-data L3 — Independent Events ───────────────────────────────────────
+function genIndependent13(): Problem {
+  return fromCases([
+    { q: `A coin is tossed and a dice is rolled.\nFind P(heads AND a 6).`, c: '1/12', w: ['1/8', '7/12', '1/6'], s: ['P(heads) = 1/2, P(6) = 1/6', 'Independent → multiply: 1/2 × 1/6 = 1/12'], h: ['"AND" with independent events → multiply'], mistake: 'Adding the probabilities.', tip: 'Independent + AND → multiply.' },
+    { q: `Two coins are tossed.\nFind P(heads AND heads).`, c: '1/4', w: ['1/2', '1/3', '2/4'], s: ['1/2 × 1/2 = 1/4'], h: ['Multiply the two probabilities'], mistake: 'Saying 1/2.', tip: 'Each toss is 1/2; multiply them.' },
+    { q: `A dice is rolled twice.\nFind P(a 6 AND a 6).`, c: '1/36', w: ['1/12', '2/6', '1/6'], s: ['1/6 × 1/6 = 1/36'], h: ['Multiply 1/6 by 1/6'], mistake: 'Adding to get 2/6.', tip: 'Independent rolls → multiply.' },
+    { q: `P(rain) = 1/3 and P(late bus) = 1/2, independently.\nFind P(both happen).`, c: '1/6', w: ['5/6', '1/5', '2/3'], s: ['1/3 × 1/2 = 1/6'], h: ['Multiply the probabilities'], mistake: 'Adding the fractions.', tip: 'Independent AND → multiply.' },
+  ]);
+}
+
+// ── age13-data L4 — Mean ─────────────────────────────────────────────────────
+function genMean13(): Problem {
+  // build 5 values whose total is divisible by 5 for a clean mean
+  const base = Array.from({ length: 4 }, () => randInt(2, 18));
+  const sum4 = base.reduce((a, b) => a + b, 0);
+  const last = (5 * randInt(4, 14)) - sum4;
+  const d = [...base, last].filter(v => v >= 1);
+  while (d.length < 5) d.push(randInt(2, 12));
+  const total = d.reduce((a, b) => a + b, 0);
+  const mean = Math.round(total / d.length);
+  const realMean = total / d.length;
+  const correct = Number.isInteger(realMean) ? `${realMean}` : realMean.toFixed(1);
+  return {
+    id: uid(),
+    question: `Find the mean of:\n${d.join(', ')}`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`${mean + 1}`, `${d[2]}`, `${total}`]),
+    marks: 2,
+    workingSteps: [`Sum = ${d.join(' + ')} = ${total}`, `Mean = ${total} ÷ ${d.length} = ${correct}`],
+    hints: [`Mean = sum ÷ how many values`],
+    calculatorAllowed: true,
+    commonMistake: `Dividing by the wrong count — there are ${d.length} values.`,
+    examTip: `Mean = total ÷ number of values.`,
+  };
+}
+
+// ── age13-data L5 — Median & Mode ────────────────────────────────────────────
+function genMedianMode13(): Problem {
+  const d = Array.from({ length: 5 }, () => randInt(1, 15)).sort((a, b) => a - b);
+  if (Math.random() < 0.5) {
+    const median = d[2];
+    return {
+      id: uid(),
+      question: `Find the median of:\n${d.join(', ')}`,
+      correctAnswer: `${median}`,
+      options: makeOptions(`${median}`, [`${d[1]}`, `${d[3]}`, `${Math.round(d.reduce((a, b) => a + b, 0) / 5)}`]),
+      marks: 2,
+      workingSteps: [`Data is in order; 5 values → middle is the 3rd`, `Median = ${median}`],
+      hints: [`Median = middle value when sorted`],
+      calculatorAllowed: false,
+      commonMistake: `Confusing the median with the mean.`,
+      examTip: `Sort first, then take the middle value.`,
+    };
+  }
+  const modeVal = d[randInt(0, 3)];
+  const withMode = [...d, modeVal].sort((a, b) => a - b);
+  return {
+    id: uid(),
+    question: `Find the mode of:\n${withMode.join(', ')}`,
+    correctAnswer: `${modeVal}`,
+    options: makeOptions(`${modeVal}`, [`${withMode[0]}`, `${withMode[withMode.length - 1]}`, `${withMode[2]}`]),
+    marks: 2,
+    workingSteps: [`The mode is the most frequent value`, `${modeVal} appears twice → mode = ${modeVal}`],
+    hints: [`Mode = the value that appears most often`],
+    calculatorAllowed: false,
+    commonMistake: `Confusing mode with median.`,
+    examTip: `Mode = most frequent value.`,
+  };
+}
+
+// ── age13-data L6 — Range ────────────────────────────────────────────────────
+function genRange13(): Problem {
+  const d = Array.from({ length: 6 }, () => randInt(5, 45));
+  const mx = Math.max(...d), mn = Math.min(...d), range = mx - mn;
+  return {
+    id: uid(),
+    question: `Find the range of:\n${d.join(', ')}`,
+    correctAnswer: `${range}`,
+    options: makeOptions(`${range}`, [`${mx}`, `${mn}`, `${range + 2}`]),
+    marks: 1,
+    workingSteps: [`Range = largest − smallest = ${mx} − ${mn} = ${range}`],
+    hints: [`Range = biggest − smallest`],
+    calculatorAllowed: false,
+    commonMistake: `Giving the largest value instead of the difference.`,
+    examTip: `Range measures spread: max − min.`,
+  };
+}
+
+// ── age13-data L7 — Quartiles & IQR ──────────────────────────────────────────
+function genQuartiles13(): Problem {
+  const d = Array.from({ length: 7 }, () => randInt(10, 50)).sort((a, b) => a - b);
+  const q1 = d[1], q2 = d[3], q3 = d[5], iqr = q3 - q1;
+  if (Math.random() < 0.5) {
+    return {
+      id: uid(),
+      question: `Ordered data:\n${d.join(', ')}\n\nFind the interquartile range (IQR).\n(Q1 = ${q1}, Q3 = ${q3})`,
+      correctAnswer: `${iqr}`,
+      options: makeOptions(`${iqr}`, [`${iqr + 1}`, `${q3}`, `${q2}`]),
+      marks: 2,
+      workingSteps: [`IQR = Q3 − Q1 = ${q3} − ${q1} = ${iqr}`],
+      hints: [`IQR = Q3 − Q1`],
+      calculatorAllowed: false,
+      commonMistake: `Using the median instead of Q1 in the subtraction.`,
+      examTip: `IQR = upper quartile − lower quartile.`,
+    };
+  }
+  return {
+    id: uid(),
+    question: `Ordered data (7 values):\n${d.join(', ')}\n\nFind the median.`,
+    correctAnswer: `${q2}`,
+    options: makeOptions(`${q2}`, [`${d[2]}`, `${d[4]}`, `${q1}`]),
+    marks: 2,
+    workingSteps: [`7 values → median is the 4th`, `Median = ${q2}`],
+    hints: [`Median position = (n+1)/2 = 4th`],
+    calculatorAllowed: false,
+    commonMistake: `Picking the 3rd or 5th value.`,
+    examTip: `For 7 values the median is the 4th.`,
+  };
+}
+
+// ── age13-data L8 — Two-Way Tables ───────────────────────────────────────────
+function genTwoWay13(): Problem {
+  return fromCases([
+    { q: `A class of 30:\n        Walk  Bus\nBoys     8    7\nGirls    9    6\n\nHow many learners take the bus?`, c: '13', w: ['15', '17', '7'], s: ['Bus column: boys 7 + girls 6 = 13'], h: ['Add down the Bus column'], mistake: 'Adding a row instead of the column.', tip: 'Read the correct row/column, then total.' },
+    { q: `        Tea  Coffee\nAdults   12    8\nKids      5    0\n\nHow many people were surveyed in total?`, c: '25', w: ['20', '17', '13'], s: ['12 + 8 + 5 + 0 = 25'], h: ['Add every cell'], mistake: 'Forgetting a cell.', tip: 'The grand total = sum of all inner cells.' },
+    { q: `        Pass  Fail\nGrade A   18    2\nGrade B   12    8\n\nHow many learners passed?`, c: '30', w: ['20', '10', '40'], s: ['Pass column: 18 + 12 = 30'], h: ['Add the Pass column'], mistake: 'Adding a row.', tip: 'Match the question to the right column.' },
+  ]);
+}
+
 export const TOPIC_LEVELS: Record<string, TopicLevels> = {
   // ── Ages 13/14 (Explorers / Pioneers) ───────────────────────────────────────
   'age13-algebra':    { 1: genSubstitution13, 2: genLikeTerms13, 3: genExpandSingle13, 4: genExpandDouble13, 5: genFactoriseCommon13, 6: genSolveLinear13, 7: genSolveBrackets13, 8: genWordEquation13 },
+  'age13-geometry':   { 1: genPythagHyp13, 2: genPythagLeg13, 3: genPythagApply13, 4: genTriangleAngleSum13, 5: genParallelAngles13, 6: genExteriorAngle13, 7: genAnglesLinePoint13, 8: genIsosceles13 },
+  'age13-graphs':     { 1: genGradient2pts13, 2: genReadMC13, 3: genYIntercept13, 4: genXIntercept13, 5: genPointOnLine13, 6: genParallelGradient13, 7: genTableValue13, 8: genMidpointGraph13 },
+  'age13-numbers':    { 1: genIntegerAddSub13, 2: genIntegerMulDiv13, 3: genBODMAS13, 4: genHCFLCM13, 5: genSquaresRoots13, 6: genRounding13, 7: genIntegerWord13, 8: genPrimes13 },
+  'age13-proportion': { 1: genRatioShare13, 2: genSimplifyRatio13, 3: genUnitRate13, 4: genPercentOf13, 5: genPercentChange13, 6: genUnitConvert13, 7: genBestBuy13, 8: genScale13 },
+  'age13-data':       { 1: genSingleProb13, 2: genComplement13, 3: genIndependent13, 4: genMean13, 5: genMedianMode13, 6: genRange13, 7: genQuartiles13, 8: genTwoWay13 },
   'age14-exponents':  { 1: genExpProduct14, 2: genExpQuotient14, 3: genExpPower14, 4: genExpZeroNeg14, 5: genSciNotation14, 6: genExpEvaluate14, 7: genExpSimplify14, 8: genIndexEquation14 },
   // ── Age 15 ────────────────────────────────────────────────────────────────
   'age15-numbers':    { 1: genSurds, 2: genIndices, 3: genQuadraticsFactor, 4: genSequences, 5: genLogs, 6: genStandardForm, 7: genEstimationRounding, 8: genLogQuotient },
