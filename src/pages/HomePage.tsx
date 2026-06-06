@@ -12,24 +12,26 @@ type AgeCard = {
   senior?: boolean; // ages 13–17 → dark Exam Studio instead of the kids' RPG
 };
 
-// Kids' "Math Monsters" RPG — ages 3–12 (bright, gamified).
-const KID_CARDS: AgeCard[] = [
-  // Pre-School (Ages 3–5)
-  { age: 3, label: 'Pre-School',    emoji: '🌱', color: '#059669', bg: '#F0FDF4', border: '#6EE7B7', phase: 1 },
-  { age: 4, label: 'Pre-School',    emoji: '🌱', color: '#059669', bg: '#F0FDF4', border: '#6EE7B7', phase: 1 },
-  { age: 5, label: 'Pre-School',    emoji: '🌱', color: '#059669', bg: '#F0FDF4', border: '#6EE7B7', phase: 1 },
-  // Lower Primary (Ages 6–8)
-  { age: 6, label: 'Lower Primary', emoji: '📚', color: '#D97706', bg: '#FFFBEB', border: '#FDE68A', phase: 2 },
-  { age: 7, label: 'Lower Primary', emoji: '📚', color: '#D97706', bg: '#FFFBEB', border: '#FDE68A', phase: 2 },
-  { age: 8, label: 'Lower Primary', emoji: '📚', color: '#D97706', bg: '#FFFBEB', border: '#FDE68A', phase: 2 },
-  // Higher Primary (Ages 9–12)
-  { age: 9,  label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#EFF6FF', border: '#BFDBFE', phase: 3 },
-  { age: 10, label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#EFF6FF', border: '#BFDBFE', phase: 3 },
-  { age: 11, label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#EFF6FF', border: '#BFDBFE', phase: 3 },
-  { age: 12, label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#EFF6FF', border: '#BFDBFE', phase: 3 },
-  // Advanced Primary (Ages 11–12)
-  { age: 11, label: 'Advanced',       emoji: '🏆', color: '#9F1239', bg: '#FFF1F2', border: '#FECDD3', phase: 4, advanced: true },
-  { age: 12, label: 'Advanced',       emoji: '🏆', color: '#9F1239', bg: '#FFF1F2', border: '#FECDD3', phase: 4, advanced: true },
+// Kids' "Math Monsters" RPG — cards sit inside coloured panels, so each card
+// uses a white background and gets its identity from its border + text colour.
+// Pre-School (Ages 3–5).
+const PRESCHOOL_CARDS: AgeCard[] = [
+  { age: 3, label: 'Pre-School', emoji: '🌱', color: '#059669', bg: '#FFFFFF', border: '#6EE7B7', phase: 1 },
+  { age: 4, label: 'Pre-School', emoji: '🌱', color: '#059669', bg: '#FFFFFF', border: '#6EE7B7', phase: 1 },
+  { age: 5, label: 'Pre-School', emoji: '🌱', color: '#059669', bg: '#FFFFFF', border: '#6EE7B7', phase: 1 },
+];
+
+// Primary (Ages 6–12).
+const PRIMARY_CARDS: AgeCard[] = [
+  { age: 6,  label: 'Lower Primary',  emoji: '📚', color: '#D97706', bg: '#FFFFFF', border: '#FDE68A', phase: 2 },
+  { age: 7,  label: 'Lower Primary',  emoji: '📚', color: '#D97706', bg: '#FFFFFF', border: '#FDE68A', phase: 2 },
+  { age: 8,  label: 'Lower Primary',  emoji: '📚', color: '#D97706', bg: '#FFFFFF', border: '#FDE68A', phase: 2 },
+  { age: 9,  label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#FFFFFF', border: '#BFDBFE', phase: 3 },
+  { age: 10, label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#FFFFFF', border: '#BFDBFE', phase: 3 },
+  { age: 11, label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#FFFFFF', border: '#BFDBFE', phase: 3 },
+  { age: 12, label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#FFFFFF', border: '#BFDBFE', phase: 3 },
+  { age: 11, label: 'Advanced',       emoji: '🏆', color: '#9F1239', bg: '#FFFFFF', border: '#FECDD3', phase: 4, advanced: true },
+  { age: 12, label: 'Advanced',       emoji: '🏆', color: '#9F1239', bg: '#FFFFFF', border: '#FECDD3', phase: 4, advanced: true },
 ];
 
 // Exam Studio — ages 13–17 (dark, exam-prep). One continuous ramp:
@@ -97,27 +99,50 @@ export default function HomePage() {
         />
       </div>
 
-      {/* ── Kids' Adventure (Ages 3–12) ── */}
-      <div className="px-4 pt-3 pb-1">
-        <h2 className="font-[Nunito] text-xl font-extrabold text-gray-800 leading-tight">
-          🎮 Kids' Adventure
-        </h2>
-        <p className="text-xs text-gray-400 font-semibold mt-0.5">
-          Ages 3–12 · tap an age to start playing
-        </p>
-      </div>
-      <div className="px-4 flex flex-col gap-2">
-        {chunk(KID_CARDS, 3).map((row, rowIdx) => (
-          <div key={rowIdx} className="grid grid-cols-3 gap-2">
-            {row.map((card, i) => (
-              <div key={i}><AgeCardItem card={card} /></div>
+      {/* ── Pre-School (Ages 3–5) ── */}
+      <div className="px-4 pt-3">
+        <div className="rounded-2xl p-4 border" style={{ background: '#ECFDF5', borderColor: '#A7F3D0' }}>
+          <h2 className="font-[Nunito] text-xl font-extrabold leading-tight" style={{ color: '#047857' }}>
+            🌱 Little Learners
+          </h2>
+          <p className="text-xs font-semibold mt-0.5" style={{ color: '#10B981' }}>
+            Ages 3–5 · first numbers, shapes &amp; counting
+          </p>
+          <div className="flex flex-col gap-2 mt-3">
+            {chunk(PRESCHOOL_CARDS, 3).map((row, rowIdx) => (
+              <div key={rowIdx} className="grid grid-cols-3 gap-2">
+                {row.map((card, i) => (
+                  <div key={i}><AgeCardItem card={card} /></div>
+                ))}
+              </div>
             ))}
           </div>
-        ))}
+        </div>
+      </div>
+
+      {/* ── Primary (Ages 6–12) ── */}
+      <div className="px-4 mt-3">
+        <div className="rounded-2xl p-4 border" style={{ background: '#EFF6FF', borderColor: '#BFDBFE' }}>
+          <h2 className="font-[Nunito] text-xl font-extrabold leading-tight" style={{ color: '#1D4ED8' }}>
+            ⚔️ Primary Quest
+          </h2>
+          <p className="text-xs font-semibold mt-0.5" style={{ color: '#3B82F6' }}>
+            Ages 6–12 · the Math Monsters adventure
+          </p>
+          <div className="flex flex-col gap-2 mt-3">
+            {chunk(PRIMARY_CARDS, 3).map((row, rowIdx) => (
+              <div key={rowIdx} className="grid grid-cols-3 gap-2">
+                {row.map((card, i) => (
+                  <div key={i}><AgeCardItem card={card} /></div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* ── The Academy (Ages 13–17) ── */}
-      <div className="px-4 mt-5">
+      <div className="px-4 mt-3">
         <div className="rounded-2xl p-4" style={{ background: '#0d1117' }}>
           <h2 className="font-[Nunito] text-xl font-extrabold leading-tight" style={{ color: '#5EEAD4' }}>
             🎓 The Academy
