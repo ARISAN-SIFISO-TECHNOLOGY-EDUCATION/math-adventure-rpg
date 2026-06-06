@@ -186,7 +186,7 @@ export default function TopicsPage() {
           </motion.button>
           <div>
             <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">Age {age}</p>
-            <h1 className="text-xl font-outfit font-extrabold text-white">{group?.school ?? 'Exam Studio'}</h1>
+            <h1 className="text-xl font-outfit font-extrabold text-white">{group?.school ?? 'The Academy'}</h1>
           </div>
         </div>
         <div className="flex flex-col items-center justify-center text-center py-24">
@@ -250,7 +250,7 @@ export default function TopicsPage() {
           <ArrowLeft className="w-5 h-5 text-white" />
         </motion.button>
         <div className="flex-1">
-          <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">Age {age} · Exam Studio</p>
+          <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">Age {age} · The Academy</p>
           <h1
             onClick={handleTitleTap}
             className="text-xl font-outfit font-extrabold text-white select-none"

@@ -116,14 +116,14 @@ export default function HomePage() {
         ))}
       </div>
 
-      {/* ── Exam Studio (Ages 13–17) ── */}
+      {/* ── The Academy (Ages 13–17) ── */}
       <div className="px-4 mt-5">
         <div className="rounded-2xl p-4" style={{ background: '#0d1117' }}>
           <h2 className="font-[Nunito] text-xl font-extrabold leading-tight" style={{ color: '#5EEAD4' }}>
-            📐 Exam Studio
+            🎓 The Academy
           </h2>
           <p className="text-xs font-semibold mt-0.5" style={{ color: '#94A3B8' }}>
-            Ages 13–17 · exam-prep, mastery levels &amp; mock papers
+            Ages 13–17 · serious maths, mastery levels &amp; mock papers
           </p>
           <div className="flex flex-col gap-2 mt-3">
             {chunk(SENIOR_CARDS, 3).map((row, rowIdx) => (

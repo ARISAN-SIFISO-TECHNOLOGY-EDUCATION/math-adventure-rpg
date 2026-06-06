@@ -27,7 +27,7 @@ export const CURRICULUM: AgeGroup[] = [
   {
     age: 13,
     school: 'School of Explorers',
-    subtitle: 'Foundations for the Exam Studio — algebra, geometry, graphs, numbers, proportion & data',
+    subtitle: 'Foundations for the Academy — algebra, geometry, graphs, numbers, proportion & data',
     icon: '🧭',
     color: 'bg-teal',
     locked: false,
