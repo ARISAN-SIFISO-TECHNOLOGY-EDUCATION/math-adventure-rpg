@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowLeft, Lock, CheckCircle, BookOpen } from 'lucide-react';
@@ -10,8 +11,20 @@ import {
   getLevelProgress,
   isLevelUnlocked,
   isDevUnlockAll,
+  setDevUnlockAll,
+  isDevButtonRevealed,
+  revealDevButton,
   getMockExamScores,
 } from '../progress';
+
+// True only when running the Vite dev server (npm run dev). In a release build
+// this is false, so the Dev Mode button stays hidden until the secret gesture.
+// Contained cast avoids needing global vite/client types.
+const IS_DEV_BUILD = Boolean((import.meta as { env?: { DEV?: boolean } }).env?.DEV);
+
+// Number of taps on the school title that reveals the Dev Mode button in a
+// release build — obscure enough that ordinary users never trigger it.
+const SECRET_TAP_COUNT = 7;
 
 // ─── Level dot ───────────────────────────────────────────────────────────────
 function LevelDot({
@@ -200,6 +213,31 @@ export default function TopicsPage() {
   const allTopicIds = group.topics.map(t => t.id);
   const lastMock = getMockExamScores().filter(m => m.age === ageNum).slice(-1)[0];
 
+  // Dev Mode — unlocks every topic & level so the whole syllabus can be reviewed
+  // freely (bypasses the ≥80% mastery gate). Global across all ages 15–17.
+  const [devUnlock, setDevUnlock] = useState(isDevUnlockAll());
+  function toggleDevUnlock() {
+    const next = !devUnlock;
+    setDevUnlockAll(next);
+    setDevUnlock(next);
+  }
+
+  // Dev button visibility: always on the dev server; in a release build only
+  // after the developer taps the school title SECRET_TAP_COUNT times.
+  const [devRevealed, setDevRevealed] = useState(isDevButtonRevealed());
+  const [titleTaps, setTitleTaps] = useState(0);
+  const devButtonVisible = IS_DEV_BUILD || devRevealed;
+
+  function handleTitleTap() {
+    if (devButtonVisible) return;
+    const next = titleTaps + 1;
+    setTitleTaps(next);
+    if (next >= SECRET_TAP_COUNT) {
+      revealDevButton();
+      setDevRevealed(true);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-slate-900 max-w-md mx-auto px-4 pb-24">
       {/* Header */}
@@ -213,7 +251,12 @@ export default function TopicsPage() {
         </motion.button>
         <div className="flex-1">
           <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">Age {age} · IGCSE</p>
-          <h1 className="text-xl font-outfit font-extrabold text-white">{group.school}</h1>
+          <h1
+            onClick={handleTitleTap}
+            className="text-xl font-outfit font-extrabold text-white select-none"
+          >
+            {group.school}
+          </h1>
         </div>
       </div>
 
@@ -258,6 +301,23 @@ export default function TopicsPage() {
             <p className="text-sm opacity-70 mt-1 font-inter">All topics · IGCSE style · marks &amp; exam tips</p>
           </motion.button>
         </motion.div>
+      )}
+
+      {/* Dev Mode toggle — unlock the whole syllabus for review (bypasses mastery gate).
+          Visible on the dev server, or after the secret title-tap gesture in a release build. */}
+      {devButtonVisible && (
+        <div className="mt-8 border-t border-slate-800 pt-4">
+          <button
+            onClick={toggleDevUnlock}
+            className={`w-full py-2.5 rounded-xl text-sm font-inter font-medium transition-colors ${
+              devUnlock
+                ? 'bg-sprout-orange/20 text-sprout-orange border border-sprout-orange/30'
+                : 'bg-slate-800 text-slate-500'
+            }`}
+          >
+            {devUnlock ? '🔓 Dev Mode ON — all levels unlocked' : '🔒 Dev Mode OFF'}
+          </button>
+        </div>
       )}
 
       <SeniorNav />

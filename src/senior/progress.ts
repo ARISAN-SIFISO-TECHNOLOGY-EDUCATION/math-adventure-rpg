@@ -124,6 +124,26 @@ export function isDevUnlockAll(): boolean {
   return loadProgress().devUnlockAll;
 }
 
+// ─── Dev button reveal (production gesture) ──────────────────────────────────
+// The Dev Mode toggle is always shown on the Vite dev server, but in a release
+// (Play Store) build it stays hidden until the developer reveals it with a
+// secret gesture. Once revealed on a device it stays revealed.
+const DEV_REVEAL_KEY = 'mathadv-senior-devreveal';
+
+export function isDevButtonRevealed(): boolean {
+  try {
+    return localStorage.getItem(DEV_REVEAL_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function revealDevButton(): void {
+  try {
+    localStorage.setItem(DEV_REVEAL_KEY, '1');
+  } catch { /* ignore */ }
+}
+
 // ─── Write helpers ───────────────────────────────────────────────────────────
 
 /**
