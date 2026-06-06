@@ -98,10 +98,10 @@ export default function CurriculumPage() {
             className="font-[Nunito] text-5xl font-extrabold leading-tight mb-5"
             style={{ background: 'linear-gradient(135deg,#4F46E5,#7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
           >
-            105 Levels.<br />9 Phases.<br />One Complete Journey.
+            Ages 3 to 17.<br />One Complete Journey.
           </h1>
           <p className="text-xl text-gray-500 max-w-xl mx-auto">
-            Every level is mapped to South African CAPS math standards. Progress is sequential — each level builds directly on the one before it.
+            A playful RPG for ages 3–12 and a focused exam‑prep Academy for ages 13–17 — every level mapped to South African CAPS standards. Progress is sequential: each level builds on the one before it.
           </p>
         </div>
       </section>

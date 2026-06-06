@@ -172,12 +172,13 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ── Footer Links ── */}
+      {/* ── Footer Links ── info pages only; Learn (Curriculum) and Grown-Ups
+          live in the bottom bar, so they are NOT repeated here. ── */}
       <div className="px-4 py-4 mt-4 border-t border-gray-100 flex justify-center gap-6 flex-wrap">
-        <Link to="/about"          className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">About</Link>
-        <Link to="/parents"        className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">For Parents</Link>
-        <Link to="/grown-up-corner" className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">Grown-up Corner</Link>
-        <Link to="/curriculum"     className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">Curriculum</Link>
+        <Link to="/about"    className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">About</Link>
+        <Link to="/parents"  className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">Parent Guide</Link>
+        <Link to="/privacy"  className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">Privacy</Link>
+        <Link to="/contact"  className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">Contact</Link>
       </div>
 
     </div>

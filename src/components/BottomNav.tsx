@@ -6,13 +6,15 @@
 // game screen (/play).
 
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Home, BookOpen, ShieldCheck, Gamepad2 } from 'lucide-react';
+import { Home, BookOpen, ShieldCheck, Rocket } from 'lucide-react';
 
+// 'Start' routes to the home age-chooser (NOT straight into the kids' RPG), so
+// teens reach the Academy and little ones reach the RPG by picking their age.
 const ITEMS = [
   { to: '/',                label: 'Home',      Icon: Home },
   { to: '/curriculum',      label: 'Learn',     Icon: BookOpen },
   { to: '/grown-up-corner', label: 'Grown-Ups', Icon: ShieldCheck },
-  { to: '/play',            label: 'Play',      Icon: Gamepad2 },
+  { to: '/?start=1',        label: 'Start',     Icon: Rocket },
 ] as const;
 
 export default function BottomNav() {

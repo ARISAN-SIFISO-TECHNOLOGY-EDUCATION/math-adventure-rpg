@@ -21,15 +21,15 @@ export default function LandingPage() {
             Learn Math.<br />Slay Monsters.<br />Save the Kingdom.
           </h1>
           <p className="text-xl text-gray-500 max-w-xl mx-auto mb-8">
-            A turn‑based educational RPG for ages 3–14. Solve math problems to defeat
-            enemies, earn coins, and progress through a magical world — guided by Sparky the Dragon.
+            A playful maths RPG for ages 3–12, plus a focused exam‑prep Academy for teens (13–17).
+            Solve problems, earn rewards, and build real mastery — all offline, ad‑free and free.
           </p>
           <div className="flex gap-4 justify-center flex-wrap mb-12">
             <Link
-              to="/play"
+              to="/"
               className="font-[Nunito] inline-flex items-center gap-2 bg-[#4F46E5] hover:bg-[#4338CA] hover:scale-105 text-white px-8 py-4 rounded-full font-bold text-base shadow-lg transition-all no-underline"
             >
-              🎮 Play Now — It's Free
+              🚀 Start Now — It's Free
             </Link>
             <a
               href="#ages"
@@ -40,8 +40,8 @@ export default function LandingPage() {
           </div>
           <div className="flex justify-center gap-12 flex-wrap">
             {[
-              { num: '105', label: 'Difficulty Levels' },
-              { num: '9',  label: 'Learning Phases' },
+              { num: '345', label: 'Levels' },
+              { num: '3–17', label: 'Ages Covered' },
               { num: '100%', label: 'Offline & Ad‑Free' },
             ].map(s => (
               <div key={s.label} className="text-center">

@@ -39,7 +39,7 @@ const TIPS = [
   {
     icon: '📅',
     title: 'How Long to Play',
-    body: 'Ages 3–5: 5–10 minutes with a parent. Ages 6–8: 15 minutes independently. Ages 9–12: 20–25 minutes. The streak counter rewards consistent daily sessions.',
+    body: 'Ages 3–5: 5–10 minutes with a parent. Ages 6–8: 15 minutes independently. Ages 9–12: 20–25 minutes. Ages 13–17 (The Academy): 30–40 minute focused study sessions with mastery levels and mock papers. The streak counter rewards consistent daily sessions.',
   },
   {
     icon: '🔥',

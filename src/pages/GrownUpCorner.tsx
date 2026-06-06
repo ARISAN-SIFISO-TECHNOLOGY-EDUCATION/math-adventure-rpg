@@ -37,7 +37,10 @@ export default function GrownUpCorner() {
     | { phase: number; levelInPhase: number }
     | null;
 
-  const [selectedPhase, setSelectedPhase] = useState(savedProgress?.phase ?? 1);
+  // Replay/skill-guide cover the live kids' RPG only (phases 1–4). Ages 13–17
+  // live in The Academy, which has its own progress; clamp so we never open the
+  // orphaned phases 5–9 (the game now caps /play at phase 4).
+  const [selectedPhase, setSelectedPhase] = useState(Math.min(4, savedProgress?.phase ?? 1));
   const [timerMin, setTimerMin] = useState<TimerMin | null>(null);
   const [activeTimer, setActiveTimer] = useState<{ endTime: number; minutes: number } | null>(
     () => JSON.parse(localStorage.getItem('sessionTimer') || 'null')
@@ -188,7 +191,7 @@ export default function GrownUpCorner() {
 
           {/* Phase tabs */}
           <div className="flex gap-2 mb-4 flex-wrap">
-            {PHASES.map(ph => (
+            {PHASES.filter(ph => ph.id <= 4).map(ph => (
               <button key={ph.id} onClick={() => setSelectedPhase(ph.id)}
                 className={`px-3 py-1.5 rounded-xl border-2 border-black font-black text-sm transition-all ${
                   selectedPhase === ph.id ? 'bg-black text-white' : 'bg-gray-100 hover:bg-gray-200'
