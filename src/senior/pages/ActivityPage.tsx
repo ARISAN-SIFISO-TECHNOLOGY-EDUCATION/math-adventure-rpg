@@ -10,6 +10,7 @@ import {
   type Problem,
 } from '../mathEngine';
 import { recordAttempt, addMistake, recordMockExam } from '../progress';
+import { recordAnswer, recordLevelComplete } from '../../lib/stats';
 import ErrorBoundary from '../../components/ErrorBoundary';
 
 // ─── Option button ────────────────────────────────────────────────────────────
@@ -252,6 +253,7 @@ function ActivityPageInner() {
 
   function handleAnswer(correct: boolean, userAnswer: string) {
     const problem = problems[currentIdx];
+    recordAnswer(correct); // on-device only (Grown-up Corner insights)
     const newResults = [...results, { correct, problem, userAnswer }];
     setResults(newResults);
 
@@ -274,6 +276,7 @@ function ActivityPageInner() {
     setWaitingNext(false);
     if (currentIdx + 1 >= problems.length) {
       // Done — calculate score and navigate to success
+      recordLevelComplete(); // on-device only (Grown-up Corner insights)
       const correct = results.filter(r => r.correct).length;
       const score = Math.round((correct / problems.length) * 100);
       if (mode === 'mock') {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PHASES } from '../game/phases';
 import { safeGet } from '../lib/safeStorage';
+import { getStats, resetStats } from '../lib/stats';
 
 const GATE_PROBLEMS = [
   { question: '8 + 5 = ?', answer: 13 },
@@ -38,6 +39,10 @@ export default function GrownUpCorner() {
     'mathProgress',
     null,
   );
+
+  // On-device learning insights (never leaves the device).
+  const stats = getStats();
+  const accuracy = stats.answered > 0 ? Math.round((stats.correct / stats.answered) * 100) : 0;
 
   // Replay/skill-guide cover the live kids' RPG only (phases 1–4). Ages 13–17
   // live in The Academy, which has its own progress; clamp so we never open the
@@ -89,6 +94,7 @@ export default function GrownUpCorner() {
         'lifetimeCoins', 'consolationCoins', 'companionSetup', 'sessionTimer'].forEach(
         k => localStorage.removeItem(k)
       );
+      resetStats();
     } else {
       const p = safeGet<{ phase: number; levelInPhase: number } | null>('mathProgress', null);
       if (p) localStorage.setItem('mathProgress', JSON.stringify({ phase: p.phase, levelInPhase: 1 }));
@@ -181,6 +187,39 @@ export default function GrownUpCorner() {
             className="mt-4 inline-flex items-center gap-2 bg-[#3B82F6] text-white px-6 py-3 rounded-2xl font-black border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] no-underline hover:bg-[#2563EB] transition-all">
             ▶️ Continue Game
           </Link>
+        </section>
+
+        {/* ── Section 1b: Learning Insights (on-device only) ── */}
+        <section className="bg-white rounded-[24px] p-6 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mb-6">
+          <h2 className="text-xl font-black mb-1">🔍 Learning Insights</h2>
+          <p className="text-sm font-bold text-gray-500 mb-4">
+            Private to this device — never uploaded or shared.
+          </p>
+          {stats.answered === 0 ? (
+            <p className="text-gray-500 font-bold">No activity yet. Insights appear once your child starts answering questions.</p>
+          ) : (
+            <>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-[#E0F2FE] rounded-2xl border-2 border-black p-3 text-center">
+                  <p className="text-2xl font-black text-[#3B82F6]">{stats.answered}</p>
+                  <p className="text-xs font-bold text-gray-500">Questions</p>
+                </div>
+                <div className="bg-[#DCFCE7] rounded-2xl border-2 border-black p-3 text-center">
+                  <p className="text-2xl font-black text-[#22C55E]">{accuracy}%</p>
+                  <p className="text-xs font-bold text-gray-500">Accuracy</p>
+                </div>
+                <div className="bg-[#F3E8FF] rounded-2xl border-2 border-black p-3 text-center">
+                  <p className="text-2xl font-black text-[#A855F7]">{stats.levelsCompleted}</p>
+                  <p className="text-xs font-bold text-gray-500">Levels done</p>
+                </div>
+              </div>
+              {stats.lastPlayed && (
+                <p className="text-xs font-bold text-gray-400 mt-3">
+                  Last active: {new Date(stats.lastPlayed).toLocaleDateString()}
+                </p>
+              )}
+            </>
+          )}
         </section>
 
         {/* ── Section 2: Replay any level ── */}

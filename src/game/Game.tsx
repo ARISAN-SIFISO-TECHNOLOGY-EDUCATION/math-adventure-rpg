@@ -13,6 +13,7 @@ import { Companion, type CompanionEmotion } from './Companion';
 import { useNarration } from './useNarration';
 import { registerScreenBack } from '../lib/backHandler';
 import { safeGet } from '../lib/safeStorage';
+import { recordAnswer, recordLevelComplete } from '../lib/stats';
 import { useSoundSystem } from './useSoundSystem';
 import {
   TUTORIAL_SLIDES, LEVEL_INTROS, PHASE1_HINTS,
@@ -624,6 +625,7 @@ export default function Game() {
     if (choice === problem.correctAnswer) {
       playCorrect();
       speakCorrect();
+      recordAnswer(true);
       const requiredToWin = isBossLevel(phase, levelInPhase) ? 7 : 5;
       setCompanionEmotion(progress + 1 >= requiredToWin ? 'celebrating' : 'excited');
       setCompanionMessage(null);
@@ -655,6 +657,7 @@ export default function Game() {
       if (newLifetime >= 500)  awardBadge('coins_500');
 
       if (newProgress >= requiredToWin) {
+        recordLevelComplete();
         const wasLastLevel = levelInPhase === currentPhaseConfig.levels.length;
         const wasLastPhase = phase === 4;
         const wasBonus = isBossLevel(phase, levelInPhase);
@@ -729,6 +732,7 @@ export default function Game() {
     } else {
       playWrong();
       speakWrong();
+      recordAnswer(false);
       setCompanionEmotion('encouraging');
       setCompanionMessage(null);
       const newWrong = wrongAttempts + 1;
