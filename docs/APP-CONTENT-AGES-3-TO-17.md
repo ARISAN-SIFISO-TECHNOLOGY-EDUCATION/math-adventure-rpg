@@ -123,20 +123,20 @@ The three senior bands form an upward arc: **Builders → Systems → Thinkers**
 
 ---
 
-## Age 15 — School of Builders · 🏗️ (9 topics · 38 levels)
+## Age 15 — School of Builders · 🏗️ (9 topics · 72 levels)
 *IGCSE Core — Cambridge 0580 / 0607 / CAPS Grade 10 aligned*
 
 | Topic | Levels | Covers |
 |-------|--------|--------|
 | 🔢 **Numbers & Algebra I** | 8 | Surds · Indices · Quadratics (factor) · Sequences · Logs · Standard form · Rounding/estimation · Log quotient law |
-| ✏️ **Algebra II** | 6 | Quadratic formula · Simultaneous · Inequalities · Algebraic fractions · Completing the square · Linear + quadratic |
-| 📐 **Geometry & Vectors** | 6 | Analytical geometry · Circle geometry · Similarity · Vectors · Volume & surface area · Sector arc |
-| 📡 **Trigonometry** | 7 | SOH-CAH-TOA · Sine/cosine rule · Elevation & depression · Bearings · 3D trig · Inverse trig · ½ab sin C |
-| 💯 **Numeracy & Proportion** | 1 | Percentages · Reverse % · Ratio · Direct/inverse proportion · Speed-distance-time |
-| 📊 **Statistics** | 3 | Mean/median/mode · Box plots · Grouped data · Histograms · Scatter |
-| 🎲 **Probability & Finance** | 2 | Venn diagrams · Tree diagrams · Compound interest |
-| 🔀 **Functions** | 2 | Domain/range · Graphs & transformations |
-| ⬛ **Matrices & Transformations** | 3 | 2×2 matrices · Geometric transformations · Inverse matrix |
+| ✏️ **Algebra II** | 8 | Quadratic formula · Simultaneous · Inequalities · Algebraic fractions · Completing the square · Linear + quadratic · Change of subject · Factor by grouping |
+| 📐 **Geometry & Vectors** | 8 | Analytical geometry · Circle geometry · Similarity · Vectors · Volume & surface area · Sector arc · Polygon angles · Similar-shape area/volume |
+| 📡 **Trigonometry** | 8 | SOH-CAH-TOA · Sine/cosine rule · Elevation & depression · Bearings · 3D trig · Inverse trig · ½ab sin C · Exact values |
+| 💯 **Numeracy & Proportion** | 8 | Percentages · % change · Reverse % · Ratio sharing · Direct proportion · Inverse proportion · Speed-distance-time · Unit conversion |
+| 📊 **Statistics** | 8 | Mean/median/mode · Box plots · Grouped data · Frequency-table mean · Scatter & correlation · Stem-and-leaf · Range · Comparing data |
+| 🎲 **Probability & Finance** | 8 | Venn diagrams · Compound interest · Single events · Tree diagrams · Mutually exclusive · Independent events · Simple interest · Expected frequency |
+| 🔀 **Functions** | 8 | Evaluate/composite/inverse · Graphs · Domain & range · Graph-type recognition · Line from 2 points · Turning point · Solving f(x)=k · Transformations |
+| ⬛ **Matrices & Transformations** | 8 | Transformations · Multiply & determinant · Inverse matrix · Add/subtract · Scalar × · Identity · Matrix equations · Transformation matrices |
 
 ---
 
@@ -180,11 +180,11 @@ The three senior bands form an upward arc: **Builders → Systems → Thinkers**
 | Advanced Primary | 11–12 | RPG | — | 15 |
 | Secondary | 13 | RPG | 3 worlds | 15 |
 | Upper Secondary | 14 | RPG | 3 worlds | 15 |
-| School of Builders | 15 | Exam Studio | 9 topics | 38 |
+| School of Builders | 15 | Exam Studio | 9 topics | 72 |
 | School of Systems | 16 | Exam Studio | 7 topics | 30 |
 | School of Thinkers | 17 | Exam Studio | 7 topics | 30 |
 
-**RPG total:** 95 levels (ages 3–14) · **Exam Studio total:** 98 levels across 23 topics (ages 15–17).
+**RPG total:** 95 levels (ages 3–14) · **Exam Studio total:** 132 levels across 23 topics (ages 15–17).
 
 Every generated question is verified to offer **4 distinct multiple-choice options** with the correct answer always present (engine-level guarantee). Senior questions add worked steps, exam tips, and common-mistake notes; senior progress is mastery-gated at ≥ 80% with sequential unlocking.
 

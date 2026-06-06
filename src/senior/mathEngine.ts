@@ -5375,17 +5375,698 @@ function genFallback(): Problem {
 type LevelGenerator = () => Problem;
 type TopicLevels = Record<number, LevelGenerator>;
 
+// ═══════════════════════════════════════════════════════════════════════════
+//  Age 15 (Builders) expansion — bring every topic up to 8 distinct levels.
+//  Conceptual skills use hand-verified CASES; arithmetic skills compute the
+//  answer procedurally so it is always correct. makeOptions guarantees 4
+//  distinct options regardless.
+// ═══════════════════════════════════════════════════════════════════════════
+
+interface CaseDef {
+  q: string; c: string; w: string[]; s: string[]; h: string[];
+  mistake: string; tip: string; m?: number; calc?: boolean;
+}
+
+function fromCases(cases: CaseDef[]): Problem {
+  const c = cases[randInt(0, cases.length - 1)];
+  return {
+    id: uid(), question: c.q, correctAnswer: c.c,
+    options: makeOptions(c.c, c.w), marks: c.m ?? 3,
+    workingSteps: c.s, hints: c.h, calculatorAllowed: c.calc ?? false,
+    commonMistake: c.mistake, examTip: c.tip,
+  };
+}
+
+// ── age15-numeracy L2 — Percentage Change ────────────────────────────────────
+function genPercentChange(): Problem {
+  const P = randInt(2, 9) * 100;
+  const r = [5, 10, 20, 25, 50][randInt(0, 4)];
+  const inc = Math.random() < 0.5;
+  const delta = (P * r) / 100;
+  const val = inc ? P + delta : P - delta;
+  return {
+    id: uid(),
+    question: `A price of ${P} is ${inc ? 'increased' : 'decreased'} by ${r}%.\n\nFind the new price.`,
+    correctAnswer: `${val}`,
+    options: makeOptions(`${val}`, [`${delta}`, `${inc ? P - delta : P + delta}`, `${val + (inc ? delta : -delta)}`]),
+    marks: 2,
+    workingSteps: [
+      `Multiplier = ${inc ? `1 + ${r}/100 = ${1 + r / 100}` : `1 − ${r}/100 = ${1 - r / 100}`}`,
+      `New price = ${P} × ${inc ? 1 + r / 100 : 1 - r / 100} = ${val}`,
+    ],
+    hints: [`${inc ? 'Increase' : 'Decrease'} → multiply by ${inc ? '(1 + rate)' : '(1 − rate)'}`, `${r}% of ${P} = ${delta}`],
+    calculatorAllowed: true,
+    commonMistake: `Stopping at the change (${delta}) instead of ${inc ? 'adding it to' : 'subtracting it from'} the original.`,
+    examTip: `Use the multiplier method: ${inc ? 1 + r / 100 : 1 - r / 100} × ${P} in one step — fewer errors.`,
+  };
+}
+
+// ── age15-numeracy L3 — Reverse Percentages ──────────────────────────────────
+function genReversePercent(): Problem {
+  const O = randInt(2, 9) * 100;
+  const r = [10, 20, 25, 50][randInt(0, 3)];
+  const inc = Math.random() < 0.5;
+  const mult = inc ? 1 + r / 100 : 1 - r / 100;
+  const newVal = O * mult;
+  return {
+    id: uid(),
+    question: `After a ${r}% ${inc ? 'increase' : 'decrease'}, a price is ${newVal}.\n\nFind the ORIGINAL price.`,
+    correctAnswer: `${O}`,
+    options: makeOptions(`${O}`, [`${newVal}`, `${O + 100}`, `${O - 100}`]),
+    marks: 3,
+    workingSteps: [
+      `New price = original × ${mult}`,
+      `${newVal} = original × ${mult}`,
+      `Original = ${newVal} ÷ ${mult} = ${O}`,
+    ],
+    hints: [`Reverse percentage → divide by the multiplier`, `multiplier = ${mult}`],
+    calculatorAllowed: true,
+    commonMistake: `Taking ${r}% of the NEW price (${newVal}) instead of dividing by the multiplier. The % is of the original.`,
+    examTip: `Reverse % ALWAYS divides by the multiplier. Never take a percentage of the new value.`,
+  };
+}
+
+// ── age15-numeracy L4 — Sharing in a Ratio ───────────────────────────────────
+function genRatioSharing(): Problem {
+  const parts = [randInt(1, 4), randInt(1, 4), randInt(1, 4)];
+  const sum = parts[0] + parts[1] + parts[2];
+  const unit = randInt(2, 9) * 10;
+  const total = sum * unit;
+  const idx = randInt(0, 2);
+  const who = ['A', 'B', 'C'][idx];
+  const share = parts[idx] * unit;
+  return {
+    id: uid(),
+    question: `Share ${total} in the ratio ${parts.join(' : ')} among A, B and C.\n\nHow much does ${who} receive?`,
+    correctAnswer: `${share}`,
+    options: makeOptions(`${share}`, [`${share + unit}`, `${Math.max(0, share - unit)}`, `${Math.round(total / 3)}`]),
+    marks: 3,
+    workingSteps: [
+      `Total parts = ${parts.join(' + ')} = ${sum}`,
+      `One part = ${total} ÷ ${sum} = ${unit}`,
+      `${who} = ${parts[idx]} × ${unit} = ${share}`,
+    ],
+    hints: [`Find the total number of parts first`, `One part = total ÷ sum of parts`],
+    calculatorAllowed: true,
+    commonMistake: `Dividing by 3 (the number of people) instead of ${sum} (the total parts).`,
+    examTip: `Always find the value of ONE part first, then multiply by each share's parts.`,
+  };
+}
+
+// ── age15-numeracy L5 — Direct Proportion ────────────────────────────────────
+function genDirectProportion(): Problem {
+  const k = randInt(2, 9);
+  const x1 = randInt(2, 6);
+  const y1 = k * x1;
+  const x2 = x1 + randInt(1, 4);
+  const y2 = k * x2;
+  return {
+    id: uid(),
+    question: `y is directly proportional to x.\nWhen x = ${x1}, y = ${y1}.\n\nFind y when x = ${x2}.`,
+    correctAnswer: `${y2}`,
+    options: makeOptions(`${y2}`, [`${y2 + k}`, `${y1 + (x2 - x1)}`, `${y2 - k}`]),
+    marks: 3,
+    workingSteps: [`Direct proportion: y = kx`, `k = ${y1} ÷ ${x1} = ${k}`, `y = ${k} × ${x2} = ${y2}`],
+    hints: [`y = kx`, `Find k first, then substitute the new x`],
+    calculatorAllowed: false,
+    commonMistake: `Adding the change in x to y (giving ${y1 + (x2 - x1)}) — proportion is multiplicative, not additive.`,
+    examTip: `The ratio y/x is constant (= k = ${k}). Use it to scale.`,
+  };
+}
+
+// ── age15-numeracy L6 — Inverse Proportion ───────────────────────────────────
+function genInverseProportion(): Problem {
+  const k = [12, 24, 36, 48, 60][randInt(0, 4)];
+  const divs = [1, 2, 3, 4, 6].filter(d => k % d === 0);
+  const x1 = divs[randInt(0, divs.length - 1)];
+  let x2 = divs[randInt(0, divs.length - 1)];
+  if (x2 === x1) x2 = divs[(divs.indexOf(x1) + 1) % divs.length];
+  const y1 = k / x1, y2 = k / x2;
+  return {
+    id: uid(),
+    question: `y is inversely proportional to x.\nWhen x = ${x1}, y = ${y1}.\n\nFind y when x = ${x2}.`,
+    correctAnswer: `${y2}`,
+    options: makeOptions(`${y2}`, [`${k}`, `${y2 + 1}`, `${Math.max(1, y2 - 1)}`]),
+    marks: 3,
+    workingSteps: [`Inverse proportion: y = k/x`, `k = x·y = ${x1} × ${y1} = ${k}`, `y = ${k} ÷ ${x2} = ${y2}`],
+    hints: [`y = k/x`, `k = x × y is constant`],
+    calculatorAllowed: false,
+    commonMistake: `Treating it as direct proportion — here as x increases, y DECREASES.`,
+    examTip: `Inverse proportion: the PRODUCT x×y is constant (= ${k}).`,
+  };
+}
+
+// ── age15-numeracy L7 — Speed, Distance & Time ───────────────────────────────
+function genSpeedDistTime(): Problem {
+  const S = [40, 50, 60, 80, 100][randInt(0, 4)];
+  const T = randInt(2, 5);
+  const D = S * T;
+  const mode = randInt(0, 2);
+  if (mode === 0) {
+    return {
+      id: uid(),
+      question: `A car travels at ${S} km/h for ${T} hours.\n\nFind the distance travelled.`,
+      correctAnswer: `${D} km`,
+      options: makeOptions(`${D} km`, [`${S + T} km`, `${D + S} km`, `${Math.round(D / 2)} km`]),
+      marks: 2,
+      workingSteps: [`Distance = Speed × Time`, `D = ${S} × ${T} = ${D} km`],
+      hints: [`D = S × T`], calculatorAllowed: true,
+      commonMistake: `Adding speed and time instead of multiplying.`,
+      examTip: `Use the D-S-T triangle: D on top, so D = S × T.`,
+    };
+  } else if (mode === 1) {
+    return {
+      id: uid(),
+      question: `A journey of ${D} km is driven at ${S} km/h.\n\nHow long does it take?`,
+      correctAnswer: `${T} hours`,
+      options: makeOptions(`${T} hours`, [`${T + 1} hours`, `${D - S} hours`, `${Math.max(1, T - 1)} hours`]),
+      marks: 2,
+      workingSteps: [`Time = Distance ÷ Speed`, `T = ${D} ÷ ${S} = ${T} hours`],
+      hints: [`T = D ÷ S`], calculatorAllowed: true,
+      commonMistake: `Multiplying instead of dividing — Time = Distance ÷ Speed.`,
+      examTip: `From the triangle: T = D / S.`,
+    };
+  } else {
+    return {
+      id: uid(),
+      question: `A train covers ${D} km in ${T} hours.\n\nFind its average speed.`,
+      correctAnswer: `${S} km/h`,
+      options: makeOptions(`${S} km/h`, [`${S + 10} km/h`, `${D - T} km/h`, `${Math.max(10, S - 10)} km/h`]),
+      marks: 2,
+      workingSteps: [`Speed = Distance ÷ Time`, `S = ${D} ÷ ${T} = ${S} km/h`],
+      hints: [`S = D ÷ T`], calculatorAllowed: true,
+      commonMistake: `Dividing time by distance — Speed = Distance ÷ Time.`,
+      examTip: `From the triangle: S = D / T.`,
+    };
+  }
+}
+
+// ── age15-numeracy L8 — Unit Conversion ──────────────────────────────────────
+function genUnitConversion(): Problem {
+  return fromCases([
+    { q: `Convert 3.5 km to metres.`, c: '3500 m', w: ['350 m', '35000 m', '3.5 m'], s: ['1 km = 1000 m', '3.5 × 1000 = 3500 m'], h: ['1 km = 1000 m'], mistake: 'Multiplying by 100 instead of 1000.', tip: 'km → m: multiply by 1000.', calc: true },
+    { q: `Convert 2500 g to kilograms.`, c: '2.5 kg', w: ['25 kg', '250 kg', '0.25 kg'], s: ['1 kg = 1000 g', '2500 ÷ 1000 = 2.5 kg'], h: ['1 kg = 1000 g'], mistake: 'Dividing by 100 instead of 1000.', tip: 'g → kg: divide by 1000.', calc: true },
+    { q: `Convert 4.2 litres to millilitres.`, c: '4200 ml', w: ['420 ml', '42000 ml', '42 ml'], s: ['1 L = 1000 ml', '4.2 × 1000 = 4200 ml'], h: ['1 L = 1000 ml'], mistake: 'Wrong power of ten.', tip: 'L → ml: multiply by 1000.', calc: true },
+    { q: `Convert 750 cm to metres.`, c: '7.5 m', w: ['75 m', '0.75 m', '7500 m'], s: ['1 m = 100 cm', '750 ÷ 100 = 7.5 m'], h: ['1 m = 100 cm'], mistake: 'Dividing by 1000 instead of 100.', tip: 'cm → m: divide by 100.', calc: true },
+    { q: `A car uses 6 litres per 100 km. How much for a 250 km trip?`, c: '15 litres', w: ['12 litres', '24 litres', '6 litres'], s: ['Per km: 6 ÷ 100 = 0.06 L', '250 × 0.06 = 15 litres'], h: ['Find fuel per km first'], mistake: 'Forgetting to scale to 250 km.', tip: 'Compound units: find the per-unit rate first.', calc: true },
+  ]);
+}
+
+// ── age15-prob L3 — Single Event Probability ─────────────────────────────────
+function genSingleEventProb(): Problem {
+  const r = randInt(2, 5), b = randInt(2, 5), g = randInt(2, 5);
+  const total = r + b + g;
+  const which = randInt(0, 2);
+  const cnt = [r, b, g][which];
+  const name = ['red', 'blue', 'green'][which];
+  const correct = simplify(cnt, total);
+  return {
+    id: uid(),
+    question: `A bag contains ${r} red, ${b} blue and ${g} green counters.\nOne counter is taken at random.\n\nFind P(${name}).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [simplify(total - cnt, total), `${cnt}/${total + 1}`, simplify(cnt + 1, total)]),
+    marks: 2,
+    workingSteps: [`P(event) = favourable ÷ total`, `P(${name}) = ${cnt}/${total} = ${correct}`],
+    hints: [`Total counters = ${total}`, `P = favourable / total`],
+    calculatorAllowed: false,
+    commonMistake: `Using the wrong total — count ALL counters (${total}), not just the other colours.`,
+    examTip: `Always simplify the fraction. ${cnt}/${total} = ${correct}.`,
+  };
+}
+
+// ── age15-prob L4 — Tree Diagrams (without replacement) ───────────────────────
+function genTreeDiagram(): Problem {
+  const total = randInt(6, 9);
+  const r = randInt(2, total - 2);
+  const num = r * (r - 1), den = total * (total - 1);
+  const correct = simplify(num, den);
+  return {
+    id: uid(),
+    question: `A box has ${total} balls, of which ${r} are red.\nTwo balls are taken WITHOUT replacement.\n\nFind P(both red).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [simplify(r * r, total * total), `${r}/${total}`, simplify(r * (r - 1), total * total)]),
+    marks: 3,
+    workingSteps: [
+      `P(1st red) = ${r}/${total}`,
+      `P(2nd red | 1st red) = ${r - 1}/${total - 1}`,
+      `P(both) = ${r}/${total} × ${r - 1}/${total - 1} = ${correct}`,
+    ],
+    hints: [`Without replacement: reduce BOTH numerator and denominator by 1 for the 2nd draw`, `Multiply along the branches`],
+    calculatorAllowed: false,
+    commonMistake: `Using ${r}/${total} twice (that is WITH replacement) — the second draw has one fewer ball.`,
+    examTip: `Without replacement changes the second fraction. Reduce top and bottom by 1.`,
+  };
+}
+
+// ── age15-prob L5 — Mutually Exclusive Events ────────────────────────────────
+function genMutuallyExclusive(): Problem {
+  const den = [8, 10, 12][randInt(0, 2)];
+  const a = randInt(1, 3), b = randInt(1, 3);
+  const correct = simplify(a + b, den);
+  return {
+    id: uid(),
+    question: `Events A and B are mutually exclusive.\nP(A) = ${a}/${den},  P(B) = ${b}/${den}.\n\nFind P(A or B).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [simplify(a * b, den), `${a + b}/${den * 2}`, simplify(Math.abs(a - b) || 1, den)]),
+    marks: 2,
+    workingSteps: [`Mutually exclusive: P(A or B) = P(A) + P(B)`, `= ${a}/${den} + ${b}/${den} = ${a + b}/${den} = ${correct}`],
+    hints: [`Mutually exclusive means they cannot both happen`, `Just add the probabilities`],
+    calculatorAllowed: false,
+    commonMistake: `Multiplying instead of adding — "OR" with mutually exclusive events means ADD.`,
+    examTip: `Mutually exclusive → add. (There is no overlap to subtract.)`,
+  };
+}
+
+// ── age15-prob L6 — Independent Events ───────────────────────────────────────
+function genIndependentEvents(): Problem {
+  const fr = [[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [2, 5]];
+  const i = randInt(0, fr.length - 1);
+  let j = randInt(0, fr.length - 1);
+  if (j === i) j = (i + 1) % fr.length;
+  const [n1, d1] = fr[i], [n2, d2] = fr[j];
+  const num = n1 * n2, den = d1 * d2;
+  const correct = simplify(num, den);
+  return {
+    id: uid(),
+    question: `A and B are independent events.\nP(A) = ${n1}/${d1},  P(B) = ${n2}/${d2}.\n\nFind P(A and B).`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [simplify(n1 * d2 + n2 * d1, den), `${num}/${den + 1}`, simplify(num + 1, den)]),
+    marks: 3,
+    workingSteps: [`Independent: P(A and B) = P(A) × P(B)`, `= ${n1}/${d1} × ${n2}/${d2} = ${num}/${den} = ${correct}`],
+    hints: [`Independent events: MULTIPLY`, `Multiply numerators and denominators`],
+    calculatorAllowed: false,
+    commonMistake: `Adding instead of multiplying — "AND" with independent events means MULTIPLY.`,
+    examTip: `Independent + "AND" → multiply the probabilities.`,
+  };
+}
+
+// ── age15-prob L7 — Simple Interest ──────────────────────────────────────────
+function genSimpleInterest(): Problem {
+  const P = randInt(2, 9) * 1000;
+  const r = [5, 8, 10, 12][randInt(0, 3)];
+  const t = randInt(2, 5);
+  const I = (P * r * t) / 100;
+  const total = P + I;
+  const askTotal = Math.random() < 0.5;
+  const correct = askTotal ? `${total}` : `${I}`;
+  return {
+    id: uid(),
+    question: `${P} is invested at ${r}% SIMPLE interest per year for ${t} years.\n\nFind the ${askTotal ? 'total amount' : 'interest earned'}.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`${askTotal ? I : total}`, `${Math.round(P * Math.pow(1 + r / 100, t))}`, `${P * r * t}`]),
+    marks: 3,
+    workingSteps: [
+      `Simple interest: I = P × r × t / 100`,
+      `I = ${P} × ${r} × ${t} / 100 = ${I}`,
+      ...(askTotal ? [`Total = P + I = ${P} + ${I} = ${total}`] : []),
+    ],
+    hints: [`I = P r t / 100`, ...(askTotal ? [`Total = P + I`] : [])],
+    calculatorAllowed: true,
+    commonMistake: `Using compound interest — simple interest is the same amount each year (linear).`,
+    examTip: `Simple interest is linear: the same ${I / t} is added every year.`,
+  };
+}
+
+// ── age15-prob L8 — Expected Frequency ───────────────────────────────────────
+function genExpectedFrequency(): Problem {
+  const opts = [[1, 5, 60], [1, 4, 80], [1, 6, 60], [2, 5, 50], [3, 10, 100]];
+  const [num, den, trials] = opts[randInt(0, opts.length - 1)];
+  const exp = (num / den) * trials;
+  return {
+    id: uid(),
+    question: `The probability of an event is ${num}/${den}.\nThe experiment is repeated ${trials} times.\n\nHow many times is the event expected to occur?`,
+    correctAnswer: `${exp}`,
+    options: makeOptions(`${exp}`, [`${trials - exp}`, `${exp + den}`, `${Math.round(trials / den)}`]),
+    marks: 2,
+    workingSteps: [`Expected frequency = probability × number of trials`, `= ${num}/${den} × ${trials} = ${exp}`],
+    hints: [`Expected = P(event) × trials`],
+    calculatorAllowed: true,
+    commonMistake: `Using just the probability or just the trials — multiply them together.`,
+    examTip: `Expected frequency = P × n. It need not be a whole number in general.`,
+  };
+}
+
+// ── age15-functions L3 — Domain & Range ──────────────────────────────────────
+function genDomainRange15(): Problem {
+  return fromCases([
+    { q: `State the range of f(x) = x² + 3.`, c: 'y ≥ 3', w: ['y ≤ 3', 'y ≥ 0', 'y > 3'], s: ['x² has minimum value 0', 'Minimum of x² + 3 is 0 + 3 = 3', 'Range: y ≥ 3'], h: ['x² is always ≥ 0', 'Add the constant to the minimum'], mistake: 'Writing y > 3 — the value 3 IS reached (at x = 0), so use ≥.', tip: 'For y = x² + c the range is y ≥ c.' },
+    { q: `State the domain of f(x) = √(x − 4).`, c: 'x ≥ 4', w: ['x ≤ 4', 'x > 4', 'x ≥ 0'], s: ['The inside of a square root must be ≥ 0', 'x − 4 ≥ 0', 'x ≥ 4'], h: ['Inside of √ must be ≥ 0'], mistake: 'x > 4 excludes 4, but √0 = 0 is valid, so x ≥ 4.', tip: 'Square root: set the inside ≥ 0.' },
+    { q: `Which value of x is excluded from the domain of f(x) = 1/(x − 2)?`, c: 'x = 2', w: ['x = 0', 'x = −2', 'x = 1'], s: ['The denominator cannot be 0', 'x − 2 = 0 → x = 2', 'Exclude x = 2'], h: ['Denominator ≠ 0'], mistake: 'Excluding x = 0 — it is x − 2 that cannot be 0, so x ≠ 2.', tip: 'For 1/(x − a), exclude x = a.' },
+    { q: `State the range of f(x) = (x − 1)² + 5.`, c: 'y ≥ 5', w: ['y ≥ 1', 'y ≥ −5', 'y ≤ 5'], s: ['(x − 1)² has minimum 0', 'Minimum of (x − 1)² + 5 is 5', 'Range: y ≥ 5'], h: ['A squared bracket is ≥ 0'], mistake: 'Reading y ≥ 1 from the bracket — the + 5 lifts the minimum to 5.', tip: 'Vertex form y = (x − p)² + q has range y ≥ q.' },
+  ]);
+}
+
+// ── age15-functions L4 — Recognising Graph Types ─────────────────────────────
+function genGraphTypeRecognition(): Problem {
+  return fromCases([
+    { q: `What type of graph is y = 2x − 3?`, c: 'Straight line', w: ['Parabola', 'Hyperbola', 'Exponential'], s: ['Highest power of x is 1', 'y = mx + c is a straight line'], h: ['Look at the highest power of x'], mistake: 'Confusing linear with quadratic.', tip: 'Power 1 → line, power 2 → parabola.' },
+    { q: `What type of graph is y = x² − 4?`, c: 'Parabola', w: ['Straight line', 'Cubic', 'Hyperbola'], s: ['Highest power of x is 2', 'y = ax² + bx + c is a parabola'], h: ['Highest power is 2'], mistake: 'Calling it a straight line.', tip: 'x² → U-shaped parabola.' },
+    { q: `What type of graph is y = 1/x?`, c: 'Hyperbola', w: ['Parabola', 'Straight line', 'Cubic'], s: ['Reciprocal function', 'y = 1/x is a hyperbola with asymptotes'], h: ['x is in the denominator'], mistake: 'Calling it a parabola.', tip: 'Reciprocal 1/x → hyperbola.' },
+    { q: `What type of graph is y = 2ˣ?`, c: 'Exponential', w: ['Parabola', 'Straight line', 'Hyperbola'], s: ['The variable is in the exponent', 'y = aˣ is exponential'], h: ['x is the power'], mistake: 'Confusing 2ˣ with x².', tip: 'Variable in the exponent → exponential.' },
+    { q: `What type of graph is y = x³?`, c: 'Cubic', w: ['Parabola', 'Straight line', 'Hyperbola'], s: ['Highest power of x is 3', 'y = x³ is a cubic curve'], h: ['Highest power is 3'], mistake: 'Calling it a parabola.', tip: 'x³ → S-shaped cubic.' },
+  ]);
+}
+
+// ── age15-functions L5 — Equation of a Line from Two Points ───────────────────
+function genLineFromTwoPoints(): Problem {
+  const m = [2, 3, -2, -1, 1, -3][randInt(0, 5)];
+  const x1 = randInt(0, 3);
+  const c = randInt(-4, 4);
+  const y1 = m * x1 + c;
+  const x2 = x1 + randInt(1, 3);
+  const y2 = m * x2 + c;
+  const fmtC = (k: number) => (k === 0 ? '' : k > 0 ? ` + ${k}` : ` − ${-k}`);
+  const correct = `y = ${m}x${fmtC(c)}`;
+  return {
+    id: uid(),
+    question: `A straight line passes through (${x1}, ${y1}) and (${x2}, ${y2}).\n\nFind its equation.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`y = ${m + 1}x${fmtC(c)}`, `y = ${m}x${fmtC(c + 1)}`, `y = ${-m}x${fmtC(c)}`]),
+    marks: 3,
+    workingSteps: [
+      `Gradient m = (y₂ − y₁)/(x₂ − x₁) = (${y2} − ${y1})/(${x2} − ${x1}) = ${m}`,
+      `Use y = mx + c with (${x1}, ${y1}): ${y1} = ${m}×${x1} + c → c = ${c}`,
+      `Equation: ${correct}`,
+    ],
+    hints: [`Find the gradient first`, `Then substitute a point to find c`],
+    calculatorAllowed: false,
+    commonMistake: `Computing the gradient upside down: (x₂ − x₁)/(y₂ − y₁).`,
+    examTip: `m = rise/run = (y₂ − y₁)/(x₂ − x₁). Keep the order consistent.`,
+  };
+}
+
+// ── age15-functions L6 — Turning Point (Vertex Form) ─────────────────────────
+function genTurningPointForm(): Problem {
+  const p = randInt(1, 4) * (Math.random() < 0.5 ? 1 : -1);
+  const q = randInt(-4, 4);
+  const pStr = p >= 0 ? `− ${p}` : `+ ${-p}`;
+  const qStr = q >= 0 ? `+ ${q}` : `− ${-q}`;
+  const correct = `(${p}, ${q})`;
+  return {
+    id: uid(),
+    question: `Find the turning point (vertex) of:\n y = (x ${pStr})² ${qStr}`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`(${-p}, ${q})`, `(${p}, ${-q})`, `(${q}, ${p})`]),
+    marks: 3,
+    workingSteps: [`y = (x − p)² + q has vertex (p, q)`, `Here p = ${p}, q = ${q}`, `Turning point = (${p}, ${q})`],
+    hints: [`Vertex form: y = (x − p)² + q`, `The vertex is (p, q) — watch the sign of p`],
+    calculatorAllowed: false,
+    commonMistake: `Reading the sign of p straight from the bracket — (x ${pStr}) gives p = ${p}.`,
+    examTip: `Vertex form reveals the turning point directly: (p, q). Line of symmetry is x = ${p}.`,
+  };
+}
+
+// ── age15-functions L7 — Solving f(x) = k ────────────────────────────────────
+function genFunctionMapping(): Problem {
+  const a = randInt(2, 5), b = randInt(1, 6), x = randInt(2, 6);
+  const k = a * x + b;
+  return {
+    id: uid(),
+    question: `f(x) = ${a}x + ${b}.\nGiven that f(x) = ${k}, find the value of x.`,
+    correctAnswer: `${x}`,
+    options: makeOptions(`${x}`, [`${x + 1}`, `${k - a}`, `${Math.round(k / a)}`]),
+    marks: 3,
+    workingSteps: [`${a}x + ${b} = ${k}`, `${a}x = ${k - b}`, `x = ${k - b} ÷ ${a} = ${x}`],
+    hints: [`Set the expression equal to ${k}`, `Solve the linear equation`],
+    calculatorAllowed: false,
+    commonMistake: `Substituting ${k} for x instead of solving for x.`,
+    examTip: `f(x) = k means "for what input do we get ${k}?" — solve the equation.`,
+  };
+}
+
+// ── age15-functions L8 — Graph Transformations ───────────────────────────────
+function genGraphTransform(): Problem {
+  return fromCases([
+    { q: `Describe the transformation from y = f(x) to y = f(x) + 3.`, c: 'Translation 3 units up', w: ['Translation 3 units down', 'Translation 3 units right', 'Translation 3 units left'], s: ['A constant ADDED outside the function moves it vertically', '+ 3 → up 3'], h: ['Outside the bracket → vertical move'], mistake: 'Confusing vertical and horizontal shifts.', tip: '+ k outside → up k.' },
+    { q: `Describe the transformation from y = f(x) to y = f(x) − 2.`, c: 'Translation 2 units down', w: ['Translation 2 units up', 'Translation 2 units left', 'Translation 2 units right'], s: ['− 2 outside → move down 2'], h: ['Outside the bracket → vertical move'], mistake: 'Moving up instead of down.', tip: '− k outside → down k.' },
+    { q: `Describe the transformation from y = f(x) to y = f(x − 4).`, c: 'Translation 4 units right', w: ['Translation 4 units left', 'Translation 4 units up', 'Translation 4 units down'], s: ['Inside the bracket moves horizontally, OPPOSITE to the sign', '(x − 4) → right 4'], h: ['Inside the bracket → horizontal (opposite sign)'], mistake: '(x − 4) looks like left but it moves RIGHT.', tip: 'Inside: − a → right a (counter-intuitive).' },
+    { q: `Describe the transformation from y = f(x) to y = f(x + 1).`, c: 'Translation 1 unit left', w: ['Translation 1 unit right', 'Translation 1 unit up', 'Translation 1 unit down'], s: ['(x + 1) → left 1 (opposite sign)'], h: ['Inside the bracket → opposite direction'], mistake: '(x + 1) moves LEFT, not right.', tip: 'Inside: + a → left a.' },
+    { q: `Describe the transformation from y = f(x) to y = −f(x).`, c: 'Reflection in the x-axis', w: ['Reflection in the y-axis', 'Translation down', 'Rotation 90°'], s: ['Negating the whole function flips it vertically', 'y = −f(x) reflects in the x-axis'], h: ['Minus outside → reflect in x-axis'], mistake: 'Confusing the two reflections.', tip: '−f(x) → reflect in x-axis; f(−x) → reflect in y-axis.' },
+    { q: `Describe the transformation from y = f(x) to y = f(−x).`, c: 'Reflection in the y-axis', w: ['Reflection in the x-axis', 'Translation left', 'Rotation 180°'], s: ['Negating the input flips it horizontally', 'y = f(−x) reflects in the y-axis'], h: ['Minus inside → reflect in y-axis'], mistake: 'Confusing the two reflections.', tip: 'f(−x) → reflect in y-axis.' },
+  ]);
+}
+
+// ── age15-stats L4 — Mean from a Frequency Table ─────────────────────────────
+function genFreqTableMean(): Problem {
+  const vals = [1, 2, 3, 4];
+  const f = [randInt(1, 6), randInt(1, 6), randInt(1, 6), randInt(1, 6)];
+  const sumF = f.reduce((a, b) => a + b, 0);
+  const sumFX = vals.reduce((a, v, i) => a + v * f[i], 0);
+  const mean = sumFX / sumF;
+  const correct = Number.isInteger(mean) ? `${mean}` : mean.toFixed(2);
+  const table = vals.map((v, i) => `|   ${v}   |  ${f[i]}   |`).join('\n');
+  return {
+    id: uid(),
+    question: `The table shows test scores:\n\n| Score | Freq |\n|-------|------|\n${table}\n\nFind the mean score.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [(mean + 1).toFixed(2), (sumFX / 4).toFixed(2), (mean + 0.5).toFixed(2)]),
+    marks: 3,
+    workingSteps: [
+      `Σfx = ${vals.map((v, i) => `${v}×${f[i]}`).join(' + ')} = ${sumFX}`,
+      `Σf = ${f.join(' + ')} = ${sumF}`,
+      `Mean = ${sumFX} ÷ ${sumF} = ${correct}`,
+    ],
+    hints: [`Mean = Σfx ÷ Σf`, `Multiply each score by its frequency first`],
+    calculatorAllowed: true,
+    commonMistake: `Dividing by the number of rows (4) instead of Σf (${sumF}).`,
+    examTip: `Add an "fx" column, total it, then divide by the total frequency.`,
+  };
+}
+
+// ── age15-stats L5 — Scatter Graphs & Correlation ────────────────────────────
+function genScatterCorrelation(): Problem {
+  return fromCases([
+    { q: `As temperature rises, ice-cream sales rise.\nWhat correlation does a scatter graph show?`, c: 'Positive correlation', w: ['Negative correlation', 'No correlation', 'Zero gradient'], s: ['Both quantities increase together', 'Up-and-to-the-right → positive correlation'], h: ['Do both increase together?'], mistake: 'Confusing positive with negative.', tip: 'Both rise together → positive.' },
+    { q: `As a car gets older, its value falls.\nWhat correlation does a scatter graph show?`, c: 'Negative correlation', w: ['Positive correlation', 'No correlation', 'Perfect correlation'], s: ['One increases while the other decreases', 'Down-and-to-the-right → negative correlation'], h: ['One up, one down?'], mistake: 'Calling opposite trends positive.', tip: 'One up, one down → negative.' },
+    { q: `Shoe size and exam mark give a randomly scattered graph.\nWhat correlation is shown?`, c: 'No correlation', w: ['Positive correlation', 'Negative correlation', 'Strong correlation'], s: ['No clear pattern', 'Random scatter → no correlation'], h: ['Is there any clear trend?'], mistake: 'Seeing a trend where there is none.', tip: 'No pattern → no correlation.' },
+    { q: `A line of best fit slopes downward from left to right.\nWhat correlation is shown?`, c: 'Negative correlation', w: ['Positive correlation', 'No correlation', 'Zero correlation'], s: ['Downward slope → as x increases, y decreases', 'Negative correlation'], h: ['Which way does the line slope?'], mistake: 'Confusing the slope direction.', tip: 'Downward line → negative correlation.' },
+  ]);
+}
+
+// ── age15-stats L6 — Stem-and-Leaf Diagrams ──────────────────────────────────
+function genStemLeaf(): Problem {
+  return fromCases([
+    { q: `Stem-and-leaf (stem = tens):\n2 | 1 3 5\n3 | 0 2 4 6\n4 | 1 5\n\nFind the median.`, c: '32', w: ['30', '34', '25'], s: ['Data: 21, 23, 25, 30, 32, 34, 36, 41, 45', '9 values → median is the 5th', 'Median = 32'], h: ['Read the values in order', 'Median position = (9+1)/2 = 5th'], mistake: 'Picking the middle of the diagram by eye instead of counting.', tip: 'List the values in order, then find the middle one.' },
+    { q: `Stem-and-leaf (stem = tens):\n1 | 2 4\n2 | 1 3 5 7\n3 | 0 2\n\nFind the range.`, c: '20', w: ['18', '30', '12'], s: ['Smallest = 12, Largest = 32', 'Range = 32 − 12 = 20'], h: ['Range = largest − smallest', 'Smallest is the first leaf, largest is the last'], mistake: 'Reading only the leaves and ignoring the stems.', tip: 'Combine stem and leaf: 1 | 2 = 12.' },
+    { q: `Stem-and-leaf (stem = tens):\n4 | 1 1 3\n5 | 0 2\n6 | 4\n\nFind the mode.`, c: '41', w: ['43', '11', '50'], s: ['Values: 41, 41, 43, 50, 52, 64', '41 appears twice — most often', 'Mode = 41'], h: ['Mode = most frequent value', 'Look for a repeated leaf'], mistake: 'Giving the repeated leaf (1) instead of the full value (41).', tip: 'The mode is the whole value, e.g. 41, not just the leaf.' },
+  ]);
+}
+
+// ── age15-stats L7 — Range & Spread ──────────────────────────────────────────
+function genRangeSpread(): Problem {
+  const d = Array.from({ length: 6 }, () => randInt(5, 45));
+  const mx = Math.max(...d), mn = Math.min(...d), range = mx - mn;
+  return {
+    id: uid(),
+    question: `Find the range of:\n${d.join(', ')}`,
+    correctAnswer: `${range}`,
+    options: makeOptions(`${range}`, [`${mx}`, `${mn}`, `${range + 2}`]),
+    marks: 2,
+    workingSteps: [`Range = largest − smallest`, `= ${mx} − ${mn} = ${range}`],
+    hints: [`Find the largest and smallest values`, `Range = largest − smallest`],
+    calculatorAllowed: false,
+    commonMistake: `Giving the largest value instead of the difference.`,
+    examTip: `A smaller range means the data is less spread out (more consistent).`,
+  };
+}
+
+// ── age15-stats L8 — Comparing Data Sets ─────────────────────────────────────
+function genComparingData(): Problem {
+  return fromCases([
+    { q: `Class A: mean 60, range 8.\nClass B: mean 60, range 20.\n\nWhich class is more consistent?`, c: 'Class A (smaller range)', w: ['Class B (larger range)', 'Both equally consistent', 'Cannot be determined'], s: ['Same mean, so compare spread', 'Smaller range = more consistent', 'Class A: range 8 < 20'], h: ['Consistency is about spread, not average', 'Smaller range = more consistent'], mistake: 'Thinking a larger range is better.', tip: 'Same mean → the smaller range is more consistent.' },
+    { q: `Team X: mean score 45.\nTeam Y: mean score 52.\n\nWhich team scored higher on average?`, c: 'Team Y', w: ['Team X', 'Equal', 'Cannot be determined'], s: ['Compare the means', '52 > 45', 'Team Y is higher on average'], h: ['Compare the means directly'], mistake: 'Confusing higher mean with more consistent.', tip: 'The mean measures average performance.' },
+    { q: `Data set P has range 5.\nData set Q has range 15.\n\nWhich is more spread out?`, c: 'Set Q', w: ['Set P', 'Equal spread', 'Cannot be determined'], s: ['Larger range = more spread', '15 > 5', 'Set Q is more spread out'], h: ['Range measures spread'], mistake: 'Thinking a smaller range is more spread.', tip: 'Larger range = more spread out.' },
+  ]);
+}
+
+// ── age15-matrices L4 — Adding & Subtracting Matrices ────────────────────────
+function genMatrixAddSub(): Problem {
+  const A = [randInt(1, 6), randInt(1, 6), randInt(1, 6), randInt(1, 6)];
+  const B = [randInt(1, 6), randInt(1, 6), randInt(1, 6), randInt(1, 6)];
+  const add = Math.random() < 0.5;
+  const R = A.map((v, i) => (add ? v + B[i] : v - B[i]));
+  const fmt = (m: number[]) => `(${m[0]} ${m[1]} / ${m[2]} ${m[3]})`;
+  const correct = fmt(R);
+  return {
+    id: uid(),
+    question: `Work out:\n[${A[0]} ${A[1]}] ${add ? '+' : '−'} [${B[0]} ${B[1]}]\n[${A[2]} ${A[3]}]   [${B[2]} ${B[3]}]`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [
+      fmt(A.map((v, i) => (add ? v - B[i] : v + B[i]))),
+      fmt(R.map((v, i) => (i === 0 ? v + 1 : v))),
+      fmt(A.map((v, i) => v * B[i])),
+    ]),
+    marks: 2,
+    workingSteps: [`Add or subtract corresponding elements`, `Result = ${correct}`],
+    hints: [`Matrices add/subtract element by element`, `Same position with same position`],
+    calculatorAllowed: false,
+    commonMistake: `Trying to use row × column (that is multiplication, not addition).`,
+    examTip: `Only same-size matrices can be added or subtracted, position by position.`,
+  };
+}
+
+// ── age15-matrices L5 — Scalar Multiplication ────────────────────────────────
+function genScalarMatrix(): Problem {
+  const k = randInt(2, 5);
+  const A = [randInt(1, 6), randInt(1, 6), randInt(1, 6), randInt(1, 6)];
+  const R = A.map(v => v * k);
+  const fmt = (m: number[]) => `(${m[0]} ${m[1]} / ${m[2]} ${m[3]})`;
+  const correct = fmt(R);
+  return {
+    id: uid(),
+    question: `Work out ${k} × the matrix:\n[${A[0]} ${A[1]}]\n[${A[2]} ${A[3]}]`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [
+      fmt(A.map((v, i) => (i === 0 ? v * k : v))),
+      fmt(A.map(v => v + k)),
+      fmt(A.map((v, i) => v * k + (i === 3 ? 1 : 0))),
+    ]),
+    marks: 2,
+    workingSteps: [`Multiply EVERY element by ${k}`, `Result = ${correct}`],
+    hints: [`Scalar multiplication: every element × ${k}`],
+    calculatorAllowed: false,
+    commonMistake: `Multiplying only the first element — the scalar multiplies ALL four.`,
+    examTip: `A scalar multiplies every entry of the matrix.`,
+  };
+}
+
+// ── age15-matrices L6 — The Identity Matrix ──────────────────────────────────
+function genMatrixIdentity(): Problem {
+  return fromCases([
+    { q: `What is the 2×2 identity matrix?`, c: '(1 0 / 0 1)', w: ['(0 0 / 0 0)', '(1 1 / 1 1)', '(0 1 / 1 0)'], s: ['The identity has 1s on the leading diagonal and 0s elsewhere'], h: ['I leaves any matrix unchanged: AI = A'], mistake: 'Putting 1s everywhere.', tip: 'Identity = 1s on the diagonal, 0s off it.' },
+    { q: `For any 2×2 matrix A, what is A × I  (I = identity)?`, c: 'A', w: ['I', 'The zero matrix', 'A²'], s: ['Multiplying by the identity changes nothing', 'AI = IA = A'], h: ['Think of I like multiplying a number by 1'], mistake: 'Thinking AI = I.', tip: 'The identity is the matrix version of the number 1.' },
+    { q: `Which matrix maps every vector to itself?`, c: 'The identity matrix', w: ['The zero matrix', 'A rotation matrix', 'The inverse matrix'], s: ['Iv = v for every vector v', 'That is the identity matrix'], h: ['Which matrix leaves things unchanged?'], mistake: 'Choosing the zero matrix.', tip: 'Identity matrix: Iv = v.' },
+  ]);
+}
+
+// ── age15-matrices L7 — Matrix Equations (Determinant) ───────────────────────
+function genMatrixEquation(): Problem {
+  const x = randInt(2, 6), b = randInt(1, 4), c = randInt(1, 4), d = randInt(2, 6);
+  const det = x * d - b * c;
+  return {
+    id: uid(),
+    question: `The determinant of [x  ${b}]\n                  [${c}  ${d}]  is ${det}.\n\nFind the value of x.`,
+    correctAnswer: `x = ${x}`,
+    options: makeOptions(`x = ${x}`, [`x = ${x + 1}`, `x = ${Math.max(0, x - 1)}`, `x = ${det}`]),
+    marks: 3,
+    workingSteps: [
+      `det = (top-left × bottom-right) − (top-right × bottom-left)`,
+      `${det} = x×${d} − ${b}×${c} = ${d}x − ${b * c}`,
+      `${d}x = ${det + b * c}`,
+      `x = ${x}`,
+    ],
+    hints: [`det = ad − bc`, `Set it equal to ${det} and solve`],
+    calculatorAllowed: false,
+    commonMistake: `Adding bc instead of subtracting when forming the determinant.`,
+    examTip: `Write det = ad − bc first, then solve the resulting linear equation.`,
+  };
+}
+
+// ── age15-matrices L8 — Transformation Matrices ──────────────────────────────
+function genTransformMatrix(): Problem {
+  return fromCases([
+    { q: `Apply the matrix (0 1 / 1 0) to the point (2, 5).`, c: '(5, 2)', w: ['(2, 5)', '(−2, 5)', '(5, −2)'], s: ['(0 1 / 1 0) × (2, 5): (0×2 + 1×5, 1×2 + 0×5)', '= (5, 2)'], h: ['Multiply the matrix by the column vector'], mistake: 'Leaving the point unchanged.', tip: '(0 1 / 1 0) swaps the coordinates.' },
+    { q: `Which matrix represents a reflection in the x-axis?`, c: '(1 0 / 0 −1)', w: ['(−1 0 / 0 1)', '(0 1 / 1 0)', '(1 0 / 0 1)'], s: ['x-axis reflection: (x, y) → (x, −y)', 'Matrix (1 0 / 0 −1)'], h: ['x stays, y is negated'], mistake: 'Negating x instead of y.', tip: 'x-axis reflection keeps x, flips y.' },
+    { q: `Which matrix represents a 90° anticlockwise rotation about the origin?`, c: '(0 −1 / 1 0)', w: ['(0 1 / −1 0)', '(−1 0 / 0 −1)', '(1 0 / 0 1)'], s: ['90° anticlockwise: (x, y) → (−y, x)', 'Matrix (0 −1 / 1 0)'], h: ['(x, y) → (−y, x) for 90° ACW'], mistake: 'Using the clockwise matrix.', tip: '90° ACW: (0 −1 / 1 0); 90° CW: (0 1 / −1 0).' },
+  ]);
+}
+
+// ── age15-geometry L7 — Polygon Angles ───────────────────────────────────────
+function genPolygonAngles(): Problem {
+  const n = [5, 6, 8, 9, 10, 12][randInt(0, 5)];
+  const interior = ((n - 2) * 180) / n;
+  const exterior = 360 / n;
+  const askInt = Math.random() < 0.5;
+  const correct = askInt ? `${interior}°` : `${exterior}°`;
+  return {
+    id: uid(),
+    question: `Find the size of each ${askInt ? 'interior' : 'exterior'} angle of a regular ${n}-sided polygon.`,
+    correctAnswer: correct,
+    options: makeOptions(correct, [`${askInt ? exterior : interior}°`, `${(askInt ? interior : exterior) + 10}°`, `${(n - 2) * 180}°`]),
+    marks: 3,
+    workingSteps: askInt
+      ? [`Interior angle = (n − 2) × 180 ÷ n`, `= (${n} − 2) × 180 ÷ ${n} = ${(n - 2) * 180} ÷ ${n} = ${interior}°`]
+      : [`Exterior angle = 360 ÷ n`, `= 360 ÷ ${n} = ${exterior}°`],
+    hints: askInt ? [`Interior = (n − 2) × 180 / n`] : [`Exterior = 360 / n`],
+    calculatorAllowed: true,
+    commonMistake: `Mixing up the two formulas — interior + exterior = 180° at each vertex.`,
+    examTip: `Exterior angles of any polygon sum to 360°. Interior = 180° − exterior.`,
+  };
+}
+
+// ── age15-geometry L8 — Similar Shapes: Area & Volume ────────────────────────
+function genScaleFactorAreaVol(): Problem {
+  const k = randInt(2, 4);
+  const small = randInt(2, 6);
+  const isVol = Math.random() < 0.5;
+  const u = isVol ? '³' : '²';
+  const large = isVol ? small * k * k * k : small * k * k;
+  return {
+    id: uid(),
+    question: isVol
+      ? `Two similar solids have linear scale factor ${k}.\nThe smaller has volume ${small} cm³.\n\nFind the volume of the larger.`
+      : `Two similar shapes have linear scale factor ${k}.\nThe smaller has area ${small} cm².\n\nFind the area of the larger.`,
+    correctAnswer: `${large} cm${u}`,
+    options: makeOptions(`${large} cm${u}`, [
+      `${small * k} cm${u}`,
+      `${isVol ? small * k * k : small * k * k * k} cm${u}`,
+      `${large + small} cm${u}`,
+    ]),
+    marks: 3,
+    workingSteps: isVol
+      ? [`Volume scale factor = k³ = ${k}³ = ${k * k * k}`, `Larger volume = ${small} × ${k * k * k} = ${large} cm³`]
+      : [`Area scale factor = k² = ${k}² = ${k * k}`, `Larger area = ${small} × ${k * k} = ${large} cm²`],
+    hints: isVol ? [`Volume scales by k³`] : [`Area scales by k²`],
+    calculatorAllowed: true,
+    commonMistake: `Using the linear scale factor ${k} for ${isVol ? 'volume' : 'area'} — ${isVol ? 'cube it (k³)' : 'square it (k²)'}.`,
+    examTip: `Length scales by k, area by k², volume by k³.`,
+  };
+}
+
+// ── age15-algebra L7 — Changing the Subject ──────────────────────────────────
+function genChangeSubject(): Problem {
+  return fromCases([
+    { q: `Make x the subject:\n y = 3x + 6`, c: 'x = (y − 6)/3', w: ['x = (y + 6)/3', 'x = 3(y − 6)', 'x = y/3 − 6'], s: ['y = 3x + 6', 'y − 6 = 3x', 'x = (y − 6)/3'], h: ['Undo + 6 first, then ÷ 3'], mistake: 'Dividing only part of the right-hand side by 3.', tip: 'Reverse the operations in reverse order.' },
+    { q: `Make a the subject:\n v = u + at`, c: 'a = (v − u)/t', w: ['a = (v + u)/t', 'a = (v − u)t', 'a = v − u − t'], s: ['v = u + at', 'v − u = at', 'a = (v − u)/t'], h: ['Subtract u, then divide by t'], mistake: 'Forgetting to divide the whole bracket by t.', tip: 'Isolate the at term first.' },
+    { q: `Make h the subject:\n V = lwh`, c: 'h = V/(lw)', w: ['h = Vlw', 'h = V − lw', 'h = lw/V'], s: ['V = lwh', 'Divide both sides by lw', 'h = V/(lw)'], h: ['Divide by everything multiplying h'], mistake: 'Subtracting lw instead of dividing.', tip: 'h is multiplied by lw, so divide by lw.' },
+    { q: `Make r the subject:\n A = πr²`, c: 'r = √(A/π)', w: ['r = A/π', 'r = √(Aπ)', 'r = (A/π)²'], s: ['A = πr²', 'r² = A/π', 'r = √(A/π)'], h: ['Divide by π, then square-root'], mistake: 'Forgetting the square root at the end.', tip: 'Undo the square last by taking √.' },
+  ]);
+}
+
+// ── age15-algebra L8 — Factorising by Grouping ───────────────────────────────
+function genFactorGrouping(): Problem {
+  return fromCases([
+    { q: `Factorise by grouping:\n ax + ay + bx + by`, c: '(a + b)(x + y)', w: ['(a + x)(b + y)', '(a − b)(x − y)', 'ab(x + y)'], s: ['Group: a(x + y) + b(x + y)', 'Common factor (x + y)', '(a + b)(x + y)'], h: ['Group into pairs', 'Take out a common factor from each pair'], mistake: 'Pairing the wrong terms.', tip: 'Look for a common bracket after the first factoring step.' },
+    { q: `Factorise by grouping:\n x² + 5x + 2x + 10`, c: '(x + 2)(x + 5)', w: ['(x + 5)(x + 5)', '(x + 2)(x − 5)', '(x + 10)(x + 1)'], s: ['Group: x(x + 5) + 2(x + 5)', 'Common factor (x + 5)', '(x + 2)(x + 5)'], h: ['Factor x from the first pair, 2 from the second'], mistake: 'Sign errors in the second bracket.', tip: 'Both brackets should match after the first step.' },
+    { q: `Factorise by grouping:\n 2x + 2y + ax + ay`, c: '(2 + a)(x + y)', w: ['(2 − a)(x + y)', '(2 + x)(a + y)', '2a(x + y)'], s: ['Group: 2(x + y) + a(x + y)', '(2 + a)(x + y)'], h: ['Take 2 from the first pair, a from the second'], mistake: 'Mismatched brackets.', tip: 'The shared bracket is (x + y).' },
+    { q: `Factorise by grouping:\n xy + 3x + 2y + 6`, c: '(x + 2)(y + 3)', w: ['(x + 3)(y + 2)', '(x + 6)(y + 1)', 'xy(3 + 2)'], s: ['Group: x(y + 3) + 2(y + 3)', '(x + 2)(y + 3)'], h: ['Factor x from the first pair, 2 from the second'], mistake: 'Swapping the bracket constants.', tip: 'Check by expanding: (x + 2)(y + 3) = xy + 3x + 2y + 6.' },
+  ]);
+}
+
+// ── age15-trig L8 — Exact Trig Values ────────────────────────────────────────
+function genExactTrigValues(): Problem {
+  return fromCases([
+    { q: `Write down the exact value of sin 30°.`, c: '1/2', w: ['√3/2', '1', '√2/2'], s: ['Standard exact value', 'sin 30° = 1/2'], h: ['Memorise the special angles'], mistake: 'Confusing sin 30° with sin 60°.', tip: 'sin 30° = 1/2, sin 60° = √3/2.' },
+    { q: `Write down the exact value of cos 60°.`, c: '1/2', w: ['√3/2', '1/√2', '1'], s: ['cos 60° = 1/2 (= sin 30°)'], h: ['cos 60° = sin 30°'], mistake: 'Confusing cos 60° with cos 30°.', tip: 'cos 60° = 1/2, cos 30° = √3/2.' },
+    { q: `Write down the exact value of tan 45°.`, c: '1', w: ['0', '√3', '1/√3'], s: ['tan 45° = sin 45° / cos 45° = 1'], h: ['At 45° opposite = adjacent'], mistake: 'Thinking tan 45° = √3.', tip: 'tan 45° = 1 exactly.' },
+    { q: `Write down the exact value of sin 60°.`, c: '√3/2', w: ['1/2', '√2/2', '1'], s: ['sin 60° = √3/2'], h: ['Special triangle 30-60-90'], mistake: 'Confusing with sin 30°.', tip: 'sin 60° = √3/2 ≈ 0.866.' },
+    { q: `Write down the exact value of cos 30°.`, c: '√3/2', w: ['1/2', '1', '√3'], s: ['cos 30° = √3/2'], h: ['cos 30° = sin 60°'], mistake: 'Writing √3 instead of √3/2.', tip: 'cos 30° = √3/2.' },
+    { q: `Write down the exact value of tan 30°.`, c: '1/√3', w: ['√3', '1', '1/2'], s: ['tan 30° = sin 30° / cos 30° = (1/2)/(√3/2) = 1/√3'], h: ['tan = sin / cos'], mistake: 'Inverting to √3 (that is tan 60°).', tip: 'tan 30° = 1/√3 = √3/3; tan 60° = √3.' },
+    { q: `Write down the exact value of cos 0°.`, c: '1', w: ['0', '1/2', '√3/2'], s: ['cos 0° = 1'], h: ['At 0° adjacent = hypotenuse'], mistake: 'Confusing cos 0° with sin 0°.', tip: 'cos 0° = 1, sin 0° = 0.' },
+  ]);
+}
+
 export const TOPIC_LEVELS: Record<string, TopicLevels> = {
   // ── Age 15 ────────────────────────────────────────────────────────────────
-  'age15-numbers':    { 1: genSurds,            2: genIndices,           3: genQuadraticsFactor,  4: genSequences,       5: genLogs,           6: genStandardForm,       7: genEstimationRounding,  8: genLogQuotient },
-  'age15-algebra':    { 1: genQuadraticFormula,  2: genSimultaneous,      3: genInequalities,      4: genAlgebraicFractions, 5: genCompletingSquare, 6: genSimultaneousLinQuad                                              },
-  'age15-geometry':   { 1: genAnalyticalGeo,     2: genCircleGeometry,    3: genSimilarity,        4: genVectors,         5: genVolumeSA,           6: genSectorArc                                                        },
-  'age15-trig':       { 1: genSOHCAHTOA,         2: genSineCosineRule,    3: genElevationDepression, 4: genBearings,      5: gen3DTrig,             6: genInverseTrig,        7: genTriangleAreaSinC                        },
-  'age15-numeracy':   { 1: genPercentageRatio                                                                                                                                               },
-  'age15-stats':      { 1: genAverages,           2: genBoxPlot,           3: genStats2                                                                                                                                     },
-  'age15-prob':       { 1: genVennTree,           2: genCompoundInterest                                                                                                                                                    },
-  'age15-functions':  { 1: genFunctionsDomain,   2: genFunctionsGraphs                                                                                                                                                      },
-  'age15-matrices':   { 1: genTransformations,   2: genMatrices,          3: genInverseMatrix                                                                                                                               },
+  'age15-numbers':    { 1: genSurds, 2: genIndices, 3: genQuadraticsFactor, 4: genSequences, 5: genLogs, 6: genStandardForm, 7: genEstimationRounding, 8: genLogQuotient },
+  'age15-algebra':    { 1: genQuadraticFormula, 2: genSimultaneous, 3: genInequalities, 4: genAlgebraicFractions, 5: genCompletingSquare, 6: genSimultaneousLinQuad, 7: genChangeSubject, 8: genFactorGrouping },
+  'age15-geometry':   { 1: genAnalyticalGeo, 2: genCircleGeometry, 3: genSimilarity, 4: genVectors, 5: genVolumeSA, 6: genSectorArc, 7: genPolygonAngles, 8: genScaleFactorAreaVol },
+  'age15-trig':       { 1: genSOHCAHTOA, 2: genSineCosineRule, 3: genElevationDepression, 4: genBearings, 5: gen3DTrig, 6: genInverseTrig, 7: genTriangleAreaSinC, 8: genExactTrigValues },
+  'age15-numeracy':   { 1: genPercentageRatio, 2: genPercentChange, 3: genReversePercent, 4: genRatioSharing, 5: genDirectProportion, 6: genInverseProportion, 7: genSpeedDistTime, 8: genUnitConversion },
+  'age15-stats':      { 1: genAverages, 2: genBoxPlot, 3: genStats2, 4: genFreqTableMean, 5: genScatterCorrelation, 6: genStemLeaf, 7: genRangeSpread, 8: genComparingData },
+  'age15-prob':       { 1: genVennTree, 2: genCompoundInterest, 3: genSingleEventProb, 4: genTreeDiagram, 5: genMutuallyExclusive, 6: genIndependentEvents, 7: genSimpleInterest, 8: genExpectedFrequency },
+  'age15-functions':  { 1: genFunctionsDomain, 2: genFunctionsGraphs, 3: genDomainRange15, 4: genGraphTypeRecognition, 5: genLineFromTwoPoints, 6: genTurningPointForm, 7: genFunctionMapping, 8: genGraphTransform },
+  'age15-matrices':   { 1: genTransformations, 2: genMatrices, 3: genInverseMatrix, 4: genMatrixAddSub, 5: genScalarMatrix, 6: genMatrixIdentity, 7: genMatrixEquation, 8: genTransformMatrix },
   // ── Age 16 ────────────────────────────────────────────────────────────────
   'age16-trig2':           { 1: genTrigIdentities, 2: genTrigEquations, 3: genRadians, 4: genPythagIdentity, 5: genDoubleAngle },
   'age16-calculus':        { 1: genDifferentiationFirstPrinciples, 2: genBasicDifferentiation, 3: genTangentLine, 4: genStationaryPoint, 5: genIntegration },
