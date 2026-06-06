@@ -250,7 +250,7 @@ export default function TopicsPage() {
           <ArrowLeft className="w-5 h-5 text-white" />
         </motion.button>
         <div className="flex-1">
-          <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">Age {age} · IGCSE</p>
+          <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">Age {age} · Exam Studio</p>
           <h1
             onClick={handleTitleTap}
             className="text-xl font-outfit font-extrabold text-white select-none"

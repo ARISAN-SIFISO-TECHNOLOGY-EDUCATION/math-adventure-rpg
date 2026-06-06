@@ -24,7 +24,7 @@ for (const topicId of Object.keys(TOPIC_LEVELS)) {
 }
 
 // Mock exams per age
-for (const age of [15, 16, 17]) {
+for (const age of [13, 14, 15, 16, 17]) {
   const probs = generateMockExamProblems(age, 40);
   if (probs.length !== 40) report(`mock age${age}: got ${probs.length} problems`);
   for (const p of probs) {
@@ -34,6 +34,6 @@ for (const age of [15, 16, 17]) {
 }
 
 console.log(failures === 0
-  ? `✓ All senior generators clean (${RUNS} runs each, ages 15/16/17 mock OK)`
+  ? `✓ All senior generators clean (${RUNS} runs each, ages 13–17 mock OK)`
   : `✗ ${failures} failures`);
 process.exit(failures === 0 ? 0 : 1);

@@ -9,34 +9,37 @@ type AgeCard = {
   border: string;
   phase: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
   advanced?: boolean;
-  senior?: boolean; // ages 15–17 → IGCSE Exam Studio instead of the RPG
+  senior?: boolean; // ages 13–17 → dark Exam Studio instead of the kids' RPG
 };
 
-const AGE_CARDS: AgeCard[] = [
-  // Row 1 — Pre-School (Ages 3–5)
+// Kids' "Math Monsters" RPG — ages 3–12 (bright, gamified).
+const KID_CARDS: AgeCard[] = [
+  // Pre-School (Ages 3–5)
   { age: 3, label: 'Pre-School',    emoji: '🌱', color: '#059669', bg: '#F0FDF4', border: '#6EE7B7', phase: 1 },
   { age: 4, label: 'Pre-School',    emoji: '🌱', color: '#059669', bg: '#F0FDF4', border: '#6EE7B7', phase: 1 },
   { age: 5, label: 'Pre-School',    emoji: '🌱', color: '#059669', bg: '#F0FDF4', border: '#6EE7B7', phase: 1 },
-  // Row 2 — Lower Primary (Ages 6–8)
+  // Lower Primary (Ages 6–8)
   { age: 6, label: 'Lower Primary', emoji: '📚', color: '#D97706', bg: '#FFFBEB', border: '#FDE68A', phase: 2 },
   { age: 7, label: 'Lower Primary', emoji: '📚', color: '#D97706', bg: '#FFFBEB', border: '#FDE68A', phase: 2 },
   { age: 8, label: 'Lower Primary', emoji: '📚', color: '#D97706', bg: '#FFFBEB', border: '#FDE68A', phase: 2 },
-  // Row 3 — Higher Primary (Ages 9–11)
+  // Higher Primary (Ages 9–12)
   { age: 9,  label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#EFF6FF', border: '#BFDBFE', phase: 3 },
   { age: 10, label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#EFF6FF', border: '#BFDBFE', phase: 3 },
   { age: 11, label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#EFF6FF', border: '#BFDBFE', phase: 3 },
-  // Row 4 — Higher Primary Age 12 + Advanced
   { age: 12, label: 'Higher Primary', emoji: '⚔️', color: '#2563EB', bg: '#EFF6FF', border: '#BFDBFE', phase: 3 },
+  // Advanced Primary (Ages 11–12)
   { age: 11, label: 'Advanced',       emoji: '🏆', color: '#9F1239', bg: '#FFF1F2', border: '#FECDD3', phase: 4, advanced: true },
   { age: 12, label: 'Advanced',       emoji: '🏆', color: '#9F1239', bg: '#FFF1F2', border: '#FECDD3', phase: 4, advanced: true },
-  // Row 5 — Age 13 + Age 14
-  { age: 13, label: 'Secondary',      emoji: '🧠', color: '#4338CA', bg: '#EEF2FF', border: '#A5B4FC', phase: 5 },
-  { age: 14, label: 'Upper Secondary', emoji: '🎓', color: '#0369A1', bg: '#F0F9FF', border: '#7DD3FC', phase: 6 },
-  { age: 14, label: 'Upper Secondary', emoji: '🔭', color: '#0F766E', bg: '#F0FDFA', border: '#99F6E4', phase: 6, advanced: true },
-  // Row 6 — Ages 15–17 (Senior Exam Studio · IGCSE)
-  { age: 15, label: 'Builders', emoji: '🏗️', color: '#0F766E', bg: '#F0FDFA', border: '#5EEAD4', phase: 7, senior: true },
-  { age: 16, label: 'Systems',  emoji: '🛰️', color: '#6D28D9', bg: '#F5F3FF', border: '#C4B5FD', phase: 8, senior: true },
-  { age: 17, label: 'Thinkers', emoji: '🧩', color: '#B45309', bg: '#FFFBEB', border: '#FCD34D', phase: 9, senior: true },
+];
+
+// Exam Studio — ages 13–17 (dark, exam-prep). One continuous ramp:
+// Explorers → Pioneers → Builders → Systems → Thinkers.
+const SENIOR_CARDS: AgeCard[] = [
+  { age: 13, label: 'Explorers', emoji: '🧭', color: '#5EEAD4', bg: '#0f2e2b', border: '#134e4a', phase: 5, senior: true },
+  { age: 14, label: 'Pioneers',  emoji: '🚩', color: '#FCD34D', bg: '#2e2410', border: '#854d0e', phase: 6, senior: true },
+  { age: 15, label: 'Builders',  emoji: '🏗️', color: '#5EEAD4', bg: '#0f2e2b', border: '#134e4a', phase: 7, senior: true },
+  { age: 16, label: 'Systems',   emoji: '🛰️', color: '#C4B5FD', bg: '#221b3a', border: '#5b21b6', phase: 8, senior: true },
+  { age: 17, label: 'Thinkers',  emoji: '🧩', color: '#FCD34D', bg: '#2e2410', border: '#854d0e', phase: 9, senior: true },
 ];
 
 function AgeCardItem({ card }: { card: AgeCard }) {
@@ -58,7 +61,10 @@ function AgeCardItem({ card }: { card: AgeCard }) {
           Advanced
         </span>
       ) : (
-        <span className="text-[9px] text-gray-400 font-semibold text-center leading-tight">
+        <span
+          className="text-[9px] font-semibold text-center leading-tight"
+          style={{ color: card.senior ? card.color : '#9CA3AF' }}
+        >
           {card.label}
         </span>
       )}
@@ -66,16 +72,13 @@ function AgeCardItem({ card }: { card: AgeCard }) {
   );
 }
 
-export default function HomePage() {
-  const rows = [
-    AGE_CARDS.slice(0, 3),
-    AGE_CARDS.slice(3, 6),
-    AGE_CARDS.slice(6, 9),
-    AGE_CARDS.slice(9, 12),
-    AGE_CARDS.slice(12, 15),
-    AGE_CARDS.slice(15, 18),
-  ];
+function chunk<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
 
+export default function HomePage() {
   return (
     <div className="min-h-screen bg-white flex flex-col max-w-lg mx-auto">
 
@@ -83,7 +86,7 @@ export default function HomePage() {
       <div className="relative w-full overflow-hidden">
         <img
           src="/hero.jpg"
-          alt="Math Adventure RPG — kids learning maths"
+          alt="Math Adventure RPG — learning maths from age 3 to 17"
           style={{ width: '100%', height: 'auto', display: 'block' }}
           draggable={false}
         />
@@ -94,19 +97,17 @@ export default function HomePage() {
         />
       </div>
 
-      {/* ── Choose Your Age ── */}
+      {/* ── Kids' Adventure (Ages 3–12) ── */}
       <div className="px-4 pt-3 pb-1">
         <h2 className="font-[Nunito] text-xl font-extrabold text-gray-800 leading-tight">
-          🎯 Choose Your Age
+          🎮 Kids' Adventure
         </h2>
         <p className="text-xs text-gray-400 font-semibold mt-0.5">
-          Tap your child's age to start playing
+          Ages 3–12 · tap an age to start playing
         </p>
       </div>
-
-      {/* ── Age Card Grid ── */}
-      <div className="px-4 flex flex-col gap-2 flex-1">
-        {rows.map((row, rowIdx) => (
+      <div className="px-4 flex flex-col gap-2">
+        {chunk(KID_CARDS, 3).map((row, rowIdx) => (
           <div key={rowIdx} className="grid grid-cols-3 gap-2">
             {row.map((card, i) => (
               <div key={i}><AgeCardItem card={card} /></div>
@@ -115,8 +116,29 @@ export default function HomePage() {
         ))}
       </div>
 
+      {/* ── Exam Studio (Ages 13–17) ── */}
+      <div className="px-4 mt-5">
+        <div className="rounded-2xl p-4" style={{ background: '#0d1117' }}>
+          <h2 className="font-[Nunito] text-xl font-extrabold leading-tight" style={{ color: '#5EEAD4' }}>
+            📐 Exam Studio
+          </h2>
+          <p className="text-xs font-semibold mt-0.5" style={{ color: '#94A3B8' }}>
+            Ages 13–17 · exam-prep, mastery levels &amp; mock papers
+          </p>
+          <div className="flex flex-col gap-2 mt-3">
+            {chunk(SENIOR_CARDS, 3).map((row, rowIdx) => (
+              <div key={rowIdx} className="grid grid-cols-3 gap-2">
+                {row.map((card, i) => (
+                  <div key={i}><AgeCardItem card={card} /></div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* ── Footer Links ── */}
-      <div className="px-4 py-4 mt-3 border-t border-gray-100 flex justify-center gap-6 flex-wrap">
+      <div className="px-4 py-4 mt-4 border-t border-gray-100 flex justify-center gap-6 flex-wrap">
         <Link to="/about"          className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">About</Link>
         <Link to="/parents"        className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">For Parents</Link>
         <Link to="/grown-up-corner" className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">Grown-up Corner</Link>

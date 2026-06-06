@@ -6,6 +6,23 @@ export type FormulaEntry = {
 };
 
 export const FORMULAS: Record<string, FormulaEntry[]> = {
+  // ── Ages 13/14 — Explorers / Pioneers ───────────────────────────────────────
+  'age13-algebra': [
+    { name: 'Substitution',      formula: 'Replace the letter with its value',     use: 'Evaluate an expression for a given x',                example: '3x + 5, x = 4 → 3(4) + 5 = 17' },
+    { name: 'Like Terms',        formula: 'Add coefficients of the same letter',   use: 'Simplify by grouping x with x, numbers with numbers', example: '5x + 2x = 7x' },
+    { name: 'Expand Bracket',    formula: 'a(b + c) = ab + ac',                    use: 'Multiply every term inside by the term outside',      example: '3(2x + 4) = 6x + 12' },
+    { name: 'Expand Double',     formula: '(x + a)(x + b) = x² + (a+b)x + ab',     use: 'FOIL: First, Outer, Inner, Last',                     example: '(x+2)(x+3) = x² + 5x + 6' },
+    { name: 'Common Factor',     formula: 'ab + ac = a(b + c)',                    use: 'Take out the highest common factor',                  example: '6x + 9 = 3(2x + 3)' },
+    { name: 'Solve Linear',      formula: 'Inverse operations, reverse order',     use: 'Undo + / − first, then × / ÷',                       example: '3x + 5 = 20 → x = 5' },
+  ],
+  'age14-exponents': [
+    { name: 'Product Law',       formula: 'aᵐ × aⁿ = aᵐ⁺ⁿ',          use: 'Same base, multiplying → add powers',  example: 'x³ × x⁴ = x⁷' },
+    { name: 'Quotient Law',      formula: 'aᵐ ÷ aⁿ = aᵐ⁻ⁿ',          use: 'Same base, dividing → subtract powers', example: 'x⁷ ÷ x³ = x⁴' },
+    { name: 'Power Law',         formula: '(aᵐ)ⁿ = aᵐⁿ',             use: 'Power of a power → multiply powers',    example: '(x³)² = x⁶' },
+    { name: 'Zero Exponent',     formula: 'a⁰ = 1',                   use: 'Any non-zero base to the power 0',      example: '5⁰ = 1' },
+    { name: 'Negative Exponent', formula: 'a⁻ⁿ = 1/aⁿ',              use: 'Negative power → reciprocal',           example: '2⁻² = 1/4' },
+    { name: 'Scientific Notation', formula: 'a × 10ⁿ,  1 ≤ a < 10',   use: 'Write very large or small numbers',     example: '45 000 = 4.5 × 10⁴' },
+  ],
   'age15-functions': [
     { name: 'Function Notation',   formula: 'f(x) — substitute x into the rule',        use: 'Evaluate f(3) by replacing every x with 3' },
     { name: 'Composite Function',  formula: 'fg(x) = f(g(x))',                           use: 'Apply g first (inner), then f (outer)',       example: 'f(x)=2x, g(x)=x+1 → fg(3) = f(4) = 8' },

@@ -6835,7 +6835,289 @@ function genDiscriminant17(): Problem {
   ]);
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+//  Ages 13/14 (Explorers / Pioneers) — pre-storm tier of the Exam Studio.
+//  CAPS Gr 8/9 foundations in the senior Problem format (marks, steps, tips).
+//  Numbers kept simpler than the age15 IGCSE versions. Grade labels NEVER
+//  appear in rendered strings (age-only rule).
+// ═══════════════════════════════════════════════════════════════════════════
+
+const COPRIME_PAIRS: [number, number][] = [[2, 3], [3, 4], [2, 5], [3, 5], [4, 5], [2, 7], [3, 7], [5, 6]];
+
+// ── age13-algebra L1 — Substitution ──────────────────────────────────────────
+function genSubstitution13(): Problem {
+  const a = randInt(2, 6), b = randInt(1, 9), x = randInt(2, 8);
+  const val = a * x + b;
+  return {
+    id: uid(),
+    question: `Find the value of ${a}x + ${b} when x = ${x}.`,
+    correctAnswer: `${val}`,
+    options: makeOptions(`${val}`, [`${a * x}`, `${a + x + b}`, `${val + a}`]),
+    marks: 2,
+    workingSteps: [`Replace x with ${x}`, `${a}(${x}) + ${b} = ${a * x} + ${b} = ${val}`],
+    hints: [`Substitute ${x} for x`, `Multiply first, then add`],
+    calculatorAllowed: false,
+    commonMistake: `Adding before multiplying — do ${a}×${x} first, then + ${b}.`,
+    examTip: `Write the substitution line ${a}(${x}) + ${b} before simplifying — it earns a method mark.`,
+  };
+}
+
+// ── age13-algebra L2 — Collecting Like Terms ─────────────────────────────────
+function genLikeTerms13(): Problem {
+  if (Math.random() < 0.5) {
+    const a = randInt(2, 6), b = randInt(2, 6), c = randInt(1, 8), d = randInt(1, 8);
+    const xc = a + b, k = c + d;
+    return {
+      id: uid(),
+      question: `Simplify: ${a}x + ${c} + ${b}x + ${d}`,
+      correctAnswer: `${xc}x + ${k}`,
+      options: makeOptions(`${xc}x + ${k}`, [`${a * b}x + ${k}`, `${xc}x + ${k + 1}`, `${xc + k}x`]),
+      marks: 2,
+      workingSteps: [`Group like terms: (${a}x + ${b}x) + (${c} + ${d})`, `= ${xc}x + ${k}`],
+      hints: [`Add the x terms together, then the numbers`],
+      calculatorAllowed: false,
+      commonMistake: `Multiplying the x coefficients instead of adding them.`,
+      examTip: `Only add terms of the SAME type: x with x, numbers with numbers.`,
+    };
+  }
+  const a = randInt(2, 6), b = randInt(2, 6), p = randInt(2, 6), q = randInt(2, 6);
+  const xc = a + b, yc = p + q;
+  return {
+    id: uid(),
+    question: `Simplify: ${a}x + ${p}y + ${b}x + ${q}y`,
+    correctAnswer: `${xc}x + ${yc}y`,
+    options: makeOptions(`${xc}x + ${yc}y`, [`${xc + yc}xy`, `${xc}x + ${yc + 1}y`, `${a * b}x + ${yc}y`]),
+    marks: 2,
+    workingSteps: [`Group like terms: (${a}x + ${b}x) + (${p}y + ${q}y)`, `= ${xc}x + ${yc}y`],
+    hints: [`x terms together, y terms together`],
+    calculatorAllowed: false,
+    commonMistake: `Combining x and y into "xy" — they are different terms and stay separate.`,
+    examTip: `x and y cannot be combined. Keep them as separate terms.`,
+  };
+}
+
+// ── age13-algebra L3 — Expanding a Single Bracket ────────────────────────────
+function genExpandSingle13(): Problem {
+  const k = randInt(2, 5), a = randInt(2, 5), b = randInt(1, 6);
+  return {
+    id: uid(),
+    question: `Expand: ${k}(${a}x + ${b})`,
+    correctAnswer: `${k * a}x + ${k * b}`,
+    options: makeOptions(`${k * a}x + ${k * b}`, [`${k * a}x + ${b}`, `${a}x + ${k * b}`, `${k + a}x + ${k * b}`]),
+    marks: 2,
+    workingSteps: [`Multiply each term inside by ${k}`, `${k}×${a}x = ${k * a}x,  ${k}×${b} = ${k * b}`, `= ${k * a}x + ${k * b}`],
+    hints: [`Multiply BOTH terms inside the bracket by ${k}`],
+    calculatorAllowed: false,
+    commonMistake: `Multiplying only the first term — ${k} multiplies ${b} too.`,
+    examTip: `Distribute the number to every term inside the bracket.`,
+  };
+}
+
+// ── age13-algebra L4 — Expanding Double Brackets ─────────────────────────────
+function genExpandDouble13(): Problem {
+  const a = randInt(1, 6), b = randInt(1, 6);
+  const mid = a + b, last = a * b;
+  return {
+    id: uid(),
+    question: `Expand and simplify: (x + ${a})(x + ${b})`,
+    correctAnswer: `x² + ${mid}x + ${last}`,
+    options: makeOptions(`x² + ${mid}x + ${last}`, [`x² + ${last}x + ${mid}`, `x² + ${mid + 1}x + ${last}`, `x² + ${a}x + ${b}`]),
+    marks: 3,
+    workingSteps: [`FOIL: x×x + x×${b} + ${a}×x + ${a}×${b}`, `= x² + ${b}x + ${a}x + ${last}`, `= x² + ${mid}x + ${last}`],
+    hints: [`Use FOIL: First, Outer, Inner, Last`, `Add the two middle x-terms`],
+    calculatorAllowed: false,
+    commonMistake: `Forgetting the middle term — combine ${a}x + ${b}x = ${mid}x.`,
+    examTip: `Middle coefficient = sum (${a}+${b}); constant = product (${a}×${b}).`,
+  };
+}
+
+// ── age13-algebra L5 — Factorising (Common Factor) ───────────────────────────
+function genFactoriseCommon13(): Problem {
+  const g = randInt(2, 5);
+  const [a, b] = COPRIME_PAIRS[randInt(0, COPRIME_PAIRS.length - 1)];
+  const t1 = g * a, t2 = g * b;
+  return {
+    id: uid(),
+    question: `Factorise fully: ${t1}x + ${t2}`,
+    correctAnswer: `${g}(${a}x + ${b})`,
+    options: makeOptions(`${g}(${a}x + ${b})`, [`${g}(${a}x + ${b + 1})`, `${a}(${g}x + ${b})`, `${g}(${a}x + ${t2})`]),
+    marks: 2,
+    workingSteps: [`Highest common factor of ${t1} and ${t2} is ${g}`, `${t1}x + ${t2} = ${g}(${a}x + ${b})`],
+    hints: [`Find the highest common factor first`, `Divide each term by it`],
+    calculatorAllowed: false,
+    commonMistake: `Taking out a factor that isn't the HIGHEST — check ${g} divides both fully.`,
+    examTip: `Check by expanding: ${g}(${a}x + ${b}) should give back ${t1}x + ${t2}.`,
+  };
+}
+
+// ── age13-algebra L6 — Solving Linear Equations ──────────────────────────────
+function genSolveLinear13(): Problem {
+  const a = randInt(2, 6), x = randInt(2, 9), b = randInt(1, 9);
+  const c = a * x + b;
+  return {
+    id: uid(),
+    question: `Solve: ${a}x + ${b} = ${c}`,
+    correctAnswer: `x = ${x}`,
+    options: makeOptions(`x = ${x}`, [`x = ${x + 1}`, `x = ${c - b}`, `x = ${Math.round(c / a)}`]),
+    marks: 3,
+    workingSteps: [`Subtract ${b}: ${a}x = ${c - b}`, `Divide by ${a}: x = ${x}`],
+    hints: [`Undo + ${b} first`, `Then divide by ${a}`],
+    calculatorAllowed: false,
+    commonMistake: `Dividing before subtracting ${b} — remove the +${b} first.`,
+    examTip: `Inverse operations in reverse order: subtract, then divide.`,
+  };
+}
+
+// ── age13-algebra L7 — Equations with Brackets ───────────────────────────────
+function genSolveBrackets13(): Problem {
+  const a = randInt(2, 5), x = randInt(2, 8), b = randInt(1, 6);
+  const c = a * (x + b);
+  return {
+    id: uid(),
+    question: `Solve: ${a}(x + ${b}) = ${c}`,
+    correctAnswer: `x = ${x}`,
+    options: makeOptions(`x = ${x}`, [`x = ${x + b}`, `x = ${x + 1}`, `x = ${c - a}`]),
+    marks: 3,
+    workingSteps: [`Divide both sides by ${a}: x + ${b} = ${c / a}`, `Subtract ${b}: x = ${x}`],
+    hints: [`Divide by ${a} first, or expand the bracket`, `Then subtract ${b}`],
+    calculatorAllowed: false,
+    commonMistake: `Forgetting to subtract ${b} after dividing.`,
+    examTip: `Two valid routes: divide by ${a} first, OR expand then solve.`,
+  };
+}
+
+// ── age13-algebra L8 — Forming Equations from Words ──────────────────────────
+function genWordEquation13(): Problem {
+  return fromCases([
+    { q: `A number is multiplied by 4, then 3 is added. The result is 23.\nFind the number.`, c: '5', w: ['6', '20', '4'], s: ['Let the number be n: 4n + 3 = 23', '4n = 20', 'n = 5'], h: ['Turn the words into 4n + 3 = 23'], mistake: 'Forgetting to subtract the 3 before dividing.', tip: 'Build the equation step by step from the sentence.' },
+    { q: `Twice a number minus 5 equals 11.\nFind the number.`, c: '8', w: ['3', '6', '16'], s: ['2n − 5 = 11', '2n = 16', 'n = 8'], h: ['"Twice a number" = 2n'], mistake: 'Subtracting instead of adding the 5 back.', tip: 'Reverse each operation in turn.' },
+    { q: `Five more than three times a number is 26.\nFind the number.`, c: '7', w: ['9', '21', '8'], s: ['3n + 5 = 26', '3n = 21', 'n = 7'], h: ['"three times a number" = 3n'], mistake: 'Dividing 26 by 3 before removing the 5.', tip: 'Remove the +5 first, then divide.' },
+    { q: `A number divided by 2, then add 4, gives 10.\nFind the number.`, c: '12', w: ['28', '6', '8'], s: ['n/2 + 4 = 10', 'n/2 = 6', 'n = 12'], h: ['"divided by 2" = n/2'], mistake: 'Multiplying by 2 before subtracting the 4.', tip: 'Undo +4, then undo ÷2 by ×2.' },
+  ]);
+}
+
+// ── age14-exponents L1 — Product Law ─────────────────────────────────────────
+function genExpProduct14(): Problem {
+  const m = randInt(2, 6), n = randInt(2, 6);
+  return {
+    id: uid(),
+    question: `Simplify: x^${m} × x^${n}`,
+    correctAnswer: `x^${m + n}`,
+    options: expOptions('x', m + n, [m * n, m, n, m + n + 1]),
+    marks: 2,
+    workingSteps: [`Same base, multiplying → ADD the powers`, `x^${m} × x^${n} = x^(${m}+${n}) = x^${m + n}`],
+    hints: [`aᵐ × aⁿ = aᵐ⁺ⁿ`],
+    calculatorAllowed: false,
+    commonMistake: `Multiplying the powers (${m}×${n}) instead of adding them.`,
+    examTip: `Multiplying same-base powers → ADD exponents.`,
+  };
+}
+
+// ── age14-exponents L2 — Quotient Law ────────────────────────────────────────
+function genExpQuotient14(): Problem {
+  const m = randInt(5, 9), n = randInt(2, 4);
+  return {
+    id: uid(),
+    question: `Simplify: x^${m} ÷ x^${n}`,
+    correctAnswer: `x^${m - n}`,
+    options: expOptions('x', m - n, [m + n, m, n]),
+    marks: 2,
+    workingSteps: [`Same base, dividing → SUBTRACT the powers`, `x^${m} ÷ x^${n} = x^(${m}−${n}) = x^${m - n}`],
+    hints: [`aᵐ ÷ aⁿ = aᵐ⁻ⁿ`],
+    calculatorAllowed: false,
+    commonMistake: `Dividing the powers instead of subtracting them.`,
+    examTip: `Dividing same-base powers → SUBTRACT exponents.`,
+  };
+}
+
+// ── age14-exponents L3 — Power Law ───────────────────────────────────────────
+function genExpPower14(): Problem {
+  const m = randInt(2, 5), n = randInt(2, 4);
+  return {
+    id: uid(),
+    question: `Simplify: (x^${m})^${n}`,
+    correctAnswer: `x^${m * n}`,
+    options: expOptions('x', m * n, [m + n, m, n]),
+    marks: 2,
+    workingSteps: [`Power of a power → MULTIPLY the powers`, `(x^${m})^${n} = x^(${m}×${n}) = x^${m * n}`],
+    hints: [`(aᵐ)ⁿ = aᵐⁿ`],
+    calculatorAllowed: false,
+    commonMistake: `Adding the powers (${m}+${n}) instead of multiplying them.`,
+    examTip: `Power raised to a power → MULTIPLY exponents.`,
+  };
+}
+
+// ── age14-exponents L4 — Zero & Negative Exponents ───────────────────────────
+function genExpZeroNeg14(): Problem {
+  return fromCases([
+    { q: `Evaluate: 5⁰`, c: '1', w: ['0', '5', '−5'], s: ['Any non-zero base to the power 0 is 1', '5⁰ = 1'], h: ['a⁰ = 1'], mistake: 'Writing 0 — anything to the power 0 is 1.', tip: 'b⁰ = 1 for any base b ≠ 0.' },
+    { q: `Write 2⁻² as a fraction.`, c: '1/4', w: ['−4', '4', '1/2'], s: ['a⁻ⁿ = 1/aⁿ', '2⁻² = 1/2² = 1/4'], h: ['Negative power → reciprocal'], mistake: 'Making the answer negative — a negative power means a reciprocal, not a negative.', tip: 'a⁻ⁿ = 1/aⁿ.' },
+    { q: `Write 2⁻³ as a fraction.`, c: '1/8', w: ['−8', '8', '1/6'], s: ['2⁻³ = 1/2³ = 1/8'], h: ['a⁻ⁿ = 1/aⁿ'], mistake: 'Computing 1/6 (2×3) instead of 1/2³.', tip: 'Cube first: 2³ = 8, then reciprocal.' },
+    { q: `Evaluate: 10⁻¹`, c: '1/10', w: ['−10', '10', '0'], s: ['10⁻¹ = 1/10'], h: ['Negative power → reciprocal'], mistake: 'Writing −10.', tip: 'a⁻¹ = 1/a.' },
+  ]);
+}
+
+// ── age14-exponents L5 — Scientific Notation ─────────────────────────────────
+function genSciNotation14(): Problem {
+  return fromCases([
+    { q: `Write 45 000 in scientific notation.`, c: '4.5 × 10⁴', w: ['45 × 10³', '4.5 × 10³', '4.5 × 10⁵'], s: ['Move the point so one non-zero digit is in front', '4.5 × 10⁴ (point moved 4 places)'], h: ['One digit before the decimal point', 'Count how many places you move'], mistake: 'Miscounting the power of 10.', tip: 'a × 10ⁿ with 1 ≤ a < 10.' },
+    { q: `Write 0.0032 in scientific notation.`, c: '3.2 × 10⁻³', w: ['3.2 × 10³', '32 × 10⁻⁴', '3.2 × 10⁻²'], s: ['Small number → negative power', 'Move the point 3 places right: 3.2 × 10⁻³'], h: ['Numbers < 1 give a negative power'], mistake: 'Using a positive power for a small number.', tip: 'Less than 1 → negative exponent.' },
+    { q: `Write 6.7 × 10³ as an ordinary number.`, c: '6700', w: ['670', '67000', '6.7000'], s: ['10³ = 1000', '6.7 × 1000 = 6700'], h: ['Move the point 3 places right'], mistake: 'Moving the wrong number of places.', tip: 'Positive power → move right that many places.' },
+    { q: `Write 250 000 in scientific notation.`, c: '2.5 × 10⁵', w: ['25 × 10⁴', '2.5 × 10⁴', '2.5 × 10⁶'], s: ['2.5 × 10⁵ (point moved 5 places)'], h: ['One digit before the point'], mistake: 'Off-by-one on the power.', tip: 'Count the places you shift the decimal point.' },
+  ]);
+}
+
+// ── age14-exponents L6 — Evaluating Powers ───────────────────────────────────
+function genExpEvaluate14(): Problem {
+  const base = randInt(2, 5), exp = randInt(2, 4);
+  const val = Math.pow(base, exp);
+  return {
+    id: uid(),
+    question: `Evaluate: ${base}^${exp}`,
+    correctAnswer: `${val}`,
+    options: makeOptions(`${val}`, [`${base * exp}`, `${val + base}`, `${Math.pow(base, exp - 1)}`]),
+    marks: 2,
+    workingSteps: [`${base}^${exp} means ${base} multiplied by itself ${exp} times`, `= ${Array(exp).fill(base).join(' × ')} = ${val}`],
+    hints: [`A power is repeated multiplication, not ${base}×${exp}`],
+    calculatorAllowed: false,
+    commonMistake: `Computing ${base}×${exp} = ${base * exp} instead of the power.`,
+    examTip: `${base}^${exp} = ${base} × ${base} ... (${exp} times).`,
+  };
+}
+
+// ── age14-exponents L7 — Simplifying with Multiple Laws ───────────────────────
+function genExpSimplify14(): Problem {
+  const a = randInt(2, 3), b = randInt(2, 3), p = randInt(2, 3);
+  const correct = (a + b) * p;
+  return {
+    id: uid(),
+    question: `Simplify: (x^${a} × x^${b})^${p}`,
+    correctAnswer: `x^${correct}`,
+    options: expOptions('x', correct, [a + b + p, a * b * p, a + b]),
+    marks: 3,
+    workingSteps: [`Inside the bracket: x^${a} × x^${b} = x^${a + b}`, `Then power of a power: (x^${a + b})^${p} = x^${correct}`],
+    hints: [`Add the powers inside first`, `Then multiply by the outer power`],
+    calculatorAllowed: false,
+    commonMistake: `Mixing the laws up — add inside, THEN multiply by ${p}.`,
+    examTip: `Work the bracket first, then apply the outer power.`,
+  };
+}
+
+// ── age14-exponents L8 — Index Equations ─────────────────────────────────────
+function genIndexEquation14(): Problem {
+  return fromCases([
+    { q: `Solve: 2ˣ = 32`, c: 'x = 5', w: ['x = 16', 'x = 4', 'x = 6'], s: ['Write 32 as a power of 2', '32 = 2⁵, so x = 5'], h: ['What power of 2 gives 32?'], mistake: 'Dividing 32 by 2 instead of finding the power.', tip: '2⁵ = 32.' },
+    { q: `Solve: 3ˣ = 81`, c: 'x = 4', w: ['x = 27', 'x = 3', 'x = 9'], s: ['81 = 3⁴, so x = 4'], h: ['What power of 3 gives 81?'], mistake: 'Confusing 3⁴ with 3×4.', tip: '3⁴ = 81.' },
+    { q: `Solve: 5ˣ = 25`, c: 'x = 2', w: ['x = 5', 'x = 3', 'x = 1'], s: ['25 = 5², so x = 2'], h: ['What power of 5 gives 25?'], mistake: 'Answering 5.', tip: '5² = 25.' },
+    { q: `Solve: 2ˣ = 64`, c: 'x = 6', w: ['x = 32', 'x = 5', 'x = 8'], s: ['64 = 2⁶, so x = 6'], h: ['Keep doubling: 2,4,8,16,32,64'], mistake: 'Stopping at the wrong power.', tip: '2⁶ = 64.' },
+    { q: `Solve: 10ˣ = 1000`, c: 'x = 3', w: ['x = 100', 'x = 4', 'x = 2'], s: ['1000 = 10³, so x = 3'], h: ['Count the zeros'], mistake: 'Answering 100.', tip: '10³ = 1000.' },
+  ]);
+}
+
 export const TOPIC_LEVELS: Record<string, TopicLevels> = {
+  // ── Ages 13/14 (Explorers / Pioneers) ───────────────────────────────────────
+  'age13-algebra':    { 1: genSubstitution13, 2: genLikeTerms13, 3: genExpandSingle13, 4: genExpandDouble13, 5: genFactoriseCommon13, 6: genSolveLinear13, 7: genSolveBrackets13, 8: genWordEquation13 },
+  'age14-exponents':  { 1: genExpProduct14, 2: genExpQuotient14, 3: genExpPower14, 4: genExpZeroNeg14, 5: genSciNotation14, 6: genExpEvaluate14, 7: genExpSimplify14, 8: genIndexEquation14 },
   // ── Age 15 ────────────────────────────────────────────────────────────────
   'age15-numbers':    { 1: genSurds, 2: genIndices, 3: genQuadraticsFactor, 4: genSequences, 5: genLogs, 6: genStandardForm, 7: genEstimationRounding, 8: genLogQuotient },
   'age15-algebra':    { 1: genQuadraticFormula, 2: genSimultaneous, 3: genInequalities, 4: genAlgebraicFractions, 5: genCompletingSquare, 6: genSimultaneousLinQuad, 7: genChangeSubject, 8: genFactorGrouping },

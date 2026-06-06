@@ -25,6 +25,46 @@ export interface AgeGroup {
 
 export const CURRICULUM: AgeGroup[] = [
   {
+    age: 13,
+    school: 'School of Explorers',
+    subtitle: 'Foundations for the Exam Studio — algebra, geometry, graphs, numbers, proportion & data',
+    icon: '🧭',
+    color: 'bg-teal',
+    locked: false,
+    hasMockExam: true,
+    topics: [
+      {
+        id: 'age13-algebra',
+        title: 'Algebra Foundations',
+        subtitle: 'Substitution · Like Terms · Expanding · Factorising · Solving Linear · Brackets · Fractions · Word Problems',
+        icon: '🔤',
+        color: 'bg-teal',
+        levels: 8,
+        hasTest: true,
+      },
+    ],
+  },
+  {
+    age: 14,
+    school: 'School of Pioneers',
+    subtitle: 'Pushing forward — exponents, algebra, financial maths, geometry, measurement & data',
+    icon: '🚩',
+    color: 'bg-sprout-gold',
+    locked: false,
+    hasMockExam: true,
+    topics: [
+      {
+        id: 'age14-exponents',
+        title: 'Exponents',
+        subtitle: 'Laws · Zero & Negative · Scientific Notation · Roots · Simplify · Evaluate · Index Equations · Standard Form',
+        icon: '⚡',
+        color: 'bg-sprout-orange',
+        levels: 8,
+        hasTest: true,
+      },
+    ],
+  },
+  {
     age: 15,
     school: 'School of Builders',
     subtitle: 'IGCSE Core — Cambridge 0580 / 0607 / CAPS Grade 10',
