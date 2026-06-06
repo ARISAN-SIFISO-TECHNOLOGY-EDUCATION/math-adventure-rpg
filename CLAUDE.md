@@ -11,6 +11,9 @@ npm run preview    # Serve the production build locally
 npm run lint       # TypeScript type-check only (tsc --noEmit), no test runner
 npm run clean      # Delete dist/
 
+# Academy generator smoke test (option distinctness + correct ∈ options)
+node --experimental-strip-types smoke-senior.mts
+
 # Mobile (Android) — run after every build
 npx cap sync          # Copy dist/ → android/app/src/main/assets/www/
 npx cap open android  # Open Android Studio → Build signed AAB
@@ -18,54 +21,55 @@ npx cap open android  # Open Android Studio → Build signed AAB
 
 For network mobile testing: `npx vite --host` then open the Network URL on the phone.
 
+## Core product rule
+
+**Present everything by AGE, never by school grade.** CAPS/IGCSE/Cambridge alignment is internal only — grade labels must never appear in rendered UI. This is non-negotiable.
+
 ## Architecture
 
 React 19 + TypeScript + Vite + Tailwind CSS v4 + Capacitor 8 (Android wrapper).
 
-**Routing** (`src/App.tsx`): React Router 7. Marketing pages (`/features`, `/curriculum`, `/preschool`, `/lower-primary`, etc.) plus the single game entry point `/play?phase=1|2|3|4`.
+The app has **two experiences**, chosen on the home screen (`src/pages/HomePage.tsx`, split into 🎮 *Kids' Adventure* 3–12 and 🎓 *The Academy* 13–17):
 
-**Game engine** (`src/game/Game.tsx`): One large component that owns all game state. Uses a `GameState` enum — `'START' | 'TUTORIAL' | 'LEVEL_INTRO' | 'PLAYING' | 'VICTORY'` — and transitions between them via event handlers (`startGame`, `handleAnswer`, `handleTutorialDone`, etc.).
+### 1. Kids' Adventure — the RPG (ages 3–12)
+- **Entry:** `/play?phase=1|2|3|4` (the Game **clamps phase to ≤ 4**).
+- **Engine** (`src/game/Game.tsx`): one large component owning all state via a `GameState` enum (`'START' | 'TUTORIAL' | 'LEVEL_INTRO' | 'PLAYING' | 'VICTORY'`) with handlers (`startGame`, `handleAnswer`, …). Bright theme, companion (`src/game/Companion.tsx`, default "Sparky" 🐉), narration (`src/game/useNarration.ts`), badges, streaks, 30-min break timer.
+- **Math** (`src/mathEngine.ts`): `generateProblem(phase, level)` looks up `'${phase}-${level}'` in `GENERATORS`. Active generators are `p1l*`, `p2l*`, `p3l*`, `p4l*`. Helpers: `numericOptions`, `shuffle`, `fractionStr`, `rand`.
+- **Levels:** Phase 1 = 15, Phase 2 = 20, Phase 3 = 15, Phase 4 = 15 → **65 levels**.
 
-**Math engine** (`src/mathEngine.ts`): All question generation lives here. `generateProblem(phase, level)` looks up a key `'${phase}-${level}'` in the `GENERATORS` map and calls the matching function. There are 105 generators total: `p1l1`–`p1l15`, `p2l1`–`p2l20`, and `p3`–`p9` with 15 levels each (`pNl1`–`pNl15`). Key helpers: `numericOptions(correct, count, minVal, spread)`, `shuffle<T>()`, `fractionStr(num, den)`, `rand(min, max)`.
+### 2. The Academy — exam prep (ages 13–17)
+- **Entry:** `/senior/topics/:age` (+ `/senior/activity|success|mistakes|formulas/:topicId|dashboard|planner`). Lazy-loaded in `src/App.tsx`. Dark theme; the global marketing `BottomNav` is hidden on `/senior/*`.
+- **Math** (`src/senior/mathEngine.ts`): `TOPIC_LEVELS` maps `'age{N}-{topic}'` → `{ levelNumber: generator }`. Each generator returns the IGCSE `Problem` type: `question, correctAnswer, options:[string×4], marks, workingSteps[], hints[], calculatorAllowed, commonMistake, examTip`. `makeOptions(correct, wrong[])` guarantees 4 distinct options (de-dupe + numeric-neighbour padding). `fromCases(CaseDef[])` builds compact conceptual generators; `factorial`/`comb`/`perm` are shared helpers.
+  - `generateProblems(topicId, _diff, count, level)` — a single level. `generateTopicTestProblems(topicId)` — topic test. `generateMockExamProblems(age, count)` — pulls every `age{N}-*` generator for a full paper. `generateMastersProblems(count)` — the cross-age **Masters Quiz** (critical thinking; mode `'masters'`, not tied to one age).
+- **Curriculum** (`src/senior/curriculum.ts`): `CURRICULUM: AgeGroup[]` keyed by `age` (13–17). Each has a `school` name and `topics[]` (`id`, `title`, `subtitle`, `levels`, …).
+- **Progress** (`src/senior/progress.ts`): localStorage keys `mathadv-senior-*`. **Pass = ≥ 80%**, sequential level + topic unlock (mastery gating), mistake log, mock scores. **Dev Mode** (`isDevButtonRevealed`/`revealDevButton`, key `mathadv-senior-devreveal`) unlocks everything for content review — always shown on the dev server, hidden in release until the school title is tapped 7×.
+- **Formula Vault** (`src/senior/formulas.ts`): `FORMULAS` keyed by topic id.
+- **Schools (one upward arc):** 13 **Explorers** 🧭 · 14 **Pioneers** 🚩 · 15 **Builders** 🏗️ · 16 **Systems** 🛰️ · 17 **Thinkers** 🧩. **Every topic is a uniform 8 levels.** Totals: 48 / 48 / 72 / 56 / 56 = **280 levels across 35 topics**.
 
-**Data layer** (`src/data/grades.ts`): `GRADES[]` is a 9-item config array (one per phase) that drives the landing-page age cards, phase names, topic lists, and play/detail links. (The `GRADES`/`GradeConfig` identifiers are legacy internal names — the UI shows ages only, never grades.) When adding a phase or changing level counts, update `GRADES` here AND `PHASES[]` inside `Game.tsx`.
+**Routing** (`src/App.tsx`): React Router 7. Marketing pages (`/about`, `/features`, `/curriculum`, `/parents`, `/preschool` … `/age17`, `/secondary`, `/grown-up-corner`) + the two experiences above. `isImmersive = pathname === '/play' || startsWith('/senior')` hides the global `BottomNav`.
 
-**Companion** (`src/game/Companion.tsx`): Displays the player's named character. Accepts an `emotion` prop (`'idle' | 'happy' | 'excited' | 'thinking' | 'encouraging' | 'celebrating'`) which drives animation and picks a random message from `MESSAGES[emotion]`. Pass `customMessage` to override the random pick.
+**Navigation surfaces (no link duplicated across them):** mobile `BottomNav` (Home · Learn=`/curriculum` · Grown-Ups=`/grown-up-corner` · Start=`/`); home footer + marketing `Footer` (About · Parent Guide · Privacy · Contact); desktop `Navbar`.
 
-**Narration** (`src/game/useNarration.ts`): Web Speech API wrapper. Called in `Game.tsx` to read question text aloud when a new problem loads. Respects the mute toggle.
+**Data layer** (`src/data/grades.ts`): `GRADES[]` is a 9-item legacy config driving the Curriculum/marketing pages. Phases 1–4 are the live RPG (`playLink` → `/play?phase=N`); phases 5–9 are the Academy ages 13–17 (`playLink` → `/senior/topics/{age}`, real school names + level counts). `GRADES`/`GradeConfig` are legacy internal names — UI shows ages only.
 
 **Persistence** (all `localStorage`):
-- `mathProgress` — `{ phase, levelInPhase }` — resumes where the player left off
-- `earnedBadges` — array of badge IDs
-- `companionSetup` — `{ name, emoji }`
-- `streakData` — `{ date, count }`
-- `sessionTimer` — enforces the 30-minute break overlay
+- Kids' RPG: `mathProgress` `{ phase, levelInPhase }`, `earnedBadges`, `companionSetup`, `streakData`, `sessionTimer`
+- Academy: `mathadv-senior-progress`, `mathadv-senior-settings`, `mathadv-senior-devreveal`
 
-## Phases, Levels, and Generators
+> **Orphaned RPG phases 5–9.** `src/mathEngine.ts` still contains `p5l*`–`p9l*` and `Game.tsx` still has `PHASES[4..8]`, but ages 13–17 now live in The Academy — these phases are **unlinked from home and unreachable** (`/play` clamps phase to ≤ 4). Treat them as legacy/retirement candidates; do not extend them.
 
-The app is presented by **age only — never grades** (a non-negotiable product rule). Phase names below are the in-app `PHASES[].name`; the curriculum is CAPS-aligned internally but grade labels never appear in the UI.
+## Adding content
 
-| Phase | Ages | Phase name | Worlds | Levels (lip) | Generator keys |
-|-------|------|------------|--------|--------------|----------------|
-| 1 | 3–5 | Pre-School | Pre-School (no worlds) | 1–15 | `1-1` … `1-15` |
-| 2 | 6–8 | Lower Primary | Academy, Merchant's Guild, Dragon's Tower, Star Observatory | 1–20 | `2-1` … `2-20` |
-| 3 | 9–12 | Higher Primary | Merchant Republic, Engineers' Citadel, Storm Observatory | 1–15 | `3-1` … `3-15` |
-| 4 | 11–12 | Advanced Primary | The Pinnacle, Geometry Forge, Summit Academy | 1–15 | `4-1` … `4-15` |
-| 5 | 13 | Secondary | Iron Citadel, Storm Fortress, Oracle's Nexus | 1–15 | `5-1` … `5-15` |
-| 6 | 14 | Upper Secondary | Algebra Lab, Proof Chamber, Data Observatory | 1–15 | `6-1` … `6-15` |
-| 7 | 15 | School of Foundations | Algebra Foundry, Function Observatory, Geometry Citadel | 1–15 | `7-1` … `7-15` |
-| 8 | 16 | School of Mastery | Quadratic Forge, Analytical Tower, Trigon Sanctum | 1–15 | `8-1` … `8-15` |
-| 9 | 17 | School of Excellence | Sequence Spire, Calculus Crucible, Apex Observatory | 1–15 | `9-1` … `9-15` |
+### Add an Academy level/topic (ages 13–17) — the common case
+1. Write `genX()` in `src/senior/mathEngine.ts` returning a `Problem` (arithmetic generators should *compute* the answer; conceptual ones use hand-verified `fromCases`).
+2. Register it in the topic's `TOPIC_LEVELS['age{N}-{topic}']` map.
+3. For a **new topic**: add a `TopicCard` to that age's `topics[]` in `src/senior/curriculum.ts`, and (optionally) a `FORMULAS['age{N}-{topic}']` set in `formulas.ts`.
+4. Run `node --experimental-strip-types smoke-senior.mts`, then `npm run lint` and `npm run build`.
 
-`levelInPhase` (lip) is the 1-indexed position within the phase. `PHASES[phase-1].levels[lip-1].n` is the display number shown to the player (cumulative 1–105). Boss levels are lip 5, 10, 15, 20 for Phase 2+ (require 7 correct instead of 5). For phases with three 5-level worlds, world entries are lip 1, 6, 11; wire new world phases into `P{n}_WORLDS`, `P{n}_LEVEL_INTROS`, `P{n}_HINTS`, `getHint`, the intro/world lookup, the world-entry detection in `startGame`/`handleAnswer`, and the in-game hint render block.
-
-## Adding a New Level (e.g. Phase 2 lip 21)
-
-1. Write `p2l21()` in `src/mathEngine.ts` returning a `Problem` — requires `question`, `options`, `correctAnswer`; `explanation` is optional but recommended.
-2. Register `'2-21': p2l21` in the `GENERATORS` map (after the last `2-x` entry, before the next phase block).
-3. Add `{ n: <display_n>, topic: '...' }` to `PHASES[1].levels` in `Game.tsx`.
-4. Update `src/data/grades.ts`: increment `levels` count for Phase 2.
-5. If this starts a new world: add the world to `P2_WORLDS`, add the lip to `P2_LEVEL_INTROS`, `P2_HINTS`, `isBossLevel`, and both `isP2WorldEntry` locations in `Game.tsx`.
+### Add a Kids' RPG level (ages 3–12)
+1. Write `pNlM()` in `src/mathEngine.ts`; register `'N-M': pNlM` in `GENERATORS`.
+2. Add `{ n, topic }` to `PHASES[N-1].levels` in `Game.tsx`; bump the `levels` count in `src/data/grades.ts`.
+3. Boss levels (Phase 2+) are at lip 5/10/15/20 (require 7 correct vs 5). New worlds must be wired into `P{n}_WORLDS`, `P{n}_LEVEL_INTROS`, `P{n}_HINTS`, `getHint`, and the world-entry detection in `startGame`/`handleAnswer`.
 
 ## Android Release Checklist
 
