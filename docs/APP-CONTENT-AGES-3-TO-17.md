@@ -11,14 +11,16 @@ Last updated: 2026-06-06 · App version 1.x · Android (Google Play) · 100% off
 
 | Ages | Experience | Style | Entry point |
 |------|-----------|-------|-------------|
-| **3 – 14** | **Math Monsters RPG** | Bright, gamified worlds, a named companion, badges, narration | `/play?phase=1…6` |
-| **15 – 17** | **Senior Exam Studio** | Dark, exam-focused IGCSE / A-Level interface with working steps, exam tips, mock papers | `/senior/topics/15…17` |
+| **3 – 12** | **Math Monsters RPG** ("Kids' Adventure") | Bright, gamified worlds, a named companion, badges, narration | `/play?phase=1…4` |
+| **13 – 17** | **The Academy** | Dark, exam-prep interface with marks, working steps, exam tips, mastery levels & mock papers | `/senior/topics/13…17` |
 
-The home screen shows one **age card** per year. Tapping a card opens the right experience automatically — the child never picks a "grade".
+The home screen splits into two sections: **🎮 Kids' Adventure** (3–12) and **🎓 The Academy** (13–17). Tapping an age card opens the right experience automatically — the learner never picks a "grade".
+
+> Ages 13/14 were deliberately shifted out of the kids' RPG into The Academy so teenagers get an age-appropriate, exam-style ramp toward the senior years. The old Phase 5/6 RPG levels still exist in code but are no longer linked from the home screen.
 
 ---
 
-# PART 1 — Math Monsters RPG (Ages 3–14)
+# PART 1 — Math Monsters RPG (Ages 3–12)
 
 A single game engine (`src/game/Game.tsx`) drives all RPG phases. Each phase is a set of levels; most phases group levels into **worlds** with a boss at the end of each. Boss levels require **7 correct** answers; normal levels require **5**. Wrong answers never end the run — the child keeps trying with hints, narration, and an encouraging companion.
 
@@ -95,31 +97,43 @@ Bridges primary into early secondary. Boss at the final level.
 
 ---
 
-## Phase 5 — Secondary · Age 13 · 🧠 (15 levels · 3 worlds)
-
-| World | Levels | Topics |
-|-------|--------|--------|
-| 🏰 **The Iron Citadel** | 31–35 | Algebraic substitution · Expanding double brackets (FOIL) · Factorising (common factor, DOTS) · Equations with brackets & fractions · **Boss** |
-| ⛈️ **The Storm Fortress** | 36–40 | Pythagoras (hypotenuse) · Pythagoras (shorter side) · Parallel-line angles · Straight-line functions (y = mx + c) · **Boss** |
-| 🔮 **The Oracle's Nexus** | 41–45 | Scientific notation · Integer operations · Probability (complementary & independent) · Quartiles & IQR · **Final Boss** |
+*(Ages 13 & 14 — formerly RPG Phases 5 & 6 — now live in The Academy below. The old RPG levels remain in code but are unlinked from home.)*
 
 ---
 
-## Phase 6 — Upper Secondary · Age 14 · 🎓 (15 levels · 3 worlds)
+# PART 2 — The Academy (Ages 13–17)
 
-| World | Levels | Topics |
-|-------|--------|--------|
-| 🧪 **The Algebra Lab** | 46–50 | Exponent laws · Zero & negative exponents · Trinomial factorising · Financial maths (VAT, hire purchase) · **Boss** |
-| 📐 **The Proof Chamber** | 51–55 | Translation · Reflection · Rotation · Congruency (SAS/SSS/AAS/RHS) · **Boss** |
-| 📊 **The Data Observatory** | 56–60 | Five-number summary · Compound shapes · Tree diagrams · Exchange rates & ratio · **Final Boss** |
+A **dark, exam-prep interface** (`src/senior/`) for serious maths study. Every question carries **marks, worked solutions, hints, a common-mistake warning, and an exam tip**. Progress is **mastery-gated**: a learner must score **≥ 80%** to pass a level, and levels/topics unlock **sequentially** — no skipping ahead. Each age offers a **40-question Mock Exam**, a **Formula Vault**, a **Mistake Book**, a **Dashboard**, and a **Study Planner**. A hidden **Dev Mode** (tap the school title 7× in a release build) unlocks everything for content review.
+
+The five Schools form one continuous upward arc: **Explorers → Pioneers → Builders → Systems → Thinkers** (find your footing → push forward → build foundations → connect & analyse systems → think abstractly).
 
 ---
 
-# PART 2 — Senior Exam Studio (Ages 15–17)
+## Age 13 — School of Explorers · 🧭 (6 topics · 48 levels)
+*Foundations for The Academy — CAPS Gr 8/9 aligned (age-only in UI)*
 
-A separate **dark, exam-grade interface** (`src/senior/`) built for IGCSE / A-Level study. Every question carries **marks, worked solutions, hints, a common-mistake warning, and an exam tip**. Progress is **mastery-gated**: a learner must score **≥ 80%** to pass a level, and levels/topics unlock **sequentially** — no skipping ahead. Each age band offers a **40-question Mock Exam**, a **Formula Vault**, a **Mistake Book**, a **Dashboard**, and a **Study Planner**.
+| Topic | Levels | Covers |
+|-------|--------|--------|
+| 🔤 **Algebra Foundations** | 8 | Substitution · Like terms · Expand single & double brackets · Factorising (common + DOTS) · Solve linear · Brackets · Word problems |
+| 📐 **Pythagoras & Angles** | 8 | Hypotenuse · Shorter side · Applications · Triangle angle sum · Parallel-line angles · Exterior angle · Line/point angles · Isosceles |
+| 📈 **Straight-Line Graphs** | 8 | Gradient from 2 points · Read m & c · y-intercept · x-intercept · Point on line · Parallel lines · Find x · Midpoint |
+| 🔢 **Numbers & Integers** | 8 | Add/subtract & multiply/divide integers · BODMAS · HCF & LCM · Squares & roots · Rounding · Directed-number word problems · Primes |
+| 💯 **Ratio, Rate & Percent** | 8 | Sharing in a ratio · Simplify ratio · Unit rate · % of amount · % change · Unit conversion · Best buy · Scale |
+| 🎲 **Probability & Data** | 8 | Single events · Complementary · Independent · Mean · Median & mode · Range · Quartiles & IQR · Two-way tables |
 
-The three senior bands form an upward arc: **Builders → Systems → Thinkers** (build foundations → connect & analyse systems → think abstractly).
+---
+
+## Age 14 — School of Pioneers · 🚩 (6 topics · 48 levels)
+*Pushing forward — CAPS Gr 9 aligned*
+
+| Topic | Levels | Covers |
+|-------|--------|--------|
+| ⚡ **Exponents** | 8 | Product/quotient/power laws · Zero & negative · Scientific notation · Roots · Simplify · Evaluate · Index equations · Standard form |
+| ✖️ **Algebra II** | 8 | Expand (with coefficient) · Trinomials · Common factor · Both-sides equations · Substitute into formulae · Algebraic fractions · Change of subject · Inequalities |
+| 💰 **Financial Maths** | 8 | VAT · Profit & loss · Simple interest · Discount · Hire purchase · Exchange rates · Budgeting · Percentage profit |
+| 🔷 **Geometry & Transformations** | 8 | Translation · Reflection · Rotation · Enlargement · Congruency tests · Similar triangles · Angle relationships · Symmetry |
+| 📏 **Measurement** | 8 | Perimeter · Area (rectangle/triangle/circle) · Circumference · Compound areas · Volume · Surface area |
+| 📊 **Data Handling** | 8 | Mean from table · Median (even) · Mode from table · Range & IQR · Tree diagrams · Expected frequency · Scatter · Modal class |
 
 ---
 
@@ -174,17 +188,17 @@ The three senior bands form an upward arc: **Builders → Systems → Thinkers**
 
 | Band | Ages | Experience | Worlds/Topics | Levels |
 |------|------|-----------|---------------|--------|
-| Pre-School | 3–5 | RPG | — | 15 |
-| Lower Primary | 6–8 | RPG | 4 worlds | 20 |
-| Higher Primary | 9–12 | RPG | 3 worlds | 15 |
-| Advanced Primary | 11–12 | RPG | — | 15 |
-| Secondary | 13 | RPG | 3 worlds | 15 |
-| Upper Secondary | 14 | RPG | 3 worlds | 15 |
-| School of Builders | 15 | Exam Studio | 9 topics | 72 |
-| School of Systems | 16 | Exam Studio | 7 topics | 56 |
-| School of Thinkers | 17 | Exam Studio | 7 topics | 56 |
+| Pre-School | 3–5 | Kids' Adventure (RPG) | — | 15 |
+| Lower Primary | 6–8 | Kids' Adventure (RPG) | 4 worlds | 20 |
+| Higher Primary | 9–12 | Kids' Adventure (RPG) | 3 worlds | 15 |
+| Advanced Primary | 11–12 | Kids' Adventure (RPG) | — | 15 |
+| School of Explorers | 13 | The Academy | 6 topics | 48 |
+| School of Pioneers | 14 | The Academy | 6 topics | 48 |
+| School of Builders | 15 | The Academy | 9 topics | 72 |
+| School of Systems | 16 | The Academy | 7 topics | 56 |
+| School of Thinkers | 17 | The Academy | 7 topics | 56 |
 
-**RPG total:** 95 levels (ages 3–14) · **Exam Studio total:** 184 levels across 23 topics (ages 15–17) — every senior topic is now a uniform 8 levels.
+**Kids' Adventure total:** 65 levels (ages 3–12) · **The Academy total:** 280 levels across 35 topics (ages 13–17) — every Academy topic is a uniform 8 levels.
 
 Every generated question is verified to offer **4 distinct multiple-choice options** with the correct answer always present (engine-level guarantee). Senior questions add worked steps, exam tips, and common-mistake notes; senior progress is mastery-gated at ≥ 80% with sequential unlocking.
 
