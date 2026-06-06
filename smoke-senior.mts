@@ -1,6 +1,6 @@
 // Smoke test: validate senior generators produce clean MCQ problems.
 // Run: node --experimental-strip-types smoke-senior.mts
-import { generateProblems, generateMockExamProblems, TOPIC_LEVELS } from './src/senior/mathEngine.ts';
+import { generateProblems, generateMockExamProblems, generateMastersProblems, TOPIC_LEVELS } from './src/senior/mathEngine.ts';
 
 const RUNS = 2000;
 let failures = 0;
@@ -33,7 +33,15 @@ for (const age of [13, 14, 15, 16, 17]) {
   }
 }
 
+// The Masters Quiz (critical thinking)
+for (let i = 0; i < 500; i++) {
+  for (const p of generateMastersProblems(15)) {
+    if (new Set(p.options).size !== 4 || !p.options.includes(p.correctAnswer))
+      report(`masters: bad problem "${p.question}"`);
+  }
+}
+
 console.log(failures === 0
-  ? `✓ All senior generators clean (${RUNS} runs each, ages 13–17 mock OK)`
+  ? `✓ All senior generators clean (${RUNS} runs each, ages 13–17 mock + Masters OK)`
   : `✗ ${failures} failures`);
 process.exit(failures === 0 ? 0 : 1);

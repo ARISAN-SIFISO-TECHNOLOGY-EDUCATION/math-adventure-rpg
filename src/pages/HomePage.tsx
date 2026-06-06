@@ -9,7 +9,9 @@ type AgeCard = {
   border: string;
   phase: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
   advanced?: boolean;
-  senior?: boolean; // ages 13–17 → dark Exam Studio instead of the kids' RPG
+  senior?: boolean; // ages 13–17 → dark Academy instead of the kids' RPG
+  to?: string;      // feature card (not an age) → route directly here
+  sub?: string;     // small caption for a feature card
 };
 
 // Kids' "Math Monsters" RPG — cards sit inside coloured panels, so each card
@@ -34,8 +36,9 @@ const PRIMARY_CARDS: AgeCard[] = [
   { age: 12, label: 'Advanced',       emoji: '🏆', color: '#9F1239', bg: '#FFFFFF', border: '#FECDD3', phase: 4, advanced: true },
 ];
 
-// Exam Studio — ages 13–17 (dark, exam-prep). One continuous ramp:
-// Explorers → Pioneers → Builders → Systems → Thinkers.
+// The Academy — ages 13–17 (dark, exam-prep). One continuous ramp:
+// Explorers → Pioneers → Builders → Systems → Thinkers, capped by the
+// cross-age Masters Quiz (critical thinking).
 const SENIOR_CARDS: AgeCard[] = [
   { age: 13, label: 'Explorers', emoji: '🧭', color: '#5EEAD4', bg: '#0f2e2b', border: '#134e4a', phase: 5, senior: true },
   { age: 14, label: 'Pioneers',  emoji: '🚩', color: '#FCD34D', bg: '#2e2410', border: '#854d0e', phase: 6, senior: true },
@@ -44,16 +47,24 @@ const SENIOR_CARDS: AgeCard[] = [
   { age: 17, label: 'Thinkers',  emoji: '🧩', color: '#FCD34D', bg: '#2e2410', border: '#854d0e', phase: 9, senior: true },
 ];
 
+// Capstone critical-thinking quiz — not tied to one age.
+const MASTERS_CARD: AgeCard = {
+  age: 0, label: 'Masters', emoji: '🧠', color: '#F0ABFC', bg: '#2a1335', border: '#86198f', phase: 9,
+  sub: 'Critical thinking', to: '/senior/activity?topicId=masters&mode=masters&age=0',
+};
+
 function AgeCardItem({ card }: { card: AgeCard }) {
+  const isFeature = !!card.to;
+  const to = card.to ?? (card.senior ? `/senior/topics/${card.age}` : `/play?phase=${card.phase}`);
   return (
     <Link
-      to={card.senior ? `/senior/topics/${card.age}` : `/play?phase=${card.phase}`}
+      to={to}
       className="flex flex-col items-center justify-center rounded-2xl border-2 py-3 px-1 gap-0.5 no-underline active:scale-95 transition-transform shadow-sm"
       style={{ background: card.bg, borderColor: card.border }}
     >
       <span className="text-2xl leading-none">{card.emoji}</span>
       <span className="text-lg font-black leading-tight" style={{ color: card.color }}>
-        Age {card.age}
+        {isFeature ? card.label : `Age ${card.age}`}
       </span>
       {card.advanced ? (
         <span
@@ -65,9 +76,9 @@ function AgeCardItem({ card }: { card: AgeCard }) {
       ) : (
         <span
           className="text-[9px] font-semibold text-center leading-tight"
-          style={{ color: card.senior ? card.color : '#9CA3AF' }}
+          style={{ color: isFeature || card.senior ? card.color : '#9CA3AF' }}
         >
-          {card.label}
+          {isFeature ? card.sub : card.label}
         </span>
       )}
     </Link>
@@ -84,19 +95,21 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white flex flex-col max-w-lg mx-auto">
 
-      {/* ── Hero Image ── */}
-      <div className="relative w-full overflow-hidden">
-        <img
-          src="/hero.jpg"
-          alt="Math Adventure RPG — learning maths from age 3 to 17"
-          style={{ width: '100%', height: 'auto', display: 'block' }}
-          draggable={false}
-        />
-        {/* subtle bottom fade so the image blends into white */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-10 pointer-events-none"
-          style={{ background: 'linear-gradient(to bottom, transparent, white)' }}
-        />
+      {/* ── Brand Hero (all ages 3–17) ── */}
+      <div
+        className="relative w-full px-5 pt-8 pb-7 overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #0f766e 0%, #4338ca 55%, #86198f 100%)' }}
+      >
+        <h1 className="font-[Nunito] text-3xl font-black text-white leading-tight tracking-tight">
+          Math Adventure
+        </h1>
+        <p className="font-inter text-sm font-semibold mt-1" style={{ color: '#C7D2FE' }}>
+          Maths mastery, ages 3 to 17 — play, learn &amp; master.
+        </p>
+        <div className="flex gap-2 mt-3 text-[11px] font-bold">
+          <span className="px-2.5 py-1 rounded-full" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}>🎮 Play 3–12</span>
+          <span className="px-2.5 py-1 rounded-full" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}>🎓 Master 13–17</span>
+        </div>
       </div>
 
       {/* ── Pre-School (Ages 3–5) ── */}
@@ -150,14 +163,11 @@ export default function HomePage() {
           <p className="text-xs font-semibold mt-0.5" style={{ color: '#94A3B8' }}>
             Ages 13–17 · serious maths, mastery levels &amp; mock papers
           </p>
-          <div className="flex flex-col gap-2 mt-3">
-            {chunk(SENIOR_CARDS, 3).map((row, rowIdx) => (
-              <div key={rowIdx} className="grid grid-cols-3 gap-2">
-                {row.map((card, i) => (
-                  <div key={i}><AgeCardItem card={card} /></div>
-                ))}
-              </div>
+          <div className="grid grid-cols-3 gap-2 mt-3">
+            {SENIOR_CARDS.map((card, i) => (
+              <div key={i}><AgeCardItem card={card} /></div>
             ))}
+            <div><AgeCardItem card={MASTERS_CARD} /></div>
           </div>
         </div>
       </div>

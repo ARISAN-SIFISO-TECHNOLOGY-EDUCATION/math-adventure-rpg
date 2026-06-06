@@ -8587,6 +8587,137 @@ export function generateMockExamProblems(age = 15, count = 40): Problem[] {
   return shuffle(problems);
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+//  The Masters Quiz — critical thinking & logic (not tied to any one age).
+//  Patterns, odd-one-out, analogies, rules, deduction, codes, reasoning.
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Sequences — find the next term.
+function genPatternNext(): Problem {
+  const t = randInt(0, 3);
+  let seq: number[], next: number, rule: string;
+  if (t === 0) { const s = randInt(2, 9), d = randInt(2, 7); seq = [s, s + d, s + 2 * d, s + 3 * d]; next = s + 4 * d; rule = `add ${d} each time`; }
+  else if (t === 1) { const s = randInt(2, 4), r = 2 + randInt(0, 1); seq = [s, s * r, s * r * r, s * r * r * r]; next = s * r * r * r * r; rule = `multiply by ${r} each time`; }
+  else if (t === 2) { const st = randInt(1, 4); seq = [st * st, (st + 1) * (st + 1), (st + 2) * (st + 2), (st + 3) * (st + 3)]; next = (st + 4) * (st + 4); rule = `these are perfect squares`; }
+  else { const s = randInt(1, 5); seq = [s, s + 1, s + 3, s + 6]; next = s + 10; rule = `the gap grows by 1 each time (+1, +2, +3, +4)`; }
+  return {
+    id: uid(),
+    question: `What comes next in the sequence?\n\n${seq.join(',  ')},  ?`,
+    correctAnswer: `${next}`,
+    options: makeOptions(`${next}`, [`${next + 1}`, `${next - 2}`, `${seq[3] + (seq[3] - seq[2])}`]),
+    marks: 1,
+    workingSteps: [`Look at how each term changes`, `Rule: ${rule}`, `Next term = ${next}`],
+    hints: [`Find the rule connecting each term to the next`],
+    calculatorAllowed: false,
+    commonMistake: `Assuming every sequence just adds a fixed number — check for multiplying or squaring too.`,
+    examTip: `Test the gaps first; if they aren't constant, look for ×, squares, or a growing gap.`,
+  };
+}
+
+// Odd one out.
+function genOddOneOut(): Problem {
+  return fromCases([
+    { q: `Which is the ODD ONE OUT?\n\n4,  9,  16,  20`, c: '20', w: ['4', '9', '16'], s: ['4, 9 and 16 are perfect squares (2², 3², 4²)', '20 is not a perfect square'], h: ['What do three of them have in common?'], mistake: 'Picking the largest by habit.', tip: 'Find the shared property, then the exception.' },
+    { q: `Which is the ODD ONE OUT?\n\n2,  3,  5,  9`, c: '9', w: ['2', '3', '5'], s: ['2, 3 and 5 are prime numbers', '9 = 3 × 3 is not prime'], h: ['Think about factors'], mistake: 'Assuming all odd numbers are prime.', tip: '9 is odd but not prime.' },
+    { q: `Which is the ODD ONE OUT?\n\n10,  20,  25,  30`, c: '25', w: ['10', '20', '30'], s: ['10, 20, 30 are multiples of 10', '25 is not'], h: ['Which end in 0?'], mistake: 'Overthinking it.', tip: 'Look for the simplest shared rule.' },
+    { q: `Which is the ODD ONE OUT?\n\n8,  27,  64,  100`, c: '100', w: ['8', '27', '64'], s: ['8 = 2³, 27 = 3³, 64 = 4³ are perfect cubes', '100 is not a cube'], h: ['Try cubing small numbers'], mistake: 'Confusing squares with cubes.', tip: '100 is a square (10²), not a cube.' },
+    { q: `Which is the ODD ONE OUT?\n\ntriangle,  square,  circle,  cube`, c: 'cube', w: ['triangle', 'square', 'circle'], s: ['Triangle, square and circle are 2-D (flat) shapes', 'A cube is 3-D (solid)'], h: ['Flat vs solid?'], mistake: 'Picking circle because it has no corners.', tip: 'Group by a clear property: 2-D vs 3-D.' },
+  ]);
+}
+
+// Number analogy (× rule).
+function genNumberAnalogy(): Problem {
+  const k = randInt(2, 5), a = randInt(2, 6), b = randInt(2, 6), c = randInt(2, 7);
+  return {
+    id: uid(),
+    question: `Find the missing number:\n\n${a} → ${a * k},   ${b} → ${b * k},   ${c} → ?`,
+    correctAnswer: `${c * k}`,
+    options: makeOptions(`${c * k}`, [`${c * k + 1}`, `${c + k}`, `${c * k - 2}`]),
+    marks: 1,
+    workingSteps: [`Each output is the input × ${k}`, `${c} × ${k} = ${c * k}`],
+    hints: [`What is done to each left number to get the right one?`],
+    calculatorAllowed: false,
+    commonMistake: `Adding the rule number instead of multiplying.`,
+    examTip: `Check the same rule works for ALL given pairs before applying it.`,
+  };
+}
+
+// Function machine (×a then +b).
+function genMappingRule(): Problem {
+  const a = randInt(2, 3), b = randInt(1, 4);
+  return {
+    id: uid(),
+    question: `A number machine follows one rule:\n\n2 → ${2 * a + b},   3 → ${3 * a + b},   4 → ${4 * a + b}\n\nWhat does 5 become?`,
+    correctAnswer: `${5 * a + b}`,
+    options: makeOptions(`${5 * a + b}`, [`${5 * a + b + 1}`, `${5 * a}`, `${5 + a + b}`]),
+    marks: 2,
+    workingSteps: [`Rule: × ${a}, then + ${b}`, `5 × ${a} + ${b} = ${5 * a + b}`],
+    hints: [`Find one rule that fits every pair`],
+    calculatorAllowed: false,
+    commonMistake: `Finding a rule that fits only the first pair.`,
+    examTip: `A valid rule must work for every example given.`,
+  };
+}
+
+// Logical deduction.
+function genLogicDeduction(): Problem {
+  return fromCases([
+    { q: `All cats are animals.\nTom is a cat.\n\nTherefore Tom is...?`, c: 'an animal', w: ['a dog', 'not an animal', 'a plant'], s: ['Every cat is an animal', 'Tom is a cat → Tom is an animal'], h: ['Follow the chain of statements'], mistake: 'Adding facts that were not given.', tip: 'Only conclude what the statements force.' },
+    { q: `If it rains, the ground gets wet.\nThe ground is DRY.\n\nWhat can you conclude?`, c: 'It did not rain', w: ['It rained', 'It will rain', 'The ground is wet'], s: ['Rain → wet ground', 'The ground is dry, so it cannot have rained'], h: ['Work backwards from the dry ground'], mistake: 'Ignoring the contradiction.', tip: 'If the result is absent, the cause was too.' },
+    { q: `Sara is taller than Bob.\nBob is taller than Joe.\n\nWho is the tallest?`, c: 'Sara', w: ['Bob', 'Joe', 'Cannot tell'], s: ['Sara > Bob > Joe', 'So Sara is tallest'], h: ['Put them in order'], mistake: 'Stopping at the first comparison.', tip: 'Chain the comparisons into one order.' },
+    { q: `No fish can fly.\nA shark is a fish.\n\nCan a shark fly?`, c: 'No', w: ['Yes', 'Sometimes', 'Only at night'], s: ['No fish can fly', 'A shark is a fish → it cannot fly'], h: ['Apply the rule to the shark'], mistake: 'Letting real-world guesses override the logic.', tip: 'Use only the given rules.' },
+  ]);
+}
+
+// Growing shape pattern (matchsticks).
+function genShapePattern(): Problem {
+  const s = randInt(3, 5), d = randInt(2, 4);
+  const seq = [s, s + d, s + 2 * d, s + 3 * d];
+  const next = s + 4 * d;
+  return {
+    id: uid(),
+    question: `A growing pattern uses these many matchsticks for shapes 1–4:\n\n${seq.join(',  ')}\n\nHow many for shape 5?`,
+    correctAnswer: `${next}`,
+    options: makeOptions(`${next}`, [`${next + d}`, `${next - 1}`, `${seq[3] + 1}`]),
+    marks: 2,
+    workingSteps: [`Each shape adds ${d} matchsticks`, `Shape 5 = ${seq[3]} + ${d} = ${next}`],
+    hints: [`How many are added each step?`],
+    calculatorAllowed: false,
+    commonMistake: `Doubling instead of adding the same amount each time.`,
+    examTip: `A constant gap means a linear rule: add ${d} each step.`,
+  };
+}
+
+// Codes & ciphers.
+function genCodePattern(): Problem {
+  return fromCases([
+    { q: `Using A=1, B=2, C=3, …\n\nWhat is the code for 'CAB'?`, c: '3, 1, 2', w: ['1, 2, 3', '3, 2, 1', '2, 1, 3'], s: ['C = 3, A = 1, B = 2', 'CAB → 3, 1, 2'], h: ['Convert each letter to its position'], mistake: 'Reordering the letters.', tip: 'Keep the letters in the same order.' },
+    { q: `A code shifts each letter forward by 2:\nA→C, B→D, C→E.\n\nWhat does F become?`, c: 'H', w: ['G', 'E', 'I'], s: ['Shift F forward by 2 letters', 'F → G → H'], h: ['Count two letters on from F'], mistake: 'Shifting by 1.', tip: 'Apply the exact shift stated.' },
+    { q: `If A=1, B=2, C=3, …\n\nWhich letter is number 8?`, c: 'H', w: ['G', 'I', 'J'], s: ['Count to the 8th letter', 'A,B,C,D,E,F,G,H → H'], h: ['Count along the alphabet'], mistake: 'Off-by-one counting.', tip: 'A is 1, so the 8th letter is H.' },
+    { q: `Using A=1, B=2, …\n\nWhat is the code for 'DOG'?`, c: '4, 15, 7', w: ['4, 14, 7', '3, 15, 7', '4, 15, 8'], s: ['D = 4, O = 15, G = 7'], h: ['Find each letter\'s position'], mistake: 'Miscounting O (it is the 15th letter).', tip: 'Double-check middle-alphabet letters.' },
+  ]);
+}
+
+// "Which MUST be true?"
+function genMustBeTrue(): Problem {
+  return fromCases([
+    { q: `John is older than Mary.\n\nWhich statement MUST be true?`, c: 'Mary is younger than John', w: ['Mary is older than John', 'They are the same age', 'John is the oldest in the class'], s: ['"John older than Mary" means the same as "Mary younger than John"'], h: ['Restate the fact the other way round'], mistake: 'Adding claims the fact does not support.', tip: 'Only what is logically forced "must" be true.' },
+    { q: `All squares are rectangles.\n\nWhich statement is true?`, c: 'A square is a rectangle', w: ['A rectangle is a square', 'No square is a rectangle', 'Squares have 3 sides'], s: ['Squares are a special kind of rectangle', 'So every square is a rectangle'], h: ['Direction matters: all squares ARE rectangles'], mistake: 'Reversing the statement.', tip: '"All A are B" does not mean "all B are A".' },
+    { q: `Half the class wear glasses.\n\nWhich statement MUST be true?`, c: 'Some learners wear glasses', w: ['All learners wear glasses', 'No learners wear glasses', 'Only boys wear glasses'], s: ['Half wearing glasses means at least some do'], h: ['What is guaranteed by "half"?'], mistake: 'Over-claiming "all" or "none".', tip: 'Pick the weakest statement that is definitely true.' },
+  ]);
+}
+
+const MASTERS_GENERATORS: LevelGenerator[] = [
+  genPatternNext, genOddOneOut, genNumberAnalogy, genMappingRule,
+  genLogicDeduction, genShapePattern, genCodePattern, genMustBeTrue,
+];
+
+export function generateMastersProblems(count = 15): Problem[] {
+  const out: Problem[] = [];
+  for (let i = 0; i < count; i++) out.push(MASTERS_GENERATORS[i % MASTERS_GENERATORS.length]());
+  return shuffle(out);
+}
+
 export function generateTopicTestProblems(activityType: string, count = 10): Problem[] {
   const levels = TOPIC_LEVELS[activityType];
   if (!levels) return Array.from({ length: count }, genFallback);

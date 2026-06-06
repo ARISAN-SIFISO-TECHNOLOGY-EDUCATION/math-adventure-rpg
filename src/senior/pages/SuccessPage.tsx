@@ -92,7 +92,7 @@ export default function SuccessPage() {
         <h1 className="text-3xl font-outfit font-extrabold text-white">{title}</h1>
         <p className="text-slate-400 font-inter mt-2">{subtitle}</p>
         <p className="text-slate-500 font-inter text-sm mt-1">
-          {correct}/{total} correct · {mode === 'mock' ? 'Mock Exam' : isTopicTest ? 'Topic Test' : `Level ${level}`}
+          {correct}/{total} correct · {mode === 'masters' ? 'Masters Quiz' : mode === 'mock' ? 'Mock Exam' : isTopicTest ? 'Topic Test' : `Level ${level}`}
         </p>
       </motion.div>
 
@@ -142,7 +142,7 @@ export default function SuccessPage() {
           </motion.button>
         )}
 
-        {passed && !isTopicTest && mode !== 'mock' && (
+        {passed && !isTopicTest && mode === 'topic' && (
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={() =>
@@ -160,11 +160,11 @@ export default function SuccessPage() {
 
         <motion.button
           whileTap={{ scale: 0.97 }}
-          onClick={() => navigate(`/senior/topics/${topicId.match(/age(\d+)/)?.[1] ?? 15}`)}
+          onClick={() => navigate(mode === 'masters' ? '/' : `/senior/topics/${topicId.match(/age(\d+)/)?.[1] ?? 15}`)}
           className="w-full py-4 bg-slate-800 text-white font-outfit font-semibold text-lg rounded-2xl flex items-center justify-center gap-2"
         >
           <Home className="w-5 h-5" />
-          Back to Topics
+          {mode === 'masters' ? 'Back to Home' : 'Back to Topics'}
         </motion.button>
       </motion.div>
     </div>

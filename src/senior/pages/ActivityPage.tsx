@@ -6,6 +6,7 @@ import {
   generateProblems,
   generateMockExamProblems,
   generateTopicTestProblems,
+  generateMastersProblems,
   type Problem,
 } from '../mathEngine';
 import { recordAttempt, addMistake, recordMockExam } from '../progress';
@@ -228,7 +229,9 @@ export default function ActivityPage() {
   // Generate problems once on mount
   useEffect(() => {
     let probs: Problem[];
-    if (mode === 'mock') {
+    if (mode === 'masters') {
+      probs = generateMastersProblems(15);
+    } else if (mode === 'mock') {
       probs = generateMockExamProblems(age, 40);
     } else if (isTopicTest) {
       probs = generateTopicTestProblems(topicId, 10);
@@ -271,7 +274,7 @@ export default function ActivityPage() {
       const score = Math.round((correct / problems.length) * 100);
       if (mode === 'mock') {
         recordMockExam(age, score);
-      } else {
+      } else if (mode !== 'masters') {
         recordAttempt(topicId, level, score, isTopicTest);
       }
       navigate(
@@ -307,9 +310,9 @@ export default function ActivityPage() {
         </motion.button>
         <div className="flex-1">
           <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">
-            {isTopicTest ? 'Topic Test' : mode === 'mock' ? 'Mock Exam' : `Level ${level}`}
+            {mode === 'masters' ? 'Masters Quiz' : isTopicTest ? 'Topic Test' : mode === 'mock' ? 'Mock Exam' : `Level ${level}`}
           </p>
-          <p className="text-white font-outfit font-bold text-sm truncate">{topicId}</p>
+          <p className="text-white font-outfit font-bold text-sm truncate">{mode === 'masters' ? 'Critical Thinking' : topicId}</p>
         </div>
         <div className="text-right">
           <p className="text-sprout-green font-outfit font-bold text-lg">
