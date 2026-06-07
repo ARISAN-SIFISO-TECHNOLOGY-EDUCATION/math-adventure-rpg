@@ -38,7 +38,12 @@ android {
             if (keystoreProps.getProperty('storeFile')) {
                 signingConfig signingConfigs.release
             }
-            minifyEnabled false
+            // R8 code shrinking/obfuscation + resource shrinking → smaller AAB.
+            // Capacitor/Cordova reflection is preserved via proguard-rules.pro.
+            // NOTE: always smoke-test the signed AAB on a real device before
+            // publishing — R8 issues only surface at runtime, not at build time.
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

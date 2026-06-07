@@ -69,31 +69,43 @@ Then move the keystore into the Android app folder:
 mv math-adventure-rpg-release.jks android/app/
 ```
 
-### 5. Configure signing in android/app/build.gradle
+### 5. Configure signing (secrets live OUTSIDE git)
 
-Open **`build.gradle (Module :app)`** in Android Studio (double-click it under Gradle Scripts).
+**Never put the keystore password in `build.gradle`** — `build.gradle` is committed to git.
+Instead, `build.gradle` already reads signing secrets from a **gitignored** file:
+`android/keystore.properties`. Create it once (it is ignored by `.gitignore`, alongside `*.jks`):
 
-Add `signingConfigs` block inside `android {}`, above `buildTypes`, and update `buildTypes`:
+```properties
+# android/keystore.properties — DO NOT COMMIT (gitignored)
+storeFile=math-adventure-rpg-release.jks
+storePassword=YOUR_PASSWORD
+keyAlias=math-adventure-rpg
+keyPassword=YOUR_PASSWORD
+```
+
+`build.gradle` loads it automatically and signs the release only when this file is present:
 
 ```gradle
-signingConfigs {
-    release {
-        storeFile file('math-adventure-rpg-release.jks')
-        storePassword 'YOUR_PASSWORD'
-        keyAlias 'math-adventure-rpg'
-        keyPassword 'YOUR_PASSWORD'
-    }
-}
+def keystoreProps = new Properties()
+def f = rootProject.file('keystore.properties')
+if (f.exists()) { keystoreProps.load(new FileInputStream(f)) }
+
 buildTypes {
     release {
-        signingConfig signingConfigs.release
-        minifyEnabled false
+        if (keystoreProps.getProperty('storeFile')) { signingConfig signingConfigs.release }
+        minifyEnabled true        // R8 code shrinking/obfuscation
+        shrinkResources true      // strip unused resources → smaller AAB
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
 }
 ```
 
-> Note: use `proguard-android-optimize.txt` not `proguard-android.txt` — the latter is deprecated in AGP 9.
+> Notes:
+> - Use `proguard-android-optimize.txt` not `proguard-android.txt` (the latter is deprecated in AGP 9).
+> - R8 is **on**. Capacitor/Cordova reflection is preserved by keep rules in
+>   `android/app/proguard-rules.pro` — if a plugin breaks after minify, add a keep rule there.
+>   Always smoke-test the signed AAB **on a real device** before publishing (R8 issues only
+>   appear at runtime, not at build time).
 
 Click **Sync Now** in Android Studio after saving.
 
@@ -101,21 +113,20 @@ Click **Sync Now** in Android Studio after saving.
 
 ## Every Release — Step by Step
 
-### Step 1: Bump the version
+### Steps 1–2: Bump the version, then build + sync (automated)
 
-In `android/app/build.gradle`, increment `versionCode` by 1 and update `versionName`:
-
-```gradle
-versionCode 2          // must increase by at least 1 each upload
-versionName "1.1.0"
-```
-
-### Step 2: Build and sync
+Run the release script — it gates on a clean git tree, runs lint → test → smoke, bumps
+`versionCode` (+1) and optionally `versionName`, then builds and syncs:
 
 ```bash
-npm run build
-npx cap sync
+npm run release          # bump versionCode +1, keep versionName
+npm run release 1.5      # bump versionCode +1, set versionName "1.5"
+npm run release -- --dry-run   # preview only
 ```
+
+`versionCode` must increase by at least 1 each upload — the script handles that. If you ever
+do it by hand, edit `versionCode`/`versionName` in `android/app/build.gradle` then
+`npm run build && npx cap sync`.
 
 ### Step 3: Generate signed AAB in Android Studio
 

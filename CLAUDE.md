@@ -73,9 +73,24 @@ The app has **two experiences**, chosen on the home screen (`src/pages/HomePage.
 
 ## Android Release Checklist
 
-1. Bump `versionCode` and `versionName` in `android/app/build.gradle`
-2. `npm run build && npx cap sync`
-3. Android Studio → Build → Generate Signed Bundle/APK → release AAB
-4. Upload AAB to Google Play Console (closed testing track while in testing)
+The release is automated by `npm run release` (`scripts/release.mjs`): it gates on a
+clean git tree, runs lint → test → smoke, bumps `versionCode` (+ optional `versionName`),
+then `vite build` + `cap sync`. It stops on the first failure and never signs/uploads.
+
+```bash
+npm run release                # bump versionCode +1, keep versionName
+npm run release 1.5            # bump versionCode +1, set versionName "1.5"
+npm run release -- --dry-run   # preview, change nothing
+```
+
+Then the MANUAL steps the script prints:
+1. `npx cap open android`
+2. Android Studio → Build → Generate Signed Bundle/APK → release **AAB**
+3. **Install the AAB/APK on a REAL device and smoke-test it** — R8/minify + resource
+   shrinking are ON (`minifyEnabled true` / `shrinkResources true`); R8 issues only
+   surface at runtime. Verify the app loads, narration plays, and a level completes.
+   Capacitor/Cordova reflection is preserved in `android/app/proguard-rules.pro` — if a
+   plugin breaks, add a keep rule there before disabling minify.
+4. Commit the version bump, then upload the AAB to Play Console (closed testing track).
 
 See `docs/android-build-guide.md` for first-time keystore setup.

@@ -5,17 +5,39 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# ─────────────────────────────────────────────────────────────────────────────
+# Capacitor + Cordova keep rules
+#
+# This is a Capacitor (WebView) app: the real app lives in assets/www and is
+# NOT touched by R8 — R8 only minifies the thin Android/Java shell. Capacitor
+# and Cordova resolve plugins by reflection and expose methods to the JS bridge,
+# so those classes/members must be kept or plugin calls fail silently at runtime.
+# ─────────────────────────────────────────────────────────────────────────────
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Keep the Capacitor framework and all plugins (resolved via reflection).
+-keep public class com.getcapacitor.** { *; }
+-keep public class com.getcapacitor.plugin.** { *; }
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Keep any class annotated as a Capacitor plugin, plus its bridge-exposed members.
+-keep @com.getcapacitor.annotation.CapacitorPlugin public class * { *; }
+-keepclassmembers class * extends com.getcapacitor.Plugin {
+    @com.getcapacitor.annotation.CapacitorPlugin *;
+    @com.getcapacitor.PluginMethod public <methods>;
+}
+
+# Keep Cordova plugins bridged through capacitor-cordova-android-plugins.
+-keep class org.apache.cordova.** { *; }
+-keep public class * extends org.apache.cordova.CordovaPlugin { *; }
+
+# Keep classes referenced from JS via @JavascriptInterface.
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+
+# Annotations drive Capacitor's reflective plugin resolution — keep them.
+-keepattributes *Annotation*, JavascriptInterface
+
+# Preserve line numbers so release stack traces remain debuggable, but hide the
+# original source file names (no information leak, still readable traces).
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
