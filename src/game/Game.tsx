@@ -11,6 +11,7 @@ import { generateProblem, type Problem } from '../mathEngine';
 import confetti from 'canvas-confetti';
 import { Companion, type CompanionEmotion } from './Companion';
 import { useNarration } from './useNarration';
+import { useI18n } from '../i18n';
 import { registerScreenBack } from '../lib/backHandler';
 import { safeGet } from '../lib/safeStorage';
 import { recordAnswer, recordLevelComplete } from '../lib/stats';
@@ -469,8 +470,9 @@ export default function Game() {
   const [showBreakGate, setShowBreakGate] = useState(false);
   const [completedLevel, setCompletedLevel] = useState(1);
 
+  const { lang } = useI18n();
   const { muted, toggleMute, startBGM, stopBGM, playClick, playCorrect, playWrong, playVictory } = useSoundSystem();
-  const { speakQuestion, speakCorrect, speakWrong, speakVictory, speakWelcome } = useNarration(muted);
+  const { speakQuestion, speakCorrect, speakWrong, speakVictory, speakWelcome } = useNarration(muted, lang);
 
   const currentPhaseConfig = PHASES[phase - 1];
 

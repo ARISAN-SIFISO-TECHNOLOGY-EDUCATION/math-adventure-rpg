@@ -52,9 +52,12 @@ The app has **two experiences**, chosen on the home screen (`src/pages/HomePage.
 
 **Data layer** (`src/data/grades.ts`): `GRADES[]` is a 9-item legacy config driving the Curriculum/marketing pages. Phases 1–4 are the live RPG (`playLink` → `/play?phase=N`); phases 5–9 are the Academy ages 13–17 (`playLink` → `/senior/topics/{age}`, real school names + level counts). `GRADES`/`GradeConfig` are legacy internal names — UI shows ages only.
 
+**Internationalisation** (`src/i18n/`): `<I18nProvider>` (in `main.tsx`) holds the active language in localStorage (`mathadv-lang`) and syncs `<html lang>`. `useT()` → `t('key', { var })` translates UI strings; `useI18n()` also exposes `lang`/`setLang`. **`en.ts` is the source of truth** — every key is typed (`Translations = Record<TranslationKey, string>`), so each locale (`zu.ts`) must have *exactly* the same keys or the build fails. Narration lines live in `narration.ts` (`NARRATION[lang]`); `useNarration(muted, lang)` speaks them with the right BCP-47 tag. `LanguageToggle` is the switcher (on Home). `i18n.test.ts` enforces key + placeholder parity. **Coverage so far: Home + narration (en + isiZulu). isiZulu is DRAFT — needs native-speaker review before release.** To translate a new surface: add keys to `en.ts` + `zu.ts`, then replace literals with `t(...)`. Proper nouns (Math Adventure, The Academy, school names) stay untranslated.
+
 **Persistence** (all `localStorage`):
 - Kids' RPG: `mathProgress` `{ phase, levelInPhase }`, `earnedBadges`, `companionSetup`, `streakData`, `sessionTimer`
 - Academy: `mathadv-senior-progress`, `mathadv-senior-settings`, `mathadv-senior-devreveal`
+- Global: `mathadv-lang` (i18n), `mathadv-stats` (on-device insights)
 
 > **Orphaned RPG phases 5–9.** `src/mathEngine.ts` still contains `p5l*`–`p9l*` and `Game.tsx` still has `PHASES[4..8]`, but ages 13–17 now live in The Academy — these phases are **unlinked from home and unreachable** (`/play` clamps phase to ≤ 4). Treat them as legacy/retirement candidates; do not extend them.
 

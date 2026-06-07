@@ -1,18 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
-
-const CORRECT_LINES = [
-  "Great job! That's correct!",
-  "Awesome! You got it!",
-  "Brilliant! Well done!",
-  "Fantastic! Keep going!",
-];
-
-const WRONG_LINES = [
-  "Try again — you can do it!",
-  "Not quite. Have another go!",
-  "Keep trying! You're almost there!",
-  "Don't give up — try once more!",
-];
+import { BCP47, type Lang } from '../i18n';
+import { NARRATION } from '../i18n/narration';
 
 function pick(arr: string[]) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -29,8 +17,15 @@ function cleanForSpeech(text: string): string {
     .trim();
 }
 
-export function useNarration(muted: boolean) {
+/**
+ * Speech narration for the Kids' RPG, in the active language.
+ * Falls back to the device default voice when no voice matches `lang`
+ * (e.g. most devices lack a zu-ZA voice) — utterances are still tagged so a
+ * matching voice is used where present.
+ */
+export function useNarration(muted: boolean, lang: Lang = 'en') {
   const synthRef = useRef<SpeechSynthesis | null>(null);
+  const lines = NARRATION[lang];
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -43,13 +38,13 @@ export function useNarration(muted: boolean) {
       if (muted || !synthRef.current) return;
       synthRef.current.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US';
+      u.lang = BCP47[lang];
       u.rate = 0.88;
       u.pitch = 1.1;
       u.volume = 1;
       synthRef.current.speak(u);
     },
-    [muted],
+    [muted, lang],
   );
 
   const stop = useCallback(() => synthRef.current?.cancel(), []);
@@ -57,21 +52,21 @@ export function useNarration(muted: boolean) {
   const speakQuestion = useCallback(
     (question: string, isSubitizing?: boolean) => {
       if (isSubitizing) {
-        speak('Quick! Look at the screen carefully. How many do you see?');
+        speak(lines.subitizing);
         return;
       }
-      const withFractions = question.replace(/(\d+)\/(\d+)/g, '$1 over $2');
+      const withFractions = question.replace(/(\d+)\/(\d+)/g, `$1 ${lines.fractionOver} $2`);
       const cleaned = cleanForSpeech(withFractions);
       if (cleaned.length > 2) speak(cleaned);
     },
-    [speak],
+    [speak, lines],
   );
 
-  const speakCorrect  = useCallback(() => speak(pick(CORRECT_LINES)), [speak]);
-  const speakWrong    = useCallback(() => speak(pick(WRONG_LINES)),   [speak]);
-  const speakLevelUp  = useCallback((lvl: number) => speak(`Level up! You reached level ${lvl}. Amazing!`), [speak]);
-  const speakVictory  = useCallback(() => speak('Victory! You are a math superstar!'), [speak]);
-  const speakWelcome  = useCallback(() => speak("Let's start the adventure! Are you ready?"), [speak]);
+  const speakCorrect  = useCallback(() => speak(pick(lines.correct)), [speak, lines]);
+  const speakWrong    = useCallback(() => speak(pick(lines.wrong)),   [speak, lines]);
+  const speakLevelUp  = useCallback((lvl: number) => speak(lines.levelUp.replace('{lvl}', String(lvl))), [speak, lines]);
+  const speakVictory  = useCallback(() => speak(lines.victory), [speak, lines]);
+  const speakWelcome  = useCallback(() => speak(lines.welcome), [speak, lines]);
 
   return { speak, stop, speakQuestion, speakCorrect, speakWrong, speakLevelUp, speakVictory, speakWelcome };
 }
