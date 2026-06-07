@@ -12,6 +12,7 @@ import confetti from 'canvas-confetti';
 import { Companion, type CompanionEmotion } from './Companion';
 import { useNarration } from './useNarration';
 import { useI18n } from '../i18n';
+import { hapticSuccess, hapticError, hapticCelebrate } from '../lib/haptics';
 import { registerScreenBack } from '../lib/backHandler';
 import { safeGet } from '../lib/safeStorage';
 import { recordAnswer, recordLevelComplete } from '../lib/stats';
@@ -627,6 +628,7 @@ export default function Game() {
     if (choice === problem.correctAnswer) {
       playCorrect();
       speakCorrect();
+      hapticSuccess();
       recordAnswer(true);
       const requiredToWin = isBossLevel(phase, levelInPhase) ? 7 : 5;
       setCompanionEmotion(progress + 1 >= requiredToWin ? 'celebrating' : 'excited');
@@ -669,6 +671,7 @@ export default function Game() {
           stopBGM();
           playVictory();
           speakVictory();
+          hapticCelebrate();
           setCompanionEmotion('celebrating');
           setProgress(0);
           setLevelWrongCount(0);
@@ -734,6 +737,7 @@ export default function Game() {
     } else {
       playWrong();
       speakWrong();
+      hapticError();
       recordAnswer(false);
       setCompanionEmotion('encouraging');
       setCompanionMessage(null);

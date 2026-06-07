@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import confetti from 'canvas-confetti';
 import { Home, RotateCcw, ChevronRight } from 'lucide-react';
+import { hapticCelebrate } from '../../lib/haptics';
 
 function fireConfetti() {
   confetti({
@@ -30,6 +31,7 @@ export default function SuccessPage() {
   useEffect(() => {
     if (passed) {
       fireConfetti();
+      hapticCelebrate();
     }
   }, [passed]);
 

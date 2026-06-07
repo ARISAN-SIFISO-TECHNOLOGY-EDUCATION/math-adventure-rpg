@@ -11,6 +11,7 @@ import {
 } from '../mathEngine';
 import { recordAttempt, addMistake, recordMockExam } from '../../exam-studio';
 import { recordAnswer, recordLevelComplete } from '../../lib/stats';
+import { hapticSuccess, hapticError } from '../../lib/haptics';
 import ErrorBoundary from '../../components/ErrorBoundary';
 
 // ─── Option button ────────────────────────────────────────────────────────────
@@ -253,6 +254,7 @@ function ActivityPageInner() {
 
   function handleAnswer(correct: boolean, userAnswer: string) {
     const problem = problems[currentIdx];
+    if (correct) hapticSuccess(); else hapticError();
     recordAnswer(correct); // on-device only (Grown-up Corner insights)
     const newResults = [...results, { correct, problem, userAnswer }];
     setResults(newResults);

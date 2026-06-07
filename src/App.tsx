@@ -33,6 +33,7 @@ const SeniorFormulaVaultPage = lazy(() => import('./senior/pages/FormulaVaultPag
 const SeniorDashboardPage = lazy(() => import('./senior/pages/DashboardPage'));
 const SeniorStudyPlannerPage = lazy(() => import('./senior/pages/StudyPlannerPage'));
 import BottomNav from './components/BottomNav';
+import LoadingScreen from './components/LoadingScreen';
 import { consumeScreenBack } from './lib/backHandler';
 
 // Single source of truth for the Android hardware Back button AND the edge-swipe
@@ -79,13 +80,7 @@ function AppShell() {
       <AndroidBackHandler />
       {/* Pad the page so its bottom content clears the fixed BottomNav (mobile only). */}
       <div className={isImmersive ? undefined : 'pb-16 lg:pb-0'}>
-        <Suspense
-          fallback={
-            <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-              <div className="text-teal text-xl animate-pulse">Loading…</div>
-            </div>
-          }
-        >
+        <Suspense fallback={<LoadingScreen dark={pathname.startsWith('/senior')} />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<LandingPage />} />
