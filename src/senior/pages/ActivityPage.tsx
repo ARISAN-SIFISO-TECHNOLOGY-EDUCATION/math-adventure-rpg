@@ -13,6 +13,17 @@ import { recordAttempt, addMistake, recordMockExam } from '../../exam-studio';
 import { recordAnswer, recordLevelComplete } from '../../lib/stats';
 import { hapticSuccess, hapticError } from '../../lib/haptics';
 import ErrorBoundary from '../../components/ErrorBoundary';
+import { CURRICULUM } from '../curriculum';
+
+// Resolve a topic id (e.g. "age13-numbers") to its friendly title ("Numbers");
+// falls back to the id if not found (e.g. dynamic/aggregate modes).
+function topicTitle(topicId: string): string {
+  for (const group of CURRICULUM) {
+    const t = group.topics.find(tc => tc.id === topicId);
+    if (t) return t.title;
+  }
+  return topicId;
+}
 
 // ─── Option button ────────────────────────────────────────────────────────────
 function OptionBtn({
@@ -322,7 +333,7 @@ function ActivityPageInner() {
           <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">
             {mode === 'masters' ? 'Masters Quiz' : isTopicTest ? 'Topic Test' : mode === 'mock' ? 'Mock Exam' : `Level ${level}`}
           </p>
-          <p className="text-white font-outfit font-bold text-sm truncate">{mode === 'masters' ? 'Critical Thinking' : topicId}</p>
+          <p className="text-white font-outfit font-bold text-sm truncate">{mode === 'masters' ? 'Critical Thinking' : topicTitle(topicId)}</p>
         </div>
         <div className="text-right">
           <p className="text-sprout-green font-outfit font-bold text-lg">

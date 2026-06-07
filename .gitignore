@@ -12,3 +12,6 @@ coverage/
 *.keystore
 keystore.properties
 android/keystore.properties
+
+# Generated Play Store marketing screenshots (regenerate via npm run screenshots)
+screenshots/
