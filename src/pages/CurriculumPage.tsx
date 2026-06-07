@@ -118,7 +118,7 @@ export default function CurriculumPage() {
             >
               <div className="text-4xl mb-3">{g.emoji}</div>
               <div className="font-[Nunito] font-extrabold text-lg mb-1" style={{ color: g.color }}>{g.badge}</div>
-              <div className="text-sm text-gray-400 mb-3">{g.ages} · {g.levels} levels</div>
+              <div className="text-sm text-gray-600 mb-3">{g.ages} · {g.levels} levels</div>
               <ul className="space-y-1">
                 {g.topics.map(t => (
                   <li key={t} className="text-xs flex items-center gap-2">
@@ -145,7 +145,7 @@ export default function CurriculumPage() {
                     <div className="text-4xl">{g.emoji}</div>
                     <div>
                       <h3 className="font-[Nunito] text-2xl font-extrabold" style={{ color: g.color }}>{g.badge}</h3>
-                      <p className="text-gray-400 text-sm">{g.ages}{phase.worlds ? ` · ${phase.worlds.join(' → ')}` : ''}</p>
+                      <p className="text-gray-600 text-sm">{g.ages}{phase.worlds ? ` · ${phase.worlds.join(' → ')}` : ''}</p>
                     </div>
                     <Link to={g.playLink} className="ml-auto font-[Nunito] text-sm font-bold text-white px-5 py-2 rounded-full no-underline hover:opacity-90 transition-opacity" style={{ background: g.color }}>
                       🎮 Play

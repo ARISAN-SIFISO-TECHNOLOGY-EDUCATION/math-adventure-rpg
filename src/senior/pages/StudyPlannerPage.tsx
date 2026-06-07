@@ -139,7 +139,7 @@ export default function StudyPlannerPage() {
       {/* Clear plan */}
       <button
         onClick={() => savePlan({})}
-        className="mt-6 w-full py-3 rounded-xl bg-slate-800 text-slate-500 font-inter text-sm hover:text-slate-300 transition-colors"
+        className="mt-6 w-full py-3 rounded-xl bg-slate-800 text-slate-400 font-inter text-sm hover:text-slate-300 transition-colors"
       >
         Clear week plan
       </button>

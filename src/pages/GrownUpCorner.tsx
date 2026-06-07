@@ -119,7 +119,7 @@ export default function GrownUpCorner() {
     return (
       <div className="min-h-screen bg-[#EFF6FF] flex items-center justify-center p-4">
         <div className="bg-white rounded-[32px] p-8 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full max-w-sm">
-          <Link to="/" className="flex items-center gap-1 text-sm font-black text-gray-400 hover:text-gray-600 no-underline mb-6 transition-colors">
+          <Link to="/" className="flex items-center gap-1 text-sm font-black text-gray-600 hover:text-gray-600 no-underline mb-6 transition-colors">
             ← Back
           </Link>
           <div className="text-center mb-6">
@@ -143,7 +143,7 @@ export default function GrownUpCorner() {
             />
             {gateError && <p className="text-[#EF4444] font-black text-center text-sm">Wrong! Try again.</p>}
             <button type="submit"
-              className="bg-[#3B82F6] text-white border-4 border-black py-3 rounded-2xl font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1 transition-all">
+              className="bg-[#1D4ED8] text-white border-4 border-black py-3 rounded-2xl font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1 transition-all">
               Enter →
             </button>
           </form>
@@ -162,7 +162,7 @@ export default function GrownUpCorner() {
 
         {/* Header */}
         <div className="flex items-start gap-4 mb-8">
-          <Link to="/" className="mt-1 text-sm font-black text-gray-400 hover:text-gray-600 no-underline shrink-0 transition-colors">
+          <Link to="/" className="mt-1 text-sm font-black text-gray-600 hover:text-gray-600 no-underline shrink-0 transition-colors">
             ← Back
           </Link>
           <div>
@@ -184,9 +184,9 @@ export default function GrownUpCorner() {
                 <p className="text-gray-500 font-bold text-sm">{currentPhase.ageRange}</p>
                 <p className="font-black text-2xl text-[#3B82F6] mt-1">
                   Level {savedProgress.levelInPhase}
-                  <span className="text-sm text-gray-400 font-bold"> of {currentPhase.levels.length}</span>
+                  <span className="text-sm text-gray-600 font-bold"> of {currentPhase.levels.length}</span>
                 </p>
-                <p className="text-xs font-bold text-gray-400 mt-1 leading-snug">
+                <p className="text-xs font-bold text-gray-600 mt-1 leading-snug">
                   Up next: {currentPhase.levels.find(l => l.n === savedProgress.levelInPhase)?.topic ?? 'Phase complete!'}
                 </p>
               </div>
@@ -195,7 +195,7 @@ export default function GrownUpCorner() {
             <p className="text-gray-500 font-bold">No progress yet. Start playing to track progress!</p>
           )}
           <Link to="/play"
-            className="mt-4 inline-flex items-center gap-2 bg-[#3B82F6] text-white px-6 py-3 rounded-2xl font-black border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] no-underline hover:bg-[#2563EB] transition-all">
+            className="mt-4 inline-flex items-center gap-2 bg-[#1D4ED8] text-white px-6 py-3 rounded-2xl font-black border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] no-underline hover:bg-[#2563EB] transition-all">
             ▶️ Continue Game
           </Link>
         </section>
@@ -225,7 +225,7 @@ export default function GrownUpCorner() {
                 </div>
               </div>
               {stats.lastPlayed && (
-                <p className="text-xs font-bold text-gray-400 mt-3">
+                <p className="text-xs font-bold text-gray-600 mt-3">
                   Last active: {new Date(stats.lastPlayed).toLocaleDateString()}
                 </p>
               )}
@@ -238,7 +238,7 @@ export default function GrownUpCorner() {
           <h2 className="text-xl font-black mb-1">🔄 Replay Any Level</h2>
           <p className="text-sm font-bold text-gray-500 mb-4">
             Pick any level to practice again — great for extra repetition or showing grandma!
-            <span className="block text-xs text-gray-400 mt-0.5">Replay mode does not overwrite your saved progress.</span>
+            <span className="block text-xs text-gray-600 mt-0.5">Replay mode does not overwrite your saved progress.</span>
           </p>
 
           {/* Phase tabs */}
@@ -297,7 +297,7 @@ export default function GrownUpCorner() {
           <div className="flex gap-2">
             {!activeTimer && (
               <button onClick={handleSetTimer} disabled={!timerMin}
-                className="bg-[#3B82F6] text-white px-5 py-2.5 rounded-xl border-2 border-black font-black text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] disabled:opacity-40 active:shadow-none transition-all">
+                className="bg-[#1D4ED8] text-white px-5 py-2.5 rounded-xl border-2 border-black font-black text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] disabled:opacity-40 active:shadow-none transition-all">
                 Set Timer ▶
               </button>
             )}
@@ -316,7 +316,7 @@ export default function GrownUpCorner() {
           <p className="text-sm font-bold text-gray-500 mb-4">
             What each level teaches — based on the South African CAPS curriculum.
           </p>
-          <p className="text-xs font-black text-gray-400 mb-3 uppercase tracking-wider">
+          <p className="text-xs font-black text-gray-600 mb-3 uppercase tracking-wider">
             Showing: {selectedPhaseConfig.name} ({selectedPhaseConfig.ageRange})
           </p>
           <div className="flex flex-col gap-2 max-h-72 overflow-y-auto pr-1">
@@ -331,7 +331,7 @@ export default function GrownUpCorner() {
                   <span className="font-black text-sm shrink-0 mt-0.5">L{lvl.n}</span>
                   <span className="text-sm font-bold text-gray-700 leading-snug">{lvl.topic}</span>
                   {isCurrent && (
-                    <span className="ml-auto bg-[#3B82F6] text-white text-[10px] font-black px-2 py-0.5 rounded-lg shrink-0">NOW</span>
+                    <span className="ml-auto bg-[#1D4ED8] text-white text-[10px] font-black px-2 py-0.5 rounded-lg shrink-0">NOW</span>
                   )}
                 </div>
               );
@@ -406,7 +406,7 @@ export default function GrownUpCorner() {
           )}
         </section>
 
-        <p className="text-center text-xs font-bold text-gray-400 pb-8">
+        <p className="text-center text-xs font-bold text-gray-600 pb-8">
           Math Adventure RPG · No accounts · No ads · 100% on-device 🔒
         </p>
       </div>

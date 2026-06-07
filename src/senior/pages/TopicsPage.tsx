@@ -106,7 +106,7 @@ function TopicRow({
 
       {/* Progress bar */}
       <div>
-        <div className="flex justify-between text-xs font-inter text-slate-500 mb-1">
+        <div className="flex justify-between text-xs font-inter text-slate-400 mb-1">
           <span>{passedCount}/{topic.levels} levels</span>
           <span>{pct}%</span>
         </div>
@@ -145,7 +145,7 @@ function TopicRow({
               className={`flex-1 py-2 rounded-xl text-sm font-outfit font-semibold transition-colors ${
                 testPassed
                   ? 'bg-sprout-green/20 text-sprout-green border border-sprout-green/30'
-                  : 'bg-teal text-white'
+                  : 'bg-teal text-slate-900'
               }`}
             >
               {testPassed ? '✓ Topic Test Passed' : 'Topic Test'}
@@ -203,7 +203,7 @@ export default function TopicsPage() {
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={() => navigate('/senior/topics/15')}
-            className="mt-6 px-6 py-3 bg-teal text-white font-outfit font-bold rounded-2xl"
+            className="mt-6 px-6 py-3 bg-teal text-slate-900 font-outfit font-bold rounded-2xl"
           >
             Go to Age 15 →
           </motion.button>
@@ -298,18 +298,23 @@ export default function TopicsPage() {
             onClick={() =>
               navigate(`/senior/activity?topicId=mock-age${ageNum}&level=1&mode=mock&isTopicTest=false&age=${ageNum}`)
             }
-            className={`w-full rounded-2xl p-5 text-left text-white ${group.color}`}
+            // Dark card with the age colour as an accent stripe so the white text
+            // keeps AA contrast regardless of the (varying) age colour.
+            className="w-full rounded-2xl p-5 text-left text-white bg-slate-800 border border-slate-700 flex gap-4 items-start"
           >
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-inter opacity-80">Age {age} Mock Exam</p>
-              {lastMock && (
-                <span className="text-xs font-outfit font-bold bg-white/20 rounded-full px-2.5 py-1">
-                  Best/last: {lastMock.score}%
-                </span>
-              )}
+            <span className={`w-1.5 self-stretch rounded-full flex-shrink-0 ${group.color}`} aria-hidden="true" />
+            <div className="flex-1">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-inter text-slate-400">Age {age} Mock Exam</p>
+                {lastMock && (
+                  <span className="text-xs font-outfit font-bold bg-slate-700 text-slate-200 rounded-full px-2.5 py-1">
+                    Best/last: {lastMock.score}%
+                  </span>
+                )}
+              </div>
+              <h3 className="text-xl font-outfit font-extrabold mt-0.5">40-Question Mock Paper</h3>
+              <p className="text-sm text-slate-400 mt-1 font-inter">All topics · IGCSE style · marks &amp; exam tips</p>
             </div>
-            <h3 className="text-xl font-outfit font-extrabold mt-0.5">40-Question Mock Paper</h3>
-            <p className="text-sm opacity-70 mt-1 font-inter">All topics · IGCSE style · marks &amp; exam tips</p>
           </motion.button>
         </motion.div>
       )}
@@ -323,7 +328,7 @@ export default function TopicsPage() {
             className={`w-full py-2.5 rounded-xl text-sm font-inter font-medium transition-colors ${
               devUnlock
                 ? 'bg-sprout-orange/20 text-sprout-orange border border-sprout-orange/30'
-                : 'bg-slate-800 text-slate-500'
+                : 'bg-slate-800 text-slate-400'
             }`}
           >
             {devUnlock ? '🔓 Dev Mode ON — all levels unlocked' : '🔒 Dev Mode OFF'}

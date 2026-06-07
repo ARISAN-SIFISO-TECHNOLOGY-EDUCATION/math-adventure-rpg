@@ -21,16 +21,16 @@ type AgeCard = {
 // uses a white background and gets its identity from its border + text colour.
 // Pre-School (Ages 3–5).
 const PRESCHOOL_CARDS: AgeCard[] = [
-  { age: 3, labelKey: 'label.preschool', emoji: '🌱', color: '#059669', bg: '#FFFFFF', border: '#6EE7B7', phase: 1 },
-  { age: 4, labelKey: 'label.preschool', emoji: '🌱', color: '#059669', bg: '#FFFFFF', border: '#6EE7B7', phase: 1 },
-  { age: 5, labelKey: 'label.preschool', emoji: '🌱', color: '#059669', bg: '#FFFFFF', border: '#6EE7B7', phase: 1 },
+  { age: 3, labelKey: 'label.preschool', emoji: '🌱', color: '#047857', bg: '#FFFFFF', border: '#6EE7B7', phase: 1 },
+  { age: 4, labelKey: 'label.preschool', emoji: '🌱', color: '#047857', bg: '#FFFFFF', border: '#6EE7B7', phase: 1 },
+  { age: 5, labelKey: 'label.preschool', emoji: '🌱', color: '#047857', bg: '#FFFFFF', border: '#6EE7B7', phase: 1 },
 ];
 
 // Primary (Ages 6–12).
 const PRIMARY_CARDS: AgeCard[] = [
-  { age: 6,  labelKey: 'label.lowerPrimary',  emoji: '📚', color: '#D97706', bg: '#FFFFFF', border: '#FDE68A', phase: 2 },
-  { age: 7,  labelKey: 'label.lowerPrimary',  emoji: '📚', color: '#D97706', bg: '#FFFFFF', border: '#FDE68A', phase: 2 },
-  { age: 8,  labelKey: 'label.lowerPrimary',  emoji: '📚', color: '#D97706', bg: '#FFFFFF', border: '#FDE68A', phase: 2 },
+  { age: 6,  labelKey: 'label.lowerPrimary',  emoji: '📚', color: '#B45309', bg: '#FFFFFF', border: '#FDE68A', phase: 2 },
+  { age: 7,  labelKey: 'label.lowerPrimary',  emoji: '📚', color: '#B45309', bg: '#FFFFFF', border: '#FDE68A', phase: 2 },
+  { age: 8,  labelKey: 'label.lowerPrimary',  emoji: '📚', color: '#B45309', bg: '#FFFFFF', border: '#FDE68A', phase: 2 },
   { age: 9,  labelKey: 'label.higherPrimary', emoji: '⚔️', color: '#2563EB', bg: '#FFFFFF', border: '#BFDBFE', phase: 3 },
   { age: 10, labelKey: 'label.higherPrimary', emoji: '⚔️', color: '#2563EB', bg: '#FFFFFF', border: '#BFDBFE', phase: 3 },
   { age: 11, labelKey: 'label.higherPrimary', emoji: '⚔️', color: '#2563EB', bg: '#FFFFFF', border: '#BFDBFE', phase: 3 },
@@ -82,7 +82,7 @@ function AgeCardItem({ card }: { card: AgeCard }) {
       ) : (
         <span
           className="text-[9px] font-semibold text-center leading-tight"
-          style={{ color: isFeature || card.senior ? card.color : '#9CA3AF' }}
+          style={{ color: isFeature || card.senior ? card.color : '#4B5563' }}
         >
           {isFeature ? (card.subKey ? t(card.subKey) : '') : label}
         </span>
@@ -129,7 +129,7 @@ export default function HomePage() {
           <h2 className="font-[Nunito] text-xl font-extrabold leading-tight" style={{ color: '#047857' }}>
             {t('home.preschool.title')}
           </h2>
-          <p className="text-xs font-semibold mt-0.5" style={{ color: '#10B981' }}>
+          <p className="text-xs font-semibold mt-0.5" style={{ color: '#047857' }}>
             {t('home.preschool.sub')}
           </p>
           <div className="flex flex-col gap-2 mt-3">
@@ -150,7 +150,7 @@ export default function HomePage() {
           <h2 className="font-[Nunito] text-xl font-extrabold leading-tight" style={{ color: '#1D4ED8' }}>
             {t('home.primary.title')}
           </h2>
-          <p className="text-xs font-semibold mt-0.5" style={{ color: '#3B82F6' }}>
+          <p className="text-xs font-semibold mt-0.5" style={{ color: '#1D4ED8' }}>
             {t('home.primary.sub')}
           </p>
           <div className="flex flex-col gap-2 mt-3">
@@ -186,10 +186,10 @@ export default function HomePage() {
       {/* ── Footer Links ── info pages only; Learn (Curriculum) and Grown-Ups
           live in the bottom bar, so they are NOT repeated here. ── */}
       <div className="px-4 py-4 mt-4 border-t border-gray-100 flex justify-center gap-6 flex-wrap">
-        <Link to="/about"    className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">{t('footer.about')}</Link>
-        <Link to="/parents"  className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">{t('footer.parentGuide')}</Link>
-        <Link to="/privacy"  className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">{t('footer.privacy')}</Link>
-        <Link to="/contact"  className="text-xs text-gray-400 font-semibold no-underline hover:text-gray-700">{t('footer.contact')}</Link>
+        <Link to="/about"    className="text-xs text-gray-600 font-semibold no-underline hover:text-gray-700">{t('footer.about')}</Link>
+        <Link to="/parents"  className="text-xs text-gray-600 font-semibold no-underline hover:text-gray-700">{t('footer.parentGuide')}</Link>
+        <Link to="/privacy"  className="text-xs text-gray-600 font-semibold no-underline hover:text-gray-700">{t('footer.privacy')}</Link>
+        <Link to="/contact"  className="text-xs text-gray-600 font-semibold no-underline hover:text-gray-700">{t('footer.contact')}</Link>
       </div>
 
     </div>

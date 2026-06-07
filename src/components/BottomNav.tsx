@@ -38,7 +38,7 @@ export default function BottomNav() {
               onClick={() => navigate(to)}
               aria-current={active ? 'page' : undefined}
               className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
-                active ? 'text-indigo-600' : 'text-gray-400 hover:text-gray-600'
+                active ? 'text-indigo-600' : 'text-gray-600 hover:text-gray-600'
               }`}
             >
               <Icon size={22} strokeWidth={active ? 2.6 : 2} />

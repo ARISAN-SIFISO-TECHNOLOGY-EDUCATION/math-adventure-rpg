@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Header */}
           <h1 className="font-[Nunito] text-4xl font-extrabold text-gray-900 mb-2">Privacy Policy</h1>
-          <p className="text-sm text-gray-400 mb-8">Last updated: April 4, 2026</p>
+          <p className="text-sm text-gray-600 mb-8">Last updated: April 4, 2026</p>
 
           {/* Summary banner */}
           <div className="bg-green-50 border-l-4 border-green-500 rounded-r-2xl px-5 py-4 mb-10">
@@ -114,7 +114,7 @@ export default function PrivacyPolicyPage() {
               <div className="bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 flex items-center gap-3">
                 <span className="text-2xl">📧</span>
                 <div>
-                  <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-0.5">Privacy enquiries</p>
+                  <p className="text-xs text-gray-600 font-semibold uppercase tracking-wider mb-0.5">Privacy enquiries</p>
                   <Link to="/contact" className="text-sm font-bold no-underline hover:underline" style={{ color: accent }}>
                     Contact us via the contact page →
                   </Link>

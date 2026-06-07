@@ -108,7 +108,7 @@ export default function HigherPrimaryPage() {
             <div key={c.title} className="bg-white text-center p-6 rounded-3xl shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all">
               <div className="text-5xl mb-4">{c.icon}</div>
               <h3 className="font-[Nunito] text-xl font-semibold mb-2">{c.title}</h3>
-              <p className="text-gray-400 text-sm">{c.desc}</p>
+              <p className="text-gray-600 text-sm">{c.desc}</p>
             </div>
           ))}
         </div>
@@ -129,7 +129,7 @@ export default function HigherPrimaryPage() {
                   <div key={l.n} className="bg-white p-5 rounded-2xl shadow-sm" style={{ borderLeft: `4px solid ${world.color}` }}>
                     <div className="font-[Nunito] text-xl font-extrabold mb-1" style={{ color: world.color }}>Level {l.n}</div>
                     <strong className="text-sm">{l.title}</strong>
-                    <p className="text-gray-400 text-xs mt-1">{l.example}</p>
+                    <p className="text-gray-600 text-xs mt-1">{l.example}</p>
                   </div>
                 ))}
               </div>
@@ -180,7 +180,7 @@ export default function HigherPrimaryPage() {
             <div key={s.title} className="bg-white text-center p-6 rounded-3xl shadow-sm">
               <div className="text-5xl mb-4">{s.icon}</div>
               <h3 className="font-[Nunito] text-xl font-semibold mb-2">{s.title}</h3>
-              <p className="text-gray-400 text-sm">{s.desc}</p>
+              <p className="text-gray-600 text-sm">{s.desc}</p>
             </div>
           ))}
         </div>

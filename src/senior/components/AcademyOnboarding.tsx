@@ -82,7 +82,7 @@ export default function AcademyOnboarding({ onDone }: { onDone: () => void }) {
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={next}
-            className="px-8 py-3 bg-teal text-white font-outfit font-bold rounded-2xl"
+            className="px-8 py-3 bg-teal text-slate-900 font-outfit font-bold rounded-2xl"
           >
             {isLast ? 'Start learning →' : 'Next'}
           </motion.button>

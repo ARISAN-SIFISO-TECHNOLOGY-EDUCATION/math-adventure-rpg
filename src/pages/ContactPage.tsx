@@ -64,7 +64,7 @@ export default function ContactPage() {
         value={form[id]}
         onChange={e => setForm(f => ({ ...f, [id]: e.target.value }))}
         placeholder={placeholder}
-        className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl text-sm focus:outline-none focus:border-indigo-400 disabled:bg-gray-50 disabled:text-gray-400 transition-colors"
+        className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl text-sm focus:outline-none focus:border-indigo-400 disabled:bg-gray-50 disabled:text-gray-600 transition-colors"
       />
     </div>
   );
@@ -161,7 +161,7 @@ export default function ContactPage() {
                     value={form.message}
                     onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
                     placeholder="Tell us what's on your mind…"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl text-sm focus:outline-none focus:border-indigo-400 disabled:bg-gray-50 disabled:text-gray-400 transition-colors resize-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl text-sm focus:outline-none focus:border-indigo-400 disabled:bg-gray-50 disabled:text-gray-600 transition-colors resize-none"
                   />
                 </div>
 
@@ -174,7 +174,7 @@ export default function ContactPage() {
                   type="submit"
                   disabled={!verified || sending}
                   className="w-full py-4 rounded-2xl font-[Nunito] font-bold text-base transition-all"
-                  style={verified && !sending ? { background: accent, color: 'white' } : { background: '#E5E7EB', color: '#9CA3AF', cursor: 'not-allowed' }}
+                  style={verified && !sending ? { background: accent, color: 'white' } : { background: '#E5E7EB', color: '#4B5563', cursor: 'not-allowed' }}
                 >
                   {sending ? 'Sending…' : verified ? 'Send Message ✉️' : 'Complete verification above to unlock'}
                 </button>
@@ -196,7 +196,7 @@ export default function ContactPage() {
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-gray-400 mt-4">
+                <p className="text-xs text-gray-600 mt-4">
                   We aim to respond within 2–3 business days.
                 </p>
               </div>

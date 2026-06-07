@@ -169,7 +169,7 @@ function QuestionCard({
               )}
               {problem.workingSteps?.length > 0 && (
                 <div className="mt-3 space-y-1">
-                  <p className="text-slate-500 text-xs font-inter uppercase tracking-wider">Working</p>
+                  <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">Working</p>
                   {problem.workingSteps.map((step, i) => (
                     <p key={i} className="text-slate-300 text-sm font-inter whitespace-pre-wrap">
                       {step}
@@ -339,7 +339,7 @@ function ActivityPageInner() {
           <p className="text-sprout-green font-outfit font-bold text-lg">
             {results.filter(r => r.correct).length}
           </p>
-          <p className="text-slate-500 text-xs font-inter">correct</p>
+          <p className="text-slate-400 text-xs font-inter">correct</p>
         </div>
       </div>
 
@@ -368,7 +368,7 @@ function ActivityPageInner() {
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={handleNext}
-              className="w-full py-4 bg-teal text-white font-outfit font-bold text-lg rounded-2xl"
+              className="w-full py-4 bg-teal text-slate-900 font-outfit font-bold text-lg rounded-2xl"
             >
               {currentIdx + 1 >= problems.length ? 'See Results →' : 'Next Question →'}
             </motion.button>

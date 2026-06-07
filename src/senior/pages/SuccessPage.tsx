@@ -93,7 +93,7 @@ export default function SuccessPage() {
       >
         <h1 className="text-3xl font-outfit font-extrabold text-white">{title}</h1>
         <p className="text-slate-400 font-inter mt-2">{subtitle}</p>
-        <p className="text-slate-500 font-inter text-sm mt-1">
+        <p className="text-slate-400 font-inter text-sm mt-1">
           {correct}/{total} correct · {mode === 'masters' ? 'Masters Quiz' : mode === 'mock' ? 'Mock Exam' : isTopicTest ? 'Topic Test' : `Level ${level}`}
         </p>
       </motion.div>
@@ -137,7 +137,7 @@ export default function SuccessPage() {
                 { replace: true }
               )
             }
-            className="w-full py-4 bg-teal text-white font-outfit font-bold text-lg rounded-2xl flex items-center justify-center gap-2"
+            className="w-full py-4 bg-teal text-slate-900 font-outfit font-bold text-lg rounded-2xl flex items-center justify-center gap-2"
           >
             <RotateCcw className="w-5 h-5" />
             Try Again
@@ -153,7 +153,7 @@ export default function SuccessPage() {
                 { replace: true }
               )
             }
-            className="w-full py-4 bg-teal text-white font-outfit font-bold text-lg rounded-2xl flex items-center justify-center gap-2"
+            className="w-full py-4 bg-teal text-slate-900 font-outfit font-bold text-lg rounded-2xl flex items-center justify-center gap-2"
           >
             Next Level
             <ChevronRight className="w-5 h-5" />

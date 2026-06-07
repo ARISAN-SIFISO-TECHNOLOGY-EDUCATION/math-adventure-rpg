@@ -34,7 +34,7 @@ export default function Navbar({
           </Link>
           {breadcrumb && (
             <span className="text-gray-500 font-bold">
-              <span className="lg:hidden text-gray-400"> › </span>{breadcrumb}
+              <span className="lg:hidden text-gray-600"> › </span>{breadcrumb}
             </span>
           )}
         </div>

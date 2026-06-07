@@ -29,7 +29,7 @@ function MistakeCard({ entry, onRemove }: { key?: string | number; entry: Mistak
               {entry.question}
             </p>
           </div>
-          <span className="text-slate-500 text-xs flex-shrink-0 mt-0.5 font-inter">
+          <span className="text-slate-400 text-xs flex-shrink-0 mt-0.5 font-inter">
             {expanded ? '▲' : '▼'}
           </span>
         </div>
@@ -45,13 +45,13 @@ function MistakeCard({ entry, onRemove }: { key?: string | number; entry: Mistak
           >
             <div className="px-4 py-3 space-y-2">
               <div className="flex gap-2">
-                <span className="text-slate-500 text-sm font-inter">Your answer:</span>
+                <span className="text-slate-400 text-sm font-inter">Your answer:</span>
                 <span className="text-sprout-orange text-sm font-outfit font-semibold">
                   {entry.userAnswer}
                 </span>
               </div>
               <div className="flex gap-2">
-                <span className="text-slate-500 text-sm font-inter">Correct:</span>
+                <span className="text-slate-400 text-sm font-inter">Correct:</span>
                 <span className="text-sprout-green text-sm font-outfit font-semibold">
                   {entry.correctAnswer}
                 </span>
@@ -62,7 +62,7 @@ function MistakeCard({ entry, onRemove }: { key?: string | number; entry: Mistak
                 </span>
                 <button
                   onClick={onRemove}
-                  className="flex items-center gap-1 text-slate-500 hover:text-sprout-orange text-xs font-inter transition-colors"
+                  className="flex items-center gap-1 text-slate-400 hover:text-sprout-orange text-xs font-inter transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   Remove

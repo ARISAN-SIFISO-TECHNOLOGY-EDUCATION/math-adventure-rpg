@@ -203,7 +203,7 @@ function TutorialScreen({ onDone }: { onDone: () => void }) {
           </button>
 
           {slide > 0 && (
-            <button onClick={() => setSlide(s => s - 1)} className="mt-3 text-sm font-black text-gray-400 hover:text-gray-600">
+            <button onClick={() => setSlide(s => s - 1)} className="mt-3 text-sm font-black text-gray-600 hover:text-gray-600">
               ← Back
             </button>
           )}
@@ -394,7 +394,7 @@ function BreakOverlay({ onParentOverride }: { onParentOverride: () => void }) {
           🏠 All done for now!
         </Link>
         <button onClick={onParentOverride}
-          className="text-sm font-black text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1 mx-auto">
+          className="text-sm font-black text-gray-600 hover:text-gray-600 transition-colors flex items-center gap-1 mx-auto">
           <Lock size={12} /> Parent override
         </button>
       </motion.div>
@@ -912,7 +912,7 @@ export default function Game() {
           <div>
             <p className="text-[10px] md:text-xs font-black uppercase tracking-wider leading-tight text-gray-500">{currentPhaseConfig.name}</p>
             <p className="text-xl md:text-3xl font-black leading-none">
-              {levelInPhase}<span className="text-sm md:text-base font-black text-gray-400">/{currentPhaseConfig.levels.length}</span>
+              {levelInPhase}<span className="text-sm md:text-base font-black text-gray-600">/{currentPhaseConfig.levels.length}</span>
             </p>
           </div>
         </div>
@@ -949,7 +949,7 @@ export default function Game() {
             aria-label={muted ? 'Unmute sound' : 'Mute sound'}
             aria-pressed={muted}
           >
-            {muted ? <VolumeX className="text-gray-400 w-4 h-4 md:w-6 md:h-6" /> : <Volume2 className="text-[#3B82F6] w-4 h-4 md:w-6 md:h-6" />}
+            {muted ? <VolumeX className="text-gray-600 w-4 h-4 md:w-6 md:h-6" /> : <Volume2 className="text-[#3B82F6] w-4 h-4 md:w-6 md:h-6" />}
           </button>
           {gameState !== 'PLAYING' && (
             <Link
@@ -1027,7 +1027,7 @@ export default function Game() {
                 <div className="flex items-center gap-3">
                   <span className="text-3xl">{companionEmoji}</span>
                   <div className="text-left">
-                    <p className="text-xs font-black uppercase tracking-wider text-gray-400 leading-none">Your companion</p>
+                    <p className="text-xs font-black uppercase tracking-wider text-gray-600 leading-none">Your companion</p>
                     <p className="font-black text-lg leading-tight">{companionName}</p>
                   </div>
                 </div>
@@ -1043,7 +1043,7 @@ export default function Game() {
               <div className="mt-4 w-full max-w-sm mx-auto">
                 <button
                   onClick={() => setShowBadges(b => !b)}
-                  className="w-full flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest text-gray-400 py-2 hover:text-gray-600 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest text-gray-600 py-2 hover:text-gray-600 transition-colors"
                 >
                   🏅 Badges ({earnedBadges.length}/{BADGES.length})
                   <span className="text-[10px]">{showBadges ? '▲' : '▼'}</span>
@@ -1065,10 +1065,10 @@ export default function Game() {
               </div>
 
               <div className="mt-6 flex items-center gap-6 justify-center flex-wrap">
-                <Link to="/" className="text-sm font-bold text-gray-400 hover:text-gray-600 no-underline flex items-center gap-1 transition-colors">
+                <Link to="/" className="text-sm font-bold text-gray-600 hover:text-gray-600 no-underline flex items-center gap-1 transition-colors">
                   ← Back to Home
                 </Link>
-                <Link to="/grown-up-corner" className="text-sm font-bold text-blue-500 hover:text-blue-700 no-underline flex items-center gap-1 transition-colors">
+                <Link to="/grown-up-corner" className="text-sm font-bold text-blue-700 hover:text-blue-700 no-underline flex items-center gap-1 transition-colors">
                   👨‍👩‍👧 Grown-up Corner
                 </Link>
               </div>
@@ -1141,7 +1141,7 @@ export default function Game() {
                   {problem?.meta?.isSubitizing ? (
                     flashVisible ? (
                       <div className="text-center mb-5">
-                        <p className="text-sm font-black uppercase tracking-wider text-gray-400 mb-3">
+                        <p className="text-sm font-black uppercase tracking-wider text-gray-600 mb-3">
                           ⚡ Quick Count! ⚡
                         </p>
                         <div className="bg-[#FEF9C3] border-4 border-[#EAB308] rounded-3xl p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
@@ -1156,7 +1156,7 @@ export default function Game() {
                     )
                   ) : (
                     <div className="text-center mb-5">
-                      <p className="text-sm font-black uppercase tracking-wider text-gray-400 mb-2">
+                      <p className="text-sm font-black uppercase tracking-wider text-gray-600 mb-2">
                         {currentPhaseConfig.emoji} {currentPhaseConfig.name} · Level {levelInPhase}/{currentPhaseConfig.levels.length}
                       </p>
                       <h2 className="text-2xl md:text-4xl font-black leading-tight whitespace-pre-line">{problem?.question}</h2>
@@ -1178,7 +1178,7 @@ export default function Game() {
                           />
                         ))}
                       </div>
-                      <p className="text-xs font-black text-gray-400 uppercase tracking-wider">
+                      <p className="text-xs font-black text-gray-600 uppercase tracking-wider">
                         <span className="text-[#15803D]">■ hidden</span> + <span className="text-[#A16207]">■ {problem.meta.bondKnown}</span> = {problem.meta.bondTotal}
                       </p>
                     </div>
@@ -1240,7 +1240,7 @@ export default function Game() {
                   <div className="text-6xl mb-3">🏆</div>
                   <h2 className="text-4xl font-black mb-3">CHAMPION!</h2>
                   <p className="text-xl font-bold mb-2">You've mastered all 4 phases!</p>
-                  <p className="text-sm font-bold text-gray-400 mb-6">From Pre-School counting to Advanced Primary. Incredible!</p>
+                  <p className="text-sm font-bold text-gray-600 mb-6">From Pre-School counting to Advanced Primary. Incredible!</p>
                   <button onClick={startGame}
                     className="bg-[#FFD700] hover:bg-[#F59E0B] text-black px-10 py-4 rounded-full border-4 border-black text-xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto">
                     PLAY AGAIN <Sparkles size={24} />
@@ -1253,7 +1253,7 @@ export default function Game() {
                     <p className="font-black text-base">Phase {victoryPhaseConfig.id} Unlocked!</p>
                   </div>
                   <h2 className="text-3xl font-black mb-2">{victoryPhaseConfig.name}</h2>
-                  <p className="text-lg font-bold text-gray-400 mb-6">{victoryPhaseConfig.ageRange}</p>
+                  <p className="text-lg font-bold text-gray-600 mb-6">{victoryPhaseConfig.ageRange}</p>
                   <button onClick={startGame}
                     className={`${victoryPhaseConfig.badgeBg} text-black px-10 py-4 rounded-full border-4 border-black text-xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto`}>
                     START PHASE {victoryPhaseConfig.id} <ChevronRight size={24} />

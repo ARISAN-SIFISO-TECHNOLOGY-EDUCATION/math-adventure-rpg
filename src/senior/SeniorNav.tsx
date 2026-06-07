@@ -50,8 +50,8 @@ export default function SeniorNav() {
               className={`flex flex-col items-center gap-0.5 py-2.5 transition-colors
                           lg:flex-row lg:gap-3 lg:px-3 lg:rounded-xl lg:justify-start
                           ${active
-                            ? 'text-teal lg:bg-slate-700/60'
-                            : 'text-slate-500 hover:text-slate-300 lg:hover:bg-slate-700/40'}`}
+                            ? 'text-[#5EEAD4] lg:bg-slate-700/60'
+                            : 'text-slate-400 hover:text-slate-300 lg:hover:bg-slate-700/40'}`}
             >
               <Icon className="w-5 h-5" />
               <span className="text-[10px] font-inter font-semibold lg:text-sm lg:font-bold">{item.label}</span>

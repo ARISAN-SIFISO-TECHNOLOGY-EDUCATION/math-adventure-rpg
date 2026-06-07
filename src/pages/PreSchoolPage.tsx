@@ -73,7 +73,7 @@ export default function PreSchoolPage() {
             <div key={c.title} className="bg-white text-center p-6 rounded-3xl shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all">
               <div className="text-5xl mb-4">{c.icon}</div>
               <h3 className="font-[Nunito] text-xl font-semibold mb-2">{c.title}</h3>
-              <p className="text-gray-400 text-sm">{c.desc}</p>
+              <p className="text-gray-600 text-sm">{c.desc}</p>
             </div>
           ))}
         </div>
@@ -87,7 +87,7 @@ export default function PreSchoolPage() {
             <div key={l.n} className="bg-white p-6 rounded-2xl shadow-sm" style={{ borderLeft: `4px solid #10B981` }}>
               <div className="font-[Nunito] text-2xl font-extrabold mb-2" style={{ color: accent }}>Level {l.n}</div>
               <strong>{l.title}</strong>
-              <p className="text-gray-400 text-sm mt-2">{l.example}</p>
+              <p className="text-gray-600 text-sm mt-2">{l.example}</p>
             </div>
           ))}
         </div>
@@ -134,7 +134,7 @@ export default function PreSchoolPage() {
             <div key={s.title} className="bg-white text-center p-6 rounded-3xl shadow-sm">
               <div className="text-5xl mb-4">{s.icon}</div>
               <h3 className="font-[Nunito] text-xl font-semibold mb-2">{s.title}</h3>
-              <p className="text-gray-400 text-sm">{s.desc}</p>
+              <p className="text-gray-600 text-sm">{s.desc}</p>
             </div>
           ))}
         </div>

@@ -11,7 +11,7 @@ interface Props {
 export default function LanguageToggle({ className = '', dark = false }: Props) {
   const { lang, setLang, t } = useI18n();
 
-  const idleColor = dark ? 'rgba(255,255,255,0.6)' : '#6B7280';
+  const idleColor = dark ? 'rgba(255,255,255,0.6)' : '#4B5563';
   const trackBg = dark ? 'rgba(255,255,255,0.12)' : '#F3F4F6';
 
   return (

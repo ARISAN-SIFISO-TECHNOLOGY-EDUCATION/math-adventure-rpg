@@ -86,8 +86,8 @@ export default function SideNav() {
       {/* Footer: language + promise */}
       <div className="mt-auto pt-6 flex flex-col gap-3">
         <LanguageToggle />
-        <p className="text-[11px] font-bold text-emerald-600 px-1">{t('nav.promise')}</p>
-        <p className="text-[10px] text-gray-400 px-1">© 2026 Math Adventure RPG</p>
+        <p className="text-[11px] font-bold text-emerald-700 px-1">{t('nav.promise')}</p>
+        <p className="text-[10px] text-gray-600 px-1">© 2026 Math Adventure RPG</p>
       </div>
     </nav>
   );

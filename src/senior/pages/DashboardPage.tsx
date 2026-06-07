@@ -103,7 +103,7 @@ export default function DashboardPage() {
             transition={{ duration: 0.5, ease: 'easeOut' }}
           />
         </div>
-        <p className="text-slate-500 text-xs font-inter mt-2">
+        <p className="text-slate-400 text-xs font-inter mt-2">
           {goalMet
             ? 'Daily goal smashed — come back tomorrow to keep the streak alive.'
             : `Pass ${daily.goal - daily.passed} more level${daily.goal - daily.passed === 1 ? '' : 's'} to hit today’s goal.`}
@@ -140,7 +140,7 @@ export default function DashboardPage() {
       <div className="mt-6">
         <h2 className="text-slate-400 text-xs font-inter uppercase tracking-wider mb-3">Mock Exam History</h2>
         {mockScores.length === 0 ? (
-          <div className="bg-slate-800 rounded-2xl p-6 text-center text-slate-500 font-inter text-sm">
+          <div className="bg-slate-800 rounded-2xl p-6 text-center text-slate-400 font-inter text-sm">
             No mock exams taken yet
           </div>
         ) : (
@@ -149,7 +149,7 @@ export default function DashboardPage() {
               <div key={i} className="bg-slate-800 rounded-xl px-4 py-3 flex items-center justify-between">
                 <div>
                   <p className="text-white font-outfit font-semibold">Age {s.age} Mock</p>
-                  <p className="text-slate-500 text-xs font-inter">
+                  <p className="text-slate-400 text-xs font-inter">
                     {new Date(s.date).toLocaleDateString()}
                   </p>
                 </div>
@@ -163,7 +163,7 @@ export default function DashboardPage() {
               </div>
             ))}
             {bestMock !== null && (
-              <p className="text-slate-500 text-xs font-inter text-center pt-1">
+              <p className="text-slate-400 text-xs font-inter text-center pt-1">
                 Best score: <span className="text-sprout-green font-semibold">{bestMock}%</span>
               </p>
             )}

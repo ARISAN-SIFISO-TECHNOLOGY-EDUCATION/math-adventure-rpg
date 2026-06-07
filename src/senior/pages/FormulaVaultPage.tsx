@@ -43,7 +43,7 @@ export default function FormulaVaultPage() {
 
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
             placeholder="Search formulas…"
@@ -61,7 +61,7 @@ export default function FormulaVaultPage() {
               onClick={() => { setActiveTopicId(t.id); setSearch(''); }}
               className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-sm font-outfit font-semibold transition-colors ${
                 activeTopicId === t.id
-                  ? 'bg-teal text-white'
+                  ? 'bg-teal text-slate-900'
                   : 'bg-slate-800 text-slate-400 hover:text-white'
               }`}
             >
@@ -74,7 +74,7 @@ export default function FormulaVaultPage() {
       {/* Formula list */}
       <div className="flex-1 overflow-y-auto px-4 pb-24 space-y-3">
         {filtered.length === 0 ? (
-          <div className="text-center text-slate-500 font-inter text-sm py-12">
+          <div className="text-center text-slate-400 font-inter text-sm py-12">
             {search ? 'No formulas match your search.' : 'No formulas for this topic yet.'}
           </div>
         ) : (
@@ -94,7 +94,7 @@ export default function FormulaVaultPage() {
               </div>
               <p className="text-slate-400 text-sm font-inter">{entry.use}</p>
               {entry.example && (
-                <p className="text-slate-500 text-xs font-inter border-t border-slate-700 pt-2">
+                <p className="text-slate-400 text-xs font-inter border-t border-slate-700 pt-2">
                   e.g. {entry.example}
                 </p>
               )}

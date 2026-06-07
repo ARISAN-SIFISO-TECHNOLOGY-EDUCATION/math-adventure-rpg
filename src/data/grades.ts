@@ -18,7 +18,7 @@ export const GRADES: GradeConfig[] = [
   {
     phase: 1,
     emoji: '🌱',
-    color: '#059669',
+    color: '#047857',
     bg: '#F0FDF4',
     border: '#6EE7B7',
     badge: 'Pre-School',
@@ -33,7 +33,7 @@ export const GRADES: GradeConfig[] = [
   {
     phase: 2,
     emoji: '📚',
-    color: '#D97706',
+    color: '#B45309',
     bg: '#FFFBEB',
     border: '#FDE68A',
     badge: 'Lower Primary',

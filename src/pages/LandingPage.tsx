@@ -46,7 +46,7 @@ export default function LandingPage() {
             ].map(s => (
               <div key={s.label} className="text-center">
                 <div className="text-4xl font-[Nunito] font-extrabold text-[#4F46E5]">{s.num}</div>
-                <div className="text-sm text-gray-400 mt-1">{s.label}</div>
+                <div className="text-sm text-gray-600 mt-1">{s.label}</div>
               </div>
             ))}
           </div>
