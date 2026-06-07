@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PHASES } from '../game/phases';
-import { safeGet } from '../lib/safeStorage';
+import { safeGet, safeSave } from '../lib/safeStorage';
 import { getStats, resetStats } from '../lib/stats';
 
 const GATE_PROBLEMS = [
@@ -56,6 +56,17 @@ export default function GrownUpCorner() {
     activeTimer ? formatRemaining(activeTimer.endTime) : ''
   );
   const [showResetConfirm, setShowResetConfirm] = useState<'phase' | 'all' | null>(null);
+  // Haptics (vibration feedback) — default ON; only `false` disables it.
+  const [hapticsOn, setHapticsOn] = useState(() => safeGet<boolean>('mathadv-haptics', true) !== false);
+
+  const toggleHaptics = () => {
+    const next = !hapticsOn;
+    setHapticsOn(next);
+    safeSave('mathadv-haptics', next);
+    if (next && typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+      try { navigator.vibrate(15); } catch { /* ignore */ }
+    }
+  };
 
   useEffect(() => {
     if (!activeTimer) return;
@@ -325,6 +336,34 @@ export default function GrownUpCorner() {
                 </div>
               );
             })}
+          </div>
+        </section>
+
+        {/* ── Preferences ── */}
+        <section className="bg-white rounded-[24px] p-6 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mb-6">
+          <h2 className="text-xl font-black mb-1">🎚️ Preferences</h2>
+          <p className="text-sm font-bold text-gray-500 mb-4">
+            Settings for how the app feels. Saved on this device only.
+          </p>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="font-black text-gray-800">Vibration feedback</p>
+              <p className="text-xs font-bold text-gray-500">A gentle buzz on right/wrong answers and wins.</p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={hapticsOn}
+              aria-label="Vibration feedback"
+              onClick={toggleHaptics}
+              className="relative w-14 h-8 rounded-full border-4 border-black shrink-0 transition-colors"
+              style={{ background: hapticsOn ? '#34D399' : '#E5E7EB' }}
+            >
+              <span
+                className="absolute top-0.5 w-5 h-5 rounded-full bg-black transition-all"
+                style={{ left: hapticsOn ? '1.75rem' : '0.25rem' }}
+              />
+            </button>
           </div>
         </section>
 
