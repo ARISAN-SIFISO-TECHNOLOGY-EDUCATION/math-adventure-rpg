@@ -11,7 +11,7 @@ import { generateProblem, type Problem } from '../mathEngine';
 import confetti from 'canvas-confetti';
 import { Companion, type CompanionEmotion } from './Companion';
 import { useNarration } from './useNarration';
-import { useI18n } from '../i18n';
+import { useI18n, useT } from '../i18n';
 import { hapticSuccess, hapticError, hapticCelebrate } from '../lib/haptics';
 import { registerScreenBack } from '../lib/backHandler';
 import { safeGet } from '../lib/safeStorage';
@@ -161,6 +161,7 @@ function TutorialScreen({ onDone }: { onDone: () => void }) {
   const [slide, setSlide] = useState(0);
   const current = TUTORIAL_SLIDES[slide];
   const isLast = slide === TUTORIAL_SLIDES.length - 1;
+  const t = useT();
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -199,7 +200,7 @@ function TutorialScreen({ onDone }: { onDone: () => void }) {
             onClick={() => isLast ? onDone() : setSlide(s => s + 1)}
             className="w-full bg-black text-white py-4 rounded-2xl text-xl font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] active:shadow-none active:translate-y-1 transition-all flex items-center justify-center gap-3"
           >
-            {isLast ? '🚀 Start Playing!' : 'Next →'}
+            {isLast ? t('kid.startPlaying') : t('kid.next')}
           </button>
 
           {slide > 0 && (
@@ -215,6 +216,7 @@ function TutorialScreen({ onDone }: { onDone: () => void }) {
 
 // --- Level Intro Card (Phase 1, 2, and 3 world entries) ---
 function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: number; levelInPhase: number; totalLevels: number; onStart: () => void }) {
+  const t = useT();
   const isPhase2 = phase === 2;
   const isPhase3 = phase === 3;
   const isPhase4 = phase === 4;
@@ -277,7 +279,7 @@ function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: 
           className="w-full text-white py-4 rounded-2xl text-xl font-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 transition-all"
           style={{ background: btnColor }}
         >
-          I'm Ready! ✊
+          {t('kid.imReady')}
         </button>
       </motion.div>
     </div>
@@ -295,6 +297,7 @@ const COMPANION_CHOICES = [
 function CompanionSetup({ onDone }: { onDone: (name: string, emoji: string) => void }) {
   const [name, setName] = useState('Sparky');
   const [emoji, setEmoji] = useState('🐉');
+  const t = useT();
 
   return (
     <div className="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4">
@@ -305,8 +308,8 @@ function CompanionSetup({ onDone }: { onDone: (name: string, emoji: string) => v
       >
         <div className="text-center mb-6">
           <div className="text-6xl mb-3">{emoji}</div>
-          <h2 className="text-2xl font-black">Name Your Companion!</h2>
-          <p className="text-sm font-bold text-gray-500 mt-1">They'll cheer you on through every level</p>
+          <h2 className="text-2xl font-black">{t('kid.nameCompanion')}</h2>
+          <p className="text-sm font-bold text-gray-500 mt-1">{t('kid.companionSub')}</p>
         </div>
         <input
           type="text"
@@ -332,7 +335,7 @@ function CompanionSetup({ onDone }: { onDone: (name: string, emoji: string) => v
           onClick={() => onDone(name.trim() || 'Sparky', emoji)}
           className="w-full bg-[#3B82F6] text-white py-4 rounded-2xl text-xl font-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 transition-all"
         >
-          Start Adventure! 🚀
+          {t('kid.startAdventure')}
         </button>
       </motion.div>
     </div>
@@ -340,6 +343,7 @@ function CompanionSetup({ onDone }: { onDone: (name: string, emoji: string) => v
 }
 
 function PauseMenu({ onResume, onRestart }: { onResume: () => void; onRestart: () => void }) {
+  const t = useT();
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
       <motion.div
@@ -349,19 +353,19 @@ function PauseMenu({ onResume, onRestart }: { onResume: () => void; onRestart: (
       >
         <div className="text-center mb-2">
           <div className="text-5xl mb-2">⏸️</div>
-          <h2 className="text-2xl font-black">PAUSED</h2>
+          <h2 className="text-2xl font-black">{t('kid.paused')}</h2>
         </div>
         <button onClick={onResume}
           className="w-full bg-[#4ADE80] border-4 border-black py-4 rounded-2xl font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1 transition-all">
-          ▶️ Resume
+          {t('kid.resume')}
         </button>
         <button onClick={onRestart}
           className="w-full bg-[#FEF9C3] border-4 border-black py-4 rounded-2xl font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1 transition-all">
-          🔄 Restart Level
+          {t('kid.restartLevel')}
         </button>
         <Link to="/grown-up-corner"
           className="w-full bg-[#EFF6FF] border-4 border-black py-4 rounded-2xl font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center no-underline block hover:bg-blue-50 transition-all">
-          👨‍👩‍👧 Grown-up Corner
+          {t('kid.grownups')}
         </Link>
         <Link to="/"
           className="w-full bg-gray-100 border-4 border-black py-4 rounded-2xl font-black text-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-center no-underline block hover:bg-gray-200 transition-all">
@@ -471,7 +475,7 @@ export default function Game() {
   const [showBreakGate, setShowBreakGate] = useState(false);
   const [completedLevel, setCompletedLevel] = useState(1);
 
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   const { muted, toggleMute, startBGM, stopBGM, playClick, playCorrect, playWrong, playVictory } = useSoundSystem();
   const { speakQuestion, speakCorrect, speakWrong, speakVictory, speakWelcome } = useNarration(muted, lang);
 
@@ -635,7 +639,7 @@ export default function Game() {
       setCompanionMessage(null);
       triggerConfetti();
       setCoins(prev => prev + 10);
-      setFeedback({ type: 'CORRECT', value: 'Awesome!' });
+      setFeedback({ type: 'CORRECT', value: t('kid.fbAwesome') });
       const newProgress = progress + 1;
       setProgress(newProgress);
 
@@ -758,13 +762,13 @@ export default function Game() {
         const consolationTotal = parseInt(localStorage.getItem('consolationCoins') || '0', 10) + 2;
         localStorage.setItem('consolationCoins', String(consolationTotal));
         if (consolationTotal >= 5) awardBadge('consolation_5');
-        setFeedback({ type: 'WRONG', value: '+2 🪙 Keep going!' });
+        setFeedback({ type: 'WRONG', value: t('kid.fbKeepGoing') });
         setShake(true);
         setTimeout(() => setShake(false), 500);
         setTimeout(() => setFeedback(null), 1200);
       }
     }
-  }, [problem, progress, phase, levelInPhase, wrongAttempts, streakUpdatedToday, isReplayMode, awardBadge, playCorrect, playWrong, playVictory, stopBGM, loadQuestion]);
+  }, [problem, progress, phase, levelInPhase, wrongAttempts, streakUpdatedToday, isReplayMode, awardBadge, playCorrect, playWrong, playVictory, stopBGM, loadQuestion, t]);
 
   const handlePhaseSelect = (newPhase: number) => {
     setPhase(newPhase);
@@ -955,7 +959,7 @@ export default function Game() {
             <Link
               to="/"
               className="p-2 md:p-3 rounded-2xl border-4 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-gray-50 active:shadow-none active:translate-y-1 active:translate-x-1 transition-all"
-              title="Back to Home"
+              title={t('kid.backHome')}
             >
               <Home className="text-gray-600 w-4 h-4 md:w-6 md:h-6" />
             </Link>
@@ -989,7 +993,7 @@ export default function Game() {
                   <h1 className="text-3xl md:text-4xl font-black whitespace-nowrap">MATH MONSTERS</h1>
                 </div>
               </div>
-              <p className="text-xl font-bold mb-6 max-w-sm mx-auto">Feed your monster by solving fun math puzzles!</p>
+              <p className="text-xl font-bold mb-6 max-w-sm mx-auto">{t('kid.feedMonster')}</p>
 
               {/* Phase card */}
               <div className={`${currentPhaseConfig.bgColor} ${currentPhaseConfig.borderColor} border-4 rounded-2xl p-4 mb-6 flex items-center justify-between max-w-sm mx-auto shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]`}>
@@ -1005,7 +1009,7 @@ export default function Game() {
                   className="bg-white border-4 border-black px-3 py-2 rounded-xl font-black text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1 transition-all flex items-center gap-1"
                 >
                   <Lock size={14} />
-                  Change
+                  {t('kid.change')}
                 </button>
               </div>
 
@@ -1018,7 +1022,7 @@ export default function Game() {
                 onClick={startGame}
                 className="group relative bg-[#3B82F6] hover:bg-[#2563EB] text-white px-12 py-6 rounded-full border-4 border-black text-3xl font-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-4 mx-auto"
               >
-                {hasSavedProgress ? 'CONTINUE' : 'PLAY NOW'}
+                {hasSavedProgress ? t('kid.continue') : t('kid.playNow')}
                 <ChevronRight size={32} className="group-hover:translate-x-2 transition-transform" />
               </button>
 
@@ -1027,7 +1031,7 @@ export default function Game() {
                 <div className="flex items-center gap-3">
                   <span className="text-3xl">{companionEmoji}</span>
                   <div className="text-left">
-                    <p className="text-xs font-black uppercase tracking-wider text-gray-600 leading-none">Your companion</p>
+                    <p className="text-xs font-black uppercase tracking-wider text-gray-600 leading-none">{t('kid.yourCompanion')}</p>
                     <p className="font-black text-lg leading-tight">{companionName}</p>
                   </div>
                 </div>
@@ -1035,7 +1039,7 @@ export default function Game() {
                   onClick={() => { playClick(); setShowCompanionSetup(true); }}
                   className="bg-gray-100 border-2 border-black px-3 py-1.5 rounded-xl font-black text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-0.5 active:translate-x-0.5 transition-all"
                 >
-                  ✏️ Edit
+                  {t('kid.edit')}
                 </button>
               </div>
 
@@ -1045,7 +1049,7 @@ export default function Game() {
                   onClick={() => setShowBadges(b => !b)}
                   className="w-full flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest text-gray-600 py-2 hover:text-gray-600 transition-colors"
                 >
-                  🏅 Badges ({earnedBadges.length}/{BADGES.length})
+                  🏅 {t('kid.badges')} ({earnedBadges.length}/{BADGES.length})
                   <span className="text-[10px]">{showBadges ? '▲' : '▼'}</span>
                 </button>
                 {showBadges && (
@@ -1066,10 +1070,10 @@ export default function Game() {
 
               <div className="mt-6 flex items-center gap-6 justify-center flex-wrap">
                 <Link to="/" className="text-sm font-bold text-gray-600 hover:text-gray-600 no-underline flex items-center gap-1 transition-colors">
-                  ← Back to Home
+                  ← {t('kid.backHome')}
                 </Link>
                 <Link to="/grown-up-corner" className="text-sm font-bold text-blue-700 hover:text-blue-700 no-underline flex items-center gap-1 transition-colors">
-                  👨‍👩‍👧 Grown-up Corner
+                  {t('kid.grownups')}
                 </Link>
               </div>
             </motion.div>
@@ -1131,7 +1135,7 @@ export default function Game() {
                       }}
                       className="bg-[#3B82F6] text-white px-8 py-3 rounded-2xl text-lg font-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 transition-all"
                     >
-                      Got it! Next →
+                      {t('kid.gotItNext')}
                     </button>
                   </motion.div>
                 )}
@@ -1238,25 +1242,25 @@ export default function Game() {
               {isGameComplete ? (
                 <>
                   <div className="text-6xl mb-3">🏆</div>
-                  <h2 className="text-4xl font-black mb-3">CHAMPION!</h2>
-                  <p className="text-xl font-bold mb-2">You've mastered all 4 phases!</p>
-                  <p className="text-sm font-bold text-gray-600 mb-6">From Pre-School counting to Advanced Primary. Incredible!</p>
+                  <h2 className="text-4xl font-black mb-3">{t('kid.champion')}</h2>
+                  <p className="text-xl font-bold mb-2">{t('kid.championSub')}</p>
+                  <p className="text-sm font-bold text-gray-600 mb-6">{t('kid.championSub2')}</p>
                   <button onClick={startGame}
                     className="bg-[#FFD700] hover:bg-[#F59E0B] text-black px-10 py-4 rounded-full border-4 border-black text-xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto">
-                    PLAY AGAIN <Sparkles size={24} />
+                    {t('kid.playAgainBig')} <Sparkles size={24} />
                   </button>
                 </>
               ) : isPhaseTransition ? (
                 <>
                   <div className="text-6xl mb-3">{victoryPhaseConfig.emoji}</div>
                   <div className={`inline-block ${victoryPhaseConfig.bgColor} ${victoryPhaseConfig.borderColor} border-4 px-5 py-2 rounded-full mb-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]`}>
-                    <p className="font-black text-base">Phase {victoryPhaseConfig.id} Unlocked!</p>
+                    <p className="font-black text-base">{t('kid.phaseUnlocked', { n: victoryPhaseConfig.id })}</p>
                   </div>
                   <h2 className="text-3xl font-black mb-2">{victoryPhaseConfig.name}</h2>
                   <p className="text-lg font-bold text-gray-600 mb-6">{victoryPhaseConfig.ageRange}</p>
                   <button onClick={startGame}
                     className={`${victoryPhaseConfig.badgeBg} text-black px-10 py-4 rounded-full border-4 border-black text-xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto`}>
-                    START PHASE {victoryPhaseConfig.id} <ChevronRight size={24} />
+                    {t('kid.startPhase', { n: victoryPhaseConfig.id })} <ChevronRight size={24} />
                   </button>
                 </>
               ) : (
@@ -1264,7 +1268,7 @@ export default function Game() {
                   <div className="w-24 h-24 md:w-32 md:h-32 bg-[#FFD700] rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
                     <Trophy className="text-black" size={52} />
                   </div>
-                  <h2 className="text-4xl font-black mb-3">{bossDefeated ? 'BOSS DEFEATED! 💀' : 'LEVEL UP!'}</h2>
+                  <h2 className="text-4xl font-black mb-3">{bossDefeated ? t('kid.bossDefeated') : t('kid.levelUp')}</h2>
                   {(phase === 2 || phase === 3 || phase === 4) && (() => {
                     const worlds = phase === 4 ? P4_WORLDS : phase === 3 ? P3_WORLDS : P2_WORLDS;
                     const w = worlds.find(ww => ww.levels.includes(levelInPhase));
@@ -1281,17 +1285,17 @@ export default function Game() {
                   <div className="flex flex-col gap-3 items-center">
                     <button onClick={handlePlayAgain}
                       className="bg-white border-4 border-black text-black px-8 py-3 rounded-full text-lg font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 transition-all flex items-center gap-3 mx-auto hover:bg-gray-50">
-                      🔄 Play Again
+                      {t('kid.playAgain')}
                     </button>
                     {isReplayMode ? (
                       <button onClick={() => { stopBGM(); navigate('/'); }}
                         className="bg-[#4ADE80] hover:bg-[#22C55E] text-black px-10 py-4 rounded-full border-4 border-black text-xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto">
-                        🏠 Back to Home
+                        🏠 {t('kid.backHome')}
                       </button>
                     ) : (
                       <button onClick={startGame}
                         className="bg-[#4ADE80] hover:bg-[#22C55E] text-black px-10 py-4 rounded-full border-4 border-black text-2xl font-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-2 active:translate-x-2 transition-all flex items-center gap-3 mx-auto">
-                        NEXT LEVEL <Sparkles size={28} />
+                        {t('kid.nextLevel')} <Sparkles size={28} />
                       </button>
                     )}
                   </div>
