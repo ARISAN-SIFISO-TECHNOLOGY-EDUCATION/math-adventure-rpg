@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Trash2, RefreshCw } from 'lucide-react';
-import { getMistakes, removeMistake, type MistakeEntry } from '../progress';
+import { getMistakes, removeMistake, type MistakeEntry } from '../../exam-studio';
 import SeniorNav from '../SeniorNav';
 
 function MistakeCard({ entry, onRemove }: { key?: string | number; entry: MistakeEntry; onRemove: () => void }) {

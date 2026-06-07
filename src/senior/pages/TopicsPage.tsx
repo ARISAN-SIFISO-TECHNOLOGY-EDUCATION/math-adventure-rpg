@@ -18,7 +18,7 @@ import {
   getMockExamScores,
   isAcademyOnboarded,
   setAcademyOnboarded,
-} from '../progress';
+} from '../../exam-studio';
 
 // True only when running the Vite dev server (npm run dev). In a release build
 // this is false, so the Dev Mode button stays hidden until the secret gesture.

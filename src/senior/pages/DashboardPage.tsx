@@ -10,7 +10,7 @@ import {
   getMistakes,
   getStreak,
   getDailyProgress,
-} from '../progress';
+} from '../../exam-studio';
 import SeniorNav from '../SeniorNav';
 
 interface StatCardProps {

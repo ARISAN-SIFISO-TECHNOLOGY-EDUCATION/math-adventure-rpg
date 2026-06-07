@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowLeft, Calendar, ChevronRight } from 'lucide-react';
 import { CURRICULUM } from '../curriculum';
-import { isTopicTestPassed, getLevelProgress } from '../progress';
+import { isTopicTestPassed, getLevelProgress } from '../../exam-studio';
 import SeniorNav from '../SeniorNav';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];

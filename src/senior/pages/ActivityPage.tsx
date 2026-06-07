@@ -9,7 +9,7 @@ import {
   generateMastersProblems,
   type Problem,
 } from '../mathEngine';
-import { recordAttempt, addMistake, recordMockExam } from '../progress';
+import { recordAttempt, addMistake, recordMockExam } from '../../exam-studio';
 import { recordAnswer, recordLevelComplete } from '../../lib/stats';
 import ErrorBoundary from '../../components/ErrorBoundary';
 

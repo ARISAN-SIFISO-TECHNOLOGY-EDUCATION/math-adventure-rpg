@@ -1,8 +1,11 @@
-import type { Problem, LevelGenerator, TopicLevels } from './engine/types.ts';
+// Framework core lives in the in-repo exam-studio package. Imported DIRECTLY
+// (not via the barrel) with .ts extensions so the Node strip-types smoke test
+// resolves them without pulling in the progress/localStorage code path.
+import type { Problem, LevelGenerator, TopicLevels } from '../exam-studio/types.ts';
 import {
   randInt, uid, shuffle, makeOptions, gcd, simplify,
   expOptions, fromCases, comb, perm,
-} from './engine/helpers.ts';
+} from '../exam-studio/helpers.ts';
 
 // Re-export Problem so consumers importing from './mathEngine' keep working.
 export type { Problem };
