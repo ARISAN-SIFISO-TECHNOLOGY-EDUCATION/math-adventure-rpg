@@ -6,6 +6,7 @@ import { CURRICULUM, type TopicCard } from '../curriculum';
 import { FORMULAS } from '../formulas';
 import SeniorNav from '../SeniorNav';
 import AcademyOnboarding from '../components/AcademyOnboarding';
+import { useT } from '../../i18n';
 import {
   isTopicUnlocked,
   isTopicTestPassed,
@@ -79,6 +80,7 @@ function TopicRow({
   allTopicIds: string[];
 }) {
   const navigate = useNavigate();
+  const t = useT();
   const unlocked = isTopicUnlocked(topicIndex, allTopicIds) || isDevUnlockAll();
   const testPassed = isTopicTestPassed(topic.id);
 
@@ -107,7 +109,7 @@ function TopicRow({
       {/* Progress bar */}
       <div>
         <div className="flex justify-between text-xs font-inter text-slate-400 mb-1">
-          <span>{passedCount}/{topic.levels} levels</span>
+          <span>{t('sr.levels', { passed: passedCount, total: topic.levels })}</span>
           <span>{pct}%</span>
         </div>
         <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
@@ -148,7 +150,7 @@ function TopicRow({
                   : 'bg-teal text-slate-900'
               }`}
             >
-              {testPassed ? '✓ Topic Test Passed' : 'Topic Test'}
+              {testPassed ? t('sr.topicTestPassed') : t('sr.topicTest')}
             </motion.button>
           )}
           {(FORMULAS[topic.id]?.length ?? 0) > 0 && (
@@ -171,6 +173,7 @@ function TopicRow({
 export default function TopicsPage() {
   const { age } = useParams<{ age: string }>();
   const navigate = useNavigate();
+  const t = useT();
   const ageNum = Number(age);
 
   const group = CURRICULUM.find(g => g.age === ageNum);
@@ -194,7 +197,7 @@ export default function TopicsPage() {
         </div>
         <div className="flex flex-col items-center justify-center text-center py-24">
           <span className="text-6xl">🔒</span>
-          <h2 className="text-white font-outfit font-bold text-xl mt-4">Coming soon</h2>
+          <h2 className="text-white font-outfit font-bold text-xl mt-4">{t('sr.comingSoon')}</h2>
           <p className="text-slate-400 font-inter text-sm mt-2 max-w-xs">
             We're building the {group?.school ?? 'next school'} now. The{' '}
             <span className="text-teal font-semibold">School of Builders (Age 15)</span> is fully
@@ -305,15 +308,15 @@ export default function TopicsPage() {
             <span className={`w-1.5 self-stretch rounded-full flex-shrink-0 ${group.color}`} aria-hidden="true" />
             <div className="flex-1">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-inter text-slate-400">Age {age} Mock Exam</p>
+                <p className="text-sm font-inter text-slate-400">{t('sr.mockLabel', { age: age ?? '' })}</p>
                 {lastMock && (
                   <span className="text-xs font-outfit font-bold bg-slate-700 text-slate-200 rounded-full px-2.5 py-1">
-                    Best/last: {lastMock.score}%
+                    {t('sr.bestLast', { score: lastMock.score })}
                   </span>
                 )}
               </div>
-              <h3 className="text-xl font-outfit font-extrabold mt-0.5">40-Question Mock Paper</h3>
-              <p className="text-sm text-slate-400 mt-1 font-inter">All topics · IGCSE style · marks &amp; exam tips</p>
+              <h3 className="text-xl font-outfit font-extrabold mt-0.5">{t('sr.mockTitle')}</h3>
+              <p className="text-sm text-slate-400 mt-1 font-inter">{t('sr.mockSub')}</p>
             </div>
           </motion.button>
         </motion.div>

@@ -14,6 +14,7 @@ import { recordAnswer, recordLevelComplete } from '../../lib/stats';
 import { hapticSuccess, hapticError } from '../../lib/haptics';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import { CURRICULUM } from '../curriculum';
+import { useT } from '../../i18n';
 
 // Resolve a topic id (e.g. "age13-numbers") to its friendly title ("Numbers");
 // falls back to the id if not found (e.g. dynamic/aggregate modes).
@@ -73,6 +74,7 @@ function QuestionCard({
   const [selected, setSelected] = useState<string | null>(null);
   const [showHint, setShowHint] = useState(false);
   const answered = selected !== null;
+  const t = useT();
 
   function handleSelect(opt: string) {
     if (answered) return;
@@ -113,7 +115,7 @@ function QuestionCard({
       {problem.calculatorAllowed && (
         <div className="flex items-center gap-1.5 text-teal text-xs font-inter">
           <Calculator className="w-3.5 h-3.5" />
-          <span>Calculator allowed</span>
+          <span>{t('sr.calcAllowed')}</span>
         </div>
       )}
 
@@ -160,16 +162,16 @@ function QuestionCard({
               }`}
             >
               <p className={`font-outfit font-bold ${selected === problem.correctAnswer ? 'text-sprout-green' : 'text-sprout-orange'}`}>
-                {selected === problem.correctAnswer ? '✓ Correct!' : '✗ Incorrect'}
+                {selected === problem.correctAnswer ? t('sr.correct') : t('sr.incorrect')}
               </p>
               {selected !== problem.correctAnswer && (
                 <p className="text-slate-300 text-sm font-inter mt-1">
-                  Answer: <span className="text-white font-semibold">{problem.correctAnswer}</span>
+                  {t('sr.answer')} <span className="text-white font-semibold">{problem.correctAnswer}</span>
                 </p>
               )}
               {problem.workingSteps?.length > 0 && (
                 <div className="mt-3 space-y-1">
-                  <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">Working</p>
+                  <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">{t('sr.working')}</p>
                   {problem.workingSteps.map((step, i) => (
                     <p key={i} className="text-slate-300 text-sm font-inter whitespace-pre-wrap">
                       {step}
@@ -181,13 +183,13 @@ function QuestionCard({
 
             {problem.commonMistake && (
               <div className="bg-sprout-orange/10 border border-sprout-orange/30 rounded-xl p-3 text-sm text-sprout-orange/90 font-inter">
-                ⚠️ Common mistake: {problem.commonMistake}
+                ⚠️ {t('sr.commonMistake')}: {problem.commonMistake}
               </div>
             )}
 
             {problem.examTip && (
               <div className="bg-teal/10 border border-teal/30 rounded-xl p-3 text-sm text-teal font-inter">
-                💡 Exam tip: {problem.examTip}
+                💡 {t('sr.examTip')}: {problem.examTip}
               </div>
             )}
           </motion.div>
@@ -202,7 +204,7 @@ function QuestionCard({
             className="flex items-center gap-1.5 text-slate-400 text-sm font-inter hover:text-teal transition-colors"
           >
             <Lightbulb className="w-4 h-4" />
-            {showHint ? 'Hide hint' : 'Show hint'}
+            {showHint ? t('sr.hideHint') : t('sr.showHint')}
           </button>
           <AnimatePresence>
             {showHint && (
@@ -230,6 +232,7 @@ function QuestionCard({
 function ActivityPageInner() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const t = useT();
 
   const topicId = searchParams.get('topicId') ?? 'age15-numbers';
   const level = Number(searchParams.get('level') ?? 1);
@@ -331,7 +334,7 @@ function ActivityPageInner() {
         </motion.button>
         <div className="flex-1">
           <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">
-            {mode === 'masters' ? 'Masters Quiz' : isTopicTest ? 'Topic Test' : mode === 'mock' ? 'Mock Exam' : `Level ${level}`}
+            {mode === 'masters' ? t('sr.mastersQuiz') : isTopicTest ? t('sr.topicTest') : mode === 'mock' ? t('sr.mockExam') : t('sr.level', { n: level })}
           </p>
           <p className="text-white font-outfit font-bold text-sm truncate">{mode === 'masters' ? 'Critical Thinking' : topicTitle(topicId)}</p>
         </div>
@@ -339,7 +342,7 @@ function ActivityPageInner() {
           <p className="text-sprout-green font-outfit font-bold text-lg">
             {results.filter(r => r.correct).length}
           </p>
-          <p className="text-slate-400 text-xs font-inter">correct</p>
+          <p className="text-slate-400 text-xs font-inter">{t('sr.correctLabel')}</p>
         </div>
       </div>
 

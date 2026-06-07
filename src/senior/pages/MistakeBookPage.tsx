@@ -4,9 +4,11 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Trash2, RefreshCw } from 'lucide-react';
 import { getMistakes, removeMistake, type MistakeEntry } from '../../exam-studio';
 import SeniorNav from '../SeniorNav';
+import { useT } from '../../i18n';
 
 function MistakeCard({ entry, onRemove }: { key?: string | number; entry: MistakeEntry; onRemove: () => void }) {
   const [expanded, setExpanded] = useState(false);
+  const t = useT();
 
   return (
     <motion.div
@@ -65,7 +67,7 @@ function MistakeCard({ entry, onRemove }: { key?: string | number; entry: Mistak
                   className="flex items-center gap-1 text-slate-400 hover:text-sprout-orange text-xs font-inter transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
-                  Remove
+                  {t('sr.remove')}
                 </button>
               </div>
             </div>
@@ -78,6 +80,7 @@ function MistakeCard({ entry, onRemove }: { key?: string | number; entry: Mistak
 
 export default function MistakeBookPage() {
   const navigate = useNavigate();
+  const t = useT();
   const [mistakes, setMistakes] = useState<MistakeEntry[]>(getMistakes());
 
   function handleRemove(id: string) {
@@ -106,8 +109,8 @@ export default function MistakeBookPage() {
           <ArrowLeft className="w-5 h-5 text-white" />
         </motion.button>
         <div className="flex-1">
-          <h1 className="text-xl font-outfit font-extrabold text-white">Mistake Book</h1>
-          <p className="text-slate-400 text-sm font-inter">{mistakes.length} saved mistakes</p>
+          <h1 className="text-xl font-outfit font-extrabold text-white">{t('sr.mistakeBook')}</h1>
+          <p className="text-slate-400 text-sm font-inter">{t('sr.savedMistakes', { n: mistakes.length })}</p>
         </div>
         {mistakes.length > 0 && (
           <motion.button
@@ -116,7 +119,7 @@ export default function MistakeBookPage() {
             className="flex items-center gap-1.5 bg-teal/20 text-teal border border-teal/30 rounded-xl px-3 py-2 text-sm font-outfit font-semibold"
           >
             <RefreshCw className="w-4 h-4" />
-            Practise
+            {t('sr.practise')}
           </motion.button>
         )}
       </div>
@@ -128,9 +131,9 @@ export default function MistakeBookPage() {
           className="flex flex-col items-center justify-center py-20 text-center"
         >
           <span className="text-6xl">🎯</span>
-          <h2 className="text-white font-outfit font-bold text-xl mt-4">No mistakes yet!</h2>
+          <h2 className="text-white font-outfit font-bold text-xl mt-4">{t('sr.noMistakes')}</h2>
           <p className="text-slate-400 font-inter text-sm mt-2">
-            When you get a question wrong, it'll appear here for review.
+            {t('sr.noMistakesSub')}
           </p>
         </motion.div>
       ) : (

@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import confetti from 'canvas-confetti';
 import { Home, RotateCcw, ChevronRight } from 'lucide-react';
 import { hapticCelebrate } from '../../lib/haptics';
+import { useT } from '../../i18n';
 
 function fireConfetti() {
   confetti({
@@ -17,6 +18,7 @@ function fireConfetti() {
 export default function SuccessPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const t = useT();
 
   const score = Number(searchParams.get('score') ?? 0);
   const total = Number(searchParams.get('total') ?? 5);
@@ -36,15 +38,15 @@ export default function SuccessPage() {
   }, [passed]);
 
   const emoji = score === 100 ? '🏆' : score >= 80 ? '🎉' : score >= 60 ? '💪' : '📚';
-  const title = score === 100 ? 'Perfect Score!' : passed ? 'Well Done!' : score >= 60 ? 'Good Effort!' : 'Keep Practising';
+  const title = score === 100 ? t('sr.perfect') : passed ? t('sr.wellDone') : score >= 60 ? t('sr.goodEffort') : t('sr.keepPractising');
   const subtitle =
     score === 100
-      ? 'You nailed every question!'
+      ? t('sr.subPerfect')
       : passed
-      ? 'You passed — next level unlocked!'
+      ? t('sr.subPassed')
       : score >= 60
-      ? 'Almost there — try again to pass.'
-      : 'Review the topic and try again.';
+      ? t('sr.subClose')
+      : t('sr.subRetry');
 
   // Radial progress ring
   const radius = 52;
@@ -94,7 +96,7 @@ export default function SuccessPage() {
         <h1 className="text-3xl font-outfit font-extrabold text-white">{title}</h1>
         <p className="text-slate-400 font-inter mt-2">{subtitle}</p>
         <p className="text-slate-400 font-inter text-sm mt-1">
-          {correct}/{total} correct · {mode === 'masters' ? 'Masters Quiz' : mode === 'mock' ? 'Mock Exam' : isTopicTest ? 'Topic Test' : `Level ${level}`}
+          {t('sr.scoreLine', { correct, total })} · {mode === 'masters' ? t('sr.mastersQuiz') : mode === 'mock' ? t('sr.mockExam') : isTopicTest ? t('sr.topicTest') : t('sr.level', { n: level })}
         </p>
       </motion.div>
 
@@ -107,17 +109,17 @@ export default function SuccessPage() {
       >
         <div>
           <p className="text-2xl font-outfit font-extrabold text-sprout-green">{correct}</p>
-          <p className="text-slate-400 text-xs font-inter mt-0.5">Correct</p>
+          <p className="text-slate-400 text-xs font-inter mt-0.5">{t('sr.resultCorrect')}</p>
         </div>
         <div>
           <p className="text-2xl font-outfit font-extrabold text-sprout-orange">{total - correct}</p>
-          <p className="text-slate-400 text-xs font-inter mt-0.5">Wrong</p>
+          <p className="text-slate-400 text-xs font-inter mt-0.5">{t('sr.resultWrong')}</p>
         </div>
         <div>
           <p className={`text-2xl font-outfit font-extrabold ${passed ? 'text-sprout-green' : 'text-sprout-orange'}`}>
-            {passed ? 'PASS' : 'RETRY'}
+            {passed ? t('sr.pass') : t('sr.retry')}
           </p>
-          <p className="text-slate-400 text-xs font-inter mt-0.5">Result</p>
+          <p className="text-slate-400 text-xs font-inter mt-0.5">{t('sr.resultLabel')}</p>
         </div>
       </motion.div>
 
@@ -140,7 +142,7 @@ export default function SuccessPage() {
             className="w-full py-4 bg-teal text-slate-900 font-outfit font-bold text-lg rounded-2xl flex items-center justify-center gap-2"
           >
             <RotateCcw className="w-5 h-5" />
-            Try Again
+            {t('sr.tryAgain')}
           </motion.button>
         )}
 
@@ -155,7 +157,7 @@ export default function SuccessPage() {
             }
             className="w-full py-4 bg-teal text-slate-900 font-outfit font-bold text-lg rounded-2xl flex items-center justify-center gap-2"
           >
-            Next Level
+            {t('sr.nextLevel')}
             <ChevronRight className="w-5 h-5" />
           </motion.button>
         )}
@@ -166,7 +168,7 @@ export default function SuccessPage() {
           className="w-full py-4 bg-slate-800 text-white font-outfit font-semibold text-lg rounded-2xl flex items-center justify-center gap-2"
         >
           <Home className="w-5 h-5" />
-          {mode === 'masters' ? 'Back to Home' : 'Back to Topics'}
+          {mode === 'masters' ? t('sr.backToHome') : t('sr.backToTopics')}
         </motion.button>
       </motion.div>
     </div>

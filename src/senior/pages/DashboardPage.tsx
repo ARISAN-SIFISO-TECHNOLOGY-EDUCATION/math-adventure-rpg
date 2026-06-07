@@ -12,6 +12,7 @@ import {
   getDailyProgress,
 } from '../../exam-studio';
 import SeniorNav from '../SeniorNav';
+import { useT } from '../../i18n';
 
 interface StatCardProps {
   icon: LucideIcon;
@@ -36,6 +37,7 @@ function StatCard({ icon: Icon, label, value, color }: StatCardProps) {
 
 export default function DashboardPage() {
   const navigate = useNavigate();
+  const t = useT();
   const mockScores = getMockExamScores();
   const mistakes = getMistakes();
   const streak = getStreak();
@@ -79,7 +81,7 @@ export default function DashboardPage() {
         >
           <ArrowLeft className="w-5 h-5 text-white" />
         </motion.button>
-        <h1 className="text-xl font-outfit font-extrabold text-white">Dashboard</h1>
+        <h1 className="text-xl font-outfit font-extrabold text-white">{t('sr.nav.dashboard')}</h1>
       </div>
 
       {/* Daily goal + streak — the habit loop */}
@@ -88,11 +90,11 @@ export default function DashboardPage() {
           <div className="flex items-center gap-2">
             <Flame className={`w-5 h-5 ${streak.count > 0 ? 'text-sprout-orange' : 'text-slate-600'}`} />
             <span className="text-white font-outfit font-bold">
-              {streak.count > 0 ? `${streak.count}-day streak` : 'Start a streak today'}
+              {streak.count > 0 ? t('sr.streak', { n: streak.count }) : t('sr.startStreak')}
             </span>
           </div>
           <span className="text-slate-400 text-xs font-inter">
-            {goalMet ? '✓ Goal done' : `${daily.passed}/${daily.goal} today`}
+            {goalMet ? t('sr.goalDoneShort') : t('sr.todayGoal', { done: daily.passed, goal: daily.goal })}
           </span>
         </div>
         <div className="h-2 bg-slate-700 rounded-full overflow-hidden" role="progressbar" aria-valuenow={daily.passed} aria-valuemin={0} aria-valuemax={daily.goal} aria-label="Daily goal progress">
@@ -104,9 +106,7 @@ export default function DashboardPage() {
           />
         </div>
         <p className="text-slate-400 text-xs font-inter mt-2">
-          {goalMet
-            ? 'Daily goal smashed — come back tomorrow to keep the streak alive.'
-            : `Pass ${daily.goal - daily.passed} more level${daily.goal - daily.passed === 1 ? '' : 's'} to hit today’s goal.`}
+          {goalMet ? t('sr.goalDone') : t('sr.goalNudge', { n: daily.goal - daily.passed })}
         </p>
       </div>
 
@@ -119,9 +119,9 @@ export default function DashboardPage() {
         >
           <BookOpen className="w-5 h-5 text-sprout-pink flex-shrink-0" />
           <div className="flex-1">
-            <p className="text-white font-outfit font-semibold text-sm">Review your mistakes</p>
+            <p className="text-white font-outfit font-semibold text-sm">{t('sr.reviewMistakes')}</p>
             <p className="text-slate-400 text-xs font-inter">
-              {mistakes.length} saved question{mistakes.length === 1 ? '' : 's'} to revisit — your fastest marks.
+              {t('sr.reviewMistakesSub', { n: mistakes.length })}
             </p>
           </div>
           <span className="text-sprout-pink" aria-hidden="true">→</span>
@@ -130,25 +130,25 @@ export default function DashboardPage() {
 
       {/* Stat grid */}
       <div className="grid grid-cols-2 gap-3">
-        <StatCard icon={Trophy} label="Levels passed" value={`${totalPassed}/${totalLevels}`} color="bg-teal" />
-        <StatCard icon={Target} label="Topics completed" value={`${topicTestsPassed}/${totalTopics}`} color="bg-sprout-purple" />
-        <StatCard icon={Flame} label="Total attempts" value={totalAttempts} color="bg-sprout-orange" />
-        <StatCard icon={BookOpen} label="Mistakes saved" value={mistakes.length} color="bg-sprout-pink" />
+        <StatCard icon={Trophy} label={t('sr.levelsPassed')} value={`${totalPassed}/${totalLevels}`} color="bg-teal" />
+        <StatCard icon={Target} label={t('sr.topicsCompleted')} value={`${topicTestsPassed}/${totalTopics}`} color="bg-sprout-purple" />
+        <StatCard icon={Flame} label={t('sr.totalAttempts')} value={totalAttempts} color="bg-sprout-orange" />
+        <StatCard icon={BookOpen} label={t('sr.mistakesSaved')} value={mistakes.length} color="bg-sprout-pink" />
       </div>
 
       {/* Mock exam history */}
       <div className="mt-6">
-        <h2 className="text-slate-400 text-xs font-inter uppercase tracking-wider mb-3">Mock Exam History</h2>
+        <h2 className="text-slate-400 text-xs font-inter uppercase tracking-wider mb-3">{t('sr.mockHistory')}</h2>
         {mockScores.length === 0 ? (
           <div className="bg-slate-800 rounded-2xl p-6 text-center text-slate-400 font-inter text-sm">
-            No mock exams taken yet
+            {t('sr.noMocks')}
           </div>
         ) : (
           <div className="space-y-2">
             {[...mockScores].reverse().slice(0, 5).map((s, i) => (
               <div key={i} className="bg-slate-800 rounded-xl px-4 py-3 flex items-center justify-between">
                 <div>
-                  <p className="text-white font-outfit font-semibold">Age {s.age} Mock</p>
+                  <p className="text-white font-outfit font-semibold">{t('sr.ageMock', { age: s.age })}</p>
                   <p className="text-slate-400 text-xs font-inter">
                     {new Date(s.date).toLocaleDateString()}
                   </p>
@@ -164,7 +164,7 @@ export default function DashboardPage() {
             ))}
             {bestMock !== null && (
               <p className="text-slate-400 text-xs font-inter text-center pt-1">
-                Best score: <span className="text-sprout-green font-semibold">{bestMock}%</span>
+                {t('sr.bestScore')} <span className="text-sprout-green font-semibold">{bestMock}%</span>
               </p>
             )}
           </div>
@@ -173,7 +173,7 @@ export default function DashboardPage() {
 
       {/* Topic breakdown */}
       <div className="mt-6">
-        <h2 className="text-slate-400 text-xs font-inter uppercase tracking-wider mb-3">Age 15 — Topic Breakdown</h2>
+        <h2 className="text-slate-400 text-xs font-inter uppercase tracking-wider mb-3">{t('sr.topicBreakdown', { age: age15.age })}</h2>
         <div className="space-y-3">
           {age15.topics.map(topic => {
             const levelNums = Array.from({ length: topic.levels }, (_, i) => i + 1);
@@ -191,7 +191,7 @@ export default function DashboardPage() {
                   <div className="flex items-center gap-2">
                     {testPassed && (
                       <span className="text-sprout-green text-xs font-inter bg-sprout-green/10 px-2 py-0.5 rounded-full border border-sprout-green/30">
-                        ✓ Test
+                        {t('sr.testBadge')}
                       </span>
                     )}
                     <span className="text-slate-400 text-xs font-inter">{passed}/{topic.levels}</span>
