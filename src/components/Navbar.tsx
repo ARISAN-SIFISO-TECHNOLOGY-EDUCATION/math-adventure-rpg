@@ -16,7 +16,7 @@ export default function Navbar({
   nextLink,
 }: NavbarProps) {
   return (
-    <nav style={{ borderBottom: `1px solid ${borderColor}` }} className="bg-white py-5">
+    <nav style={{ borderBottom: `1px solid ${borderColor}` }} className="bg-white py-5 lg:hidden">
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center flex-wrap gap-4">
         <div className="font-[Nunito] text-xl font-extrabold">
           <Link to="/" style={{ color: accentColor, textDecoration: 'none' }}>

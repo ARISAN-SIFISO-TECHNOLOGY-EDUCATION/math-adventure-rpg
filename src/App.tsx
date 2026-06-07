@@ -33,6 +33,7 @@ const SeniorFormulaVaultPage = lazy(() => import('./senior/pages/FormulaVaultPag
 const SeniorDashboardPage = lazy(() => import('./senior/pages/DashboardPage'));
 const SeniorStudyPlannerPage = lazy(() => import('./senior/pages/StudyPlannerPage'));
 import BottomNav from './components/BottomNav';
+import SideNav from './components/SideNav';
 import LoadingScreen from './components/LoadingScreen';
 import { consumeScreenBack } from './lib/backHandler';
 
@@ -74,12 +75,18 @@ function AppShell() {
   // Immersive screens own the full viewport: the kids' RPG and the senior
   // Exam Studio both hide the light marketing BottomNav and skip its padding.
   const isImmersive = pathname === '/play' || pathname.startsWith('/senior');
+  // On desktop the SideNav is the universal navigation for every non-immersive
+  // page (the marketing Navbar is hidden at lg+). Offset the content so it sits
+  // to the RIGHT of the fixed sidebar. Immersive screens (kids' RPG + the dark
+  // Academy) stay full-screen with their own navigation/theme.
 
   return (
     <>
       <AndroidBackHandler />
-      {/* Pad the page so its bottom content clears the fixed BottomNav (mobile only). */}
-      <div className={isImmersive ? undefined : 'pb-16 lg:pb-0'}>
+      {!isImmersive && <SideNav />}
+      {/* Pad the page so its bottom content clears the fixed BottomNav (mobile
+          only) and clears the SideNav (desktop only). */}
+      <div className={isImmersive ? undefined : 'pb-16 lg:pb-0 lg:pl-60'}>
         <Suspense fallback={<LoadingScreen dark={pathname.startsWith('/senior')} />}>
         <Routes>
           <Route path="/" element={<HomePage />} />

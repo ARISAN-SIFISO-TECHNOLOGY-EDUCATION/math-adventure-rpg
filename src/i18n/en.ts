@@ -31,6 +31,14 @@ export const en = {
   'label.advanced': 'Advanced',
   'masters.sub': 'Critical thinking',
 
+  // Navigation (BottomNav + SideNav)
+  'nav.home': 'Home',
+  'nav.start': 'Start',
+  'nav.learn': 'Learn',
+  'nav.features': 'Features',
+  'nav.grownups': 'Grown-Ups',
+  'nav.promise': '✨ Free forever · no ads · offline',
+
   // Footer links
   'footer.about': 'About',
   'footer.parentGuide': 'Parent Guide',

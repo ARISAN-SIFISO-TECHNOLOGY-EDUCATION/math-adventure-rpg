@@ -33,9 +33,17 @@ export const zu: Translations = {
   'label.advanced': 'Othuthukile',
   'masters.sub': 'Ukucabanga okujulile',
 
+  // Navigation (BottomNav + SideNav)
+  'nav.home': 'Ikhaya',
+  'nav.start': 'Qala',
+  'nav.learn': 'Funda',
+  'nav.features': 'Izici',
+  'nav.grownups': 'Abadala',
+  'nav.promise': '✨ Mahhala phakade · azikho izikhangiso · i-offline',
+
   // Footer links
   'footer.about': 'Mayelana',
-  'footer.parentGuide': 'Umhlahlandlela Wabazali',
+  'footer.parentGuide': 'Abazali',
   'footer.privacy': 'Ubumfihlo',
   'footer.contact': 'Xhumana',
 

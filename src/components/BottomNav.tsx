@@ -7,19 +7,21 @@
 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Home, BookOpen, ShieldCheck, Rocket } from 'lucide-react';
+import { useT, type TranslationKey } from '../i18n';
 
 // 'Start' routes to the home age-chooser (NOT straight into the kids' RPG), so
 // teens reach the Academy and little ones reach the RPG by picking their age.
-const ITEMS = [
-  { to: '/',                label: 'Home',      Icon: Home },
-  { to: '/curriculum',      label: 'Learn',     Icon: BookOpen },
-  { to: '/grown-up-corner', label: 'Grown-Ups', Icon: ShieldCheck },
-  { to: '/?start=1',        label: 'Start',     Icon: Rocket },
-] as const;
+const ITEMS: { to: string; labelKey: TranslationKey; Icon: typeof Home }[] = [
+  { to: '/',                labelKey: 'nav.home',     Icon: Home },
+  { to: '/curriculum',      labelKey: 'nav.learn',    Icon: BookOpen },
+  { to: '/grown-up-corner', labelKey: 'nav.grownups', Icon: ShieldCheck },
+  { to: '/?start=1',        labelKey: 'nav.start',    Icon: Rocket },
+];
 
 export default function BottomNav() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const t = useT();
 
   return (
     <nav
@@ -28,7 +30,7 @@ export default function BottomNav() {
       aria-label="Main navigation"
     >
       <div className="max-w-lg mx-auto flex items-stretch h-16">
-        {ITEMS.map(({ to, label, Icon }) => {
+        {ITEMS.map(({ to, labelKey, Icon }) => {
           const active = to === '/' ? pathname === '/' : pathname.startsWith(to);
           return (
             <button
@@ -40,7 +42,7 @@ export default function BottomNav() {
               }`}
             >
               <Icon size={22} strokeWidth={active ? 2.6 : 2} />
-              <span className="text-[10px] font-extrabold tracking-wide">{label}</span>
+              <span className="text-[10px] font-extrabold tracking-wide">{t(labelKey)}</span>
             </button>
           );
         })}
