@@ -72,21 +72,35 @@ function AndroidBackHandler() {
 
 function AppShell() {
   const { pathname } = useLocation();
-  // Immersive screens own the full viewport: the kids' RPG and the senior
-  // Exam Studio both hide the light marketing BottomNav and skip its padding.
-  const isImmersive = pathname === '/play' || pathname.startsWith('/senior');
-  // On desktop the SideNav is the universal navigation for every non-immersive
-  // page (the marketing Navbar is hidden at lg+). Offset the content so it sits
-  // to the RIGHT of the fixed sidebar. Immersive screens (kids' RPG + the dark
-  // Academy) stay full-screen with their own navigation/theme.
+  const isPlay = pathname === '/play';
+  const isSenior = pathname.startsWith('/senior');
+  const isImmersive = isPlay || isSenior;
+  // The Academy's focus flow (a live question / success) is full-screen with no
+  // nav; its hub pages get the dark SeniorNav, which becomes a left sidebar on
+  // desktop. The light global SideNav serves everything outside the Academy
+  // (home, marketing, AND the kids' RPG at /play).
+  const isSeniorFocus = pathname.startsWith('/senior/activity') || pathname.startsWith('/senior/success');
+  const showSideNav = !isSenior;
+
+  // Desktop content offset so it sits RIGHT of whichever fixed sidebar applies.
+  let wrapperCls: string;
+  if (isSenior) {
+    // Dark full-bleed background so the area beside the centred column (and the
+    // SeniorNav sidebar gutter) stays dark instead of flashing white on desktop.
+    wrapperCls = `bg-slate-900 min-h-screen${isSeniorFocus ? '' : ' lg:pl-60'}`;
+  } else if (isPlay) {
+    wrapperCls = 'lg:pl-60';                             // global SideNav, no bottom bar
+  } else {
+    wrapperCls = 'pb-16 lg:pb-0 lg:pl-60';              // global SideNav + mobile BottomNav clearance
+  }
 
   return (
     <>
       <AndroidBackHandler />
-      {!isImmersive && <SideNav />}
+      {showSideNav && <SideNav />}
       {/* Pad the page so its bottom content clears the fixed BottomNav (mobile
-          only) and clears the SideNav (desktop only). */}
-      <div className={isImmersive ? undefined : 'pb-16 lg:pb-0 lg:pl-60'}>
+          only) and clears the sidebar (desktop only). */}
+      <div className={wrapperCls || undefined}>
         <Suspense fallback={<LoadingScreen dark={pathname.startsWith('/senior')} />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
