@@ -15,6 +15,7 @@ export const zu: Translations = {
   'home.tagline': 'Ubungcweti bezibalo, iminyaka emi-3 kuya kwemi-17 — dlala, funda futhi ube ngumchwepheshe.',
   'home.badge.play': '🎮 Dlala 3–12',
   'home.badge.master': '🎓 Funda 13–17',
+  'home.badge.free': '✨ Mahhala phakade',
 
   // Home — section panels
   'home.preschool.title': '🌱 Abafundi Abancane',

@@ -109,16 +109,17 @@ export default function HomePage() {
       >
         <div className="flex items-start justify-between gap-2">
           <h1 className="font-[Nunito] text-3xl font-black text-white leading-tight tracking-tight">
-            Math Adventure
+            Math Adventure RPG
           </h1>
           <LanguageToggle dark />
         </div>
         <p className="font-inter text-sm font-semibold mt-1" style={{ color: '#C7D2FE' }}>
           {t('home.tagline')}
         </p>
-        <div className="flex gap-2 mt-3 text-[11px] font-bold">
+        <div className="flex flex-wrap gap-2 mt-3 text-[11px] font-bold">
           <span className="px-2.5 py-1 rounded-full" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}>{t('home.badge.play')}</span>
           <span className="px-2.5 py-1 rounded-full" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff' }}>{t('home.badge.master')}</span>
+          <span className="px-2.5 py-1 rounded-full" style={{ background: 'rgba(255,255,255,0.22)', color: '#fff' }}>{t('home.badge.free')}</span>
         </div>
       </div>
 

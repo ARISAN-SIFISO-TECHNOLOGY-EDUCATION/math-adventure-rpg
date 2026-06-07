@@ -13,6 +13,7 @@ export const en = {
   'home.tagline': 'Maths mastery, ages 3 to 17 — play, learn & master.',
   'home.badge.play': '🎮 Play 3–12',
   'home.badge.master': '🎓 Master 13–17',
+  'home.badge.free': '✨ Free forever',
 
   // Home — section panels
   'home.preschool.title': '🌱 Little Learners',
