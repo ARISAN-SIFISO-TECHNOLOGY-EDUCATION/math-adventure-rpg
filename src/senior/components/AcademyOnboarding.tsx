@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useT, type TranslationKey } from '../../i18n';
 
 // A short, one-time intro to how The Academy works — mastery gating, the exam
 // surfaces, and the support tools. Shown on the first topic-list visit so teens
@@ -7,29 +8,18 @@ import { motion, AnimatePresence } from 'motion/react';
 
 interface Card {
   emoji: string;
-  title: string;
-  body: string;
+  titleKey: TranslationKey;
+  bodyKey: TranslationKey;
 }
 
 const CARDS: Card[] = [
-  {
-    emoji: '🎯',
-    title: 'Master each level',
-    body: 'Score 80% or more to pass a level. Levels and topics unlock in order, so each builds on the last — no skipping the foundations.',
-  },
-  {
-    emoji: '📝',
-    title: 'Tests & mock exams',
-    body: 'Pass a Topic Test to open the next topic. When you’re ready, sit the 40-question Mock Exam — IGCSE-style, with marks and exam tips.',
-  },
-  {
-    emoji: '🧰',
-    title: 'Tools that help you',
-    body: 'Every question shows working, hints, and common mistakes. The Formula Vault and your Mistake Book are always a tap away in the bottom bar.',
-  },
+  { emoji: '🎯', titleKey: 'sr.onboard.t1', bodyKey: 'sr.onboard.b1' },
+  { emoji: '📝', titleKey: 'sr.onboard.t2', bodyKey: 'sr.onboard.b2' },
+  { emoji: '🧰', titleKey: 'sr.onboard.t3', bodyKey: 'sr.onboard.b3' },
 ];
 
 export default function AcademyOnboarding({ onDone }: { onDone: () => void }) {
+  const t = useT();
   const [index, setIndex] = useState(0);
   const card = CARDS[index];
   const isLast = index === CARDS.length - 1;
@@ -44,7 +34,7 @@ export default function AcademyOnboarding({ onDone }: { onDone: () => void }) {
       className="fixed inset-0 z-50 bg-slate-900/95 flex items-center justify-center p-6"
       role="dialog"
       aria-modal="true"
-      aria-label="How The Academy works"
+      aria-label={t('sr.onboard.title')}
     >
       <div className="w-full max-w-sm">
         <AnimatePresence mode="wait">
@@ -57,8 +47,8 @@ export default function AcademyOnboarding({ onDone }: { onDone: () => void }) {
             className="bg-slate-800 rounded-3xl p-8 text-center"
           >
             <div className="text-6xl mb-4" aria-hidden="true">{card.emoji}</div>
-            <h2 className="text-white font-outfit font-extrabold text-2xl mb-3">{card.title}</h2>
-            <p className="text-slate-300 font-inter leading-relaxed">{card.body}</p>
+            <h2 className="text-white font-outfit font-extrabold text-2xl mb-3">{t(card.titleKey)}</h2>
+            <p className="text-slate-300 font-inter leading-relaxed">{t(card.bodyKey)}</p>
           </motion.div>
         </AnimatePresence>
 
@@ -77,14 +67,14 @@ export default function AcademyOnboarding({ onDone }: { onDone: () => void }) {
             onClick={onDone}
             className="text-slate-400 font-inter text-sm px-3 py-2"
           >
-            Skip
+            {t('sr.onboard.skip')}
           </button>
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={next}
             className="px-8 py-3 bg-teal text-slate-900 font-outfit font-bold rounded-2xl"
           >
-            {isLast ? 'Start learning →' : 'Next'}
+            {isLast ? t('sr.onboard.start') : t('sr.onboard.next')}
           </motion.button>
         </div>
       </div>

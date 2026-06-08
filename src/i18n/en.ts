@@ -127,6 +127,47 @@ export const en = {
   'sr.noMistakesSub': "When you get a question wrong, it'll appear here for review.",
   'sr.remove': 'Remove',
 
+  // Formula Vault
+  'sr.formulaVault': 'Formula Vault',
+  'sr.searchFormulas': 'Search formulas…',
+  'sr.noFormulaMatch': 'No formulas match your search.',
+  'sr.noFormulasYet': 'No formulas for this topic yet.',
+  'sr.eg': 'e.g.',
+
+  // Study Planner
+  'sr.studyPlanner': 'Study Planner',
+  'sr.plannerSub': 'Plan your week of practice',
+  'sr.recommendedNext': 'Recommended next',
+  'sr.thisWeek': 'This Week',
+  'sr.noTopicSet': 'No topic set',
+  'sr.pickTopic': '— pick —',
+  'sr.clearWeekPlan': 'Clear week plan',
+  'sr.day.Mon': 'Mon',
+  'sr.day.Tue': 'Tue',
+  'sr.day.Wed': 'Wed',
+  'sr.day.Thu': 'Thu',
+  'sr.day.Fri': 'Fri',
+  'sr.day.Sat': 'Sat',
+  'sr.day.Sun': 'Sun',
+
+  // Academy onboarding (first-run intro)
+  'sr.onboard.title': 'How The Academy works',
+  'sr.onboard.t1': 'Master each level',
+  'sr.onboard.b1': 'Score 80% or more to pass a level. Levels and topics unlock in order, so each builds on the last — no skipping the foundations.',
+  'sr.onboard.t2': 'Tests & mock exams',
+  'sr.onboard.b2': 'Pass a Topic Test to open the next topic. When you’re ready, sit the 40-question Mock Exam — IGCSE-style, with marks and exam tips.',
+  'sr.onboard.t3': 'Tools that help you',
+  'sr.onboard.b3': 'Every question shows working, hints, and common mistakes. The Formula Vault and your Mistake Book are always a tap away in the bottom bar.',
+  'sr.onboard.skip': 'Skip',
+  'sr.onboard.next': 'Next',
+  'sr.onboard.start': 'Start learning →',
+
+  // Accessibility (screen-reader labels)
+  'sr.a11y.nav': 'Academy navigation',
+  'sr.a11y.home': 'Math Adventure RPG — home',
+  'sr.a11y.dailyGoal': 'Daily goal progress',
+  'sr.a11y.back': 'Go back',
+
   // ── Kids' RPG UI chrome (ages 3–12). Generated maths, level intros, hints,
   //    tutorial prose and phase names stay English by design. ──
   'kid.next': 'Next →',

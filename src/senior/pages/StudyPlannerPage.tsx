@@ -4,8 +4,11 @@ import { motion } from 'motion/react';
 import { ArrowLeft, Calendar, ChevronRight } from 'lucide-react';
 import { CURRICULUM } from '../curriculum';
 import { isTopicTestPassed, getLevelProgress } from '../../exam-studio';
+import { useT, type TranslationKey } from '../../i18n';
 import SeniorNav from '../SeniorNav';
 
+// English keys double as the persisted plan keys — never translate these,
+// only their displayed label (sr.day.*).
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 // Open schools only (locked schools aren't playable yet).
@@ -30,6 +33,7 @@ function getNextRecommended() {
 
 export default function StudyPlannerPage() {
   const navigate = useNavigate();
+  const t = useT();
   const recommended = getNextRecommended();
 
   // Simple week plan state, persisted locally.
@@ -56,8 +60,8 @@ export default function StudyPlannerPage() {
           <ArrowLeft className="w-5 h-5 text-white" />
         </motion.button>
         <div>
-          <h1 className="text-xl font-outfit font-extrabold text-white">Study Planner</h1>
-          <p className="text-slate-400 text-sm font-inter">Plan your week of practice</p>
+          <h1 className="text-xl font-outfit font-extrabold text-white">{t('sr.studyPlanner')}</h1>
+          <p className="text-slate-400 text-sm font-inter">{t('sr.plannerSub')}</p>
         </div>
       </div>
 
@@ -68,13 +72,13 @@ export default function StudyPlannerPage() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-teal/10 border border-teal/30 rounded-2xl p-4 mb-6"
         >
-          <p className="text-teal text-xs font-inter uppercase tracking-wider">Recommended next</p>
+          <p className="text-teal text-xs font-inter uppercase tracking-wider">{t('sr.recommendedNext')}</p>
           <div className="flex items-center justify-between mt-2">
             <div className="flex items-center gap-3">
               <span className="text-2xl">{recommended.icon}</span>
               <div>
                 <p className="text-white font-outfit font-bold">{recommended.title}</p>
-                <p className="text-slate-400 text-sm font-inter">Level {recommended.level}</p>
+                <p className="text-slate-400 text-sm font-inter">{t('sr.level', { n: recommended.level })}</p>
               </div>
             </div>
             <motion.button
@@ -96,7 +100,7 @@ export default function StudyPlannerPage() {
       <div>
         <h2 className="text-slate-400 text-xs font-inter uppercase tracking-wider mb-3">
           <Calendar className="w-3.5 h-3.5 inline mr-1" />
-          This Week
+          {t('sr.thisWeek')}
         </h2>
         <div className="space-y-2.5">
           {DAYS.map(day => {
@@ -105,7 +109,7 @@ export default function StudyPlannerPage() {
 
             return (
               <div key={day} className="bg-slate-800 rounded-xl px-4 py-3 flex items-center gap-3">
-                <span className="text-slate-400 font-outfit font-semibold text-sm w-10">{day}</span>
+                <span className="text-slate-400 font-outfit font-semibold text-sm w-10">{t(`sr.day.${day}` as TranslationKey)}</span>
                 <div className="flex-1 min-w-0">
                   {selectedTopic ? (
                     <div className="flex items-center gap-2">
@@ -115,7 +119,7 @@ export default function StudyPlannerPage() {
                       </span>
                     </div>
                   ) : (
-                    <span className="text-slate-600 font-inter text-sm">No topic set</span>
+                    <span className="text-slate-600 font-inter text-sm">{t('sr.noTopicSet')}</span>
                   )}
                 </div>
                 <select
@@ -123,7 +127,7 @@ export default function StudyPlannerPage() {
                   onChange={e => savePlan({ ...plan, [day]: e.target.value })}
                   className="bg-slate-700 text-white font-inter text-xs rounded-lg px-2 py-1.5 outline-none border-none"
                 >
-                  <option value="">— pick —</option>
+                  <option value="">{t('sr.pickTopic')}</option>
                   {OPEN_TOPICS.map(t => (
                     <option key={t.id} value={t.id}>
                       {t.icon} {t.title}
@@ -141,7 +145,7 @@ export default function StudyPlannerPage() {
         onClick={() => savePlan({})}
         className="mt-6 w-full py-3 rounded-xl bg-slate-800 text-slate-400 font-inter text-sm hover:text-slate-300 transition-colors"
       >
-        Clear week plan
+        {t('sr.clearWeekPlan')}
       </button>
 
       <SeniorNav />

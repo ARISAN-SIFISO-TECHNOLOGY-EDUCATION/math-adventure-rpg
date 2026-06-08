@@ -123,6 +123,47 @@ export const zu: Translations = {
   'sr.noMistakesSub': 'Lapho uphendula umbuzo ngokungalungile, uzovela lapha ukuze ubuyekeze.',
   'sr.remove': 'Susa',
 
+  // Formula Vault (DRAFT — native review pending)
+  'sr.formulaVault': 'Inqolobane Yamafomula',
+  'sr.searchFormulas': 'Sesha amafomula…',
+  'sr.noFormulaMatch': 'Awekho amafomula ahambisana nosesho lwakho.',
+  'sr.noFormulasYet': 'Awekho amafomula alesi sihloko okwamanje.',
+  'sr.eg': 'isib.',
+
+  // Study Planner (DRAFT — native review pending)
+  'sr.studyPlanner': 'Umhleli Wokufunda',
+  'sr.plannerSub': 'Hlela isonto lakho lokuzilolonga',
+  'sr.recommendedNext': 'Okunconywayo okulandelayo',
+  'sr.thisWeek': 'Leli Sonto',
+  'sr.noTopicSet': 'Asikho isihloko esimisiwe',
+  'sr.pickTopic': '— khetha —',
+  'sr.clearWeekPlan': 'Sula uhlelo lwesonto',
+  'sr.day.Mon': 'Mso',
+  'sr.day.Tue': 'Bil',
+  'sr.day.Wed': 'Tha',
+  'sr.day.Thu': 'Sin',
+  'sr.day.Fri': 'Hla',
+  'sr.day.Sat': 'Mgq',
+  'sr.day.Sun': 'Son',
+
+  // Academy onboarding (DRAFT — native review pending)
+  'sr.onboard.title': 'Indlela i-Academy esebenza ngayo',
+  'sr.onboard.t1': 'Phumelela izinga ngalinye',
+  'sr.onboard.b1': 'Thola u-80% noma ngaphezulu ukuze uphumelele izinga. Amazinga nezihloko kuvuleka ngokulandelana, ngakho ngalinye lakhela kwelidlule — akukho ukweqa izisekelo.',
+  'sr.onboard.t2': 'Izivivinyo nezokulinga',
+  'sr.onboard.b2': 'Phumelela Isivivinyo Sesihloko ukuze uvule isihloko esilandelayo. Lapho usulungele, bhala Isivivinyo Sokulinga semibuzo engama-40 — ngesitayela se-IGCSE, nezimaki namathiphu ezivivinyo.',
+  'sr.onboard.t3': 'Amathuluzi akusizayo',
+  'sr.onboard.b3': 'Umbuzo ngamunye ukhombisa indlela yokusebenza, amathiphu, namaphutha avamile. I-Inqolobane Yamafomula nencwadi yakho yamaphutha kuhlala kusondele ngokuthepha ku-bha engezansi.',
+  'sr.onboard.skip': 'Yeqa',
+  'sr.onboard.next': 'Okulandelayo',
+  'sr.onboard.start': 'Qala ukufunda →',
+
+  // Accessibility (screen-reader labels — DRAFT)
+  'sr.a11y.nav': 'Ukuzulazula kwe-Academy',
+  'sr.a11y.home': 'Math Adventure RPG — ikhaya',
+  'sr.a11y.dailyGoal': 'Inqubekela phambili yomgomo wansuku zonke',
+  'sr.a11y.back': 'Buyela emuva',
+
   // ── Kids' RPG UI chrome (DRAFT — native review pending) ──
   'kid.next': 'Okulandelayo →',
   'kid.startPlaying': '🚀 Qala Ukudlala!',

@@ -97,7 +97,7 @@ export default function DashboardPage() {
             {goalMet ? t('sr.goalDoneShort') : t('sr.todayGoal', { done: daily.passed, goal: daily.goal })}
           </span>
         </div>
-        <div className="h-2 bg-slate-700 rounded-full overflow-hidden" role="progressbar" aria-valuenow={daily.passed} aria-valuemin={0} aria-valuemax={daily.goal} aria-label="Daily goal progress">
+        <div className="h-2 bg-slate-700 rounded-full overflow-hidden" role="progressbar" aria-valuenow={daily.passed} aria-valuemin={0} aria-valuemax={daily.goal} aria-label={t('sr.a11y.dailyGoal')}>
           <motion.div
             className={`h-full rounded-full ${goalMet ? 'bg-sprout-green' : 'bg-teal'}`}
             initial={{ width: 0 }}

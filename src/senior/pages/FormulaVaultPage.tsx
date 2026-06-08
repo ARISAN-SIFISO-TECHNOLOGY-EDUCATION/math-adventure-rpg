@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft, Search } from 'lucide-react';
 import { FORMULAS } from '../formulas';
 import { CURRICULUM } from '../curriculum';
+import { useT } from '../../i18n';
 import SeniorNav from '../SeniorNav';
 
 // Build flat list of all topic IDs and their display names
@@ -14,6 +15,7 @@ const ALL_TOPICS = CURRICULUM.flatMap(g =>
 export default function FormulaVaultPage() {
   const { topicId } = useParams<{ topicId: string }>();
   const navigate = useNavigate();
+  const t = useT();
   const [search, setSearch] = useState('');
   const [activeTopicId, setActiveTopicId] = useState(topicId ?? ALL_TOPICS[0]?.id ?? '');
 
@@ -38,7 +40,7 @@ export default function FormulaVaultPage() {
           >
             <ArrowLeft className="w-5 h-5 text-white" />
           </motion.button>
-          <h1 className="text-xl font-outfit font-extrabold text-white">Formula Vault</h1>
+          <h1 className="text-xl font-outfit font-extrabold text-white">{t('sr.formulaVault')}</h1>
         </div>
 
         {/* Search */}
@@ -46,7 +48,7 @@ export default function FormulaVaultPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
-            placeholder="Search formulas…"
+            placeholder={t('sr.searchFormulas')}
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="w-full bg-slate-800 text-white font-inter text-sm pl-9 pr-4 py-3 rounded-xl outline-none focus:ring-2 focus:ring-teal/50 placeholder-slate-500"
@@ -75,7 +77,7 @@ export default function FormulaVaultPage() {
       <div className="flex-1 overflow-y-auto px-4 pb-24 space-y-3">
         {filtered.length === 0 ? (
           <div className="text-center text-slate-400 font-inter text-sm py-12">
-            {search ? 'No formulas match your search.' : 'No formulas for this topic yet.'}
+            {search ? t('sr.noFormulaMatch') : t('sr.noFormulasYet')}
           </div>
         ) : (
           filtered.map((entry, i) => (
@@ -95,7 +97,7 @@ export default function FormulaVaultPage() {
               <p className="text-slate-400 text-sm font-inter">{entry.use}</p>
               {entry.example && (
                 <p className="text-slate-400 text-xs font-inter border-t border-slate-700 pt-2">
-                  e.g. {entry.example}
+                  {t('sr.eg')} {entry.example}
                 </p>
               )}
             </motion.div>

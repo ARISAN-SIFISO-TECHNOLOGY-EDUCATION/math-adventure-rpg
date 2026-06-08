@@ -328,7 +328,7 @@ function ActivityPageInner() {
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate(-1)}
           className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center"
-          aria-label="Go back"
+          aria-label={t('sr.a11y.back')}
         >
           <ArrowLeft className="w-5 h-5 text-white" />
         </motion.button>

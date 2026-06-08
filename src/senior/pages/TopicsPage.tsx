@@ -157,7 +157,7 @@ function TopicRow({
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate(`/senior/formulas/${topic.id}`)}
-              aria-label="Formula Vault"
+              aria-label={t('sr.formulaVault')}
               className="w-10 h-10 rounded-xl bg-slate-700 flex items-center justify-center flex-shrink-0"
             >
               <BookOpen className="w-4 h-4 text-slate-300" />

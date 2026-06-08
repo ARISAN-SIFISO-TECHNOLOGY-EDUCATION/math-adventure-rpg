@@ -27,13 +27,13 @@ export default function SeniorNav() {
                  inset-x-0 bottom-0 border-t
                  lg:inset-y-0 lg:left-0 lg:right-auto lg:w-60 lg:border-t-0 lg:border-r lg:overflow-y-auto"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
-      aria-label="Academy navigation"
+      aria-label={t('sr.a11y.nav')}
     >
       {/* Brand header — desktop sidebar only */}
       <button
         onClick={() => navigate('/')}
         className="hidden lg:flex items-center gap-2 px-5 pt-6 pb-4 text-left w-full"
-        aria-label="Math Adventure RPG — home"
+        aria-label={t('sr.a11y.home')}
       >
         <span className="text-xl">🎓</span>
         <span className="font-outfit font-extrabold text-white leading-tight">{t('sr.academy')}</span>
