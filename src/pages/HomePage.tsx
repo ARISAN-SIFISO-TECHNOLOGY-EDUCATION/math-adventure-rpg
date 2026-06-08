@@ -5,7 +5,7 @@ import LanguageToggle from '../components/LanguageToggle';
 type AgeCard = {
   age: number;
   labelKey?: TranslationKey; // translated descriptive label (kids' age bands)
-  label?: string;            // literal proper-noun label (Academy schools, Masters)
+  label?: string;            // literal proper-noun label (Academy school names)
   emoji: string;
   color: string;
   bg: string;
@@ -53,7 +53,7 @@ const SENIOR_CARDS: AgeCard[] = [
 
 // Capstone critical-thinking quiz — not tied to one age.
 const MASTERS_CARD: AgeCard = {
-  age: 0, label: 'Masters', emoji: '🧠', color: '#F0ABFC', bg: '#2a1335', border: '#86198f', phase: 9,
+  age: 0, labelKey: 'masters.label', emoji: '🧠', color: '#F0ABFC', bg: '#2a1335', border: '#86198f', phase: 9,
   subKey: 'masters.sub', to: '/senior/activity?topicId=masters&mode=masters&age=0',
 };
 
@@ -190,6 +190,18 @@ export default function HomePage() {
         <Link to="/parents"  className="text-xs text-gray-600 font-semibold no-underline hover:text-gray-700">{t('footer.parentGuide')}</Link>
         <Link to="/privacy"  className="text-xs text-gray-600 font-semibold no-underline hover:text-gray-700">{t('footer.privacy')}</Link>
         <Link to="/contact"  className="text-xs text-gray-600 font-semibold no-underline hover:text-gray-700">{t('footer.contact')}</Link>
+      </div>
+
+      {/* Ecosystem attribution — links out to the umbrella platform. */}
+      <div className="px-4 pb-6 text-center">
+        <a
+          href="https://peoples-home-web.pages.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[11px] text-gray-400 no-underline hover:text-indigo-500"
+        >
+          ⌂ {t('footer.partOfHome')}
+        </a>
       </div>
 
     </div>

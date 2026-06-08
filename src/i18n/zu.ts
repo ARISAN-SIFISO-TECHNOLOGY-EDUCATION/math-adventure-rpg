@@ -31,6 +31,7 @@ export const zu: Translations = {
   'label.lowerPrimary': 'Amabanga Aphansi',
   'label.higherPrimary': 'Amabanga Aphezulu',
   'label.advanced': 'Othuthukile',
+  'masters.label': 'Ubungcweti', // DRAFT — "mastery"; needs native review
   'masters.sub': 'Ukucabanga okujulile',
 
   // Navigation (BottomNav + SideNav)
@@ -46,6 +47,7 @@ export const zu: Translations = {
   'footer.parentGuide': 'Abazali',
   'footer.privacy': 'Ubumfihlo',
   'footer.contact': 'Xhumana',
+  'footer.partOfHome': "Ingxenye ye-The People's Home", // DRAFT — needs native review
 
   // Language switcher
   'lang.label': 'Ulimi',

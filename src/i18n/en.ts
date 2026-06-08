@@ -29,6 +29,7 @@ export const en = {
   'label.lowerPrimary': 'Lower Primary',
   'label.higherPrimary': 'Higher Primary',
   'label.advanced': 'Advanced',
+  'masters.label': 'Masters',
   'masters.sub': 'Critical thinking',
 
   // Navigation (BottomNav + SideNav)
@@ -44,6 +45,7 @@ export const en = {
   'footer.parentGuide': 'Parent Guide',
   'footer.privacy': 'Privacy',
   'footer.contact': 'Contact',
+  'footer.partOfHome': "Part of The People's Home",
 
   // Language switcher
   'lang.label': 'Language',

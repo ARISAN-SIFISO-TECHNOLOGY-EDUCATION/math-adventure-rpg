@@ -27,6 +27,17 @@ export default function Footer({ edition, borderColor = '#E5E7EB' }: FooterProps
           © 2026 Math Adventure RPG{edition ? ` – ${edition}` : ''}. All rights reserved.<br />
           Built with ❤️ for kids who love math (and those who are learning to).
         </p>
+        {/* Ecosystem attribution — links out to the umbrella platform. */}
+        <p className="text-xs text-gray-400 mt-4">
+          <a
+            href="https://peoples-home-web.pages.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="no-underline hover:text-indigo-600"
+          >
+            ⌂ Part of The People's Home
+          </a>
+        </p>
       </div>
     </footer>
   );

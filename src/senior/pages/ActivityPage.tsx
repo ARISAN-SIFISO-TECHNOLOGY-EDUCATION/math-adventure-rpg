@@ -336,7 +336,7 @@ function ActivityPageInner() {
           <p className="text-slate-400 text-xs font-inter uppercase tracking-wider">
             {mode === 'masters' ? t('sr.mastersQuiz') : isTopicTest ? t('sr.topicTest') : mode === 'mock' ? t('sr.mockExam') : t('sr.level', { n: level })}
           </p>
-          <p className="text-white font-outfit font-bold text-sm truncate">{mode === 'masters' ? 'Critical Thinking' : topicTitle(topicId)}</p>
+          <p className="text-white font-outfit font-bold text-sm truncate">{mode === 'masters' ? t('masters.sub') : topicTitle(topicId)}</p>
         </div>
         <div className="text-right">
           <p className="text-sprout-green font-outfit font-bold text-lg">
