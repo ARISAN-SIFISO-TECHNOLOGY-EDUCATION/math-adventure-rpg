@@ -4,7 +4,12 @@ import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
-  base: './',
+  // Capacitor (Android) needs relative asset paths → default './'. The web/PWA
+  // deploy (Cloudflare Pages) needs an absolute base so multi-segment routes
+  // like /senior/topics/15 resolve their assets correctly — set WEB_BUILD=1
+  // for that build. The shipped Android build never sets WEB_BUILD, so it is
+  // completely unaffected.
+  base: process.env.WEB_BUILD ? '/' : './',
   plugins: [
     react(),
     tailwindcss(),
