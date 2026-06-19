@@ -1,14 +1,23 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 
-// Procedural Web Audio sound system for the kids' RPG: a looping background
-// melody plus one-shot SFX (click/correct/wrong/victory), all synthesised on
-// the fly so nothing has to be bundled or fetched. Returns the play controls
-// and a mute toggle.
+// Procedural Web Audio sound system for the kids' RPG: an OPTIONAL looping
+// background melody plus one-shot SFX (click/correct/wrong/victory), all
+// synthesised on the fly so nothing has to be bundled or fetched.
+//
+// Audio hierarchy (Designed-for-Families review): NARRATION > feedback SFX >
+// background music. Music therefore:
+//   • is OFF by default (`musicOn` starts false) — opt-in via its own toggle;
+//   • routes through a dedicated gain node so it can DUCK under narration
+//     (`duckForNarration`) instead of competing with the spoken question;
+// and the wrong-answer sound is a gentle "boop", never a harsh buzzer.
 export function useSoundSystem() {
-  const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = useState(false);      // master: narration + SFX
+  const [musicOn, setMusicOn] = useState(false);  // background music: opt-in
   const ctxRef = useRef<AudioContext | null>(null);
   const masterGainRef = useRef<GainNode | null>(null);
+  const bgmGainRef = useRef<GainNode | null>(null);
   const bgmTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const duckTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bgmPlayingRef = useRef(false);
 
   const getCtx = useCallback(() => {
@@ -17,20 +26,24 @@ export function useSoundSystem() {
       masterGainRef.current = ctxRef.current.createGain();
       masterGainRef.current.gain.value = 1;
       masterGainRef.current.connect(ctxRef.current.destination);
+      // Music has its own sub-mix so it can be ducked without touching SFX.
+      bgmGainRef.current = ctxRef.current.createGain();
+      bgmGainRef.current.gain.value = 1;
+      bgmGainRef.current.connect(masterGainRef.current);
     }
     if (ctxRef.current.state === 'suspended') ctxRef.current.resume();
-    return { ctx: ctxRef.current, master: masterGainRef.current! };
+    return { ctx: ctxRef.current, master: masterGainRef.current!, bgm: bgmGainRef.current! };
   }, []);
 
   const playNote = useCallback((
-    ctx: AudioContext, master: GainNode,
+    ctx: AudioContext, dest: AudioNode,
     freq: number, startTime: number, duration: number,
     type: OscillatorType = 'sine', gainVal = 0.3
   ) => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain);
-    gain.connect(master);
+    gain.connect(dest);
     osc.type = type;
     osc.frequency.setValueAtTime(freq, startTime);
     gain.gain.setValueAtTime(gainVal, startTime);
@@ -47,49 +60,86 @@ export function useSoundSystem() {
     [523.25, 0.50], [440.00, 0.25], [392.00, 0.25], [523.25, 1.00],
   ];
 
-  const scheduleBGMLoop = useCallback((ctx: AudioContext, master: GainNode, startTime: number) => {
+  const scheduleBGMLoop = useCallback((ctx: AudioContext, bgm: GainNode, startTime: number) => {
     if (!bgmPlayingRef.current) return;
     let t = startTime;
     const totalDur = BGM_NOTES.reduce((sum, [, dur]) => sum + dur, 0);
     BGM_NOTES.forEach(([freq, dur]) => {
-      playNote(ctx, master, freq, t, dur - 0.04, 'triangle', 0.07);
+      playNote(ctx, bgm, freq, t, dur - 0.04, 'triangle', 0.07);
       t += dur;
     });
     bgmTimerRef.current = setTimeout(() => {
-      if (bgmPlayingRef.current) scheduleBGMLoop(ctx, master, ctx.currentTime + 0.05);
+      if (bgmPlayingRef.current) scheduleBGMLoop(ctx, bgm, ctx.currentTime + 0.05);
     }, (totalDur - 0.3) * 1000);
   }, [playNote]);
 
   const startBGM = useCallback(() => {
-    if (bgmPlayingRef.current) return;
+    // Music is opt-in: never auto-plays unless the parent/child enabled it.
+    if (!musicOn || bgmPlayingRef.current) return;
     bgmPlayingRef.current = true;
-    const { ctx, master } = getCtx();
-    scheduleBGMLoop(ctx, master, ctx.currentTime + 0.1);
-  }, [getCtx, scheduleBGMLoop]);
+    const { ctx, bgm } = getCtx();
+    scheduleBGMLoop(ctx, bgm, ctx.currentTime + 0.1);
+  }, [musicOn, getCtx, scheduleBGMLoop]);
 
   const stopBGM = useCallback(() => {
     bgmPlayingRef.current = false;
     if (bgmTimerRef.current) clearTimeout(bgmTimerRef.current);
   }, []);
 
+  const toggleMusic = useCallback(() => {
+    setMusicOn(prev => {
+      const next = !prev;
+      if (next) {
+        bgmPlayingRef.current = true;
+        const { ctx, bgm } = getCtx();
+        scheduleBGMLoop(ctx, bgm, ctx.currentTime + 0.1);
+      } else {
+        bgmPlayingRef.current = false;
+        if (bgmTimerRef.current) clearTimeout(bgmTimerRef.current);
+      }
+      return next;
+    });
+  }, [getCtx, scheduleBGMLoop]);
+
+  // Briefly lower the music so the spoken question/feedback is never buried.
+  const duckForNarration = useCallback((holdMs = 2200) => {
+    if (!bgmPlayingRef.current || !bgmGainRef.current || !ctxRef.current) return;
+    const now = ctxRef.current.currentTime;
+    const g = bgmGainRef.current.gain;
+    g.cancelScheduledValues(now);
+    g.setValueAtTime(g.value, now);
+    g.linearRampToValueAtTime(0.18, now + 0.12);           // duck down
+    if (duckTimerRef.current) clearTimeout(duckTimerRef.current);
+    duckTimerRef.current = setTimeout(() => {
+      if (!bgmGainRef.current || !ctxRef.current) return;
+      const t = ctxRef.current.currentTime;
+      bgmGainRef.current.gain.cancelScheduledValues(t);
+      bgmGainRef.current.gain.setValueAtTime(bgmGainRef.current.gain.value, t);
+      bgmGainRef.current.gain.linearRampToValueAtTime(1, t + 0.4); // ease back up
+    }, holdMs);
+  }, []);
+
   const playClick = useCallback(() => {
     const { ctx, master } = getCtx();
-    playNote(ctx, master, 1046.5, ctx.currentTime, 0.08, 'sine', 0.35);
+    // Softer + shorter than before so taps don't beep over the narration.
+    playNote(ctx, master, 1046.5, ctx.currentTime, 0.06, 'sine', 0.15);
   }, [getCtx, playNote]);
 
   const playCorrect = useCallback(() => {
     const { ctx, master } = getCtx();
     const t = ctx.currentTime;
     [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) =>
-      playNote(ctx, master, freq, t + i * 0.12, 0.25, 'sine', 0.35)
+      playNote(ctx, master, freq, t + i * 0.12, 0.25, 'sine', 0.3)
     );
   }, [getCtx, playNote]);
 
+  // Gentle, encouraging "boop" — NOT a harsh buzzer. A wrong answer should feel
+  // like "try again", never "you failed" (especially for ages 3–5).
   const playWrong = useCallback(() => {
     const { ctx, master } = getCtx();
     const t = ctx.currentTime;
-    playNote(ctx, master, 349.23, t, 0.15, 'sawtooth', 0.18);
-    playNote(ctx, master, 261.63, t + 0.18, 0.35, 'sawtooth', 0.18);
+    playNote(ctx, master, 392.00, t, 0.14, 'sine', 0.22);
+    playNote(ctx, master, 329.63, t + 0.14, 0.20, 'sine', 0.20);
   }, [getCtx, playNote]);
 
   const playVictory = useCallback(() => {
@@ -129,9 +179,14 @@ export function useSoundSystem() {
     return () => {
       bgmPlayingRef.current = false;
       if (bgmTimerRef.current) clearTimeout(bgmTimerRef.current);
+      if (duckTimerRef.current) clearTimeout(duckTimerRef.current);
       ctxRef.current?.close();
     };
   }, []);
 
-  return { muted, toggleMute, startBGM, stopBGM, playClick, playCorrect, playWrong, playVictory };
+  return {
+    muted, toggleMute, musicOn, toggleMusic,
+    startBGM, stopBGM, duckForNarration,
+    playClick, playCorrect, playWrong, playVictory,
+  };
 }

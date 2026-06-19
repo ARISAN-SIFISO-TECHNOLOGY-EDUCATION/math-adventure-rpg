@@ -6,7 +6,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Trophy, ChevronRight, Coins, Sparkles, Volume2, VolumeX, Lock, Home } from 'lucide-react';
+import { Trophy, ChevronRight, Coins, Sparkles, Volume2, VolumeX, Lock, Home, Music } from 'lucide-react';
 import { generateProblem, type Problem } from '../mathEngine';
 import confetti from 'canvas-confetti';
 import { Companion, type CompanionEmotion } from './Companion';
@@ -157,11 +157,18 @@ function PhaseSelect({ currentPhase, onSelect, onClose }: {
 }
 
 // --- Pre-School Tutorial ---
-function TutorialScreen({ onDone }: { onDone: () => void }) {
+function TutorialScreen({ onDone, speak }: { onDone: () => void; speak: (text: string) => void }) {
   const [slide, setSlide] = useState(0);
   const current = TUTORIAL_SLIDES[slide];
   const isLast = slide === TUTORIAL_SLIDES.length - 1;
   const t = useT();
+
+  // Narrate each slide — the on-screen text is tiny for non-readers, so the
+  // voice carries the instruction.
+  useEffect(() => {
+    speak(current.say);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slide]);
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -215,8 +222,9 @@ function TutorialScreen({ onDone }: { onDone: () => void }) {
 }
 
 // --- Level Intro Card (Phase 1, 2, and 3 world entries) ---
-function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: number; levelInPhase: number; totalLevels: number; onStart: () => void }) {
+function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart, speak }: { phase: number; levelInPhase: number; totalLevels: number; onStart: () => void; speak: (text: string) => void }) {
   const t = useT();
+  const isPhase1 = phase === 1;
   const isPhase2 = phase === 2;
   const isPhase3 = phase === 3;
   const isPhase4 = phase === 4;
@@ -237,6 +245,12 @@ function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: 
         ? P2_WORLDS.find(w => w.levels.includes(levelInPhase))
         : null;
   const isWorldEntry = (isPhase2 || isPhase3 || isPhase4) && world?.levels[0] === levelInPhase;
+
+  // Narrate the intro for the preschool phase (ages 3–5, non-readers).
+  useEffect(() => {
+    if (isPhase1) speak((LEVEL_INTROS[levelInPhase] ?? LEVEL_INTROS[1]).say);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [levelInPhase]);
 
   const badgeBg  = world ? world.badge : 'bg-[#FEF9C3]';
   const tipBg    = world ? world.bg    : 'bg-[#DCFCE7]';
@@ -268,12 +282,15 @@ function LevelIntroCard({ phase, levelInPhase, totalLevels, onStart }: { phase: 
         </div>
         <h2 className="text-2xl font-black mb-2">{intro.title}</h2>
         <p className="text-gray-500 font-bold mb-3">{intro.body}</p>
-        <div
-          className={`${tipBg} border-2 rounded-2xl px-4 py-3 mb-6 w-full`}
-          style={world ? { borderColor: world.color } : undefined}
-        >
-          <p className={`text-sm font-black ${tipColor}`}>💡 Tip: {intro.tip}</p>
-        </div>
+        {/* Phase 1 (ages 3–5): tip is spoken, not shown, to keep text light. */}
+        {!isPhase1 && (
+          <div
+            className={`${tipBg} border-2 rounded-2xl px-4 py-3 mb-6 w-full`}
+            style={world ? { borderColor: world.color } : undefined}
+          >
+            <p className={`text-sm font-black ${tipColor}`}>💡 Tip: {intro.tip}</p>
+          </div>
+        )}
         <button
           onClick={onStart}
           className="w-full text-white py-4 rounded-2xl text-xl font-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 transition-all"
@@ -476,8 +493,8 @@ export default function Game() {
   const [completedLevel, setCompletedLevel] = useState(1);
 
   const { lang, t } = useI18n();
-  const { muted, toggleMute, startBGM, stopBGM, playClick, playCorrect, playWrong, playVictory } = useSoundSystem();
-  const { speakQuestion, speakCorrect, speakWrong, speakVictory, speakWelcome } = useNarration(muted, lang);
+  const { muted, toggleMute, musicOn, toggleMusic, startBGM, stopBGM, duckForNarration, playClick, playCorrect, playWrong, playVictory } = useSoundSystem();
+  const { speak, speakQuestion, speakCorrect, speakWrong, speakVictory, speakWelcome } = useNarration(muted, lang);
 
   const currentPhaseConfig = PHASES[phase - 1];
 
@@ -531,6 +548,7 @@ export default function Game() {
     if (gameState === 'PLAYING' && problem) {
       setCompanionEmotion('thinking');
       setCompanionMessage(null);
+      duckForNarration();
       speakQuestion(problem.question, problem.meta?.isSubitizing);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -589,6 +607,7 @@ export default function Game() {
     setCompanionEmotion('excited');
     setCompanionMessage(null);
     startBGM();
+    duckForNarration();
     speakWelcome();
 
     // Show tutorial first time in Phase 1; show world intros at sub-world entries
@@ -631,6 +650,7 @@ export default function Game() {
 
     if (choice === problem.correctAnswer) {
       playCorrect();
+      duckForNarration();
       speakCorrect();
       hapticSuccess();
       recordAnswer(true);
@@ -740,6 +760,7 @@ export default function Game() {
       }
     } else {
       playWrong();
+      duckForNarration();
       speakWrong();
       hapticError();
       recordAnswer(false);
@@ -900,10 +921,10 @@ export default function Game() {
         />
       )}
       {gameState === 'TUTORIAL' && (
-        <TutorialScreen onDone={handleTutorialDone} />
+        <TutorialScreen onDone={handleTutorialDone} speak={speak} />
       )}
       {gameState === 'LEVEL_INTRO' && (
-        <LevelIntroCard phase={phase} levelInPhase={levelInPhase} totalLevels={currentPhaseConfig.levels.length} onStart={handleLevelIntroStart} />
+        <LevelIntroCard phase={phase} levelInPhase={levelInPhase} totalLevels={currentPhaseConfig.levels.length} onStart={handleLevelIntroStart} speak={speak} />
       )}
 
       {/* HUD */}
@@ -954,6 +975,17 @@ export default function Game() {
             aria-pressed={muted}
           >
             {muted ? <VolumeX className="text-gray-600 w-4 h-4 md:w-6 md:h-6" /> : <Volume2 className="text-[#3B82F6] w-4 h-4 md:w-6 md:h-6" />}
+          </button>
+          {/* Background music is opt-in (off by default) and separate from the
+              voice/effects mute, so narration is never buried under music. */}
+          <button
+            onClick={toggleMusic}
+            className={`p-2 md:p-3 rounded-2xl border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1 transition-all ${musicOn ? 'bg-[#E0F2FE]' : 'bg-gray-100'}`}
+            title={musicOn ? 'Turn music off' : 'Turn music on'}
+            aria-label={musicOn ? 'Turn background music off' : 'Turn background music on'}
+            aria-pressed={musicOn}
+          >
+            <Music className={`w-4 h-4 md:w-6 md:h-6 ${musicOn ? 'text-[#3B82F6]' : 'text-gray-400'}`} />
           </button>
           {gameState !== 'PLAYING' && (
             <Link

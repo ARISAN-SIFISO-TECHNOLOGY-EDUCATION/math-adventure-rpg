@@ -4,55 +4,66 @@
 // to keep the component focused on behaviour.
 
 // --- Pre-School Tutorial Data ---
-export const TUTORIAL_SLIDES = [
+// `body` is the tiny on-screen line for non-readers (ages 3–5); `say` is the
+// warmer line the narrator speaks. Keep `body` to a few words — the voice (and
+// the big emoji) carry the meaning. (Designed-for-Families: text light, voice led.)
+export const TUTORIAL_SLIDES: { emoji: string; title: string; body: string; say: string; bg: string }[] = [
   {
     emoji: '👾',
-    title: 'Meet Your Monster!',
-    body: 'This hungry monster needs YOUR help to grow strong!',
+    title: 'Your Monster',
+    body: 'Help it grow! 🌱',
+    say: 'Hi! This hungry monster needs your help to grow big and strong.',
     bg: 'bg-[#FEF9C3]',
   },
   {
     emoji: '🎮',
     title: 'How to Play',
-    body: 'A question will appear. Look at the answers and CHOOSE the right one!',
+    body: 'Tap the right answer.',
+    say: 'A question pops up. Look at it, then tap the right answer.',
     bg: 'bg-[#DCFCE7]',
   },
   {
     emoji: '⭐',
-    title: 'Count Carefully',
-    body: 'Count each object one by one. Take your time — there is no rush!',
+    title: 'Take Your Time',
+    body: 'Count one by one.',
+    say: 'Count each thing, one by one. Take your time. There is no rush.',
     bg: 'bg-[#DBEAFE]',
   },
   {
     emoji: '🏆',
-    title: 'Earn Coins!',
-    body: 'Every correct answer earns a coin. Get 5 right to level up!',
+    title: 'Earn Coins',
+    body: 'Get 5 to level up!',
+    say: 'Every right answer gives you a coin. Get five to level up.',
     bg: 'bg-[#F3E8FF]',
   },
   {
     emoji: '🚀',
     title: "Let's Go!",
-    body: "You're ready! Feed your monster and become a Math Hero!",
+    body: "You're ready! 🎉",
+    say: 'You are ready. Feed your monster and be a Math Hero!',
     bg: 'bg-[#FFE4E6]',
   },
 ];
 
-export const LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; tip: string }> = {
-  1:  { emoji: '🔢', title: 'Counting 1 to 5',    body: 'Count the objects and choose the right number.', tip: 'Point at each one as you count!' },
-  2:  { emoji: '🌟', title: 'Counting up to 10',  body: 'Now we count even more objects!', tip: 'Take it slow — count every single one.' },
-  3:  { emoji: '⚖️', title: 'More or Less',        body: 'Look at two numbers and pick the BIGGER one.', tip: 'Think: which number would be more sweets?' },
-  4:  { emoji: '➕', title: 'Adding Together',     body: 'Put two groups together and count them all.', tip: 'Count the first group, then keep counting!' },
-  5:  { emoji: '➖', title: 'Taking Away',          body: 'Start with a number and take some away.', tip: 'Count what is left after taking away.' },
-  6:  { emoji: '⚡', title: 'Quick Count!',         body: 'Objects flash on screen — see how many without counting one by one!', tip: 'Trust your eyes — how many at once?' },
-  7:  { emoji: '🧩', title: 'Missing Part',         body: 'One part of the sum is missing. Blocks will help you find it!', tip: 'Count all blocks, then count the known ones.' },
-  8:  { emoji: '🔟', title: 'Counting to 20!',     body: 'Now we count all the way to 20 — you can do it!', tip: 'Try counting in groups of 5 to keep track.' },
-  9:  { emoji: '🔷', title: 'Shape Explorer',      body: 'Look at the shape and choose its name!', tip: 'Think about how many sides or corners it has.' },
-  10: { emoji: '🎨', title: 'Pattern Detective',   body: 'Spot what repeats and choose what comes next!', tip: 'Say the pattern out loud to hear the rhythm.' },
-  11: { emoji: '🗂️', title: 'Sort it Out!',         body: 'Find the one that does NOT belong!',            tip: 'Look carefully — what makes one different?' },
-  12: { emoji: '📏', title: 'Big or Small?',          body: 'Compare two things — which one wins?',          tip: 'Think about size, length, or how tall!' },
-  13: { emoji: '📦', title: '3D Shape Explorer',      body: 'These shapes are all around us in real life!',  tip: 'A ball is a sphere. A box is a cube!' },
-  14: { emoji: '⏪', title: 'Count Backwards!',       body: 'Start from the top and count back down!',       tip: 'Start at 10 and go: 10, 9, 8…' },
-  15: { emoji: '🥇', title: 'First, Second, Third…',  body: 'Who is 1st? Who is 2nd? Who is 3rd?',          tip: '1st means first in the line — at the front!' },
+// Phase 1 (ages 3–5): on-screen `body` is a few words for non-readers; the
+// narrator speaks `say` (which folds in the old tip). `tip` is kept for the
+// caregiver but is hidden on screen in Phase 1 — see LevelIntroCard.
+export const LEVEL_INTROS: Record<number, { emoji: string; title: string; body: string; say: string; tip: string }> = {
+  1:  { emoji: '🔢', title: 'Counting 1 to 5',    body: 'How many? Tap it!',   say: 'Count the objects one by one, then tap the right number. Point at each one as you count!', tip: 'Point at each one as you count!' },
+  2:  { emoji: '🌟', title: 'Counting up to 10',  body: 'Count to ten!',       say: 'Now we count even more. Count every single one, all the way to ten.', tip: 'Take it slow — count every single one.' },
+  3:  { emoji: '⚖️', title: 'More or Less',        body: 'Pick the bigger one!', say: 'Look at the two numbers and pick the bigger one. Which would be more sweets?', tip: 'Think: which number would be more sweets?' },
+  4:  { emoji: '➕', title: 'Adding Together',     body: 'Add them up!',        say: 'Put the two groups together and count them all.', tip: 'Count the first group, then keep counting!' },
+  5:  { emoji: '➖', title: 'Taking Away',          body: 'How many left?',      say: 'Start with a number and take some away. Count what is left.', tip: 'Count what is left after taking away.' },
+  6:  { emoji: '⚡', title: 'Quick Count!',         body: 'Quick — how many?',   say: 'The objects flash on screen. Trust your eyes — how many do you see at once?', tip: 'Trust your eyes — how many at once?' },
+  7:  { emoji: '🧩', title: 'Missing Part',         body: 'Find what is missing!', say: 'One part is missing. Count the blocks to find the missing part.', tip: 'Count all blocks, then count the known ones.' },
+  8:  { emoji: '🔟', title: 'Counting to 20!',     body: 'Count to twenty!',    say: 'Now we count all the way to twenty. You can do it!', tip: 'Try counting in groups of 5 to keep track.' },
+  9:  { emoji: '🔷', title: 'Shape Explorer',      body: 'Name the shape!',     say: 'Look at the shape and choose its name. Count its sides and corners.', tip: 'Think about how many sides or corners it has.' },
+  10: { emoji: '🎨', title: 'Pattern Detective',   body: 'What comes next?',    say: 'Spot what repeats, then choose what comes next.', tip: 'Say the pattern out loud to hear the rhythm.' },
+  11: { emoji: '🗂️', title: 'Sort it Out!',         body: 'Which is different?', say: 'Find the one that does not belong. What makes it different?', tip: 'Look carefully — what makes one different?' },
+  12: { emoji: '📏', title: 'Big or Small?',          body: 'Which is bigger?',  say: 'Compare the two things. Which one is bigger, longer, or taller?', tip: 'Think about size, length, or how tall!' },
+  13: { emoji: '📦', title: '3D Shape Explorer',      body: 'Name the 3D shape!', say: 'These shapes are all around us. A ball is a sphere; a box is a cube.', tip: 'A ball is a sphere. A box is a cube!' },
+  14: { emoji: '⏪', title: 'Count Backwards!',       body: 'Count back down!',  say: 'Start at the top and count back down. Ten, nine, eight, and on.', tip: 'Start at 10 and go: 10, 9, 8…' },
+  15: { emoji: '🥇', title: 'First, Second, Third…',  body: 'Who is first?',     say: 'Who is first? Who is second? Count from the front of the line.', tip: '1st means first in the line — at the front!' },
 };
 
 export const PHASE1_HINTS: Record<number, string> = {
