@@ -15,6 +15,8 @@ import { useI18n, useT } from '../i18n';
 import { hapticSuccess, hapticError, hapticCelebrate } from '../lib/haptics';
 import { registerScreenBack } from '../lib/backHandler';
 import { safeGet } from '../lib/safeStorage';
+import { Capacitor } from '@capacitor/core';
+import PassportPanel from './PassportPanel';
 import { recordAnswer, recordLevelComplete } from '../lib/stats';
 import { useSoundSystem } from './useSoundSystem';
 import {
@@ -1099,6 +1101,16 @@ export default function Game() {
                   </div>
                 )}
               </div>
+
+              {!Capacitor.isNativePlatform() && (
+                <PassportPanel
+                  earnedBadges={earnedBadges}
+                  onBadgesImported={(ids) => {
+                    setEarnedBadges(ids);
+                    localStorage.setItem('earnedBadges', JSON.stringify(ids));
+                  }}
+                />
+              )}
 
               <div className="mt-6 flex items-center gap-6 justify-center flex-wrap">
                 <Link to="/" className="text-sm font-bold text-gray-600 hover:text-gray-600 no-underline flex items-center gap-1 transition-colors">
