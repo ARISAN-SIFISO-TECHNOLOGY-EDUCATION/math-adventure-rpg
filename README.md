@@ -33,7 +33,28 @@ For phone testing on your network: `npx vite --host` then open the Network URL.
 - `npm run lint` — TypeScript type-check (`tsc --noEmit`)
 - `node --experimental-strip-types smoke-senior.mts` — validate every Academy generator (4 distinct options, correct answer present)
 
+## Editions & build profiles
+
+One codebase ships **two editions**, selected by a build profile (`VITE_PROFILE`):
+
+- **Google Play — Stable / LTS** (`play-store`, the default): maintenance only, frozen. This is what
+  `npm run build` + `cap sync` produce.
+- **Web — Community Edition** (`community`): the innovation lab (installable PWA + web-only features).
+
+```bash
+npm run build                       # play-store (default) → Android AAB source
+VITE_PROFILE=community npm run build # web Community Edition (or WEB_BUILD=1, backward-compatible)
+```
+
+The **Stable Build Principle**: the Play edition's gameplay/saves/progression/content/UX never change
+without explicit approval; web-only work sits behind feature flags in `src/web/`, gated by the
+`src/platform/` seam (`PLATFORM.isWeb`, `isEnabled('storyTheatre')`). See `CLAUDE.md` §
+*Profiles & Editions* and `src/platform/README.md`.
+
 ## Android Build (Google Play)
+
+The default profile is `play-store` — **no flag needed**, the AAB is byte-for-byte unaffected by the
+web edition.
 
 ```bash
 npm run build

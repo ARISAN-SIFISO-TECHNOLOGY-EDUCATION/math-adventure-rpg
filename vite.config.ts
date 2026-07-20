@@ -3,13 +3,29 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 
+// Build profile — the single knob that selects an edition (see CLAUDE.md § Profiles
+// & Editions). `play-store` is the frozen Stable/LTS Android build; `community` is
+// the web Community Edition. Backward-compatible: WEB_BUILD=1 still means "web" and
+// maps to `community`, so existing Cloudflare Pages build config keeps working.
+type Profile = 'play-store' | 'community' | 'development' | 'demo';
+const KNOWN: Profile[] = ['play-store', 'community', 'development', 'demo'];
+const raw = process.env.VITE_PROFILE as Profile | undefined;
+const PROFILE: Profile = raw && KNOWN.includes(raw)
+  ? raw
+  : (process.env.WEB_BUILD ? 'community' : 'play-store');
+const isWebProfile = PROFILE !== 'play-store';
+
 export default defineConfig({
-  // Capacitor (Android) needs relative asset paths → default './'. The web/PWA
-  // deploy (Cloudflare Pages) needs an absolute base so multi-segment routes
-  // like /senior/topics/15 resolve their assets correctly — set WEB_BUILD=1
-  // for that build. The shipped Android build never sets WEB_BUILD, so it is
-  // completely unaffected.
-  base: process.env.WEB_BUILD ? '/' : './',
+  // Capacitor (Android / `play-store`) needs relative asset paths → './'. The web
+  // profiles (Cloudflare Pages) need an absolute base so multi-segment routes like
+  // /senior/topics/15 resolve their assets correctly → '/'. The shipped Android
+  // build uses `play-store` (default), so it is completely unaffected.
+  base: isWebProfile ? '/' : './',
+  // Bake the resolved profile into the bundle so runtime code (src/platform) sees
+  // the same value the build was compiled for — including the WEB_BUILD fallback.
+  define: {
+    'import.meta.env.VITE_PROFILE': JSON.stringify(PROFILE),
+  },
   plugins: [
     react(),
     tailwindcss(),

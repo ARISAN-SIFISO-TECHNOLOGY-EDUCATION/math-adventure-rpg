@@ -25,6 +25,43 @@ For network mobile testing: `npx vite --host` then open the Network URL on the p
 
 **Present everything by AGE, never by school grade.** CAPS/IGCSE/Cambridge alignment is internal only — grade labels must never appear in rendered UI. This is non-negotiable.
 
+## Profiles & Editions (web vs Google Play) — READ BEFORE ADDING FEATURES
+
+**One codebase, two editions** (decision D-15; full policy:
+`peoples-home/brain/apps/math-adventure-release-policy.md`):
+
+- **Google Play = the Stable / LTS edition.** Maintenance only — bug fixes, compliance,
+  accessibility, security. **No experimental UI, no beta systems.**
+- **Web (Cloudflare Pages) = the Community Edition** — the innovation lab (Story Theatre, Living
+  World, advanced animation, large-screen/keyboard, community). Successful features **graduate** to
+  a future Play release only after validation.
+
+> **The Stable Build Principle.** The Play build is an LTS release: **its gameplay, saves,
+> progression, content, and UX never change without explicit founder approval.** New web work goes
+> behind a feature flag; architecture evolves *behind* the release, never through it.
+
+**Build profiles** (`VITE_PROFILE`, resolved in `vite.config.ts`):
+
+| Profile | Base | PWA | Experimental flags | Channel |
+|---|---|---|---|---|
+| `play-store` (default) | `./` | off | all off (core only) | **Stable (Play)** |
+| `community` | `/` | on | on | **Community Edition (Web)** |
+| `development` | `/` | on | on | Dev / Founder Preview |
+| `demo` | `/` | on | curated | Public showcase |
+
+- **Backward-compatible:** no profile / `play-store` reproduces the old Android behaviour
+  byte-for-byte; `WEB_BUILD=1` still means "web" and maps to `community`. The Cloudflare Pages build
+  should set `VITE_PROFILE=community` (or keep `WEB_BUILD=1`); `npm run release` / `cap sync` use the
+  default `play-store` — **the Android AAB is unaffected.**
+- **The seam** lives in `src/platform/` — `PROFILE`, `PLATFORM {isWeb,isMobile,isDesktop}`, and
+  `isEnabled(flag)`. **Use `PLATFORM.isWeb` instead of `Capacitor.isNativePlatform()`**, and gate
+  web-only code with `isEnabled('storyTheatre')` etc. Web features live in `src/web/` (Phase B
+  scaffold). `isEnabled` is true only when the profile enables the flag **and** we're on the web
+  shell — so nothing web-experimental can ever appear in the Play build.
+- **Seam-first, incremental (Phase C, later):** shared code migrates into `src/core/` one subsystem
+  at a time, by stability, freeze between. **"No file moves without a reason."** See
+  `src/platform/README.md` and `peoples-home/brain/architecture/05-platform-editions-and-profiles.md`.
+
 ## Architecture
 
 React 19 + TypeScript + Vite + Tailwind CSS v4 + Capacitor 8 (Android wrapper).
